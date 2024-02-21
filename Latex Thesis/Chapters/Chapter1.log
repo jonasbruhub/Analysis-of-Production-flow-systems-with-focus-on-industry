@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.12.7)  13 FEB 2024 14:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.12.7)  21 FEB 2024 20:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -456,26 +456,29 @@ LaTeX Warning: Citation `Hoare78' on page 2 undefined on input line 26.
 
 LaTeX Warning: Citation `CK01' on page 2 undefined on input line 28.
 
-[2] (Chapters/Chapter1.aux)
+[2]
+Underfull \vbox (badness 1762) has occurred while \output is active []
+
+ [3] [4] [5] [6] [7] (Chapters/Chapter1.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Chapter1.out' has not changed.
-(rerunfilecheck)             Checksum: 510E11ED9DFB71A53489485823E3C211;512.
+(rerunfilecheck)             Checksum: 5B03E8532F0028919DB12B5E1EEF280D;1823.
  ) 
 Here is how much of TeX's memory you used:
- 13366 strings out of 474968
- 213968 string characters out of 5780081
- 568301 words of memory out of 5000000
- 34641 multiletter control sequences out of 15000+600000
- 486598 words of font info for 75 fonts, out of 8000000 for 9000
+ 13381 strings out of 474968
+ 214146 string characters out of 5780081
+ 572301 words of memory out of 5000000
+ 34646 multiletter control sequences out of 15000+600000
+ 487374 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 107i,11n,108p,647b,453s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on Chapters/Chapter1.pdf (2 pages, 131478 bytes).
+ 107i,12n,108p,647b,462s stack positions out of 10000i,1000n,20000p,200000b,200000s
+{c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on Chapters/Chapter1.pdf (7 pages, 260724 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 57 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
- 25 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 178 PDF objects out of 1000 (max. 8388607)
+ 126 compressed objects within 2 object streams
+ 15 named destinations out of 1000 (max. 500000)
+ 57 words of extra memory for PDF output out of 10000 (max. 10000000)
 

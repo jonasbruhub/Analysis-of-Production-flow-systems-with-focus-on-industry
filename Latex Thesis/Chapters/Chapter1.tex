@@ -5,11 +5,11 @@
 
 \textit{The following text is a message to the student and should be removed during the writing process.}
 
-Please note the following instructions regarding an MSc thesis outlined in the study handbook:
+Please note the following instructions regarding an M.Sc. thesis outlined in the study handbook:
 
 ``During the first month, the student is to submit a project plan outlining the objective of the thesis and justification for same to his/her supervisor. In the project plan, the student is also to take into account the overarching learning objectives listed above. When submitting the thesis, the student is to enclose a separate document presenting the original project plan and a revision of same, where appropriate. In addition, the document is to include a brief auto-evaluation of the project process.''
 
-To learn more about the rules for an MSc thesis, please consult the rules for your own MSc programme at \url{http://sdb.dtu.dk}.
+To learn more about the rules for an M.Sc. thesis, please consult the rules for your own M.Sc. program at \url{http://sdb.dtu.dk}.
 
 \section{Project plan}
 We note that the contents of the project plan is also something we would like to see in the introductory chapter of your thesis. In fact, you can reuse your final project plan (possibly extended) as the introduction. If you prefer to write an introduction from scratch, it is, of course, important that it is consistent with the final project plan.
@@ -19,12 +19,138 @@ It is also important to note that the separate document containing
 \begin{itemize}
     \item original project plan
     \item possibly revised project plan.
-    \item brief self-evaluation
+    \item Brief self-evaluation
 \end{itemize}
 mentioned above will be passed on to the external examiner and since it contains the learning goals and the objectives for your thesis, it will be taken into account when your thesis is assessed.
 
 \cite{Hoare78}
 
 \cite{CK01}
+
+
+
+\newpage
+\section{Arrivals of batches}
+Assuming that the in-flow from the previous section in the production obeys the following SDE
+
+$$dS_t = r dt + \sigma dB_t$$
+
+I.e. Brownian motion with drift. And assuming that every time the accumulated mass hits a level $l$, the batch is ready to be processed by the next step, we wish to first find the distribution for these times. Note that the above model allows for negative flow and thus also negative accumulated mass. However, for $\sigma << r$ this becomes very unlikely as
+
+$$\mathbb{P} \left( S_t \leq 0\right) = \Phi \left( \frac{-r \sqrt{t}}{\sigma } \right)$$
+
+and thus only for small $t$ this is probable, as otherwise it is dominated by $\frac{r}{\sigma}$ which is large and thus the probability very low.
+
+
+To derive the distribution for the between batch times, $T$, we shall use the Girsanov Theorem as well as the joint distribution of the maximum of a standard Brownian motion and is running maximum. Thus, let $B_t$ be a standard Brownian motion, and $M_t$ the running maximum defined as
+
+$$M_t := \sup_{s\in [0,t]} \left\{ B_s \right\}$$
+
+
+\begin{itemize}
+    \item Udledning af joint fordeling mellem M og B
+    \item Change of measure for at opnå med drift og sigma
+    \item Marginal fordeling for M
+\end{itemize}
+
+
+
+
+
+\subsection{Joint distribution of Brownian and its running maximum}
+To derive the joint density of a standard Brownian motion and its running maximum, consider the following probability
+$$\mathbb{P}\left(M_t \geq m, B_t \leq w\right)$$
+
+Let $T_m$ be defined as the first time $B_t$ hits the level $m$, i.e. $T_m := \inf_t \left(B_t = m\right)$. Then $M_t \geq m \iff T_m \leq t$. Thus, the above probability is reexpressed as
+$$\mathbb{P}\left(M_t \geq m, B_t \leq w\right) = \mathbb{P}\left(T_m \leq t, B_t \leq w\right)$$
+
+To proceed, we use the principle of reflection which is admissible due to $B_t$ being a martingale. In particular, we define $\tilde{B}_t$ as follows
+$$\tilde{B}_t := \begin{cases}
+        B_t      & t\leq T_m \\
+        2m - B_t & t > T_m
+    \end{cases}$$
+
+It follows that $\tilde{B}_t$ is also a standard Brownian motion. By the definition of $\tilde{B}_t$, we then have that
+$$ \mathbb{P}\left(T_m \leq t, B_t \leq w\right) = \mathbb{P}\left(T_m \leq t, 2m-w \leq \tilde{B}_t\right)$$
+
+Notice that the original expression is only sensible for $m\geq w$ as $w > m$ is a contradiction to the definition of $M_t$. Thus, $2m-w \geq m$ hence $\tilde{B}_t \geq 2m-w$ implies that the original Brownian motion $B_t$ has hit the level $m$ and thus $T_m \leq t$. This means that
+$$\mathbb{P}\left(T_m \leq t, 2m-w \leq \tilde{B}_t\right) = \mathbb{P}\left( 2m-w \leq \tilde{B}_t\right) = 1- \Phi \left(\frac{2m-w}{\sqrt{t}}\right)$$
+
+Thus, in total we have found that
+$$\mathbb{P}\left(M_t \geq m, B_t \leq w\right) = 1- \Phi \left(\frac{2m-w}{\sqrt{t}}\right)$$
+
+And thus, the joint distribution is obtained by differentiation
+\begin{align*}
+    f_{M_t, B_t} (m,w) & = \frac{\partial^2}{\partial m \, \partial w} \mathbb{P}\left(M_t \leq m, B_t \leq w\right)                                                  \\
+                       & = \frac{\partial^2}{\partial m \, \partial w} \left(\mathbb{P}\left(B_t \leq w\right) - \mathbb{P}\left(M_t \geq m, B_t \leq w\right)\right) \\
+                       & = \frac{\partial^2}{\partial m \, \partial w} \Phi \left(\frac{2m-w}{\sqrt{t}}\right)                                                        \\
+                       & = \frac{2(2m-w)}{t^{3/2}} \phi\left(\frac{2m-w}{\sqrt{t}}\right)\quad , m\leq w,\; m\geq 0
+\end{align*}
+
+
+
+Note:
+
+Now, define instead $\tilde{B}_t = \sigma B_t$. We then find a similar expression for the joint density of ... and its running maximum. Namely, as
+$$\mathbb{P}\left(\tilde{M}_t \geq m, \tilde{B}_t \leq w\right) = \mathbb{P}\left(\sigma M_t \geq m, \sigma B_t \leq w\right)$$
+
+Same formula, but with $m$ and $w$ divided by $\sigma$
+
+
+
+\subsection{Joint distribution with drift and arbitrary variance}
+To
+
+In a given probability space, $(\Omega, \mathcal{F}, \mathbb{P})$, let $B_t$ be a standard Brownian motion, then define
+$$\tilde{B}_t := \tilde{\mu} t + B_t$$
+
+It is clear that with the measure $\mathbb{P}$, $\tilde{B}_t$ is a Brownian motion with drift. To derive the joint density of $\tilde{B}_t$ and its running maximum $\tilde{M}_t$, we shall use Girsanov theorem. In particular,
+
+
+The Radon-Nikodym derivative, $Z_t$,
+$$Z_t = \exp \left( - \int_0^t \theta_u \, dB_u - \frac{1}{2} \int_0^t \theta_u^2 \, du\right)$$
+
+
+
+It then follows that $\tilde{B}_t$ is a $\tilde{P}$ Brownian motion.
+
+
+Thus, the joint distribution is given by
+
+$$f_{\tilde{M}_t, \tilde{B}_t}(m,w) = \frac{2(2m-w)}{t^{3/2}} e^{\tilde{\mu} w - \frac{1}{2}\tilde{\mu}^2 t} \phi\left(\frac{2m-w}{\sqrt{t}}\right)$$
+
+
+To introduce the standard deviation $\sigma$, first define $\tilde{\mu} = \mu / \sigma$ and $\hat{B}_t = \sigma \tilde{B}_t$. Then, $\hat{B}_t$ is also a Brownian with drift, $\mu$, but with variance $\sigma^2 t$. Furthermore, the joint distribution is
+
+$$f_{\hat{M}_t, \hat{B}_t}(m,w) = \frac{2(2m-w)}{\sigma^3 t^{3/2}} e^{\frac{1}{\sigma^2}\left(\mu w - \frac{1}{2}\mu^2 t\right)} \phi\left(\frac{2m-w}{\sigma \sqrt{t}}\right)$$
+
+
+
+\subsection{Distribution of maximum of Brownian motion with drift}
+The distribution of the running maximum $\hat{M}_t$ is given by the marginal of the above, namely
+$$f_{\hat{M}_t} (m) = \int_{-\infty}^m f_{\hat{M}_t, \hat{B}_t} (m,w)\, dw$$
+
+Integration by parts admits
+\begin{align*}
+    f_{\hat{M}_t} (m) = \int_{-\infty}^m f_{\hat{M}_t, \hat{B}_t} (m,w)\, dw & = \left[\right]_{-\infty}^m
+\end{align*}
+
+
+$$= \frac{1}{\sigma \sqrt{t}} \phi \left(\frac{m-\mu t}{\sigma \sqrt{t}}\right) - \#$$
+
+
+$$ \# = \int_{-\infty}^m \frac{\mu}{\sigma^2} $$
+
+\newpage
+Finally, as $\mathbb{P} (M_t \geq l) = \mathbb{P}(T_l \leq t)$, where $T_l := \inf_s \left\{ B_t = l \right\}$
+
+
+
+
+
+Overall model for throughput of system. I.e. model the system as e.g. a system of queues and how much is produced at each step and this propagate. The important aspect is breakdown (extra processing time) and possibility of having to trowing out some production along the way, either due to error or some other (unforeseen) causes.
+
+Need to investigate different ways of modelling this (starting with a simple system with no queuing, i.e. a single batch; this is what is done above). Discuss the pros and cons and how much information they preserve (aggregation models etc. may need to model so'me part of the system by throwing away)
+
 
 \end{document}
