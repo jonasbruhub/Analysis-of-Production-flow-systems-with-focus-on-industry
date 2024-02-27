@@ -136,21 +136,62 @@ Integration by parts admits
 \end{align*}
 
 
-$$= \frac{1}{\sigma \sqrt{t}} \phi \left(\frac{m-\mu t}{\sigma \sqrt{t}}\right) - \#$$
-
-
-$$ \# = \int_{-\infty}^m \frac{\mu}{\sigma^2} $$
-
-\newpage
-Finally, as $\mathbb{P} (M_t \geq l) = \mathbb{P}(T_l \leq t)$, where $T_l := \inf_s \left\{ B_t = l \right\}$
+$$= \frac{2}{\sigma \sqrt{t}} \phi \left(\frac{m-\mu t}{\sigma \sqrt{t}}\right) - \frac{2\mu}{\sigma^2} e^{\frac{2 m \mu}{\sigma^2}} \Phi\left( - \frac{m + \mu t}{\sigma \sqrt{t}} \right)$$
 
 
 
 
+\subsection{Cumulative distribution of maximum}
+As we shall later need the survival function of $\hat{M}_t$, we first compute the cumulative distribution. Namely
 
-Overall model for throughput of system. I.e. model the system as e.g. a system of queues and how much is produced at each step and this propagate. The important aspect is breakdown (extra processing time) and possibility of having to trowing out some production along the way, either due to error or some other (unforeseen) causes.
+$$\mathbb{P}\left(\hat{M}_t \leq m\right) = \int_{0}^{m} \int_{-\infty}^{\eta} f_{\hat{M}_t, \hat{B_t}}(\eta,w) \, dw \, d\eta$$
 
-Need to investigate different ways of modelling this (starting with a simple system with no queuing, i.e. a single batch; this is what is done above). Discuss the pros and cons and how much information they preserve (aggregation models etc. may need to model so'me part of the system by throwing away)
+To compute the above, we split the inner integral over the line $w=0$ in the $\eta, w$ plane and reformulate
+\begin{align*}
+    \mathbb{P}\left(\hat{M}_t \leq m\right) & = \underbrace{\int_{0}^{m} \int_{w}^{m} f_{\hat{M}_t, \hat{B_t}}(\eta,w) \, d\eta \, dw}_{I_1}  + \underbrace{\int_{-\infty}^{0} \int_{0}^{m} f_{\hat{M}_t, \hat{B_t}}(\eta,w) \, d\eta \, dw}_{I_2}
+\end{align*}
 
+The antiderivative of $f_{\hat{M}_t,\hat{B}_t}(m,w)$ w.r.t. $m$ is simple and calculated to be
+$$\int f_{\hat{M}_t,\hat{B}_t}(m,w)\, dm = -\frac{1}{\sigma \sqrt{2\pi t}} e^{\frac{1}{\sigma^2} \left(\mu w - \frac{1}{2} \mu^2 t\right)} e^{-\frac{1}{2}\left(\frac{2m - w}{\sigma \sqrt{t}}\right)^2} $$
+
+The first of the above integrals, $I_1$, is then
+$$I_1 = -\frac{1}{\sigma \sqrt{2\pi t}} e^{-\frac{1}{2 \sigma^2} \mu^2 t } \int_0^m  e^{\frac{\mu w}{\sigma^2} - \frac{1}{2} \left(\frac{2m - w}{\sigma \sqrt{t}}\right)^2} - e^{\frac{\mu w}{\sigma^2} - \frac{1}{2} \left(\frac{w}{\sigma \sqrt{t}}\right)^2}  \, dw$$
+
+And similar for the second integral $I_2$
+$$I_2 = -\frac{1}{\sigma \sqrt{2\pi t}} e^{-\frac{1}{2 \sigma^2} \mu^2 t } \int_{-\infty}^0  e^{\frac{\mu w}{\sigma^2} - \frac{1}{2} \left(\frac{2m - w}{\sigma \sqrt{t}}\right)^2} - e^{\frac{\mu w}{\sigma^2} - \frac{1}{2} \left(\frac{w}{\sigma \sqrt{t}}\right)^2}  \, dw$$
+
+It is observed that the integrands are the same, thus
+$$\mathbb{P}\left(\hat{M}_t \leq m\right) = -\frac{1}{\sigma \sqrt{2\pi t}} e^{-\frac{1}{2 \sigma^2} \mu^2 t } \int_{-\infty}^m  e^{\frac{\mu w}{\sigma^2} - \frac{1}{2} \left(\frac{2m - w}{\sigma \sqrt{t}}\right)^2} - e^{\frac{\mu w}{\sigma^2} - \frac{1}{2} \left(\frac{w}{\sigma \sqrt{t}}\right)^2}  \, dw$$
+
+From simple substitution, and a few calculations, on gets that
+$$\mathbb{P}\left(\hat{M}_t \leq m\right) = \Phi\left(\frac{m-\mu t}{\sigma \sqrt{t}}\right) - e^{\frac{2m\mu}{\sigma^2}} \Phi\left( -\frac{m+\mu t}{\sigma \sqrt{t}} \right)$$
+
+
+
+\subsection{Distribution of time to level}
+As $\mathbb{P}\left( M_t \geq l \right) = \mathbb{P}\left( T_l \leq t \right)$. It thus follows that $f_{T_l}(t) = \frac{d}{dt} \mathbb{P}\left( M_t \geq l \right)$ which is easily calculated from the above. Namely
+\begin{align*}
+    f_{T_l} (t) & = \frac{d}{dt}\left(1 - \mathbb{P}\left(M_t \leq l\right)\right)                                                                                                                                          \\
+                & = - \frac{d}{dt} \left( \Phi\left(\frac{l-\mu t}{\sigma \sqrt{t}}\right) - e^{\frac{2l\mu}{\sigma^2}} \Phi\left( -\frac{l + \mu t}{\sigma \sqrt{t}} \right) \right)                                       \\
+                & = \frac{\mu t + l}{2\sigma t^{3/2}}\phi\left(\frac{l-\mu t}{\sigma \sqrt{t}}\right) + \frac{l - \mu t }{2\sigma t^{3/2}} e^{\frac{2\mu l}{\sigma^2}} \phi\left(- \frac{\mu t + l}{\sigma \sqrt{t}}\right)
+\end{align*}
+
+Note that although the distribution above is parameterized by 3 parameters, it can be completely specified by $\tilde{\mu} = \mu /\sigma$ and $\tilde{l}=l/\sigma$ which is clear also from the following
+
+Let $Z_t = \mu t + \sigma B_t$ and similarly $\tilde{Z}_t = Z_t/\sigma = \tilde{\mu} + B_t$. Then
+$\mathbb{P} \left(T_l \leq t \right)
+    = \mathbb{P} \left( M_t \geq l \right)
+    = \mathbb{P} \left( \tilde{M}_t \geq \tilde{l} \right)
+    = \mathbb{P} \left( \tilde{T}_{ \tilde{l} } \leq t \right)$
+where $\tilde{M}_t$ and $\tilde{T}_{\tilde{l}}$ are the running maximum and time to level of $\tilde{Z}_t$. Thus, equivalent to a probability of non-scaled Brownian motion with drift.
+
+To verify the above probability distribution, a Monte-Carlo simulation is carried out for $100.000$ simulations with parameters $l=10$, $\mu = 0.1$, $\sigma = 0.5$. As the shape resembles a gamma distribution, a simple fit, matching the mean and variance is also plotted. Although the gamma family of probability distributions is also a two-parameter family, they do not quite overlap as can be seen in the following plot.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/Brownian motion w. drift distribution and montecarlo.png}
+    \caption{Example of simulation and actual distribution. The marked $\sigma=0$ shows the limit as $\sigma \to 0$ corresponding to no noise on the input flow}
+    \label{fig:1}
+\end{figure}
 
 \end{document}
