@@ -1,28 +1,28 @@
 # Fdb version 4
-["bibtex Thesis"] 1709052732 "Thesis.aux" "Thesis.bbl" "Thesis" 1709052736 0
+["bibtex Thesis"] 1709134958 "Thesis.aux" "Thesis.bbl" "Thesis" 1709134961 0
   "./References.bib" 1705949399 42205 b5ee2a8e49ee91adecfdf2cf274fd62a ""
-  "Appendix1.aux" 1709052735 943 0c6aadcd660c82e828b9d1571a4d3387 "pdflatex"
-  "Thesis.aux" 1709052735 3706 41effd34b5fe70a1f4677b5d1ae781a2 "pdflatex"
+  "Appendix1.aux" 1709134960 943 34e2d65a5809682058149b8328104598 "pdflatex"
+  "Thesis.aux" 1709134960 3707 b04116fb3281812bc26da9fd1b3facc3 "pdflatex"
   "c:/texlive/2022/texmf-dist/bibtex/bst/base/alpha.bst" 1670365436 23907 a5f93555796fb564b924339521f10a7c ""
   (generated)
   "Thesis.bbl"
   "Thesis.blg"
   (rewritten before read)
-["pdflatex"] 1709052733 "c:/Users/jonas/OneDrive - Danmarks Tekniske Universitet/Skrivebord/THESIS LATEX/Latex Thesis/Thesis.tex" "Thesis.pdf" "Thesis" 1709052736 0
+["pdflatex"] 1709134958 "c:/Users/jonas/OneDrive - Danmarks Tekniske Universitet/Skrivebord/THESIS LATEX/Latex Thesis/Thesis.tex" "Thesis.pdf" "Thesis" 1709134961 0
   "Acknowledgements.tex" 1705949399 58 9a4dfa1a6985453461f82c11a57d8127 ""
-  "Appendix1.aux" 1709052735 943 0c6aadcd660c82e828b9d1571a4d3387 "pdflatex"
+  "Appendix1.aux" 1709134960 943 34e2d65a5809682058149b8328104598 "pdflatex"
   "Appendix1.tex" 1705949399 51 2dfa6e2e37127536219f0fba130f8c9b ""
-  "Chapters/Chapter1.tex" 1709052714 12263 d1145d88ee8a1da9fbe89952ef8bd86a ""
+  "Chapters/Chapter1.tex" 1709133005 15401 94f938e87b8c87423cdda8da7390aed1 ""
   "Chapters/Chapter2.tex" 1709052560 788 65a0fc3ae80a05ac4825ad35ae05d10d ""
   "LukeThesis.sty" 1705949925 7256 6b466128636e20dcd1530a35d8efcc2d ""
   "Preface.tex" 1705949399 698 b12b2124431f3f08a71235a456ba90ba ""
   "SummaryDK.tex" 1705949399 116 095d078cb12cd2d6cd5f26971e1382ed ""
   "SummaryUK.tex" 1705949399 61 4e3ccfbeb1515c48971f62910f0bb20f ""
-  "Thesis.aux" 1709052735 3706 41effd34b5fe70a1f4677b5d1ae781a2 "pdflatex"
-  "Thesis.bbl" 1709052733 477 6bf038f25f374172c16e352ab4787f4f "bibtex Thesis"
-  "Thesis.out" 1709052735 3300 29c092a9c7f8d9b1f3907fc29a2e014b "pdflatex"
+  "Thesis.aux" 1709134960 3707 b04116fb3281812bc26da9fd1b3facc3 "pdflatex"
+  "Thesis.bbl" 1709134958 477 6bf038f25f374172c16e352ab4787f4f "bibtex Thesis"
+  "Thesis.out" 1709134960 3300 29c092a9c7f8d9b1f3907fc29a2e014b "pdflatex"
   "Thesis.tex" 1709052729 5214 1c2caef5b6c6f182d660ddd10f20cfa6 ""
-  "Thesis.toc" 1709052735 1405 45cf15ed33d1316cd1ad4f7b81553f00 "pdflatex"
+  "Thesis.toc" 1709134960 1406 96e0191d92a630fe036a226f9c228d65 "pdflatex"
   "c:/Users/jonas/OneDrive - Danmarks Tekniske Universitet/Skrivebord/THESIS LATEX/Latex Thesis/Thesis.tex" 1709052729 5214 1c2caef5b6c6f182d660ddd10f20cfa6 ""
   "c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1670365826 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1670365826 2900 1537cc8184ad1792082cd229ecc269f4 ""
@@ -76,6 +76,7 @@
   "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1670364891 32716 08e384dc442464e7285e891af9f45947 ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb" 1670364891 30457 bc0868ebece724ed7c3d37e3d9bff7bd ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1670364891 34694 870c211f62cb72718a00e353f14f254d ""
+  "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb" 1670364891 35309 940e81a5b9e04201a07e8b33a3ae6e64 ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb" 1670365826 145408 bcd327f112f643a875638eafb48d1d8b ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb" 1670365826 140176 d0f50dba675c56d445f84a32c1f93a79 ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb" 1670365826 135942 aecb5af344df420d6ec421db27dedf62 ""

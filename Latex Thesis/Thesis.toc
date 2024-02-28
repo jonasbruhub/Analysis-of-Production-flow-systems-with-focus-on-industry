@@ -11,9 +11,9 @@
 \contentsline {section}{\numberline {1.3}Arrivals of batches}{3}{section.1.3}%
 \contentsline {subsection}{\numberline {1.3.1}Joint distribution of Brownian and its running maximum}{4}{subsection.1.3.1}%
 \contentsline {subsection}{\numberline {1.3.2}Joint distribution with drift and arbitrary variance}{5}{subsection.1.3.2}%
-\contentsline {subsection}{\numberline {1.3.3}Distribution of maximum of Brownian motion with drift}{6}{subsection.1.3.3}%
-\contentsline {subsection}{\numberline {1.3.4}Cumulative distribution of maximum}{6}{subsection.1.3.4}%
-\contentsline {subsection}{\numberline {1.3.5}Distribution of time to level}{7}{subsection.1.3.5}%
-\contentsline {chapter}{\numberline {2}Ideer til hvad der skal laves}{9}{chapter.2}%
-\contentsline {chapter}{\numberline {A}Stuff}{11}{appendix.A}%
-\contentsline {chapter}{Bibliography}{13}{appendix.A}%
+\contentsline {subsection}{\numberline {1.3.3}Distribution of maximum of Brownian motion with drift}{7}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.3.4}Cumulative distribution of maximum}{7}{subsection.1.3.4}%
+\contentsline {subsection}{\numberline {1.3.5}Distribution of time to level}{8}{subsection.1.3.5}%
+\contentsline {chapter}{\numberline {2}Ideer til hvad der skal laves}{11}{chapter.2}%
+\contentsline {chapter}{\numberline {A}Stuff}{13}{appendix.A}%
+\contentsline {chapter}{Bibliography}{15}{appendix.A}%
