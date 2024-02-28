@@ -1,0 +1,2 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QFurthermore, as \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is a martingale, the Radon-Nikodym de\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QFurthermore, as \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is a martingale, the Radon-Nikodym derivative\\E$"}

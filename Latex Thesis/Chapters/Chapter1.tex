@@ -101,29 +101,65 @@ Same formula, but with $m$ and $w$ divided by $\sigma$
 
 
 \subsection{Joint distribution with drift and arbitrary variance}
-To
-
-In a given probability space, $(\Omega, \mathcal{F}, \mathbb{P})$, let $B_t$ be a standard Brownian motion, then define
+Let $B_t$ be a standard Brownian motion defined on the probability space, $(\Omega, \mathcal{F}, \mathbb{P})$. Furthermore, define $\tilde{B}_t$ to be a Brownian motion with drift as follows
 $$\tilde{B}_t := \tilde{\mu} t + B_t$$
 
-It is clear that with the measure $\mathbb{P}$, $\tilde{B}_t$ is a Brownian motion with drift. To derive the joint density of $\tilde{B}_t$ and its running maximum $\tilde{M}_t$, we shall use Girsanov theorem. In particular,
+To derive the joint density $f_{\tilde{M}_t, \tilde{B}_t}(m,w)$ on measure $\mathbb{P}$, we use a corollary of the Girsanov theorem. Namely, suppose $B_t$ is Brownian motion under measure $\mathbb{P}$, then there exists a measure $\mathbb{Q}$ such that $\tilde{B}_t = B_t - \left<B,X\right>_t$ is a Brownian motion (without drift) under this new measure given that $X_t$ is an adapted process. Furthermore, as $\tilde{B}_t$ is a martingale, the Radon-Nikodym derivative is equal to the stochastic exponential $Z_t = \exp\left({X_t - \frac{1}{2}\left<X\right>_t}\right)$.
 
+Now, if $X_t$ is of the form $\int_0^t Y_s \, dB_s$ where $\mathbb{E}_\mathbb{P}\left[ \exp \left(  \frac{1}{2} \int_0^T Y_s^2 \, ds \right) \right] < \infty$, a special case, the Cameron-Martin-Girsanov implies that $\tilde{B}_t = B_t - \int_0^t Y_s \, ds$ is then a $\mathbb{Q}$ Brownian motion. This can easily be shown when $Y_s$ fulfills Noviko's condition, then $Z_t$ is a martingale and the Girsanov theorem applies as clearly $X_t$ is also adapted to $B_t$. Then, from the above corollary,
 
-The Radon-Nikodym derivative, $Z_t$,
-$$Z_t = \exp \left( - \int_0^t \theta_u \, dB_u - \frac{1}{2} \int_0^t \theta_u^2 \, du\right)$$
+\begin{align*}
+    \tilde{B}_t & = B_t - \left< B, X\right>_t                                                                                      \\
+                & = B_t - \lim_{||P|| \to 0} \sum_i \left(B_{t_{i+1}} - B_{t_i}\right)\left(\int_{t_i}^{t_{i+1}} Y_s \, dB_s\right) \\
+                & = B_t - \lim_{||P|| \to 0} \sum_i \left(B_{t_{i+1}} - B_{t_i}\right)^2Y_{t_i^*}                                   \\
+                & = B_t - \int_0^t Y_s\,ds
+\end{align*}
 
+As it has now been shown that there exists as measure $\mathbb{Q}$ under which $\tilde{B}_t$ is a Brownian motion as choosing $Y_s = -\tilde{mu}$ we reproduce the initial definition of $\tilde{B}_t$. To then derive the joint distribution of $\tilde{B}_t$ and its running maximum $\tilde{M}_t$, we compute the Radon-Nikodym derivative, $Z_t$, hence given by
+\begin{align*}
+    \left.\frac{d\mathbb{Q}}{d\mathbb{P}}\right\vert_{\mathcal{F}_t} = Z_t & = \exp \left( \int_0^t Y_s \, dB_s - \frac{1}{2} \int_0^t Y_s^2 \, ds\right)               \\
+                                                                           & = \exp \left( -\tilde{\mu} \int_0^t  dB_s - \frac{1}{2} \tilde{\mu}^2 \int_0^t   ds\right) \\
+                                                                           & = \exp \left( -\tilde{\mu} B_t - \frac{1}{2} \tilde{\mu}^2 t\right)                        \\
+                                                                           & = \exp \left( -\tilde{\mu} \tilde{B}_t + \frac{1}{2} \tilde{\mu}^2 t\right)
+\end{align*}
 
+With the above derivative, we have that
+$$\mathbb{Q}\left(A\right) = \int_A Z_t\, d\mathbb{P}$$
 
-It then follows that $\tilde{B}_t$ is a $\tilde{P}$ Brownian motion.
+And thus also
+$$\mathbb{P}\left(A\right) = \int_A Z_t^{-1}\, d\mathbb{Q}$$
 
+as $Z_t : X \to (0,\infty)$. It then simply follows that
+$$f_{\tilde{M}_t,\tilde{B}_t}(m,w) = \tilde{f}_{\tilde{M}_t,\tilde{B}_t}(m,w) e^{\tilde{\mu} w -\frac{1}{2}\tilde{\mu}^2 t}$$
 
-Thus, the joint distribution is given by
+where $\tilde{f}$ is the probability distribution under measure $\mathbb{Q}$. Hence,
 
 $$f_{\tilde{M}_t, \tilde{B}_t}(m,w) = \frac{2(2m-w)}{t^{3/2}} e^{\tilde{\mu} w - \frac{1}{2}\tilde{\mu}^2 t} \phi\left(\frac{2m-w}{\sqrt{t}}\right)$$
 
 
-To introduce the standard deviation $\sigma$, first define $\tilde{\mu} = \mu / \sigma$ and $\hat{B}_t = \sigma \tilde{B}_t$. Then, $\hat{B}_t$ is also a Brownian with drift, $\mu$, but with variance $\sigma^2 t$. Furthermore, the joint distribution is
 
+% Thus, at time $t$, the joint probability distribution of $\tilde{B}_t$ and $\tilde{M}_t$ under measure $\mathbb{P}$ is given by
+
+
+
+
+% $$f_{\tilde{M}_t, \tilde{B}_t} (m,w) = f_{M_t, B_t}(m,w)* = $$
+
+
+
+% As the joint density is known without drift, we want the change from $\mathbb{Q}$ to $\mathbb{P}$ to allow the use of the previous formula, thus the inverse of the derriavative (multiplicative)
+
+
+
+
+
+
+% Thus, the joint distribution is given by
+
+
+
+
+To introduce the standard deviation $\sigma$, first define $\tilde{\mu} = \mu / \sigma$ and $\hat{B}_t = \sigma \tilde{B}_t$. Then, $\hat{B}_t$ is also a Brownian with drift, $\mu$, but with variance $\sigma^2 t$. Furthermore, the joint distribution is
 $$f_{\hat{M}_t, \hat{B}_t}(m,w) = \frac{2(2m-w)}{\sigma^3 t^{3/2}} e^{\frac{1}{\sigma^2}\left(\mu w - \frac{1}{2}\mu^2 t\right)} \phi\left(\frac{2m-w}{\sigma \sqrt{t}}\right)$$
 
 
@@ -133,13 +169,7 @@ The distribution of the running maximum $\hat{M}_t$ is given by the marginal of 
 $$f_{\hat{M}_t} (m) = \int_{-\infty}^m f_{\hat{M}_t, \hat{B}_t} (m,w)\, dw$$
 
 Integration by parts admits
-\begin{align*}
-    f_{\hat{M}_t} (m) = \int_{-\infty}^m f_{\hat{M}_t, \hat{B}_t} (m,w)\, dw & = \left[\right]_{-\infty}^m
-\end{align*}
-
-
-$$= \frac{2}{\sigma \sqrt{t}} \phi \left(\frac{m-\mu t}{\sigma \sqrt{t}}\right) - \frac{2\mu}{\sigma^2} e^{\frac{2 m \mu}{\sigma^2}} \Phi\left( - \frac{m + \mu t}{\sigma \sqrt{t}} \right)$$
-
+$$ f_{\hat{M}_t} (m) = \frac{2}{\sigma \sqrt{t}} \phi \left(\frac{m-\mu t}{\sigma \sqrt{t}}\right) - \frac{2\mu}{\sigma^2} e^{\frac{2 m \mu}{\sigma^2}} \Phi\left( - \frac{m + \mu t}{\sigma \sqrt{t}} \right)$$
 
 
 
