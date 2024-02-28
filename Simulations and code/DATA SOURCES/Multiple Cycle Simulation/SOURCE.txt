@@ -1,0 +1,12 @@
+https://keen.zih.tu-dresden.de/dataset.xhtml?persistentId=doi:10.57826/KEEN/ODU6MA
+
+
+@data{KEEN/ODU6MA_2022,
+author = {Tan, Ruomu},
+publisher = {Root},
+title = {{Datasets from multiple cycles}},
+year = {2022},
+version = {V1},
+doi = {10.57826/KEEN/ODU6MA},
+url = {https://doi.org/10.57826/KEEN/ODU6MA}
+}
