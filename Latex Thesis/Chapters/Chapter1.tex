@@ -106,7 +106,9 @@ $$\tilde{B}_t := \tilde{\mu} t + B_t$$
 
 To derive the joint density $f_{\tilde{M}_t, \tilde{B}_t}(m,w)$ on measure $\mathbb{P}$, we use a corollary of the Girsanov theorem. Namely, suppose $B_t$ is Brownian motion under measure $\mathbb{P}$, then there exists a measure $\mathbb{Q}$ such that $\tilde{B}_t = B_t - \left<B,X\right>_t$ is a Brownian motion (without drift) under this new measure given that $X_t$ is an adapted process. Furthermore, as $\tilde{B}_t$ is a martingale, the Radon-Nikodym derivative is equal to the stochastic exponential $Z_t = \exp\left({X_t - \frac{1}{2}\left<X\right>_t}\right)$.
 
-Now, if $X_t$ is of the form $\int_0^t Y_s \, dB_s$ where $\mathbb{E}_\mathbb{P}\left[ \exp \left(  \frac{1}{2} \int_0^T Y_s^2 \, ds \right) \right] < \infty$, a special case, the Cameron-Martin-Girsanov implies that $\tilde{B}_t = B_t - \int_0^t Y_s \, ds$ is then a $\mathbb{Q}$ Brownian motion. This can easily be shown when $Y_s$ fulfills Noviko's condition, then $Z_t$ is a martingale and the Girsanov theorem applies as clearly $X_t$ is also adapted to $B_t$. Then, from the above corollary,
+Now, if $X_t$ is of the form $\int_0^t Y_s \, dB_s$ where
+$\mathbb{E}_{\mathbb{P}} \left[ \exp{\left(  \frac{1}{2} \int_0^T Y_s^2 \, ds \right)} \right] < \infty$
+, a special case, the Cameron-Martin-Girsanov implies that $\tilde{B}_t = B_t - \int_0^t Y_s \, ds$ is then a $\mathbb{Q}$ Brownian motion. This can easily be shown when $Y_s$ fulfills Noviko's condition, then $Z_t$ is a martingale and the Girsanov theorem applies as clearly $X_t$ is also adapted to $B_t$. Then, from the above corollary,
 
 \begin{align*}
     \tilde{B}_t & = B_t - \left< B, X\right>_t                                                                                      \\
@@ -225,5 +227,96 @@ To verify the above probability distribution, a Monte-Carlo simulation is carrie
     \caption{Example of simulation and actual distribution. The marked $\sigma=0$ shows the limit as $\sigma \to 0$ corresponding to no noise on the input flow}
     \label{fig:1}
 \end{figure}
+
+
+
+\subsection{MGF}
+\begin{align*}
+    \mathbb{E}\left[ e^{\theta T_l} \right] & = \int_0^\infty e^{\theta t} f_{T_l}(t)\, dt                                                                                                                                                                                                                                                                                                                                                   \\
+                                            & =  \underbrace{\int_0^\infty e^{\theta t} \frac{\mu t + l}{2\sigma t^{3/2}} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{l - \mu t}{\sigma \sqrt{t}}\right)^2} \, dt}_{I_1} + e^{\frac{2\mu l}{\sigma^2}} \underbrace{ \int_0^\infty  e^{\theta t} \frac{l - \mu t}{2\sigma t^{3/2}} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}\left(- \frac{\mu t + l}{\sigma \sqrt{t}}\right)^2} \, dt}_{I_2}
+\end{align*}
+
+We shall only consider the first integral $I_1$ as the second follows directly from the result of the first by substituting $\mu$ with $-\mu$
+\begin{align*}
+    I_1 & = \int_0^\infty \frac{\mu t + l}{2 \sigma t^{3/2}} \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2} \frac{\left(l-\mu t\right)^2 -2\theta \sigma^2 t^2}{\sigma^2 t}} \, dt                                                                                                                                                                                            \\
+        & = \int_0^\infty \frac{\mu t + l}{2 \sigma t^{3/2}} \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2} \frac{(\mu^2 - 2\theta \sigma^2) t^2   - 2l\mu t + l^2 }{\sigma^2 t}} \, dt                                                                                                                                                                                       \\
+        & = e^{\frac{l\mu - l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}} \int_0^\infty \frac{\mu t + l}{2 \sigma t^{3/2}} \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2} \left( \frac{\sqrt{\mu^2 -  2\theta \sigma^2} t - l}{\sigma \sqrt{t}} \right)^2 } \, dt                                                                                                             \\
+        & = e^{\frac{l\mu - l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}} \int_0^\infty \left(\frac{\sqrt{\mu^2 - 2 \theta \sigma^2} t + l}{2 \sigma t^{3/2}} + \frac{\mu - \sqrt{\mu^2 - 2\theta \sigma^2}}{2\sigma \sqrt{t}} \right) \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2} \left( \frac{\sqrt{\mu^2 -  2\theta \sigma^2} t - l}{\sigma \sqrt{t}} \right)^2 } \, dt \\
+\end{align*}
+
+Once again, we split the integral, now as follows
+\begin{dmath*}
+    I_1 = e^{\frac{l\mu - l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}} \left(\underbrace{\int_{0}^{\infty} \frac{\sqrt{\mu^2 - 2 \theta \sigma^2} t + l}{2 \sigma t^{3/2}} \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2} \left( \frac{\sqrt{\mu^2 -  2\theta \sigma^2} t - l}{\sigma \sqrt{t}}\right)^2 } \, dt}_{I_{11}}  \\
+    +  \frac{\mu - \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma} \underbrace{\int_{0}^{\infty} \frac{1}{2\sqrt{t}} \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2} \left(\frac{\sqrt{\mu^2 -  2\theta \sigma^2} t - l}{\sigma \sqrt{t}}\right)^2 } \, dt}_{I_{12}}\right)
+\end{dmath*}
+
+For the first integral, the substitution $u = \frac{\sqrt{\mu^2 - 2\theta \sigma^2} t - l}{\sigma \sqrt{t}}$ reveals that
+$$I_{11} = \int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2} \, du = 1$$
+
+As for the second integral $I_{12}$ it can be rewritten as
+\begin{align*}
+    I_{12} & = e^{\frac{l\sqrt{\mu^2 - 2\theta \sigma^2} }{\sigma^2}} \int_{0}^{\infty} \frac{1}{2\sqrt{t}} \frac{1}{\sqrt{2 \pi}} e^{-\left(\frac{\mu^2}{2\sigma^2} - \theta \right) t - \frac{l^2}{2\sigma^2} t^{-1} } \, dt
+\end{align*}
+
+Then, substituting $u = \sqrt{\frac{\mu^2}{2\sigma^2} - \theta} \sqrt{t}$
+\begin{align*}
+    I_{12} & = e^{\frac{l\sqrt{\mu^2 - 2\theta \sigma^2} }{\sigma^2}} \frac{1}{\sqrt{2\pi} \sqrt{\frac{\mu^2}{2\sigma^2} - \theta}} \int_{0}^{\infty} e^{-u^2 - \frac{l^2}{2\sigma^2} \left(\frac{\mu^2}{2\sigma^2} - \theta\right) u^{-2}} \, du
+\end{align*}
+
+To solve the above integral, we consider the following family of integrals, parameterized by $s$
+$$I(s) = \int_0^\infty e^{-u^2 - s^2 u^{-2}} \, du$$
+
+It follows that
+$$I'(s) = -2 \int_{0}^{\infty} e^{-u^2 - s^2 u^{-2}} s u^{-2} \, du $$
+
+letting $z = s/u$, it follows that $dz = -s/u^2 du$ and (assuming $s > 0$)
+$$I'(s) = -2 \int_{0}^{\infty} e^{- s^2 z^{-2} - z^2} \, dz = -2 I(s)$$
+
+Also,
+$$I(0) = \int_{0}^{\infty} e^{-u^2} \, du = \frac{\sqrt{\pi}}{2} $$
+
+Hence
+$$I(s) = \frac{\sqrt{\pi}}{2} e^{-2s} \quad , \text{for}\, s\geq 0$$
+
+Note that due to symmetry, $I(s) = I(-s)$, and hence
+$$ I(s) = \frac{\sqrt{\pi}}{2} e^{-2 \left|s\right|} $$
+
+Thus, letting $s = \frac{l}{2\sigma} \sqrt{ \frac{\mu^2}{\sigma^2} -2\theta} $ i.e. resulting in the integral from $I_{12}$, the integral $I_{12}$ is simply
+
+\begin{align*}
+    I_{12} & = e^{\frac{l\sqrt{\mu^2 - 2\theta \sigma^2} }{\sigma^2}}\frac{1}{\sqrt{2\pi} \sqrt{\frac{\mu^2}{2\sigma^2} - \theta}} \frac{\sqrt{\pi}}{2} e^{-2 \frac{l}{2\sigma} \sqrt{ \frac{\mu^2}{\sigma^2} -2\theta}} \\
+           & =\frac{\sigma}{2\sqrt{\mu^2 -2\theta \sigma^2 } }
+\end{align*}
+
+Combining the above results, we finally have $I_1$
+\begin{align*}
+    I_1 & = e^{\frac{l\mu - l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}} \left(1 +  \frac{\mu - \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma} \frac{\sigma}{2\sqrt{\mu^2 -2\theta \sigma^2 } } \right) \\
+        & = e^{\frac{l\mu - l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}}  \left( \frac{1}{2} + \frac{\mu}{2\sqrt{\mu^2 - 2\theta \sigma^2}}\right)
+\end{align*}
+
+% +  \left(\frac{\mu}{\sqrt{\mu^2 - 2\theta \sigma^2}} -1 \right) e^{\frac{l\mu - 2 l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}}
+
+Similar calculations results in the integral $I_2$ or simply by letting $\mu = -\mu $ as discussed before. In total, we find the moment generating function to be
+
+\begin{align*}
+    \mathbb{E}\left[e^{\theta T_l}\right] & = e^{\frac{l\mu - l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}}  \left( \frac{1}{2} + \frac{\mu}{2\sqrt{\mu^2 - 2\theta \sigma^2}}\right)                                    \\
+                                          & \quad + e^{\frac{2\mu l}{\sigma^2}} e^{\frac{-l\mu - l \sqrt{\mu^2 - 2\theta \sigma^2}}{\sigma^2}}  \left( \frac{1}{2} - \frac{\mu}{2\sqrt{\mu^2 - 2\theta \sigma^2}}\right) \\
+                                          & = e^{\frac{l}{\sigma^2} \left( \mu - \sqrt{\mu^2 - 2 \theta \sigma^2}\right)}
+\end{align*}
+
+From the above calculations, this is clearly defined for $\theta$ in some neighborhood of $0$, thus the above is indeed a proper moment generating function. Furthermore, all derivatives exists at $\theta = 0$.
+
+This also shows that $T_l$ does not belong to neither the Gamma family nor Phase-Type
+
+The first 3 moments are given by
+
+$$\mathbb{E}\left[T_l\right] = \frac{l}{\mu} , \quad \mathbb{E}\left[T_l^2\right] = \frac{l \sigma^2}{\mu^3} + \frac{l^2}{\mu^2} , \quad \mathbb{E}\left[T_l^3\right] = \frac{3l \sigma^4}{\mu^5} + \frac{3 l^2 \sigma^2}{\mu^4} + \frac{l^3}{\mu^3}$$
+
+Interestingly, the average is exactly what one would expect if no stochasticity was present. Furthermore, the variance has a simple nice form, namely $\frac{l \sigma^2}{\mu^3}$.
+
+Continuing the simulation from above, the theoretical mean evaluates to $100$ whereas the simulated mean evaluated to 100.343. The theoretical variance is 2500 whereas the variance from simulation was 2468.224.
+
+% sim 0 to 40, 1 mil simulations, 5000 time intervals
+
 
 \end{document}
