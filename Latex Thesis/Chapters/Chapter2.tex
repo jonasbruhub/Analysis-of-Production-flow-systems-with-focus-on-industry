@@ -1,11 +1,47 @@
 \documentclass[../Thesis.tex]{subfiles}
 \graphicspath{{\subfix{../figures/}}}
 \begin{document}
+
+\chapter{
+    Problemformulering / Introduktion
+}
+
+In many production facilities, planning is a big part of maximizing some index. Whether this is production throughput over some time period and thus often also the economic surplus or some other key index, it is of great importance to have an underlying model to describe the observed variation. In particular in operational research, the schedules may drift in suboptimal ways if the variation is not considered.
+
+
+Furthermore, from a salesman point of view, expected production and time intervals can be of great use when planning and also building production facilities. Namely, one might find that increasing the volume or efficiency of some part of the facility would increase the production throughput and profitability. This is also known as bottleneck analysis and require some understanding of the underlying mechanics and a stochastic model of this could improve the strength of such results.
+
+
+Therefore, the primary objective of this paper/thesis is to investigate and model the yield and time of a production flow with focus on the pharmaceutical and chemical production industry. More precisely, we will be building a statistical model for a single process, with the purpose of being able to describe the variation in the yield of the production cycle and production times. This will then be used to analyze potential bottlenecks.
+
+Furthermore, it will be interesting to construct a network of such processes as is typically the case in industry. We shall see how much can be said about such a network and what obstacles one may encounter when trying to analyze such networks which is this thesis will initially be treated as networks of queues.
+
+
+
+% With the possibility  
+
+
+
+
+
+
+
+
+
+
 \chapter{Ideer til hvad der skal laves}
 
 Overall model for throughput of system. I.e. model the system as e.g. a system of queues and how much is produced at each step and this propagate. The important aspect is breakdown (extra processing time) and possibility of having to trowing out some production along the way, either due to error or some other (unforeseen) causes.
 
 Need to investigate different ways of modelling this (starting with a simple system with no queuing, i.e. a single batch; this is what is done above). Discuss the pros and cons and how much information they preserve (aggregation models etc. may need to model so'me part of the system by throwing away)
 
+
+\begin{itemize}
+    \item \href{https://en.wikipedia.org/wiki/Petri_net}{Petri Net}
+    \item ODE Stochastic Chemical Reaction (first order)
+    % \item \href{https://onlinelibrary.wiley.com/doi/epdf/10.1002/ceat.270150109}{A Multiple State Stochastic Model for Deep-bed Filtration}
+    \item \href{https://www.nature.com/articles/s41597-020-0455-1}{Database of pharmacokinetic time-series data}
+    \item \href{https://search.r-project.org/CRAN/refmans/AppliedPredictiveModeling/html/ChemicalManufacturingProcess.html}{Chemical Manufacturing Process Data}
+\end{itemize}
 
 \end{document}
