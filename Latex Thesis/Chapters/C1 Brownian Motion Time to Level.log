@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  18 MAR 2024 14:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  3 APR 2024 14:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/Chapter1.tex"
-(c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/Chapter1.tex
+**"c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C1 Brownian Motion Time to Level.tex"
+(c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C1 Brownian Motion Time to Level.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-03-14>
 (c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.cls
@@ -484,8 +484,8 @@ Package hyperref Info: Option `breaklinks' set `true' on input line 39.
 Package hyperref Info: Option `bookmarksopen' set `true' on input line 39.
 Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 39.
 Package hyperref Info: Option `plainpages' set `false' on input line 39.
-)) (Chapters/Chapter1.aux)
-\openout1 = `Chapter1.aux'.
+)) (Chapters/C1 Brownian Motion Time to Level.aux)
+\openout1 = `"C1 Brownian Motion Time to Level.aux"'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
@@ -528,9 +528,9 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring OFF on input line 3.
- (Chapters/Chapter1.out) (Chapters/Chapter1.out)
+ (Chapters/C1 Brownian Motion Time to Level.out) (Chapters/C1 Brownian Motion Time to Level.out)
 \@outlinefile=\write4
-\openout4 = `Chapter1.out'.
+\openout4 = `"C1 Brownian Motion Time to Level.out"'.
 
 
 Chapter 1.
@@ -549,77 +549,66 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 4.
  (c:/texlive/2024/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-)
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 12.
- (c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1
+) [1
 Non-PDF special ignored!
 <special> header=psfrag.pro
 
 Non-PDF special ignored!
 <special> papersize=176mm,250mm
 
-{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
-
-LaTeX Warning: Citation `Hoare78' on page 2 undefined on input line 26.
-
-
-LaTeX Warning: Citation `CK01' on page 2 undefined on input line 28.
-
-[2{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [3] [4]
+{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}] [2{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
 Overfull \hbox (3.77168pt too wide) in paragraph at lines 104--105
 \T1/cmr/m/n/10 Let $\OML/cmm/m/it/10 B[]$ \T1/cmr/m/n/10 be a stan-dard Brow-n-ian mo-tion de-fined on the prob-a-bil-ity space, $\OT1/cmr/m/n/10 (
 \OML/cmm/m/it/10 ; \OMS/cmsy/m/n/10 F\OML/cmm/m/it/10 ; \U/msb/m/n/10 P\OT1/cmr/m/n/10 )$\T1/cmr/m/n/10 .
  []
 
-[5] [6] [7] [8]
-<figures/Brownian motion w. drift distribution and montecarlo.png, id=103, 408.3255pt x 298.4751pt>
+[3]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [4] [5] [6]
+<figures/Brownian motion w. drift distribution and montecarlo.png, id=82, 408.3255pt x 298.4751pt>
 File: figures/Brownian motion w. drift distribution and montecarlo.png Graphic file (type png)
 <use figures/Brownian motion w. drift distribution and montecarlo.png>
 Package pdftex.def Info: figures/Brownian motion w. drift distribution and montecarlo.png  used on input line 226.
 (pdftex.def)             Requested size: 345.30264pt x 252.41159pt.
 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
 Overfull \hbox (20.93118pt too wide) detected at line 237
+[]
+ []
+
+[7]
+Overfull \hbox (47.85052pt too wide) detected at line 245
 []
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9 <./figures/Brownian motion w. drift distribution and montecarlo.png>]
-Overfull \hbox (47.85052pt too wide) detected at line 245
-[]
- []
-
-[10] [11] [12] [13] (Chapters/Chapter1.aux)
+ [8 <./figures/Brownian motion w. drift distribution and montecarlo.png>] [9] [10] [11] (Chapters/C1 Brownian Motion Time to Level.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-03-14>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
-Package rerunfilecheck Info: File `Chapter1.out' has not changed.
-(rerunfilecheck)             Checksum: 4A69882E66A7CABCF8756CA6C53FA3C4;2454.
+Package rerunfilecheck Info: File `"C1 Brownian Motion Time to Level".out' has not changed.
+(rerunfilecheck)             Checksum: EDC288C6F300D3B83B6BBC87640FC310;2171.
  ) 
 Here is how much of TeX's memory you used:
- 14490 strings out of 474103
- 227013 string characters out of 5747481
- 1950496 words of memory out of 5000000
- 36599 multiletter control sequences out of 15000+600000
- 576184 words of font info for 84 fonts, out of 8000000 for 9000
+ 14463 strings out of 474103
+ 226850 string characters out of 5747481
+ 1949496 words of memory out of 5000000
+ 36581 multiletter control sequences out of 15000+600000
+ 575185 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 110i,19n,117p,706b,471s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on Chapters/Chapter1.pdf (13 pages, 351664 bytes).
+ 110i,19n,117p,730b,471s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb>
+Output written on "Chapters/C1 Brownian Motion Time to Level.pdf" (11 pages, 304424 bytes).
 PDF statistics:
- 236 PDF objects out of 1000 (max. 8388607)
- 170 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
- 86 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 207 PDF objects out of 1000 (max. 8388607)
+ 147 compressed objects within 2 object streams
+ 21 named destinations out of 1000 (max. 500000)
+ 70 words of extra memory for PDF output out of 10000 (max. 10000000)
 

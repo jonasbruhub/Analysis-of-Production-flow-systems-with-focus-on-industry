@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  3 APR 2024 14:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  3 APR 2024 14:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/Chapter2.tex"
-(c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/Chapter2.tex
+**"c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex"
+(c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-03-14>
 (c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.cls
@@ -484,8 +484,8 @@ Package hyperref Info: Option `breaklinks' set `true' on input line 39.
 Package hyperref Info: Option `bookmarksopen' set `true' on input line 39.
 Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 39.
 Package hyperref Info: Option `plainpages' set `false' on input line 39.
-)) (Chapters/Chapter2.aux)
-\openout1 = `Chapter2.aux'.
+)) (Chapters/C3 Data.aux)
+\openout1 = `"C3 Data.aux"'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
@@ -528,9 +528,9 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring OFF on input line 3.
- (Chapters/Chapter2.out) (Chapters/Chapter2.out)
+ (Chapters/C3 Data.out) (Chapters/C3 Data.out)
 \@outlinefile=\write4
-\openout4 = `Chapter2.out'.
+\openout4 = `"C3 Data.out"'.
 
 
 Chapter 1.
@@ -556,31 +556,27 @@ Non-PDF special ignored!
 Non-PDF special ignored!
 <special> papersize=176mm,250mm
 
-{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}] [2]
-Chapter 2.
-[3
-
-{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (Chapters/Chapter2.aux)
+{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}] (Chapters/C3 Data.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-03-14>
  ***********
-Package rerunfilecheck Info: File `Chapter2.out' has not changed.
-(rerunfilecheck)             Checksum: 73CB53BE64062D6D17A8B7C2FE450FF6;457.
+Package rerunfilecheck Info: File `"C3 Data".out' has not changed.
+(rerunfilecheck)             Checksum: 2595C1550FEC00381E51D86FA15BEFC1;91.
  ) 
 Here is how much of TeX's memory you used:
- 14398 strings out of 474103
- 225136 string characters out of 5747481
- 1934496 words of memory out of 5000000
- 36542 multiletter control sequences out of 15000+600000
- 570073 words of font info for 67 fonts, out of 8000000 for 9000
+ 14386 strings out of 474103
+ 225004 string characters out of 5747481
+ 1928496 words of memory out of 5000000
+ 36537 multiletter control sequences out of 15000+600000
+ 568218 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 110i,11n,117p,622b,458s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb>
-Output written on Chapters/Chapter2.pdf (3 pages, 67326 bytes).
+ 110i,11n,117p,541b,455s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb>
+Output written on "Chapters/C3 Data.pdf" (1 page, 16180 bytes).
 PDF statistics:
- 63 PDF objects out of 1000 (max. 8388607)
- 46 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
- 17 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 34 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
+ 3 named destinations out of 1000 (max. 500000)
+ 9 words of extra memory for PDF output out of 10000 (max. 10000000)
 

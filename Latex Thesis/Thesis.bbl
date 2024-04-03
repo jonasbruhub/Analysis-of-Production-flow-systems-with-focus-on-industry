@@ -1,13 +1,7 @@
-\begin{thebibliography}{Hoa83}
+\begin{thebibliography}{fCM}
 
-\bibitem[CK01]{CK01}
-Janet Carmenates and Matthew~R. Keith.
-\newblock Impact of automation on pharmacist interventions and medication errors in a correctional health care system.
-\newblock {\em American Journal of Health-System Pharmacy}, 59(9):779--783, May 2001.
-
-\bibitem[Hoa83]{Hoare78}
-C.~A.~R. Hoare.
-\newblock Communicating sequential processes.
-\newblock {\em Communications of the ACM}, 26(1):100--106, 1983.
+\bibitem[fCM]{TuringAward07}
+The~Association for Computing~Machinery.
+\newblock Acm turing award honors founders of automatic verification technology.
 
 \end{thebibliography}
