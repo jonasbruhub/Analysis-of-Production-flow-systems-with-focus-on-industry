@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  3 APR 2024 14:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  4 APR 2024 03:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -474,9 +474,16 @@ LaTeX Info: Redefining \addtolength on input line 81.
 \cur@row=\count321
 \cur@col=\count322
 \conditionsep=\skip75
+) (c:/texlive/2024/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count323
+\float@exts=\toks30
+\float@box=\box62
+\@float@everytoks=\toks31
+\@floatcapt=\box63
 )
-\c@lemma=\count323
-\c@example=\count324
+\c@lemma=\count324
+\c@example=\count325
 ) (c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 Package: subfiles 2020/11/14 v2.2 Multi-file projects (package)
 )
@@ -507,17 +514,17 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
  (c:/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count325
+\scratchcounter=\count326
 \scratchdimen=\dimen257
-\scratchbox=\box62
-\nofMPsegments=\count326
-\nofMParguments=\count327
-\everyMPshowfont=\toks30
-\MPscratchCnt=\count328
+\scratchbox=\box64
+\nofMPsegments=\count327
+\nofMParguments=\count328
+\everyMPshowfont=\toks32
+\MPscratchCnt=\count329
 \MPscratchDim=\dimen258
-\MPnumerator=\count329
-\makeMPintoPDFobject=\count330
-\everyMPtoPDFconversion=\toks31
+\MPnumerator=\count330
+\makeMPintoPDFobject=\count331
+\everyMPtoPDFconversion=\toks33
 ) (c:/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -525,6 +532,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring OFF on input line 3.
@@ -556,27 +564,66 @@ Non-PDF special ignored!
 Non-PDF special ignored!
 <special> papersize=176mm,250mm
 
-{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}] (Chapters/C3 Data.aux)
+{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+<figures/Multiple cycles data/Cleaning batches histograms.png, id=28, 1052.2512pt x 891.8118pt>
+File: figures/Multiple cycles data/Cleaning batches histograms.png Graphic file (type png)
+<use figures/Multiple cycles data/Cleaning batches histograms.png>
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms.png  used on input line 53.
+(pdftex.def)             Requested size: 276.24316pt x 234.12451pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/Multiple cycles data/Cleaning batches histograms combined.png, id=31, 1047.915pt x 424.2249pt>
+File: figures/Multiple cycles data/Cleaning batches histograms combined.png Graphic file (type png)
+<use figures/Multiple cycles data/Cleaning batches histograms combined.png>
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms combined.png  used on input line 63.
+(pdftex.def)             Requested size: 276.24316pt x 111.83pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
+<figures/Multiple cycles data/Cleaning batches.png, id=43, 897.5934pt x 1437.4503pt>
+File: figures/Multiple cycles data/Cleaning batches.png Graphic file (type png)
+<use figures/Multiple cycles data/Cleaning batches.png>
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches.png  used on input line 73.
+(pdftex.def)             Requested size: 310.77026pt x 497.69753pt.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 74.
+ (c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+)
+Underfull \vbox (badness 6808) has occurred while \output is active []
+
+ [3 <./figures/Multiple cycles data/Cleaning batches histograms.png> <./figures/Multiple cycles data/Cleaning batches histograms combined.png>]
+Overfull \vbox (29.32155pt too high) has occurred while \output is active []
+
+ [4 <./figures/Multiple cycles data/Cleaning batches.png>]
+<figures/Multiple cycles data/Cleaning batches timeseries single.png, id=59, 907.7112pt x 312.9291pt>
+File: figures/Multiple cycles data/Cleaning batches timeseries single.png Graphic file (type png)
+<use figures/Multiple cycles data/Cleaning batches timeseries single.png>
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches timeseries single.png  used on input line 81.
+(pdftex.def)             Requested size: 310.77026pt x 107.13458pt.
+ [5 <./figures/Multiple cycles data/Cleaning batches timeseries single.png>] (Chapters/C3 Data.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-03-14>
  ***********
 Package rerunfilecheck Info: File `"C3 Data".out' has not changed.
-(rerunfilecheck)             Checksum: 2595C1550FEC00381E51D86FA15BEFC1;91.
+(rerunfilecheck)             Checksum: 9A74D34F6690BB51DADE3B54C0AB39AD;265.
  ) 
 Here is how much of TeX's memory you used:
- 14386 strings out of 474103
- 225004 string characters out of 5747481
- 1928496 words of memory out of 5000000
- 36537 multiletter control sequences out of 15000+600000
- 568218 words of font info for 64 fonts, out of 8000000 for 9000
+ 14553 strings out of 474103
+ 229314 string characters out of 5747481
+ 1938496 words of memory out of 5000000
+ 36672 multiletter control sequences out of 15000+600000
+ 575073 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 110i,11n,117p,541b,455s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb>
-Output written on "Chapters/C3 Data.pdf" (1 page, 16180 bytes).
+ 110i,11n,117p,713b,490s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on "Chapters/C3 Data.pdf" (5 pages, 289804 bytes).
 PDF statistics:
- 34 PDF objects out of 1000 (max. 8388607)
- 24 compressed objects within 1 object stream
- 3 named destinations out of 1000 (max. 500000)
- 9 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 123 PDF objects out of 1000 (max. 8388607)
+ 83 compressed objects within 1 object stream
+ 14 named destinations out of 1000 (max. 500000)
+ 37 words of extra memory for PDF output out of 10000 (max. 10000000)
 
