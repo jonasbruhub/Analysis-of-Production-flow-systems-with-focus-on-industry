@@ -2,9 +2,8 @@
 \graphicspath{{\subfix{../figures/}}}
 \begin{document}
 
-\chapter{
-    Data
-}
+\chapter{Data}
+TIME IS IN HOURS
 
 The data used consists of six cycles. This means that the total data set consists of six simulation runs. However, each of the runs contains many batches in sequence. The following table lists the number of batches in each of the simulations and some basic statistics
 
@@ -25,11 +24,33 @@ The data used consists of six cycles. This means that the total data set consist
 
 Each batch is comprised several states. These include adding materials (IDs 1 through 4), centrifugation (ID 5), product transfer (the precipitate generated from the centrifugation, ID 6), chemical reaction (ID 7), a post operation state (\textcolor{red}{Probably to let it cool down to a point where it is ready for further processing}, ID 8), Cooling of the product (ID 9), material transfer (transfer the gained product before cleaning of the reaction vessel and/or prepare for the next reaction batch, ID 10).
 
+\section{Adding of solids and materials}
+This part of the process corresponds to events tagged with ID 1 through 4
 
+\section{Centrifugation}
+ID 5
+
+\section{Product transfer}
+ID 6
+
+\section{Reaction}
+ID 7
+
+\section{Post reaction}
+ID 8
+
+\section{Cooling}
+ID 9
+
+\section{Material transfer}
+ID 10
+
+
+\newpage
 \section{Cleaning operations}
 Sometimes, the vessel is cleansed. This is however not every time after a batch so might be interesting to investigate further. Initially, per cycle, the cleanings are summarized in the following table with basic statistics. As can be seen, there is quite some differences.
 
-The most notifiable differences per batch are the number of cleanses especially when comparing to table \ref{tab:cycle basi stats}. For the first two cycles, the cleanses seem to be in between every batch, which is indeed also the while the later four are only sometimes. Furthermore, although the cleanses are between every batch for cycles A and B, the variances are extremely different. For the last four cycles, they seem to be grouped further, E and F are very alike while cleanses in C and D are generally longer although D has a substantially smaller variance than C.
+The most notifiable differences per batch are the number of cleanses especially when comparing to \autoref{tab:cycle basi stats}. For the first two cycles, the cleanses seem to be in between every batch, which is indeed also the while the later four are only sometimes. Furthermore, although the cleanses are between every batch for cycles A and B, the variances are extremely different. For the last four cycles, they seem to be grouped further, E and F are very alike while cleanses in C and D are generally longer although D has a substantially smaller variance than C.
 
 \begin{table}[h]
     \centering
@@ -46,7 +67,7 @@ The most notifiable differences per batch are the number of cleanses especially 
     \label{tab:cycle cleansing stats stats}
 \end{table}
 
-To verify these observations and potentially discovering more important facts of their probability distributions, histograms are plotted in the following figure \ref{fig:cycle cleaning histograms}. We indeed again observe the likeliness between the cycles A and B, C and D, E and F respectively. Also, for the first two cycles and more so cycle B, the cleaning times are somewhat normally distributed although cycle A has a very heavy right tail in that case. The later four cycles only have 10 observations but the mode (i.e. peak) seem to be about the same.
+To verify these observations and potentially discovering more important facts of their probability distributions, histograms are plotted in the following \autoref{fig:cycle cleaning histograms}. We indeed again observe the likeliness between the cycles A and B, C and D, E and F respectively. Also, for the first two cycles and more so cycle B, the cleaning times are somewhat normally distributed although cycle A has a very heavy right tail in that case. The later four cycles only have 10 observations but the mode (i.e. peak) seem to be about the same.
 
 \begin{figure}[h]
     \centering
@@ -55,7 +76,7 @@ To verify these observations and potentially discovering more important facts of
     \label{fig:cycle cleaning histograms}
 \end{figure}
 
-From the above observation of like modes one may want to observe the histogram of the combined set of cleaning times. In particular, under the hypothesis that the durations are actually from the same probability distributions and realized independently within each cycle a histogram of all the observations are of interest and is shown in figure \ref{fig:cycle cleaning histograms combined} below.
+From the above observation of like modes one may want to observe the histogram of the combined set of cleaning times. In particular, under the hypothesis that the durations are actually from the same probability distributions and realized independently within each cycle a histogram of all the observations are of interest and is shown in \autoref{fig:cycle cleaning histograms combined} below.
 
 
 \begin{figure}[H]
@@ -66,7 +87,7 @@ From the above observation of like modes one may want to observe the histogram o
 \end{figure}
 
 
-Finally, to get a better overview of the irregularities is the number of cleaning periods (mostly concerning cycles C through F), each cleaning operation is shown in the following figure \ref{fig:cycle cleaning time series}. The vertical shaded rectangles signify the period in which a cleaning operation is taking place. Furthermore, the event IDs are shown but to get a clearer view on what is going on, a single rectangle (zoomed in) is shown in figure \ref{fig:cycle cleaning time series single}.
+Finally, to get a better overview of the irregularities is the number of cleaning periods (mostly concerning cycles C through F), each cleaning operation is shown in the following \autoref{fig:cycle cleaning time series}. The vertical shaded rectangles signify the period in which a cleaning operation is taking place. Furthermore, the event IDs are shown but to get a clearer view on what is going on, a single rectangle (zoomed in) is shown in \autoref{fig:cycle cleaning time series single}.
 
 \begin{figure}[H]
     \centering
@@ -86,7 +107,85 @@ Finally, to get a better overview of the irregularities is the number of cleanin
 It is observed that the observations marked with red in figure \ref{fig:cycle cleaning time series} occur exactly when that specific cleaning operation does not go to the state 11.0 after the flush of the tank (event ID 11.5) and vice versa. It is hard to conclude what this may mean, but the cleaning being in state 11.0 may indicate that the system is idle before continuing the next batch like what is observed from the other steps of the process flow. Also, it is noted that while the red dots occur nothing else is happening according to the dataset.
 
 
-% There is a relationship between the red dots and when the cleaning does not \textit{return} to state 11.0
+From a modelling point of view, the cycles C through F can be thought of as the cleansing operation having a probability of not happening or equivalently as having a duration of 0. It is thus of interest to observe what the probability of cleaning after an operation is. From \autoref{tab:cycle basi stats} and \autoref{tab:cycle cleansing stats stats}, we that indeed for cycles A and B, the probability is 100 \% when disregarding the possibility of cleaning after the final batch. Hence, we see that for the remaining cycles, the probabilities of cleaning the tank after an operation are as in \autoref {tab:cycle cleaning prob}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|r}
+        Cycle & \% cleaning \\ \hline
+        A & 100.00 \\
+        B & 100.00 \\
+        C & 15.00 \\
+        D & 16.95\\
+        E & 16.95\\
+        F & 16.13
+    \end{tabular}
+    \caption{Per cycle probability of cleaning}
+    \label{tab:cycle cleaning prob}
+\end{table}
+
+
+Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning of the tank or not. It is then of interest if the next batch is followed by a cleaning given whether the current batch is followed by a cleaning. In particular, we count for each of the cycles the transitions which are shown in the following tables. Notice that the number of observations is two less than the total number of batches within each specific cycle. This is due to the last batch is never followed by a cleaning (nor is the first batch superseded by a cleaning procedure) which results in one less observation and also due to the fact that we are logging transitions and hence lose another observation. To test for randomness, a Chi-squared test is carried out on each of the cycles to check for independence. It is observed all the cycles exhibit independence between the groups i.e. there is no statistical evidence for information is gained about if the next batch is followed by a cleaning operation given whether the current batch is followed by a cleaning operation.
+
+\begin{table}[h]
+    \begin{subtable}{.5\linewidth}
+        \centering
+        \begin{tabular}{c|c c}
+            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
+            No & 41 & 9 \\
+            Yes & 9 & 0
+        \end{tabular}
+        \caption{C, $p=0.3293$}
+        \label{tab:cycle C Contingency table}
+    \end{subtable}%
+    \begin{subtable}{.5\linewidth}
+        \centering
+        \begin{tabular}{c|c c}
+            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
+            No & 41 & 8 \\
+            Yes & 7 & 2
+        \end{tabular}
+        \caption{D, $p=0.6456$}
+        \label{tab:cycle D Contingency table}
+    \end{subtable}
+    \begin{subtable}{.5\linewidth}
+        \centering
+        \begin{tabular}{c|c c}
+            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
+            No & 41 & 7 \\
+            Yes & 7 & 3
+        \end{tabular}
+        \caption{E, $p=0.3532$}
+        \label{tab:cycle E Contingency table}
+    \end{subtable}%
+    \begin{subtable}{.5\linewidth}
+        \centering
+        \begin{tabular}{c|c c}
+            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
+            No & 41 & 9 \\
+            Yes & 9 & 1
+        \end{tabular}
+        \caption{F, $p=1.0000$}
+        \label{tab:cycle F Contingency table}
+    \end{subtable}
+
+    \caption{Contingency table for Cycle C-F}
+    % \label{tab:}
+\end{table}
+
+Thus collecting the observations from all the last four cycles, we may want to model the atom of the cleaning procedure independently of the previous batch and with a probability of $0.8375$ corresponding to the cleaning procedure only being carried out $16,25$\% of cases.
+
+Finally, we show the autocorrelation function for each the four cycles C-F in \autoref{fig:cycle cleaning ACF} and note that all the ACF stay within the 95\% confidence interval.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/Cleaning Autocorrelation.png}
+    \caption{Autocorrelation function for each of the final 4 cycles. As can also be seen from this there seem to be no information to be gained of $C_i$ from $C_{i-1}$.}
+    \label{fig:cycle cleaning ACF}
+\end{figure}
+
+
+% There is a relationship between the red dots and when the cleaning does not \textit{return} to state 11.0 -> probably no
 
 
 \end{document}

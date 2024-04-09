@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  4 APR 2024 03:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  9 APR 2024 17:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -476,9 +476,59 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box62
 \@float@everytoks=\toks31
 \@floatcapt=\box63
+) (c:/texlive/2024/texmf-dist/tex/latex/diagbox/diagbox.sty
+Package: diagbox 2020/02/09 v2.3 Making table heads with diagonal lines
+ (c:/texlive/2024/texmf-dist/tex/latex/pict2e/pict2e.sty
+Package: pict2e 2020/09/30 v0.4b Improved picture commands (HjG,RN,JT)
+ (c:/texlive/2024/texmf-dist/tex/latex/pict2e/pict2e.cfg
+File: pict2e.cfg 2016/02/05 v0.1u pict2e configuration for teTeX/TeXLive
 )
-\c@lemma=\count324
-\c@example=\count325
+Package pict2e Info: Driver file: pdftex.def on input line 112.
+Package pict2e Info: Driver file for pict2e: p2e-pdftex.def on input line 114.
+ (c:/texlive/2024/texmf-dist/tex/latex/pict2e/p2e-pdftex.def
+File: p2e-pdftex.def 2016/02/05 v0.1u Driver-dependant file (RN,HjG,JT)
+)
+\pIIe@GRAPH=\toks32
+\@arclen=\dimen257
+\@arcrad=\dimen258
+\pIIe@tempdima=\dimen259
+\pIIe@tempdimb=\dimen260
+\pIIe@tempdimc=\dimen261
+\pIIe@tempdimd=\dimen262
+\pIIe@tempdime=\dimen263
+\pIIe@tempdimf=\dimen264
+
+
+Package pict2e Warning: \arc redefined on input line 682.
+
+) (c:/texlive/2024/texmf-dist/tex/latex/tools/array.sty
+Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
+\col@sep=\dimen265
+\ar@mcellbox=\box64
+\extrarowheight=\dimen266
+\NC@list=\toks33
+\extratabsurround=\skip76
+\backup@length=\skip77
+\ar@cellbox=\box65
+)
+\diagbox@boxa=\box66
+\diagbox@boxb=\box67
+\diagbox@boxm=\box68
+\diagbox@wd=\dimen267
+\diagbox@ht=\dimen268
+\diagbox@insepl=\dimen269
+\diagbox@insepr=\dimen270
+\diagbox@outsepl=\dimen271
+\diagbox@outsepr=\dimen272
+) (c:/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count324
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count325
+)
+\c@lemma=\count326
+\c@example=\count327
 ) (c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 Package: subfiles 2020/11/14 v2.2 Multi-file projects (package)
  (c:/texlive/2024/texmf-dist/tex/latex/import/import.sty
@@ -511,17 +561,17 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 50.
 LaTeX Font Info:    ... okay on input line 50.
  (c:/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count326
-\scratchdimen=\dimen257
-\scratchbox=\box64
-\nofMPsegments=\count327
-\nofMParguments=\count328
-\everyMPshowfont=\toks32
-\MPscratchCnt=\count329
-\MPscratchDim=\dimen258
-\MPnumerator=\count330
-\makeMPintoPDFobject=\count331
-\everyMPtoPDFconversion=\toks33
+\scratchcounter=\count328
+\scratchdimen=\dimen273
+\scratchbox=\box69
+\nofMPsegments=\count329
+\nofMParguments=\count330
+\everyMPshowfont=\toks34
+\MPscratchCnt=\count331
+\MPscratchDim=\dimen274
+\MPnumerator=\count332
+\makeMPintoPDFobject=\count333
+\everyMPtoPDFconversion=\toks35
 ) (c:/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -541,7 +591,7 @@ LaTeX Font Info:    Trying to load font information for T1+cmss on input line 54
  (c:/texlive/2024/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-<figures/DTU-logo.pdf, id=79, 38.98846pt x 56.87358pt>
+<figures/DTU-logo.pdf, id=107, 38.98846pt x 56.87358pt>
 File: figures/DTU-logo.pdf Graphic file (type pdf)
 <use figures/DTU-logo.pdf>
 Package pdftex.def Info: figures/DTU-logo.pdf  used on input line 54.
@@ -572,24 +622,23 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 ]) (./Preface.tex [3] [4
 
 ]
-<figures/SignatureDummy.jpg, id=114, 257.46187pt x 103.13531pt>
+<figures/SignatureDummy.jpg, id=142, 257.46187pt x 103.13531pt>
 File: figures/SignatureDummy.jpg Graphic file (type jpg)
 <use figures/SignatureDummy.jpg>
 Package pdftex.def Info: figures/SignatureDummy.jpg  used on input line 17.
 (pdftex.def)             Requested size: 128.7306pt x 51.56752pt.
 ) (./Acknowledgements.tex [5 <./figures/SignatureDummy.jpg>] [6
 
-]) [7] [8] (./Thesis.toc)
+]) [7] [8] (./Thesis.toc [9
+
+])
 \tf@toc=\write5
 \openout5 = `Thesis.toc'.
 
- [9
-
-] [10
-
-] (./Chapters/C1 Brownian Motion Time to Level.tex
+ [10] (./Chapters/C1 Brownian Motion Time to Level.tex
 Chapter 1.
 [1
+
 
 ] [2{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
 Overfull \hbox (3.77168pt too wide) in paragraph at lines 78--79
@@ -601,7 +650,7 @@ Overfull \hbox (3.77168pt too wide) in paragraph at lines 78--79
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4] [5] [6]
-<figures/Brownian motion w. drift distribution and montecarlo.png, id=204, 408.3255pt x 298.4751pt>
+<figures/Brownian motion w. drift distribution and montecarlo.png, id=239, 408.3255pt x 298.4751pt>
 File: figures/Brownian motion w. drift distribution and montecarlo.png Graphic file (type png)
 <use figures/Brownian motion w. drift distribution and montecarlo.png>
 Package pdftex.def Info: figures/Brownian motion w. drift distribution and montecarlo.png  used on input line 200.
@@ -635,58 +684,68 @@ Chapter 3.
 
 ]
 Chapter 4.
-[17]
-<figures/Multiple cycles data/Cleaning batches histograms.png, id=262, 1052.2512pt x 891.8118pt>
+[17] [18] [19]
+<figures/Multiple cycles data/Cleaning batches histograms.png, id=307, 1052.2512pt x 891.8118pt>
 File: figures/Multiple cycles data/Cleaning batches histograms.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches histograms.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms.png  used on input line 53.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms.png  used on input line 74.
 (pdftex.def)             Requested size: 276.24316pt x 234.12451pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/Multiple cycles data/Cleaning batches histograms combined.png, id=264, 1047.915pt x 424.2249pt>
+<figures/Multiple cycles data/Cleaning batches histograms combined.png, id=309, 1047.915pt x 424.2249pt>
 File: figures/Multiple cycles data/Cleaning batches histograms combined.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches histograms combined.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms combined.png  used on input line 63.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms combined.png  used on input line 84.
 (pdftex.def)             Requested size: 276.24316pt x 111.83pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [18]
-<figures/Multiple cycles data/Cleaning batches.png, id=274, 897.5934pt x 1437.4503pt>
+ [20]
+<figures/Multiple cycles data/Cleaning batches.png, id=320, 897.5934pt x 1437.4503pt>
 File: figures/Multiple cycles data/Cleaning batches.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches.png  used on input line 73.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches.png  used on input line 94.
 (pdftex.def)             Requested size: 310.77026pt x 497.69753pt.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 74.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 95.
  (c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
 Underfull \vbox (badness 6808) has occurred while \output is active []
 
- [19 <./figures/Multiple cycles data/Cleaning batches histograms.png> <./figures/Multiple cycles data/Cleaning batches histograms combined.png>]
+ [21 <./figures/Multiple cycles data/Cleaning batches histograms.png> <./figures/Multiple cycles data/Cleaning batches histograms combined.png>]
 Overfull \vbox (29.32155pt too high) has occurred while \output is active []
 
- [20 <./figures/Multiple cycles data/Cleaning batches.png>]
-<figures/Multiple cycles data/Cleaning batches timeseries single.png, id=291, 907.7112pt x 312.9291pt>
+ [22 <./figures/Multiple cycles data/Cleaning batches.png>]
+<figures/Multiple cycles data/Cleaning batches timeseries single.png, id=336, 907.7112pt x 312.9291pt>
 File: figures/Multiple cycles data/Cleaning batches timeseries single.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches timeseries single.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches timeseries single.png  used on input line 81.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches timeseries single.png  used on input line 102.
 (pdftex.def)             Requested size: 310.77026pt x 107.13458pt.
-) [21 <./figures/Multiple cycles data/Cleaning batches timeseries single.png>]
+ [23 <./figures/Multiple cycles data/Cleaning batches timeseries single.png>]
+<figures/Multiple cycles data/Cleaning Autocorrelation.png, id=348, 737.8767pt x 727.7589pt>
+File: figures/Multiple cycles data/Cleaning Autocorrelation.png Graphic file (type png)
+<use figures/Multiple cycles data/Cleaning Autocorrelation.png>
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning Autocorrelation.png  used on input line 182.
+(pdftex.def)             Requested size: 276.24316pt x 272.46472pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [24] [25 <./figures/Multiple cycles data/Cleaning Autocorrelation.png>]
 \openout2 = `Appendix1.aux'.
 
- (./Appendix1.tex [22
+ (./Appendix1.tex [26
 
 
 ]
 Appendix A.
-) [23] [24
+) [27] [28
 
 
 
-] (./Thesis.bbl) [25
+] (./Thesis.bbl) [29
 
 ] (./Thesis.aux (./Appendix1.aux))
  ***********
@@ -694,21 +753,21 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-03-14>
  ***********
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 72E5A7093F68ABC9A8E01BB726290D1F;3635.
+(rerunfilecheck)             Checksum: E9852E920D55F23666F4EB1D1109E579;4704.
  ) 
 Here is how much of TeX's memory you used:
- 14763 strings out of 474103
- 233422 string characters out of 5747481
+ 15283 strings out of 474103
+ 242228 string characters out of 5747481
  1950496 words of memory out of 5000000
- 36782 multiletter control sequences out of 15000+600000
- 581574 words of font info for 91 fonts, out of 8000000 for 9000
+ 37260 multiletter control sequences out of 15000+600000
+ 585664 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,19n,100p,747b,615s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss1728.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2074.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on Thesis.pdf (37 pages, 589759 bytes).
+ 90i,19n,100p,1220b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfss1728.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2074.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on Thesis.pdf (41 pages, 677134 bytes).
 PDF statistics:
- 451 PDF objects out of 1000 (max. 8388607)
- 341 compressed objects within 4 object streams
- 66 named destinations out of 1000 (max. 500000)
- 188 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 537 PDF objects out of 1000 (max. 8388607)
+ 412 compressed objects within 5 object streams
+ 80 named destinations out of 1000 (max. 500000)
+ 249 words of extra memory for PDF output out of 10000 (max. 10000000)
 
