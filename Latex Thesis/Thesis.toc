@@ -17,8 +17,8 @@
 \contentsline {chapter}{\numberline {3}Ideer til hvad der skal laves}{15}{chapter.3}%
 \contentsline {chapter}{\numberline {4}Data}{17}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Incompleteness on trailing batches}{18}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Addition of solids and materials}{19}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Cleaning operations}{23}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Overall correlation and stuff}{28}{section.4.4}%
-\contentsline {chapter}{\numberline {A}Stuff}{29}{appendix.A}%
-\contentsline {chapter}{Bibliography}{31}{appendix.A}%
+\contentsline {section}{\numberline {4.2}Production phases}{20}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Correlations}{23}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}Cleaning operations}{25}{section.4.3}%
+\contentsline {chapter}{\numberline {A}Stuff}{31}{appendix.A}%
+\contentsline {chapter}{Bibliography}{33}{appendix.A}%

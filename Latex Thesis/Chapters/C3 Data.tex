@@ -5,7 +5,7 @@
 \chapter{Data}
 TIME IS IN HOURS
 
-The data used consists of six cycles. This means that the total data set consists of six simulation runs. However, each of the runs contains many batches in sequence. The following table lists the number of batches in each of the simulations and some basic statistics
+The data used consists of six cycles. This means that the total data set consists of six simulation runs. However, each of the runs contains many batches in sequence. The following table lists the number of batches in each of the simulations and some basic statistics regarding the duration of the batches (in hours)
 
 \begin{table}[h]
     \centering
@@ -53,7 +53,7 @@ As it may be of interest to investigate the correlation structure of different m
 
 Investigating when these inadequacies occur reveals that they are the last batch from each of the cycles. For example, the final batch from cycle A only goes to phase 6 (the product transfer). This can however be explained from the fact that simulation only last for 1100 hours for each cycle and is thus simply cut-off here. As we do not know if these final operations were done at the time the simulations were cut off (which is likely not the case), the final phase for each of the final batches should be disregarded. The cut-off can be also be observed in \autoref{fig:last batch example}. Furthermore, throwing away 6 incomplete batches out of the total 374 will likely not harm the analysis and is thus thrown away as this will make the analysis much simpler later on.
 
-% Bliver den afbrudt midt i??
+% Bliver den afbrudt midt i?? -> Ja, den sidste i hver bliver afbrudt midt i en af phaserne
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/tailing batch short.png}
@@ -64,17 +64,12 @@ Investigating when these inadequacies occur reveals that they are the last batch
 After cutting of the final 6 batches, we have a total of 368 batches of which each goes through all the phases. We thus proceed to discuss the negative phase IDs in the following section, where we also discuss the first four phases.
 
 
-% \begin{table}
-%     \centering
-%     \begin{tabular}{c|ccccccccccccccc}
-%         ID & 1 & 2 & 3 & 3.1 & 3.2 & 4 & 4.1 & 4.2 & 4.3 & 5 & 6 & 7 & 8 & 9 & 10 \\\hline
-%         Count & 374 & 374 & 181 & 374 & 374 & 163 & 374 & 374 & 374 & 374 & 374 & 370 & 369 & 369 & 368
-%     \end{tabular}
-% \end{table}
 
 
-\section{Addition of solids and materials}
-This part of the process corresponds to events tagged with ID 1 through 4. In \autoref{fig:B_22 phase 1-4} and example of how the process evolves over time through the different phases is shown. Immediately, we observe something weird, namely the negative event IDs.
+\newpage
+
+\section{Production phases}
+This part of the process corresponds to events tagged with ID 1 through 10 but will initially concern itself with ID 1 through 4 as much can be learned from the data set here. In \autoref{fig:B_22 phase 1-4} and example of how the process evolves over time through the different phases is shown. Immediately, we observe something weird, namely the negative event IDs.
 
 \begin{figure}[h]
     \centering
@@ -85,9 +80,8 @@ This part of the process corresponds to events tagged with ID 1 through 4. In \a
 
 To see what is going on here, from data we can see that negative values occur throughout all the six cycles. More specifically, for each negative phase observed, we log in which cycles this occurs. The result is shown in \autoref{tab:phase negative observations}. Notice that -4.1, -4.2 and -4.3 only show up in cycle F, which from \cite{benchmark-model-to-generate-batch-process-data} is known to be the only one with wrongly labelled phases. We thus suspect that this is indeed the case for these labels and might just have supposed to be the original 4.1, 4.2 and 4.3. To see if nothing funny goes on with these values, these batches are plotted as in \autoref{fig:B_22 phase 1-4} in \autoref{fig:negative 4 batches}.
 
-% \cellcolor{blue!25}
 
-\begin{table}
+\begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c}
         \diagbox{Event}{Cycle} & A & B & C & D & E & F\\\hline
@@ -109,33 +103,20 @@ To see what is going on here, from data we can see that negative values occur th
     \label{tab:phase negative observations}
 \end{table}
 
-% -1 & A, B, C, D\\
-% -2 & D, E, F\\
-% -3 & A, C, D, E, F\\
-% -4 & B, C, D, E\\
-% -4.1 & F\\
-% -4.2 & F\\
-% -4.3 & F\\
-% -5 & A, B, C, D, E, F\\
-% -6 & B, C, D, E, F\\
-% -7 & A, C, D, E, F\\
-% -8 & A, C, D, E, F\\
-% -9 & D, E, F\\
-% -10 & B, D, E, F
 
 
-\begin{figure}
+\autoref{fig:negative 4 batches} shows that nothing weird is going on except for the negation of the sub phase's ID. The same can be said for the remaining of the cases where phase ID -4.1, -4.2 and/or -4.3 is used. We thus conclude that these may simply be wrongly labelled thus we convert every such instance to its absolute value and continue with this modified data set from this point on.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=.85\linewidth]{figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png}
     \caption{13 of the 48 batches with at least one of the sub phases 4.1, 4.2 4.3 negative.}
     \label{fig:negative 4 batches}
 \end{figure}
 
-\autoref{fig:negative 4 batches} shows that nothing weird is going on except for the negation of the sub phase's ID. The same can be said for the remaining of the cases where phase ID -4.1, -4.2 and/or -4.3 is used. We thus conclude that these may simply be wrongly labelled thus we convert every such instance to its absolute value and continue with this modified data set from this point on.
-
 Having converted the above sub phase IDs we summarize the current situation in regard to negative phase IDs in the following table, \autoref{tab:phase negative observations mod}. Now all the remaining occurrences of negative phase IDS does not seem to exhibit any structure from looking at \autoref{tab:phase negative observations mod}. We thus proceed to understand what is going on with the remaining negative phase IDs.
 
-\begin{table}
+\begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c}
         \diagbox{Event}{Cycle} & A & B & C & D & E & F\\\hline
@@ -154,20 +135,54 @@ Having converted the above sub phase IDs we summarize the current situation in r
     \label{tab:phase negative observations mod}
 \end{table}
 
-From looking 
+When plotting different batches, it is clear that the negative phase IDs only occur at the end of a phase e.g. -1 only happens after 1 and so on. This together with the fact that -3 and -4 also only happen after 3.1, 3.2 and 4.1, 4.2, 4.3 respectively (and we never see a phase labelled 3 or 4) indicate that the negative phase IDs could very well correspond to delays at the end of a phase, which both makes sense from a production point of view but also from \cite{benchmark-model-to-generate-batch-process-data} where they note that all simulated cycles have been implemented with delays.
 
-% Duration of these against each other?
+At this point, it would seem that the labels of the processes are understood for phases 1 through 10 corresponding to the actual production in each batch. Thus, we proceed by searching relationships and otherwise quantifying the durations of each phase, both delays and duration for each of the phases. As a beginning, histograms for each of the phases and delays are plotted in \autoref{fig:histogram production durations}. Notice that phases 4.1, 4.3 and 8 are not shown, this is because they always last 15 min, 5 min and 2 hours respectively with the only derivation being in machine precision either when loaded or during calculations. Furthermore, notice that for the negative IDs i.e. the delays, the orange bar. This bar represents the cases where no delay was observed which is thus modelled as an atom at 1.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png}
+    \caption{Histograms of all phases and delays which are non-constant.}
+    \label{fig:histogram production durations}
+\end{figure}
+
+Apart from the above comments, not much catches the eye when looking at \autoref{fig:histogram production durations}, and we thus proceed be checking if any correlation is immediately present.
 
 
 
 
-Event 3 and 4 only happens with negative sign. i.e. -3 and -4 (and not with positive sign). From reading the paper, negative sign is likely to indicate a delay at the end of a phase. It is observed that in general, for each head-phase such as 1, 2, 3 and 4 (i.e. not 4.1 and 4.2), there exists observations with negative that phase ID and only at the end of the phase. We thus conclude that this must correspond to the delays which are also presented in \cite{benchmark-model-to-generate-batch-process-data}.
+\subsection{Correlations}
+
+Lige en korrelationsmatrix
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.9\linewidth]{figures/Multiple cycles data/Correlation matrix production and delays.png}
+    \caption{Correlation matrix for all phases with non-constant duration.}
+\end{figure}
+
+9 og 10 er ikke specielt korreleret med noget (afkøling og materiale overførsel). Ellers er 2 fremt il og med reaktionen alle korrelerede med hinanden. Eftersom rent fysisk det udvikles i tid, må handlingen i 2 påvirke de næste osv. 
+
+Umiddelbart lidt spøjst hvis delay på 7 (reaktion) skulle have noget med tiden for afkøling at gøre, især at den skulle være positiv (ville man ikke tro delay efter produktion ville afkøle mere og dermed reducere behov for afkøling, medmindre varmt steam bliver tilføjet også under delay på 7)
 
 
 
-4.1, 4.3 and 8 are constant 15 min, 5 min and 2 hours
 
 
+
+
+
+
+% Check at eventID altid er kronologisk stigende, absolut værdi (med undtagelse for 3 og 4, der gør lidt tilbage grundet waiting time)
+
+% Peaks i e.g. 1, kommer det fra en specifik cycle?
+
+% sammenhæng med fyldningsniveau?
+
+% correlaiton diagrammer
+
+% Betyder delay på 7 (ID -7) at der bliver produceret mere? Eller er det bare den er færdig og man så venter til næste operation?
+
+% Skal man måske prøve at modellere sig ud af korrelationen? Måske ved at kigge på fyldningsniveauet, da det nok beskriver en del
 
 
 \newpage
@@ -308,15 +323,10 @@ Finally, we show the autocorrelation function for each the four cycles C-F in \a
     \label{fig:cycle cleaning ACF}
 \end{figure}
 
-
-% There is a relationship between the red dots and when the cleaning does not \textit{return} to state 11.0 -> probably no
-
-\newpage
-\section{Overall correlation and stuff}
-
 \end{document}
 
 
+% There is a relationship between the red dots and when the cleaning does not \textit{return} to state 11.0 -> probably no
 
 
 % Correlationssky mellem delay og % filled
