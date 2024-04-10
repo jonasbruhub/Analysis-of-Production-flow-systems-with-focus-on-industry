@@ -187,6 +187,9 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/array.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/array.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT Chapters/C3 Data.aux
@@ -266,6 +269,21 @@ INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecrm1440.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecss1000.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecsx1000.tfm
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
 INPUT ./figures/Multiple cycles data/Cleaning batches histograms.png
 INPUT ./figures/Multiple cycles data/Cleaning batches histograms.png
 INPUT ./figures/Multiple cycles data/Cleaning batches histograms.png

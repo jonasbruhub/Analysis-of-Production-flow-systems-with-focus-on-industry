@@ -22,28 +22,152 @@ The data used consists of six cycles. This means that the total data set consist
     \label{tab:cycle basi stats}
 \end{table}
 
-Each batch is comprised several states. These include adding materials (IDs 1 through 4), centrifugation (ID 5), product transfer (the precipitate generated from the centrifugation, ID 6), chemical reaction (ID 7), a post operation state (\textcolor{red}{Probably to let it cool down to a point where it is ready for further processing}, ID 8), Cooling of the product (ID 9), material transfer (transfer the gained product before cleaning of the reaction vessel and/or prepare for the next reaction batch, ID 10).
+Each batch comprises several states. These include adding materials (IDs 1 through 4), centrifugation (ID 5), product transfer (the precipitate generated from the centrifugation, ID 6), chemical reaction (ID 7), a post operation state (\textcolor{red}{Probably to let it cool down to a point where it is ready for further processing}, ID 8), Cooling of the product (ID 9), material transfer (transfer the gained product before cleaning of the reaction vessel and/or prepare for the next reaction batch, ID 10). Notice that there is a total of 374 batches throughout the 6 observed cycles.
 
-\section{Adding of solids and materials}
-This part of the process corresponds to events tagged with ID 1 through 4
+\section{Incompleteness on trailing batches}
+As it may be of interest to investigate the correlation structure of different metrics and variables later on, it is important to understand how each of the batches across the cycles behave. Initially, when looking through the dataset, we observe a few negative phase IDs which will need investigation. However, before we do so, we check that each of the batches actually go through all the states mentioned in \cite{benchmark-model-to-generate-batch-process-data}. Thus, we take the absolute value of the negative phase IDs to ease the analysis prior to the analysis of the negative phase IDs. After this is done, we observe that not all batches go through all the phases and that some seem to have extra phases not described by \cite{benchmark-model-to-generate-batch-process-data}. Namely, from \autoref{tab:absolute phase ID batch count}, we see that IDs 3 and 4 (which are not described in \cite{benchmark-model-to-generate-batch-process-data}) have significantly fewer batches going through this phase. But perhaps even more interesting is the final 4 phases where almost all batches goes through these phases.
 
-\section{Centrifugation}
-ID 5
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c}
+        ID & Count \\\hline
+        1.0 & 374\\
+        2.0 & 374\\
+        3.0 & 181\\
+        3.1 & 374\\
+        3.2 & 374\\
+        4.0 & 163\\
+        4.1 & 374\\
+        4.2 & 374\\
+        4.3 & 374\\
+        5.0 & 374\\
+        6.0 & 374\\
+        7.0 & 370\\
+        8.0 & 369\\
+        9.0 & 369\\
+        10.0 & 368
+    \end{tabular}
+    \caption{The number of batches across all cycles that contains at least one observation for each different absolute phase ID.}
+    \label{tab:absolute phase ID batch count}
+\end{table}
 
-\section{Product transfer}
-ID 6
+Investigating when these inadequacies occur reveals that they are the last batch from each of the cycles. For example, the final batch from cycle A only goes to phase 6 (the product transfer). This can however be explained from the fact that simulation only last for 1100 hours for each cycle and is thus simply cut-off here. As we do not know if these final operations were done at the time the simulations were cut off (which is likely not the case), the final phase for each of the final batches should be disregarded. The cut-off can be also be observed in \autoref{fig:last batch example}. Furthermore, throwing away 6 incomplete batches out of the total 374 will likely not harm the analysis and is thus thrown away as this will make the analysis much simpler later on.
 
-\section{Reaction}
-ID 7
+% Bliver den afbrudt midt i??
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/tailing batch short.png}
+    \caption{The first and last batch from cycle A. It is clear that the final batch is cut-off even before the current phase it finished.}
+    \label{fig:last batch example}
+\end{figure}
 
-\section{Post reaction}
-ID 8
+After cutting of the final 6 batches, we have a total of 368 batches of which each goes through all the phases. We thus proceed to discuss the negative phase IDs in the following section, where we also discuss the first four phases.
 
-\section{Cooling}
-ID 9
 
-\section{Material transfer}
-ID 10
+% \begin{table}
+%     \centering
+%     \begin{tabular}{c|ccccccccccccccc}
+%         ID & 1 & 2 & 3 & 3.1 & 3.2 & 4 & 4.1 & 4.2 & 4.3 & 5 & 6 & 7 & 8 & 9 & 10 \\\hline
+%         Count & 374 & 374 & 181 & 374 & 374 & 163 & 374 & 374 & 374 & 374 & 374 & 370 & 369 & 369 & 368
+%     \end{tabular}
+% \end{table}
+
+
+\section{Addition of solids and materials}
+This part of the process corresponds to events tagged with ID 1 through 4. In \autoref{fig:B_22 phase 1-4} and example of how the process evolves over time through the different phases is shown. Immediately, we observe something weird, namely the negative event IDs.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\linewidth]{figures/Multiple cycles data/Adding of solids/B_22 long waiting.png}
+    \caption{}
+    \label{fig:B_22 phase 1-4}
+\end{figure}
+
+To see what is going on here, from data we can see that negative values occur throughout all the six cycles. More specifically, for each negative phase observed, we log in which cycles this occurs. The result is shown in \autoref{tab:phase negative observations}. Notice that -4.1, -4.2 and -4.3 only show up in cycle F, which from \cite{benchmark-model-to-generate-batch-process-data} is known to be the only one with wrongly labelled phases. We thus suspect that this is indeed the case for these labels and might just have supposed to be the original 4.1, 4.2 and 4.3. To see if nothing funny goes on with these values, these batches are plotted as in \autoref{fig:B_22 phase 1-4} in \autoref{fig:negative 4 batches}.
+
+% \cellcolor{blue!25}
+
+\begin{table}
+    \centering
+    \begin{tabular}{c|c|c|c|c|c|c}
+        \diagbox{Event}{Cycle} & A & B & C & D & E & F\\\hline
+        -1 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & & \\\hline
+        -2 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -3 & \cellcolor{black!50} && \cellcolor{black!50} & \cellcolor{black!50}  & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -4 & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \\\hline
+        -4.1 & &&&&&\cellcolor{black!50}\\\hline
+        -4.2 & &&&&&\cellcolor{black!50}\\\hline
+        -4.3 & &&&&&\cellcolor{black!50}\\\hline
+        -5 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -6 &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -7 & \cellcolor{black!50} &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -8 & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -9 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -10 & & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}
+    \end{tabular}
+    \caption{Occurrences of negative phases IDs. It is observed that sub phases 4.1, 4.2, 4.3 only occur in cycle F which is known to be the only cycle with wrongly labelled phases.}
+    \label{tab:phase negative observations}
+\end{table}
+
+% -1 & A, B, C, D\\
+% -2 & D, E, F\\
+% -3 & A, C, D, E, F\\
+% -4 & B, C, D, E\\
+% -4.1 & F\\
+% -4.2 & F\\
+% -4.3 & F\\
+% -5 & A, B, C, D, E, F\\
+% -6 & B, C, D, E, F\\
+% -7 & A, C, D, E, F\\
+% -8 & A, C, D, E, F\\
+% -9 & D, E, F\\
+% -10 & B, D, E, F
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.85\linewidth]{figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png}
+    \caption{13 of the 48 batches with at least one of the sub phases 4.1, 4.2 4.3 negative.}
+    \label{fig:negative 4 batches}
+\end{figure}
+
+\autoref{fig:negative 4 batches} shows that nothing weird is going on except for the negation of the sub phase's ID. The same can be said for the remaining of the cases where phase ID -4.1, -4.2 and/or -4.3 is used. We thus conclude that these may simply be wrongly labelled thus we convert every such instance to its absolute value and continue with this modified data set from this point on.
+
+Having converted the above sub phase IDs we summarize the current situation in regard to negative phase IDs in the following table, \autoref{tab:phase negative observations mod}. Now all the remaining occurrences of negative phase IDS does not seem to exhibit any structure from looking at \autoref{tab:phase negative observations mod}. We thus proceed to understand what is going on with the remaining negative phase IDs.
+
+\begin{table}
+    \centering
+    \begin{tabular}{c|c|c|c|c|c|c}
+        \diagbox{Event}{Cycle} & A & B & C & D & E & F\\\hline
+        -1 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & & \\\hline
+        -2 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -3 & \cellcolor{black!50} && \cellcolor{black!50} & \cellcolor{black!50}  & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -4 & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \\\hline
+        -5 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -6 &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -7 & \cellcolor{black!50} &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -8 & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -9 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
+        -10 & & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}
+    \end{tabular}
+    \caption{Occurrences of negative phases IDs. It is observed that sub phases 4.1, 4.2, 4.3 only occur in cycle F which is known to be the only cycle with wrongly labelled phases.}
+    \label{tab:phase negative observations mod}
+\end{table}
+
+From looking 
+
+% Duration of these against each other?
+
+
+
+
+Event 3 and 4 only happens with negative sign. i.e. -3 and -4 (and not with positive sign). From reading the paper, negative sign is likely to indicate a delay at the end of a phase. It is observed that in general, for each head-phase such as 1, 2, 3 and 4 (i.e. not 4.1 and 4.2), there exists observations with negative that phase ID and only at the end of the phase. We thus conclude that this must correspond to the delays which are also presented in \cite{benchmark-model-to-generate-batch-process-data}.
+
+
+
+4.1, 4.3 and 8 are constant 15 min, 5 min and 2 hours
+
+
 
 
 \newpage
@@ -187,5 +311,12 @@ Finally, we show the autocorrelation function for each the four cycles C-F in \a
 
 % There is a relationship between the red dots and when the cleaning does not \textit{return} to state 11.0 -> probably no
 
+\newpage
+\section{Overall correlation and stuff}
 
 \end{document}
+
+
+
+
+% Correlationssky mellem delay og % filled

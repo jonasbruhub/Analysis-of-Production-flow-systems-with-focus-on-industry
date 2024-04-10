@@ -180,6 +180,9 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/array.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/array.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/import/import.sty
@@ -324,9 +327,26 @@ INPUT ./Chapters/C2 Introduction and Problem.tex
 INPUT ./Chapters/C2 Introduction and Problem.tex
 INPUT Chapters/C2 Introduction and Problem.tex
 INPUT ./Chapters/C3 Data.tex
-INPUT Chapters/C3 Data.tex
 INPUT ./Chapters/C3 Data.tex
 INPUT Chapters/C3 Data.tex
+INPUT ./Chapters/C3 Data.tex
+INPUT ./Chapters/C3 Data.tex
+INPUT Chapters/C3 Data.tex
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/tailing batch short.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
+INPUT ./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png
 INPUT ./figures/Multiple cycles data/Cleaning batches histograms.png
 INPUT ./figures/Multiple cycles data/Cleaning batches histograms.png
 INPUT figures/Multiple cycles data/Cleaning batches histograms.png
