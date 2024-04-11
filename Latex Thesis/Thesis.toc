@@ -19,6 +19,6 @@
 \contentsline {section}{\numberline {4.1}Incompleteness on trailing batches}{18}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Production phases}{20}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1}Correlations}{23}{subsection.4.2.1}%
-\contentsline {section}{\numberline {4.3}Cleaning operations}{25}{section.4.3}%
-\contentsline {chapter}{\numberline {A}Stuff}{31}{appendix.A}%
-\contentsline {chapter}{Bibliography}{33}{appendix.A}%
+\contentsline {section}{\numberline {4.3}Cleaning operations}{27}{section.4.3}%
+\contentsline {chapter}{\numberline {A}Stuff}{33}{appendix.A}%
+\contentsline {chapter}{Bibliography}{35}{appendix.A}%

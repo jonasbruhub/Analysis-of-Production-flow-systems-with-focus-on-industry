@@ -167,8 +167,21 @@ Umiddelbart lidt spøjst hvis delay på 7 (reaktion) skulle have noget med tiden
 
 
 
+Herunder er samme korrelationsmatrix, dog hvor delay og phasens varighed lagt sammen (også med sub phases såsom 3.1, 3.2 og -3 tilsammen bliver 3)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.9\linewidth]{figures/Multiple cycles data/Correlation matrix collapsed phases.png}
+    \caption{Correlation matrix for all phases collapsed}
+\end{figure}
 
 
+Ligeledes scatter plots for superdiagonalen i ovenstående matrix. Altså phase 1 overfor phase 2, phase 2 overfor phase 3 osv. Er farvelagt efter hvilken cycle de kommer fra. \autoref{tab:phase negative observations mod} forklarer hvorfor nogle af de horisontale fremkommer sammen med \autoref{fig:histogram production durations} (selve produktionstiden er ret kort sammenlignet med delay.)
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/Multiple cycles data/phase scatter vs next phase.png}
+    \caption{Phases vs their next phase when collecting everything regarding a single phase into a total time duration}
+\end{figure}
 
 
 
@@ -330,3 +343,26 @@ Finally, we show the autocorrelation function for each the four cycles C-F in \a
 
 
 % Correlationssky mellem delay og % filled
+
+
+
+
+% 1 og -1 sammen osv -> ny korrelationsmatrix -> DONE
+
+% Binært billede af korrelationsmatrix om hvad der er med ud fra threshhold T (varirer lidt om hvad der kan give mening -> absolutværdi af korrelation obv.))
+
+% plot tider for operationer over for hinanden: O1 vs O2, O2 vs O3 -> DONE
+
+
+
+% Bo skal sende Claras PhD. vedrørende togmodeller
+
+% MODEL: baseret på threshhold for en phase, kan gå to veje, MPH* mmodel i den ene (måske) , MPH* i den anden + hale (eksponentiel)
+
+
+% CME ILT TELEK
+
+% undersøg delay propagation - artikler
+
+
+% se på kurver om der sker noget specielt under negative event med fyldningsniveauer
