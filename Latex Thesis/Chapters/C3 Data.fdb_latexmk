@@ -1,11 +1,11 @@
 # Fdb version 4
-["pdflatex"] 1712867662.5996 "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" "Chapters/C3 Data.pdf" "C3 Data" 1712867667.12882 0
-  "Chapters/../Thesis.tex" 1712758129 5377 38c60db363fed8e180556d7e0d717e11 ""
-  "Chapters/C3 Data.aux" 1712867666 8366 9755f03bc85c02da683296f412d92d97 "pdflatex"
-  "Chapters/C3 Data.out" 1712867666 821 786024b42f63b072119c9963f1699eeb "pdflatex"
-  "Chapters/C3 Data.tex" 1712867661 24863 855f16eaa4ad726094eb28e70fd8bbe6 ""
+["pdflatex"] 1713419375.23586 "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" "Chapters/C3 Data.pdf" "C3 Data" 1713419378.2566 0
+  "Chapters/../Thesis.tex" 1712867725 5377 38c60db363fed8e180556d7e0d717e11 ""
+  "Chapters/C3 Data.aux" 1713419377 8718 3ca54ef03d25f1f657e5ccededcea7d1 "pdflatex"
+  "Chapters/C3 Data.out" 1713419377 821 786024b42f63b072119c9963f1699eeb "pdflatex"
+  "Chapters/C3 Data.tex" 1713419371 25258 b0dcf0c26c073e2e3e882e70282fc4a7 ""
   "LukeThesis.sty" 1712742787 7588 830c172844cbb6cf17b7c29458ad9c02 ""
-  "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" 1712867661 24863 855f16eaa4ad726094eb28e70fd8bbe6 ""
+  "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" 1713419371 25258 b0dcf0c26c073e2e3e882e70282fc4a7 ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1710763419 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1710764551 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecbx0900.tfm" 1710764068 3584 1a7de6c99457381c64abc1a7c545505f ""
@@ -175,6 +175,7 @@
   "figures/Multiple cycles data/Cleaning batches.png" 1712672485 80865 78c4f348d1aa6a77f2dc46c84f089256 ""
   "figures/Multiple cycles data/Correlation matrix collapsed phases.png" 1712865993 17902 00b53d49959c9fe5b6db21967e1d4f41 ""
   "figures/Multiple cycles data/Correlation matrix production and delays.png" 1712780687 27979 205ebfa3ae9f53bc1be6d0bb2e8e37b6 ""
+  "figures/Multiple cycles data/Permutation test rho 10 mil.png" 1713259224 24509 09501d8b0f2d5340a55640d30475205d ""
   "figures/Multiple cycles data/phase scatter vs next phase.png" 1712867287 159983 b30bde1fb0ffbb03fe10cdcaa69409fa ""
   "figures/Multiple cycles data/tailing batch short.png" 1712755512 30558 0201712b19a7aec164dcec23a258ba2f ""
   (generated)
