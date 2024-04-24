@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  18 APR 2024 07:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  23 APR 2024 14:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -536,9 +536,27 @@ Package: colortbl 2024/02/20 v1.0g Color table columns (DPC)
 \everycr=\toks34
 \minrowclearance=\skip78
 \rownum=\count326
+) (c:/texlive/2024/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2023-11-01 v4.19 Multi-page Table package (DPC)
+\LTleft=\skip79
+\LTright=\skip80
+\LTpre=\skip81
+\LTpost=\skip82
+\LTchunksize=\count327
+\LTcapwidth=\dimen273
+\LT@head=\box69
+\LT@firsthead=\box70
+\LT@foot=\box71
+\LT@lastfoot=\box72
+\LT@gbox=\box73
+\LT@cols=\count328
+\LT@rows=\count329
+\c@LT@tables=\count330
+\c@LT@chunks=\count331
+\LT@p@ftn=\toks35
 )
-\c@lemma=\count327
-\c@example=\count328
+\c@lemma=\count332
+\c@example=\count333
 ) (c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 Package: subfiles 2020/11/14 v2.2 Multi-file projects (package)
 )
@@ -569,17 +587,17 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
  (c:/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count329
-\scratchdimen=\dimen273
-\scratchbox=\box69
-\nofMPsegments=\count330
-\nofMParguments=\count331
-\everyMPshowfont=\toks35
-\MPscratchCnt=\count332
-\MPscratchDim=\dimen274
-\MPnumerator=\count333
-\makeMPintoPDFobject=\count334
-\everyMPtoPDFconversion=\toks36
+\scratchcounter=\count334
+\scratchdimen=\dimen274
+\scratchbox=\box74
+\nofMPsegments=\count335
+\nofMParguments=\count336
+\everyMPshowfont=\toks36
+\MPscratchCnt=\count337
+\MPscratchDim=\dimen275
+\MPnumerator=\count338
+\makeMPintoPDFobject=\count339
+\everyMPtoPDFconversion=\toks37
 ) (c:/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -589,18 +607,16 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+ (c:/texlive/2024/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
+)
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring OFF on input line 3.
  (Chapters/C3 Data.out) (Chapters/C3 Data.out)
 \@outlinefile=\write4
 \openout4 = `"C3 Data.out"'.
 
-
-Chapter 1.
-LaTeX Font Info:    Trying to load font information for T1+cmss on input line 5.
-(c:/texlive/2024/texmf-dist/tex/latex/base/t1cmss.fd
-File: t1cmss.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
 LaTeX Font Info:    Trying to load font information for U+msa on input line 5.
  (c:/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -612,147 +628,156 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 5.
  (c:/texlive/2024/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    Trying to load font information for T1+cmss on input line 39.
+ (c:/texlive/2024/texmf-dist/tex/latex/base/t1cmss.fd
+File: t1cmss.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 ) [1
 Non-PDF special ignored!
 <special> header=psfrag.pro
+{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
+
 
 Non-PDF special ignored!
 <special> papersize=176mm,250mm
+] [2
 
-{c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+]
+Chapter 1.
+[3]
 
-LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 2 undefined on input line 28.
+LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 4 undefined on input line 62.
 
 
-LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 2 undefined on input line 28.
+LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 4 undefined on input line 62.
 
 
-LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 2 undefined on input line 28.
+LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 4 undefined on input line 62.
 
-[2]
-<figures/Multiple cycles data/tailing batch short.png, id=47, 616.4631pt x 435.0654pt>
+[4]
+<figures/Multiple cycles data/tailing batch short.png, id=59, 616.4631pt x 435.0654pt>
 File: figures/Multiple cycles data/tailing batch short.png Graphic file (type png)
 <use figures/Multiple cycles data/tailing batch short.png>
-Package pdftex.def Info: figures/Multiple cycles data/tailing batch short.png  used on input line 59.
+Package pdftex.def Info: figures/Multiple cycles data/tailing batch short.png  used on input line 93.
 (pdftex.def)             Requested size: 276.24316pt x 194.96106pt.
- [3 <./figures/Multiple cycles data/tailing batch short.png>]
-<figures/Multiple cycles data/Adding of solids/B_22 long waiting.png, id=56, 610.6815pt x 435.0654pt>
+ [5 <./figures/Multiple cycles data/tailing batch short.png>]
+<figures/Multiple cycles data/Adding of solids/B_22 long waiting.png, id=68, 610.6815pt x 435.0654pt>
 File: figures/Multiple cycles data/Adding of solids/B_22 long waiting.png Graphic file (type png)
 <use figures/Multiple cycles data/Adding of solids/B_22 long waiting.png>
-Package pdftex.def Info: figures/Multiple cycles data/Adding of solids/B_22 long waiting.png  used on input line 76.
+Package pdftex.def Info: figures/Multiple cycles data/Adding of solids/B_22 long waiting.png  used on input line 110.
 (pdftex.def)             Requested size: 241.71078pt x 172.19746pt.
 
 
-LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 4 undefined on input line 81.
+LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 6 undefined on input line 115.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png, id=61, 609.9588pt x 435.0654pt>
+<figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png, id=73, 609.9588pt x 435.0654pt>
 File: figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png Graphic file (type png)
 <use figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png>
-Package pdftex.def Info: figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png  used on input line 112.
+Package pdftex.def Info: figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png  used on input line 146.
 (pdftex.def)             Requested size: 293.50935pt x 209.35345pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4 <./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png>]
+ [6 <./figures/Multiple cycles data/Adding of solids/B_22 long waiting.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [5 <./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png>]
+ [7 <./figures/Multiple cycles data/Adding of solids/sample negative sub 4 phases.png>]
 
-LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 6 undefined on input line 138.
+LaTeX Warning: Citation `benchmark-model-to-generate-batch-process-data' on page 8 undefined on input line 172.
 
-<figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png, id=78, 880.2486pt x 880.9713pt>
+<figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png, id=91, 880.2486pt x 880.9713pt>
 File: figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png Graphic file (type png)
 <use figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png>
-Package pdftex.def Info: figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png  used on input line 144.
+Package pdftex.def Info: figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png  used on input line 178.
 (pdftex.def)             Requested size: 345.30264pt x 345.59381pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [6]
-<figures/Multiple cycles data/Correlation matrix production and delays.png, id=86, 414.8298pt x 370.0224pt>
+ [8]
+<figures/Multiple cycles data/Correlation matrix production and delays.png, id=99, 420.6114pt x 370.0224pt>
 File: figures/Multiple cycles data/Correlation matrix production and delays.png Graphic file (type png)
 <use figures/Multiple cycles data/Correlation matrix production and delays.png>
-Package pdftex.def Info: figures/Multiple cycles data/Correlation matrix production and delays.png  used on input line 159.
-(pdftex.def)             Requested size: 310.77026pt x 277.21121pt.
+Package pdftex.def Info: figures/Multiple cycles data/Correlation matrix production and delays.png  used on input line 193.
+(pdftex.def)             Requested size: 310.77026pt x 273.40012pt.
 
 Underfull \vbox (badness 2158) has occurred while \output is active []
 
- [7 <./figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png>]
-<figures/Multiple cycles data/Permutation test rho 10 mil.png, id=94, 406.1574pt x 370.0224pt>
+ [9 <./figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png>]
+<figures/Multiple cycles data/Permutation test rho 10 mil.png, id=106, 406.1574pt x 370.0224pt>
 File: figures/Multiple cycles data/Permutation test rho 10 mil.png Graphic file (type png)
 <use figures/Multiple cycles data/Permutation test rho 10 mil.png>
-Package pdftex.def Info: figures/Multiple cycles data/Permutation test rho 10 mil.png  used on input line 167.
+Package pdftex.def Info: figures/Multiple cycles data/Permutation test rho 10 mil.png  used on input line 201.
 (pdftex.def)             Requested size: 310.77026pt x 283.11702pt.
-<figures/Multiple cycles data/Correlation matrix collapsed phases.png, id=95, 411.2163pt x 363.5181pt>
+<figures/Multiple cycles data/Correlation matrix collapsed phases.png, id=107, 417.7206pt x 366.4089pt>
 File: figures/Multiple cycles data/Correlation matrix collapsed phases.png Graphic file (type png)
 <use figures/Multiple cycles data/Correlation matrix collapsed phases.png>
-Package pdftex.def Info: figures/Multiple cycles data/Correlation matrix collapsed phases.png  used on input line 180.
-(pdftex.def)             Requested size: 310.77026pt x 274.74016pt.
+Package pdftex.def Info: figures/Multiple cycles data/Correlation matrix collapsed phases.png  used on input line 214.
+(pdftex.def)             Requested size: 241.71078pt x 212.01971pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8 <./figures/Multiple cycles data/Correlation matrix production and delays.png>] [9 <./figures/Multiple cycles data/Permutation test rho 10 mil.png>]
-<figures/Multiple cycles data/phase scatter vs next phase.png, id=111, 498.663pt x 499.3857pt>
+ [10 <./figures/Multiple cycles data/Correlation matrix production and delays.png>] [11 <./figures/Multiple cycles data/Permutation test rho 10 mil.png>]
+<figures/Multiple cycles data/phase scatter vs next phase.png, id=122, 498.663pt x 499.3857pt>
 File: figures/Multiple cycles data/phase scatter vs next phase.png Graphic file (type png)
 <use figures/Multiple cycles data/phase scatter vs next phase.png>
-Package pdftex.def Info: figures/Multiple cycles data/phase scatter vs next phase.png  used on input line 188.
+Package pdftex.def Info: figures/Multiple cycles data/phase scatter vs next phase.png  used on input line 222.
 (pdftex.def)             Requested size: 345.30264pt x 345.80331pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10 <./figures/Multiple cycles data/Correlation matrix collapsed phases.png>] [11 <./figures/Multiple cycles data/phase scatter vs next phase.png>]
-<figures/Multiple cycles data/Cleaning batches histograms.png, id=126, 1052.2512pt x 891.8118pt>
+ [12 <./figures/Multiple cycles data/Correlation matrix collapsed phases.png>] [13 <./figures/Multiple cycles data/phase scatter vs next phase.png>]
+<figures/Multiple cycles data/Cleaning batches histograms.png, id=138, 1052.2512pt x 891.8118pt>
 File: figures/Multiple cycles data/Cleaning batches histograms.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches histograms.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms.png  used on input line 232.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms.png  used on input line 266.
 (pdftex.def)             Requested size: 276.24316pt x 234.12451pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/Multiple cycles data/Cleaning batches histograms combined.png, id=128, 1047.915pt x 424.2249pt>
+<figures/Multiple cycles data/Cleaning batches histograms combined.png, id=140, 1047.915pt x 424.2249pt>
 File: figures/Multiple cycles data/Cleaning batches histograms combined.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches histograms combined.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms combined.png  used on input line 242.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches histograms combined.png  used on input line 276.
 (pdftex.def)             Requested size: 276.24316pt x 111.83pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [12]
-<figures/Multiple cycles data/Cleaning batches.png, id=139, 897.5934pt x 1437.4503pt>
+ [14]
+<figures/Multiple cycles data/Cleaning batches.png, id=151, 897.5934pt x 1437.4503pt>
 File: figures/Multiple cycles data/Cleaning batches.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches.png  used on input line 252.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches.png  used on input line 286.
 (pdftex.def)             Requested size: 310.77026pt x 497.69753pt.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 253.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 287.
  (c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
 Underfull \vbox (badness 6808) has occurred while \output is active []
 
- [13 <./figures/Multiple cycles data/Cleaning batches histograms.png> <./figures/Multiple cycles data/Cleaning batches histograms combined.png>]
+ [15 <./figures/Multiple cycles data/Cleaning batches histograms.png> <./figures/Multiple cycles data/Cleaning batches histograms combined.png>]
 Overfull \vbox (29.32155pt too high) has occurred while \output is active []
 
- [14 <./figures/Multiple cycles data/Cleaning batches.png>]
-<figures/Multiple cycles data/Cleaning batches timeseries single.png, id=156, 907.7112pt x 312.9291pt>
+ [16 <./figures/Multiple cycles data/Cleaning batches.png>]
+<figures/Multiple cycles data/Cleaning batches timeseries single.png, id=168, 907.7112pt x 312.9291pt>
 File: figures/Multiple cycles data/Cleaning batches timeseries single.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning batches timeseries single.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches timeseries single.png  used on input line 260.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning batches timeseries single.png  used on input line 294.
 (pdftex.def)             Requested size: 310.77026pt x 107.13458pt.
- [15 <./figures/Multiple cycles data/Cleaning batches timeseries single.png>]
-<figures/Multiple cycles data/Cleaning Autocorrelation.png, id=169, 737.8767pt x 727.7589pt>
+ [17 <./figures/Multiple cycles data/Cleaning batches timeseries single.png>]
+<figures/Multiple cycles data/Cleaning Autocorrelation.png, id=180, 737.8767pt x 727.7589pt>
 File: figures/Multiple cycles data/Cleaning Autocorrelation.png Graphic file (type png)
 <use figures/Multiple cycles data/Cleaning Autocorrelation.png>
-Package pdftex.def Info: figures/Multiple cycles data/Cleaning Autocorrelation.png  used on input line 340.
+Package pdftex.def Info: figures/Multiple cycles data/Cleaning Autocorrelation.png  used on input line 374.
 (pdftex.def)             Requested size: 276.24316pt x 272.46472pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[16] [17 <./figures/Multiple cycles data/Cleaning Autocorrelation.png>] (Chapters/C3 Data.aux)
+[18] [19 <./figures/Multiple cycles data/Cleaning Autocorrelation.png>] (Chapters/C3 Data.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-03-14>
@@ -765,18 +790,18 @@ Package rerunfilecheck Info: File `"C3 Data".out' has not changed.
 (rerunfilecheck)             Checksum: 786024B42F63B072119C9963F1699EEB;821.
  ) 
 Here is how much of TeX's memory you used:
- 15249 strings out of 474103
- 243988 string characters out of 5747481
+ 15396 strings out of 474103
+ 246364 string characters out of 5747481
  1946496 words of memory out of 5000000
- 37306 multiletter control sequences out of 15000+600000
+ 37445 multiletter control sequences out of 15000+600000
  580704 words of font info for 99 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  110i,21n,117p,1281b,602s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on "Chapters/C3 Data.pdf" (17 pages, 747862 bytes).
+<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on "Chapters/C3 Data.pdf" (19 pages, 764908 bytes).
 PDF statistics:
- 279 PDF objects out of 1000 (max. 8388607)
- 194 compressed objects within 2 object streams
- 43 named destinations out of 1000 (max. 500000)
+ 300 PDF objects out of 1000 (max. 8388607)
+ 208 compressed objects within 3 object streams
+ 46 named destinations out of 1000 (max. 500000)
  106 words of extra memory for PDF output out of 10000 (max. 10000000)
 

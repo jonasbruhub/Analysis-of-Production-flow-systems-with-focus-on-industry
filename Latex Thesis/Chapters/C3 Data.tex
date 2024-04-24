@@ -2,23 +2,57 @@
 \graphicspath{{\subfix{../figures/}}}
 \begin{document}
 
-\chapter{Data}
+Let $X_{i}$ be the time spent in phase $i$, $D_i$ be the delay that may or may not happen. $M_i$ is the mass at the end of each phase.
+
 TIME IS IN HOURS
+
+% \begin{table}
+%     \centering
+%     \begin{tabular}{c|c|c|c|c|c}
+%         Cycle & $\widehat{\text{Var}\left(\sum X_i\right)}$ & $\sum \widehat{\text{Var}\left(X_i\right)}$ & $\widehat{\mathbb{E} \left[D_i\right]} $ & $\widehat{ \text{Var} \left(\sum D_i\right)} $ & $\sum \widehat{\text{Var}\left(D_i\right)}$ \\ \hline
+%     \end{tabular}
+% \end{table}
+
+% \begin{longtable}{c|c}
+%     a & b\\\hline
+%     \caption{lol} \label{tab:t}
+% \end{longtable}
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cccccc}
+        Cycle                                               & A       & B       & C       & D      & E      & F      \\\hline
+        $\widehat{\mathbb{E}\left[\sum X_i\right]}$         & 13.993  & 13.898  & 15.343  & 14.471 & 14.589 & 14.418 \\\hline
+        $\widehat{\text{Var}\left(\sum X_i\right)}$         & 0.95636 & 0.46587 & 0.76111 & 4.9589 & 4.2678 & 5.3545 \\\hline
+        $\sum \widehat{\text{Var}\left(X_i\right)}$         & 0.50590 & 0.31182 & 0.36667 & 1.8322 & 1.5788 & 1.9696 \\\hline
+        $\widehat{\mathbb{E} \left[\sum D_i\right]}$        & 0.96398 & 1.9402  & 2.4503  & 3.6050 & 3.7390 & 3.0041 \\\hline
+        $\widehat{ \text{Var} \left(\sum D_i\right)}$       & 0.31843 & 0.39117 & 0.90187 & 1.2468 & 1.2787 & 1.0462 \\\hline
+        $\sum \widehat{\text{Var}\left(D_i\right)}$         & 0.34921 & 0.53198 & 0.74914 & 1.4357 & 1.2454 & 1.3099 \\\hline
+        $\widehat{\mathbb{E}\left[\sum X_i\, D_i\right]}$   & 1.9321  & 1.5001  & 4.8191  & 6.4225 & 6.0405 & 6.3343 \\\hline
+        $\widehat{\text{Var} \left(\sum X_i \, D_i\right)}$ & 3.7798  & 0.89920 & 16.870  & 22.133 & 12.660 & 16.194
+    \end{tabular}
+    % \caption{Per cycle batch duration statistics}
+    % \label{tab:cycle basi stats}
+\end{table}
+
+\chapter{Data}
+
 
 The data used consists of six cycles. This means that the total data set consists of six simulation runs. However, each of the runs contains many batches in sequence. The following table lists the number of batches in each of the simulations and some basic statistics regarding the duration of the batches (in hours)
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{c|c|c|c}
-        Cycle & \#batch & $\mu_{batch}$ & $\sigma^2_{batch}$\\ \hline
-        A & 66 & 14.776 & 3.641\\
-        B & 64 & 15.644 & 3.915\\
-        C & 61 & 17.714 & 2.330\\
-        D & 60 & 18.069 & 6.922\\
-        E & 60 & 18.088 & 9.613\\
-        F & 63 & 17.227 & 7.766
+    \begin{tabular}{c|c|c|c|c|c}
+        Cycle & \#batch & $\mu$  & $\sigma^2$ & $\sigma$ & $\sigma / \mu$ \\ \hline
+        A     & 66      & 14.776 & 3.641      & 1.908    & 0.1291         \\
+        B     & 64      & 15.644 & 3.915      & 1.979    & 0.1265         \\
+        C     & 61      & 17.714 & 2.330      & 1.526    & 0.08617        \\
+        D     & 60      & 18.069 & 6.922      & 2.631    & 0.1456         \\
+        E     & 60      & 18.088 & 9.613      & 3.100    & 0.1714         \\
+        F     & 63      & 17.227 & 7.766      & 2.787    & 0.1618
     \end{tabular}
-    \caption{Per cycle batch statistics}
+    \caption{Per cycle batch duration statistics}
     \label{tab:cycle basi stats}
 \end{table}
 
@@ -30,28 +64,28 @@ As it may be of interest to investigate the correlation structure of different m
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c}
-        ID & Count \\\hline
-        1.0 & 374\\
-        2.0 & 374\\
-        3.0 & 181\\
-        3.1 & 374\\
-        3.2 & 374\\
-        4.0 & 163\\
-        4.1 & 374\\
-        4.2 & 374\\
-        4.3 & 374\\
-        5.0 & 374\\
-        6.0 & 374\\
-        7.0 & 370\\
-        8.0 & 369\\
-        9.0 & 369\\
+        ID   & Count \\\hline
+        1.0  & 374   \\
+        2.0  & 374   \\
+        3.0  & 181   \\
+        3.1  & 374   \\
+        3.2  & 374   \\
+        4.0  & 163   \\
+        4.1  & 374   \\
+        4.2  & 374   \\
+        4.3  & 374   \\
+        5.0  & 374   \\
+        6.0  & 374   \\
+        7.0  & 370   \\
+        8.0  & 369   \\
+        9.0  & 369   \\
         10.0 & 368
     \end{tabular}
     \caption{The number of batches across all cycles that contains at least one observation for each different absolute phase ID.}
     \label{tab:absolute phase ID batch count}
 \end{table}
 
-Investigating when these inadequacies occur reveals that they are the last batch from each of the cycles. For example, the final batch from cycle A only goes to phase 6 (the product transfer). This can however be explained from the fact that simulation only last for 1100 hours for each cycle and is thus simply cut-off here. As we do not know if these final operations were done at the time the simulations were cut off (which is likely not the case), the final phase for each of the final batches should be disregarded. The cut-off can be also be observed in \autoref{fig:last batch example}. Furthermore, throwing away 6 incomplete batches out of the total 374 will likely not harm the analysis and is thus thrown away as this will make the analysis much simpler later on.
+Investigating when these inadequacies occur reveals that they are the last batch from each of the cycles. For example, the final batch from cycle A only goes to phase 6 (the product transfer). This can however be explained from the fact that simulation only last for 1100 hours for each cycle and is thus simply cut-off here. As we do not know if these final operations were done at the time the simulations were cut off (which is likely not the case), the final phase for each of the final batches should be disregarded. The cut-off can also be observed in \autoref{fig:last batch example}. Furthermore, throwing away 6 incomplete batches out of the total 374 will likely not harm the analysis and is thus thrown away as this will make the analysis much simpler later on.
 
 % Bliver den afbrudt midt i?? -> Ja, den sidste i hver bliver afbrudt midt i en af phaserne
 \begin{figure}[h]
@@ -69,7 +103,7 @@ After cutting of the final 6 batches, we have a total of 368 batches of which ea
 \newpage
 
 \section{Production phases}
-This part of the process corresponds to events tagged with ID 1 through 10 but will initially concern itself with ID 1 through 4 as much can be learned from the data set here. In \autoref{fig:B_22 phase 1-4} and example of how the process evolves over time through the different phases is shown. Immediately, we observe something weird, namely the negative event IDs.
+This part of the process corresponds to events tagged with ID 1 through 10 but will initially concern itself with ID 1 through 4 as much can be learned from the data set here. In \autoref{fig:B_22 phase 1-4} an example of how the process evolves over time through the different phases is shown. Immediately, we observe something weird, namely the negative event IDs.
 
 \begin{figure}[h]
     \centering
@@ -84,20 +118,20 @@ To see what is going on here, from data we can see that negative values occur th
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c}
-        \diagbox{Event}{Cycle} & A & B & C & D & E & F\\\hline
-        -1 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & & \\\hline
-        -2 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -3 & \cellcolor{black!50} && \cellcolor{black!50} & \cellcolor{black!50}  & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -4 & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \\\hline
-        -4.1 & &&&&&\cellcolor{black!50}\\\hline
-        -4.2 & &&&&&\cellcolor{black!50}\\\hline
-        -4.3 & &&&&&\cellcolor{black!50}\\\hline
-        -5 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -6 &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -7 & \cellcolor{black!50} &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -8 & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -9 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -10 & & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}
+        \diagbox{Event}{Cycle} & A                    & B                    & C                    & D                    & E                    & F                    \\\hline
+        -1                     & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} &                      &                      \\\hline
+        -2                     &                      &                      &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -3                     & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -4                     &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} &                      \\\hline
+        -4.1                   &                      &                      &                      &                      &                      & \cellcolor{black!50} \\\hline
+        -4.2                   &                      &                      &                      &                      &                      & \cellcolor{black!50} \\\hline
+        -4.3                   &                      &                      &                      &                      &                      & \cellcolor{black!50} \\\hline
+        -5                     & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -6                     &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -7                     & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -8                     & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -9                     &                      &                      &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -10                    &                      & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}
     \end{tabular}
     \caption{Occurrences of negative phases IDs. It is observed that sub phases 4.1, 4.2, 4.3 only occur in cycle F which is known to be the only cycle with wrongly labelled phases.}
     \label{tab:phase negative observations}
@@ -119,17 +153,17 @@ Having converted the above sub phase IDs we summarize the current situation in r
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c}
-        \diagbox{Event}{Cycle} & A & B & C & D & E & F\\\hline
-        -1 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & & \\\hline
-        -2 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -3 & \cellcolor{black!50} && \cellcolor{black!50} & \cellcolor{black!50}  & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -4 & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \\\hline
-        -5 & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -6 &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -7 & \cellcolor{black!50} &  & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -8 & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -9 & & & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}\\\hline
-        -10 & & \cellcolor{black!50} & & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}
+        \diagbox{Event}{Cycle} & A                    & B                    & C                    & D                    & E                    & F                    \\\hline
+        -1                     & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} &                      &                      \\\hline
+        -2                     &                      &                      &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -3                     & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -4                     &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} &                      \\\hline
+        -5                     & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -6                     &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -7                     & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -8                     & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -9                     &                      &                      &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50} \\\hline
+        -10                    &                      & \cellcolor{black!50} &                      & \cellcolor{black!50} & \cellcolor{black!50} & \cellcolor{black!50}
     \end{tabular}
     \caption{Occurrences of negative phases IDs. It is observed that sub phases 4.1, 4.2, 4.3 only occur in cycle F which is known to be the only cycle with wrongly labelled phases.}
     \label{tab:phase negative observations mod}
@@ -146,7 +180,7 @@ At this point, it would seem that the labels of the processes are understood for
     \label{fig:histogram production durations}
 \end{figure}
 
-Apart from the above comments, not much catches the eye when looking at \autoref{fig:histogram production durations}, and we thus proceed be checking if any correlation is immediately present.
+Apart from the above comments, not much catches the eye when looking at \autoref{fig:histogram production durations}, and we thus proceed by checking if any correlation is immediately present.
 
 
 
@@ -160,7 +194,7 @@ Lige en korrelationsmatrix
     \caption{Correlation matrix for all phases with non-constant duration.}
 \end{figure}
 
-9 og 10 er ikke specielt korreleret med noget (afkøling og materiale overførsel). Ellers er 2 fremt il og med reaktionen alle korrelerede med hinanden. Eftersom rent fysisk det udvikles i tid, må handlingen i 2 påvirke de næste osv. 
+9 og 10 er ikke specielt korreleret med noget (afkøling og materiale overførsel). Ellers er 2 fremt il og med reaktionen alle korrelerede med hinanden. Eftersom rent fysisk det udvikles i tid, må handlingen i 2 påvirke de næste osv.
 
 \begin{figure}
     \centering
@@ -177,7 +211,7 @@ Herunder er samme korrelationsmatrix, dog hvor delay og phasens varighed lagt sa
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.9\linewidth]{figures/Multiple cycles data/Correlation matrix collapsed phases.png}
+    \includegraphics[width=.7\linewidth]{figures/Multiple cycles data/Correlation matrix collapsed phases.png}
     \caption{Correlation matrix for all phases collapsed}
 \end{figure}
 
@@ -212,14 +246,14 @@ The most notifiable differences per batch are the number of cleanses especially 
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{c|c|c|c|c|c}
-        Cycle & \#ops & min & max & $\mu$ & $\sigma^2$\\ \hline
-        A & 65 & 1.113 & 3.067 & 1.917 & 0.269\\
-        B & 63 & 1.324 & 1.751 & 1.566 & 0.00883\\
-        C & 9  & 1.544 & 3.306 & 2.153 & 0.277\\
-        D & 10 & 1.474 & 2.009 & 1.581 & 0.0212\\
-        E & 10 & 0.827 & 1.584 & 1.465 & 0.0462\\
-        F & 10 & 0.748 & 1.610 & 1.466 & 0.0595
+    \begin{tabular}{c|c|c|c|c|c|c|c}
+        Cycle & \#ops & min   & max   & $\mu$ & $\sigma^2$ & $\sigma$ & $\sigma / \mu$ \\ \hline
+        A     & 65    & 1.113 & 3.067 & 1.917 & 0.269      & 0.518    & 0.270          \\
+        B     & 63    & 1.324 & 1.751 & 1.566 & 0.00883    & 0.0939   & 0.0600         \\
+        C     & 9     & 1.544 & 3.306 & 2.153 & 0.277      & 0.526    & 0.245          \\
+        D     & 10    & 1.474 & 2.009 & 1.581 & 0.0212     & 0.146    & 0.0922         \\
+        E     & 10    & 0.827 & 1.584 & 1.465 & 0.0462     & 0.215    & 0.147          \\
+        F     & 10    & 0.748 & 1.610 & 1.466 & 0.0595     & 0.244    & 0.166
     \end{tabular}
     \caption{Per cycle cleansing statistics}
     \label{tab:cycle cleansing stats stats}
@@ -271,12 +305,12 @@ From a modelling point of view, the cycles C through F can be thought of as the 
     \centering
     \begin{tabular}{c|r}
         Cycle & \% cleaning \\ \hline
-        A & 100.00 \\
-        B & 100.00 \\
-        C & 15.00 \\
-        D & 16.95\\
-        E & 16.95\\
-        F & 16.13
+        A     & 100.00      \\
+        B     & 100.00      \\
+        C     & 15.00       \\
+        D     & 16.95       \\
+        E     & 16.95       \\
+        F     & 16.13
     \end{tabular}
     \caption{Per cycle probability of cleaning}
     \label{tab:cycle cleaning prob}
@@ -289,9 +323,9 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
     \begin{subtable}{.5\linewidth}
         \centering
         \begin{tabular}{c|c c}
-            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
-            No & 41 & 9 \\
-            Yes & 9 & 0
+            \diagbox{$C_i$}{$C_{i+1}$} & No & Yes \\ \hline
+            No                         & 41 & 9   \\
+            Yes                        & 9  & 0
         \end{tabular}
         \caption{C, $p=0.3293$}
         \label{tab:cycle C Contingency table}
@@ -299,9 +333,9 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
     \begin{subtable}{.5\linewidth}
         \centering
         \begin{tabular}{c|c c}
-            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
-            No & 41 & 8 \\
-            Yes & 7 & 2
+            \diagbox{$C_i$}{$C_{i+1}$} & No & Yes \\ \hline
+            No                         & 41 & 8   \\
+            Yes                        & 7  & 2
         \end{tabular}
         \caption{D, $p=0.6456$}
         \label{tab:cycle D Contingency table}
@@ -309,9 +343,9 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
     \begin{subtable}{.5\linewidth}
         \centering
         \begin{tabular}{c|c c}
-            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
-            No & 41 & 7 \\
-            Yes & 7 & 3
+            \diagbox{$C_i$}{$C_{i+1}$} & No & Yes \\ \hline
+            No                         & 41 & 7   \\
+            Yes                        & 7  & 3
         \end{tabular}
         \caption{E, $p=0.3532$}
         \label{tab:cycle E Contingency table}
@@ -319,9 +353,9 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
     \begin{subtable}{.5\linewidth}
         \centering
         \begin{tabular}{c|c c}
-            \diagbox{$C_i$}{$C_{i+1}$}  & No & Yes \\ \hline
-            No & 41 & 9 \\
-            Yes & 9 & 1
+            \diagbox{$C_i$}{$C_{i+1}$} & No & Yes \\ \hline
+            No                         & 41 & 9   \\
+            Yes                        & 9  & 1
         \end{tabular}
         \caption{F, $p=1.0000$}
         \label{tab:cycle F Contingency table}
