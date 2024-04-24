@@ -183,6 +183,8 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/longtable.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/longtable.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/import/import.sty
@@ -202,6 +204,8 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT c:/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT c:/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+INPUT c:/texlive/2024/texmf-dist/tex/latex/caption/ltcaption.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/caption/ltcaption.sty
 INPUT ./Thesis.out
 INPUT ./Thesis.out
 INPUT Thesis.out
@@ -332,6 +336,16 @@ INPUT Chapters/C3 Data.tex
 INPUT ./Chapters/C3 Data.tex
 INPUT ./Chapters/C3 Data.tex
 INPUT Chapters/C3 Data.tex
+INPUT ./figures/Multiple cycles data/variable desciption.png
+INPUT ./figures/Multiple cycles data/variable desciption.png
+INPUT figures/Multiple cycles data/variable desciption.png
+INPUT ./figures/Multiple cycles data/variable desciption.png
+INPUT ./figures/Multiple cycles data/variable desciption.png
+INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
+INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
+INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
+INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm
 INPUT ./figures/Multiple cycles data/tailing batch short.png
 INPUT ./figures/Multiple cycles data/tailing batch short.png
 INPUT figures/Multiple cycles data/tailing batch short.png
@@ -357,6 +371,11 @@ INPUT ./figures/Multiple cycles data/Correlation matrix production and delays.pn
 INPUT figures/Multiple cycles data/Correlation matrix production and delays.png
 INPUT ./figures/Multiple cycles data/Correlation matrix production and delays.png
 INPUT ./figures/Multiple cycles data/Correlation matrix production and delays.png
+INPUT ./figures/Multiple cycles data/Permutation test rho 10 mil.png
+INPUT ./figures/Multiple cycles data/Permutation test rho 10 mil.png
+INPUT figures/Multiple cycles data/Permutation test rho 10 mil.png
+INPUT ./figures/Multiple cycles data/Permutation test rho 10 mil.png
+INPUT ./figures/Multiple cycles data/Permutation test rho 10 mil.png
 INPUT ./figures/Multiple cycles data/Correlation matrix collapsed phases.png
 INPUT ./figures/Multiple cycles data/Correlation matrix collapsed phases.png
 INPUT figures/Multiple cycles data/Correlation matrix collapsed phases.png
@@ -382,11 +401,6 @@ INPUT ./figures/Multiple cycles data/Cleaning batches.png
 INPUT figures/Multiple cycles data/Cleaning batches.png
 INPUT ./figures/Multiple cycles data/Cleaning batches.png
 INPUT ./figures/Multiple cycles data/Cleaning batches.png
-INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
-INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
-INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
-INPUT c:/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
-INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecti1000.tfm
 INPUT ./figures/Multiple cycles data/Cleaning batches timeseries single.png
 INPUT ./figures/Multiple cycles data/Cleaning batches timeseries single.png

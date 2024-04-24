@@ -3,3 +3,4 @@ integrands
 stochasticity
 Autocorrelation
 autocorrelation
+covary

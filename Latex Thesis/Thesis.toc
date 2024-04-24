@@ -16,9 +16,10 @@
 \contentsline {chapter}{\numberline {2} Problemformulering / Introduktion }{13}{chapter.2}%
 \contentsline {chapter}{\numberline {3}Ideer til hvad der skal laves}{15}{chapter.3}%
 \contentsline {chapter}{\numberline {4}Data}{17}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Incompleteness on trailing batches}{18}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Production phases}{20}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Correlations}{23}{subsection.4.2.1}%
-\contentsline {section}{\numberline {4.3}Cleaning operations}{27}{section.4.3}%
-\contentsline {chapter}{\numberline {A}Stuff}{33}{appendix.A}%
-\contentsline {chapter}{Bibliography}{35}{appendix.A}%
+\contentsline {section}{\numberline {4.1}Basic statistics}{18}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Incompleteness on trailing batches}{19}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Production phases}{21}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Correlations}{24}{subsection.4.3.1}%
+\contentsline {section}{\numberline {4.4}Cleaning operations}{29}{section.4.4}%
+\contentsline {chapter}{\numberline {A}Stuff}{37}{appendix.A}%
+\contentsline {chapter}{Bibliography}{39}{appendix.A}%

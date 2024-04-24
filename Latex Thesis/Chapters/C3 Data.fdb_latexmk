@@ -1,11 +1,11 @@
 # Fdb version 4
-["pdflatex"] 1713876605.75947 "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" "Chapters/C3 Data.pdf" "C3 Data" 1713876608.74792 0
-  "Chapters/../Thesis.tex" 1712867725 5377 38c60db363fed8e180556d7e0d717e11 ""
-  "Chapters/C3 Data.aux" 1713876608 8739 99637a3518d602bb008af01fc81e59e2 "pdflatex"
-  "Chapters/C3 Data.out" 1713876608 821 786024b42f63b072119c9963f1699eeb "pdflatex"
-  "Chapters/C3 Data.tex" 1713876604 29737 2b70fa7040e7ef845595afde06b0df7f ""
+["pdflatex"] 1713975110.89074 "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" "Chapters/C3 Data.pdf" "C3 Data" 1713975113.92066 0
+  "Chapters/../Thesis.tex" 1713960211 5391 df58c1952b8d78df637ec49772d78d5f ""
+  "Chapters/C3 Data.aux" 1713975113 9524 7bfae2f9c80aeac79dd12cc52a800b66 "pdflatex"
+  "Chapters/C3 Data.out" 1713975113 980 92c9ea2cc60dbe4bc74bd7c375b4d2dd "pdflatex"
+  "Chapters/C3 Data.tex" 1713975106 31922 57a49bc13d0606244b07212c8dcd540e ""
   "LukeThesis.sty" 1713865127 7612 bbe88149224e2770778e14a173f871b1 ""
-  "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" 1713876604 29737 2b70fa7040e7ef845595afde06b0df7f ""
+  "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Chapters/C3 Data.tex" 1713975106 31922 57a49bc13d0606244b07212c8dcd540e ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1710763419 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1710764551 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecbx0900.tfm" 1710764068 3584 1a7de6c99457381c64abc1a7c545505f ""
@@ -55,6 +55,7 @@
   "c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1710762499 35752 024fb6c41858982481f6968b5fc26508 ""
   "c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1710762499 32762 7fee39e011c23b3589931effd97b9702 ""
   "c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1710762499 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
+  "c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1710762499 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1710762499 32716 08e384dc442464e7285e891af9f45947 ""
   "c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1710762499 34694 870c211f62cb72718a00e353f14f254d ""
   "c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb" 1710763419 143961 fe73b0de40bc9eebafe5b31a39c455e0 ""
@@ -182,6 +183,7 @@
   "figures/Multiple cycles data/Permutation test rho 10 mil.png" 1713259224 24509 09501d8b0f2d5340a55640d30475205d ""
   "figures/Multiple cycles data/phase scatter vs next phase.png" 1712867287 159983 b30bde1fb0ffbb03fe10cdcaa69409fa ""
   "figures/Multiple cycles data/tailing batch short.png" 1712755512 30558 0201712b19a7aec164dcec23a258ba2f ""
+  "figures/Multiple cycles data/variable desciption.png" 1713974689 266050 318ca7233bf3867e744086b7fdb8a86d ""
   (generated)
   "Chapters/C3 Data.aux"
   "Chapters/C3 Data.log"

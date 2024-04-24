@@ -2,44 +2,29 @@
 \graphicspath{{\subfix{../figures/}}}
 \begin{document}
 
-Let $X_{i}$ be the time spent in phase $i$, $D_i$ be the delay that may or may not happen. $M_i$ is the mass at the end of each phase.
-
-TIME IS IN HOURS
-
-% \begin{table}
-%     \centering
-%     \begin{tabular}{c|c|c|c|c|c}
-%         Cycle & $\widehat{\text{Var}\left(\sum X_i\right)}$ & $\sum \widehat{\text{Var}\left(X_i\right)}$ & $\widehat{\mathbb{E} \left[D_i\right]} $ & $\widehat{ \text{Var} \left(\sum D_i\right)} $ & $\sum \widehat{\text{Var}\left(D_i\right)}$ \\ \hline
-%     \end{tabular}
-% \end{table}
-
-% \begin{longtable}{c|c}
-%     a & b\\\hline
-%     \caption{lol} \label{tab:t}
-% \end{longtable}
-
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{c|cccccc}
-        Cycle                                               & A       & B       & C       & D      & E      & F      \\\hline
-        $\widehat{\mathbb{E}\left[\sum X_i\right]}$         & 13.993  & 13.898  & 15.343  & 14.471 & 14.589 & 14.418 \\\hline
-        $\widehat{\text{Var}\left(\sum X_i\right)}$         & 0.95636 & 0.46587 & 0.76111 & 4.9589 & 4.2678 & 5.3545 \\\hline
-        $\sum \widehat{\text{Var}\left(X_i\right)}$         & 0.50590 & 0.31182 & 0.36667 & 1.8322 & 1.5788 & 1.9696 \\\hline
-        $\widehat{\mathbb{E} \left[\sum D_i\right]}$        & 0.96398 & 1.9402  & 2.4503  & 3.6050 & 3.7390 & 3.0041 \\\hline
-        $\widehat{ \text{Var} \left(\sum D_i\right)}$       & 0.31843 & 0.39117 & 0.90187 & 1.2468 & 1.2787 & 1.0462 \\\hline
-        $\sum \widehat{\text{Var}\left(D_i\right)}$         & 0.34921 & 0.53198 & 0.74914 & 1.4357 & 1.2454 & 1.3099 \\\hline
-        $\widehat{\mathbb{E}\left[\sum X_i\, D_i\right]}$   & 1.9321  & 1.5001  & 4.8191  & 6.4225 & 6.0405 & 6.3343 \\\hline
-        $\widehat{\text{Var} \left(\sum X_i \, D_i\right)}$ & 3.7798  & 0.89920 & 16.870  & 22.133 & 12.660 & 16.194
-    \end{tabular}
-    % \caption{Per cycle batch duration statistics}
-    % \label{tab:cycle basi stats}
-\end{table}
-
 \chapter{Data}
+% Handler om data, hvorfor det giver mening med baggrund i dette (et mere statistisk udgangspunkt, måske er det ikke altid at man ved hvad der har effekt på hvad, og hvordan det kan kontrolleres)
+
+In this section, we will describe and analyze the data used in this thesis. The data stems from a simulation study on a chemical batch production system and comprises six time series from which the time stamps (in hours) and level in a tank is of the most interest. The goal of this section is to describe how different phases of the production covary. The data is chosen as it resembles an actual production data set but is also implemented with what at first glance seem to be fairly realistic variation and noise in measurements. Overall, the point of this example data is to exemplify what one may encounter in a real batch production system and from this try to build a model in order to predict or quantify the behavior of the system or learn hidden (causal) structure important for optimization etc. 
+
+We define a set of phases/units $\mathcal{U}$ that each batch comprises. In this case, units are identified with IDs 1 through 10 (with subunits such as 3.1) described further in \autoref{tab:absolute phase ID batch count}. Then, for each unit, we define the stochastic variables $X_u$ and $X^D_u$ to be the duration and delay after a unit respectively. It is also important to keep track of the level in the tank after each unit is finished, and we thus define variables $M_u$ and $M^D_u$ to be the level in the tank after unit $u$ and its associated delay respectively. As the units are executed in sequence, as is the case in this data, a simple representation of the variables can easily be visualized and is shown in \autoref{fig:variable description} below.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\linewidth]{figures/Multiple cycles data/variable desciption.png}
+    \caption{Exemplification of the variables $X_i$, $X^D_i$, $M_i$, $M^D_i$.}
+    \label{fig:variable description}
+\end{figure}
+
+% We define the variables $X_u$, $D_u$ and $M_u$ to be the duration, delay and level in the tank at the end of each phase/unit operation $u$.
 
 
-The data used consists of six cycles. This means that the total data set consists of six simulation runs. However, each of the runs contains many batches in sequence. The following table lists the number of batches in each of the simulations and some basic statistics regarding the duration of the batches (in hours)
+
+\section{Basic statistics}
+Initially, we present some basic statistics in \autoref{tab:cycle basic stats} for batches and proceed to discuss the nature of the batches, removing outliers and faulty observations etc.
+
+
+% The data used consists of six cycles. This means that the total data set consists of six simulation runs. However, each of the runs contains many batches in sequence. The following table lists the number of batches in each of the simulations and some basic statistics regarding the duration of the batches (in hours)
 
 \begin{table}[h]
     \centering
@@ -53,33 +38,35 @@ The data used consists of six cycles. This means that the total data set consist
         F     & 63      & 17.227 & 7.766      & 2.787    & 0.1618
     \end{tabular}
     \caption{Per cycle batch duration statistics}
-    \label{tab:cycle basi stats}
+    \label{tab:cycle basic stats}
 \end{table}
 
 Each batch comprises several states. These include adding materials (IDs 1 through 4), centrifugation (ID 5), product transfer (the precipitate generated from the centrifugation, ID 6), chemical reaction (ID 7), a post operation state (\textcolor{red}{Probably to let it cool down to a point where it is ready for further processing}, ID 8), Cooling of the product (ID 9), material transfer (transfer the gained product before cleaning of the reaction vessel and/or prepare for the next reaction batch, ID 10). Notice that there is a total of 374 batches throughout the 6 observed cycles.
+
+
 
 \section{Incompleteness on trailing batches}
 As it may be of interest to investigate the correlation structure of different metrics and variables later on, it is important to understand how each of the batches across the cycles behave. Initially, when looking through the dataset, we observe a few negative phase IDs which will need investigation. However, before we do so, we check that each of the batches actually go through all the states mentioned in \cite{benchmark-model-to-generate-batch-process-data}. Thus, we take the absolute value of the negative phase IDs to ease the analysis prior to the analysis of the negative phase IDs. After this is done, we observe that not all batches go through all the phases and that some seem to have extra phases not described by \cite{benchmark-model-to-generate-batch-process-data}. Namely, from \autoref{tab:absolute phase ID batch count}, we see that IDs 3 and 4 (which are not described in \cite{benchmark-model-to-generate-batch-process-data}) have significantly fewer batches going through this phase. But perhaps even more interesting is the final 4 phases where almost all batches goes through these phases.
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{c|c}
-        ID   & Count \\\hline
-        1.0  & 374   \\
-        2.0  & 374   \\
-        3.0  & 181   \\
-        3.1  & 374   \\
-        3.2  & 374   \\
-        4.0  & 163   \\
-        4.1  & 374   \\
-        4.2  & 374   \\
-        4.3  & 374   \\
-        5.0  & 374   \\
-        6.0  & 374   \\
-        7.0  & 370   \\
-        8.0  & 369   \\
-        9.0  & 369   \\
-        10.0 & 368
+\begin{tabular}{c|c|c}
+        ID   & Count & Description \\\hline
+        1.0  & 374 & Addition of liquid raw material \texttt{Educt1} \\
+        2.0  & 374 & Addition of liquid raw material \texttt{Educt2} \\
+        3.0  & 181 &  \\
+        3.1  & 374 & Addition of liquid raw material \texttt{Educt3} \\
+        3.2  & 374 & Agitation \\
+        4.0  & 163 &  \\
+        4.1  & 374 & Waiting for field operation \\
+        4.2  & 374 & Addition of solids \\
+        4.3  & 374 & Waiting for control operator \\
+        5.0  & 374 & centrifugation \\
+        6.0  & 374 & Product transfer \\
+        7.0  & 370 & Reaction \\
+        8.0  & 369 & Post reaction \\
+        9.0  & 369 & Cooling \\
+        10.0 & 368 & Material transfer
     \end{tabular}
     \caption{The number of batches across all cycles that contains at least one observation for each different absolute phase ID.}
     \label{tab:absolute phase ID batch count}
@@ -242,7 +229,7 @@ Ligeledes scatter plots for superdiagonalen i ovenstående matrix. Altså phase 
 \section{Cleaning operations}
 Sometimes, the vessel is cleansed. This is however not every time after a batch so might be interesting to investigate further. Initially, per cycle, the cleanings are summarized in the following table with basic statistics. As can be seen, there is quite some differences.
 
-The most notifiable differences per batch are the number of cleanses especially when comparing to \autoref{tab:cycle basi stats}. For the first two cycles, the cleanses seem to be in between every batch, which is indeed also the while the later four are only sometimes. Furthermore, although the cleanses are between every batch for cycles A and B, the variances are extremely different. For the last four cycles, they seem to be grouped further, E and F are very alike while cleanses in C and D are generally longer although D has a substantially smaller variance than C.
+The most notifiable differences per batch are the number of cleanses especially when comparing to \autoref{tab:cycle basic stats}. For the first two cycles, the cleanses seem to be in between every batch, which is indeed also the while the later four are only sometimes. Furthermore, although the cleanses are between every batch for cycles A and B, the variances are extremely different. For the last four cycles, they seem to be grouped further, E and F are very alike while cleanses in C and D are generally longer although D has a substantially smaller variance than C.
 
 \begin{table}[h]
     \centering
@@ -257,6 +244,23 @@ The most notifiable differences per batch are the number of cleanses especially 
     \end{tabular}
     \caption{Per cycle cleansing statistics}
     \label{tab:cycle cleansing stats stats}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cccccc}
+        Cycle                                                 & A       & B       & C       & D      & E      & F      \\\hline
+        $\widehat{\mathbb{E}\left[\sum X_u\right]}$           & 13.993  & 13.898  & 15.343  & 14.471 & 14.589 & 14.418 \\\hline
+        $\widehat{\text{Var}\left(\sum X_u\right)}$           & 0.95636 & 0.46587 & 0.76111 & 4.9589 & 4.2678 & 5.3545 \\\hline
+        $\sum \widehat{\text{Var}\left(X_u\right)}$           & 0.50590 & 0.31182 & 0.36667 & 1.8322 & 1.5788 & 1.9696 \\\hline
+        $\widehat{\mathbb{E} \left[\sum X^D_u\right]}$        & 0.96398 & 1.9402  & 2.4503  & 3.6050 & 3.7390 & 3.0041 \\\hline
+        $\widehat{ \text{Var} \left(\sum X^D_u\right)}$       & 0.31843 & 0.39117 & 0.90187 & 1.2468 & 1.2787 & 1.0462 \\\hline
+        $\sum \widehat{\text{Var}\left(X^D_u\right)}$         & 0.34921 & 0.53198 & 0.74914 & 1.4357 & 1.2454 & 1.3099 \\\hline
+        $\widehat{\mathbb{E} \left[\sum X_u \, X^D_u\right]}$ & 1.9321  & 1.5001  & 4.8191  & 6.4225 & 6.0405 & 6.3343 \\\hline
+        $\widehat{\text{Var} \left(\sum X_u \, X^D_u\right)}$ & 3.7798  & 0.89920 & 16.870  & 22.133 & 12.660 & 16.194
+    \end{tabular}
+    \caption{Each of the time related variables $X_i$ and $D_i$ and variance description.}
+    \label{tab:data variation and covariance}
 \end{table}
 
 To verify these observations and potentially discovering more important facts of their probability distributions, histograms are plotted in the following \autoref{fig:cycle cleaning histograms}. We indeed again observe the likeliness between the cycles A and B, C and D, E and F respectively. Also, for the first two cycles and more so cycle B, the cleaning times are somewhat normally distributed although cycle A has a very heavy right tail in that case. The later four cycles only have 10 observations but the mode (i.e. peak) seem to be about the same.
@@ -299,7 +303,7 @@ Finally, to get a better overview of the irregularities is the number of cleanin
 It is observed that the observations marked with red in figure \ref{fig:cycle cleaning time series} occur exactly when that specific cleaning operation does not go to the state 11.0 after the flush of the tank (event ID 11.5) and vice versa. It is hard to conclude what this may mean, but the cleaning being in state 11.0 may indicate that the system is idle before continuing the next batch like what is observed from the other steps of the process flow. Also, it is noted that while the red dots occur nothing else is happening according to the dataset.
 
 
-From a modelling point of view, the cycles C through F can be thought of as the cleansing operation having a probability of not happening or equivalently as having a duration of 0. It is thus of interest to observe what the probability of cleaning after an operation is. From \autoref{tab:cycle basi stats} and \autoref{tab:cycle cleansing stats stats}, we that indeed for cycles A and B, the probability is 100 \% when disregarding the possibility of cleaning after the final batch. Hence, we see that for the remaining cycles, the probabilities of cleaning the tank after an operation are as in \autoref {tab:cycle cleaning prob}
+From a modelling point of view, the cycles C through F can be thought of as the cleansing operation having a probability of not happening or equivalently as having a duration of 0. It is thus of interest to observe what the probability of cleaning after an operation is. From \autoref{tab:cycle basic stats} and \autoref{tab:cycle cleansing stats stats}, we that indeed for cycles A and B, the probability is 100 \% when disregarding the possibility of cleaning after the final batch. Hence, we see that for the remaining cycles, the probabilities of cleaning the tank after an operation are as in \autoref {tab:cycle cleaning prob}
 
 \begin{table}[h]
     \centering
