@@ -1,1 +1,7 @@
 Simulations and code/cycle_production_data.csv
+**/*.aux
+**/*.fdb_latexmk
+**/*.fls
+**/*.log
+**/*.out
+**/*.synctex.gz
