@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  3 APR 2024 14:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.18)  15 MAY 2024 21:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -82,6 +82,10 @@ File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen142
 \Gin@req@width=\dimen143
+) (c:/texlive/2024/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 2017/06/25 v1.7b (e)psfig emulation (SPQR)
+\epsfxsize=\dimen144
+\epsfysize=\dimen145
 ) (c:/texlive/2024/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2023/11/15 v3.01 LaTeX color extensions (UK)
  (c:/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
@@ -102,14 +106,14 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
  (c:/texlive/2024/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen144
-\captionmargin=\dimen145
-\caption@leftmargin=\dimen146
-\caption@rightmargin=\dimen147
-\caption@width=\dimen148
-\caption@indent=\dimen149
-\caption@parindent=\dimen150
-\caption@hangindent=\dimen151
+\caption@tempdima=\dimen146
+\captionmargin=\dimen147
+\caption@leftmargin=\dimen148
+\caption@rightmargin=\dimen149
+\caption@width=\dimen150
+\caption@indent=\dimen151
+\caption@parindent=\dimen152
+\caption@hangindent=\dimen153
 Package caption Info: Standard document class detected.
 )
 \c@caption@flags=\count199
@@ -166,7 +170,7 @@ Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count269
 )
-\@linkdim=\dimen152
+\@linkdim=\dimen154
 \Hy@linkcounter=\count270
 \Hy@pagecounter=\count271
  (c:/texlive/2024/texmf-dist/tex/latex/hyperref/pd1enc.def
@@ -195,15 +199,15 @@ Package hyperref Info: Bookmarks ON on input line 4446.
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4784.
-\XeTeXLinkMargin=\dimen153
+\XeTeXLinkMargin=\dimen155
  (c:/texlive/2024/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
  (c:/texlive/2024/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
 \Fld@menulength=\count274
-\Field@Width=\dimen154
-\Fld@charsize=\dimen155
+\Field@Width=\dimen156
+\Fld@charsize=\dimen157
 Package hyperref Info: Hyper figures OFF on input line 6063.
 Package hyperref Info: Link nesting OFF on input line 6068.
 Package hyperref Info: Hyper index ON on input line 6071.
@@ -236,20 +240,31 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
 )
 \Hy@SectionHShift=\skip59
+) (c:/texlive/2024/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks20
+\thm@bodyfont=\toks21
+\thm@headfont=\toks22
+\thm@notefont=\toks23
+\thm@headpunct=\toks24
+\thm@preskip=\skip60
+\thm@postskip=\skip61
+\thm@headsep=\skip62
+\dth@everypar=\toks25
 ) (c:/texlive/2024/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2023/05/13 v2.17o AMS math features
-\@mathmargin=\skip60
+\@mathmargin=\skip63
 
 For additional information on amsmath, use the `?' option.
 (c:/texlive/2024/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
  (c:/texlive/2024/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks20
-\ex@=\dimen156
+\@emptytoks=\toks26
+\ex@=\dimen158
 )) (c:/texlive/2024/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen157
+\pmbraise@=\dimen159
 ) (c:/texlive/2024/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
@@ -270,7 +285,7 @@ LaTeX Info: Redefining \big on input line 722.
 LaTeX Info: Redefining \Big on input line 723.
 LaTeX Info: Redefining \bigg on input line 724.
 LaTeX Info: Redefining \Bigg on input line 725.
-\big@size=\dimen158
+\big@size=\dimen160
 LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
 \macc@depth=\count285
@@ -283,21 +298,21 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \dotsspace@=\muskip17
 \c@parentequation=\count287
 \dspbrk@lvl=\count288
-\tag@help=\toks21
+\tag@help=\toks27
 \row@=\count289
 \column@=\count290
 \maxfields@=\count291
-\andhelp@=\toks22
-\eqnshift@=\dimen159
-\alignsep@=\dimen160
-\tagshift@=\dimen161
-\tagwidth@=\dimen162
-\totwidth@=\dimen163
-\lineht@=\dimen164
-\@envbody=\toks23
-\multlinegap=\skip61
-\multlinetaggap=\skip62
-\mathdisplay@stack=\toks24
+\andhelp@=\toks28
+\eqnshift@=\dimen161
+\alignsep@=\dimen162
+\tagshift@=\dimen163
+\tagwidth@=\dimen164
+\totwidth@=\dimen165
+\lineht@=\dimen166
+\@envbody=\toks29
+\multlinegap=\skip64
+\multlinetaggap=\skip65
+\mathdisplay@stack=\toks30
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
 ) (c:/texlive/2024/texmf-dist/tex/latex/amsfonts/amssymb.sty
@@ -318,16 +333,16 @@ LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
 Enhancements to Picture Environment. Version 1.2 - Released June 1, 1986
 \@@multicnt=\count292
 \d@lta=\count293
-\@delta=\dimen165
-\@@delta=\dimen166
+\@delta=\dimen167
+\@@delta=\dimen168
 \@gridcnt=\count294
 \@joinkind=\count295
-\@dotgap=\dimen167
-\@ddotgap=\dimen168
+\@dotgap=\dimen169
+\@ddotgap=\dimen170
 \@x@diff=\count296
 \@y@diff=\count297
-\x@diff=\dimen169
-\y@diff=\dimen170
+\x@diff=\dimen171
+\y@diff=\dimen172
 \@dotbox=\box53
 \num@segments=\count298
 \num@segmentsi=\count299
@@ -336,27 +351,15 @@ Enhancements to Picture Environment. Version 1.2 - Released June 1, 1986
 Extension to Epic and LaTeX. Version 1.1e - Released Dec 21, 1999
 \@gphlinewidth=\count300
 \@eepictcnt=\count301
-\@tempdimc=\dimen171
-\maxovaldiam=\dimen172
+\@tempdimc=\dimen173
+\maxovaldiam=\dimen174
 \@filltype=\box54
-) (c:/texlive/2024/texmf-dist/tex/latex/graphics/epsfig.sty
-Package: epsfig 2017/06/25 v1.7b (e)psfig emulation (SPQR)
-\epsfxsize=\dimen173
-\epsfysize=\dimen174
 ) (c:/texlive/2024/texmf-dist/tex/latex/psfrag/psfrag.sty
 Package: psfrag 1998/04/11 v3.04 PSfrag (MCG)
 \pfg@pcount=\count302
 \pfg@scount=\count303
 \pfg@temp=\write3
-) (c:/texlive/2024/texmf-dist/tex/latex/tools/theorem.sty
-Package: theorem 2023/07/05 v2.2c Theorem extension package (FMi)
-\theorem@style=\toks25
-\theorem@bodyfont=\toks26
-\theorempreskipamount=\skip63
-\theorempostskipamount=\skip64
- (c:/texlive/2024/texmf-dist/tex/latex/tools/thp.sty
-File: thp.sty 2023/07/05 v2.2c Theorem extension package (FMi)
-)) (c:/texlive/2024/texmf-dist/tex/latex/breqn/breqn.sty (c:/texlive/2024/texmf-dist/tex/latex/l3kernel/expl3.sty
+) (c:/texlive/2024/texmf-dist/tex/latex/breqn/breqn.sty (c:/texlive/2024/texmf-dist/tex/latex/l3kernel/expl3.sty
 Package: expl3 2024-03-14 L3 programming layer (loader) 
  (c:/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-03-14 L3 backend support: PDF output (pdfTeX)
@@ -406,36 +409,36 @@ Package: calc 2023/07/08 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Bcount=\count306
 \calc@Adimen=\dimen175
 \calc@Bdimen=\dimen176
-\calc@Askip=\skip65
-\calc@Bskip=\skip66
+\calc@Askip=\skip66
+\calc@Bskip=\skip67
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count307
-\calc@Cskip=\skip67
+\calc@Cskip=\skip68
 )
 \inf@bad=\count308
 \maxint=\count309
 \listwidth=\dimen177
 \eqnumsep=\dimen178
 \eqmargin=\dimen179
-\eqlinespacing=\skip68
-\eqlineskip=\skip69
+\eqlinespacing=\skip69
+\eqlineskip=\skip70
 \eqlineskiplimit=\dimen180
 \eqbinoffset=\muskip18
 \eqdelimoffset=\muskip19
 \eqindentstep=\dimen181
-\eqstyle=\toks27
+\eqstyle=\toks31
 \eqbreakdepth=\count310
 \eqinterlinepenalty=\count311
 \intereqpenalty=\count312
-\intereqskip=\skip70
+\intereqskip=\skip71
 \prerelpenalty=\count313
 \prebinoppenalty=\count314
 \Dmedmuskip=\muskip20
 \Dthickmuskip=\muskip21
-\eqleftskip=\skip71
-\eqrightskip=\skip72
-\eq@vspan=\skip73
+\eqleftskip=\skip72
+\eqrightskip=\skip73
+\eq@vspan=\skip74
 \eq@binoffset=\muskip22
 \EQ@box=\box56
 \EQ@copy=\box57
@@ -465,21 +468,139 @@ LaTeX Info: Redefining \addtolength on input line 81.
 \mathindent=\dimen199
 \eq@final@linecount=\count319
 \eq@wdR=\dimen256
-\EQ@continue=\toks28
+\EQ@continue=\toks32
 \lr@level=\count320
-\GRP@queue=\toks29
+\GRP@queue=\toks33
 \GRP@box=\box60
 \GRP@wholebox=\box61
-\darraycolsep=\skip74
+\darraycolsep=\skip75
 \cur@row=\count321
 \cur@col=\count322
-\conditionsep=\skip75
+\conditionsep=\skip76
+) (c:/texlive/2024/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count323
+\float@exts=\toks34
+\float@box=\box62
+\@float@everytoks=\toks35
+\@floatcapt=\box63
+) (c:/texlive/2024/texmf-dist/tex/latex/diagbox/diagbox.sty
+Package: diagbox 2020/02/09 v2.3 Making table heads with diagonal lines
+ (c:/texlive/2024/texmf-dist/tex/latex/pict2e/pict2e.sty
+Package: pict2e 2020/09/30 v0.4b Improved picture commands (HjG,RN,JT)
+ (c:/texlive/2024/texmf-dist/tex/latex/pict2e/pict2e.cfg
+File: pict2e.cfg 2016/02/05 v0.1u pict2e configuration for teTeX/TeXLive
 )
-\c@lemma=\count323
-\c@example=\count324
-) (c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
+Package pict2e Info: Driver file: pdftex.def on input line 112.
+Package pict2e Info: Driver file for pict2e: p2e-pdftex.def on input line 114.
+ (c:/texlive/2024/texmf-dist/tex/latex/pict2e/p2e-pdftex.def
+File: p2e-pdftex.def 2016/02/05 v0.1u Driver-dependant file (RN,HjG,JT)
+)
+\pIIe@GRAPH=\toks36
+\@arclen=\dimen257
+\@arcrad=\dimen258
+\pIIe@tempdima=\dimen259
+\pIIe@tempdimb=\dimen260
+\pIIe@tempdimc=\dimen261
+\pIIe@tempdimd=\dimen262
+\pIIe@tempdime=\dimen263
+\pIIe@tempdimf=\dimen264
+
+
+Package pict2e Warning: \arc redefined on input line 682.
+
+) (c:/texlive/2024/texmf-dist/tex/latex/tools/array.sty
+Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
+\col@sep=\dimen265
+\ar@mcellbox=\box64
+\extrarowheight=\dimen266
+\NC@list=\toks37
+\extratabsurround=\skip77
+\backup@length=\skip78
+\ar@cellbox=\box65
+)
+\diagbox@boxa=\box66
+\diagbox@boxb=\box67
+\diagbox@boxm=\box68
+\diagbox@wd=\dimen267
+\diagbox@ht=\dimen268
+\diagbox@insepl=\dimen269
+\diagbox@insepr=\dimen270
+\diagbox@outsepl=\dimen271
+\diagbox@outsepr=\dimen272
+) (c:/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count324
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count325
+) (c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2024/02/20 v1.0g Color table columns (DPC)
+\everycr=\toks38
+\minrowclearance=\skip79
+\rownum=\count326
+) (c:/texlive/2024/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2023-11-01 v4.19 Multi-page Table package (DPC)
+\LTleft=\skip80
+\LTright=\skip81
+\LTpre=\skip82
+\LTpost=\skip83
+\LTchunksize=\count327
+\LTcapwidth=\dimen273
+\LT@head=\box69
+\LT@firsthead=\box70
+\LT@foot=\box71
+\LT@lastfoot=\box72
+\LT@gbox=\box73
+\LT@cols=\count328
+\LT@rows=\count329
+\c@LT@tables=\count330
+\c@LT@chunks=\count331
+\LT@p@ftn=\toks39
+) (c:/texlive/2024/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
+ (c:/texlive/2024/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
+)
+\@float@every@algorithm=\toks40
+\c@algorithm=\count332
+) (c:/texlive/2024/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+ (c:/texlive/2024/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count333
+\c@ALG@rem=\count334
+\c@ALG@nested=\count335
+\ALG@tlm=\skip84
+\ALG@thistlm=\skip85
+\c@ALG@Lnr=\count336
+\c@ALG@blocknr=\count337
+\c@ALG@storecount=\count338
+\c@ALG@tmpcounter=\count339
+\ALG@tmplength=\skip86
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (c:/texlive/2024/texmf-dist/tex/latex/tools/bm.sty
+Package: bm 2023/07/08 v1.2f Bold Symbol Support (DPC/FMi)
+\symboldoperators=\mathgroup7
+\symboldletters=\mathgroup8
+\symboldsymbols=\mathgroup9
+Package bm Info: No bold for \OMX/cmex/m/n, using \pmb.
+Package bm Info: No bold for \U/msa/m/n, using \pmb.
+Package bm Info: No bold for \U/msb/m/n, using \pmb.
+\symboldlasy=\mathgroup10
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 149.
+) (c:/texlive/2024/texmf-dist/tex/latex/oberdiek/aliascnt.sty
+Package: aliascnt 2018/09/07 v1.5 Alias counters (HO)
+)
+\c@theorem=\count340
+\c@corollary=\count341
+\c@example=\count342
+ (c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 Package: subfiles 2020/11/14 v2.2 Multi-file projects (package)
-)
+))
 Package hyperref Info: Option `breaklinks' set `true' on input line 39.
 Package hyperref Info: Option `bookmarksopen' set `true' on input line 39.
 Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 39.
@@ -507,17 +628,17 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
  (c:/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count325
-\scratchdimen=\dimen257
-\scratchbox=\box62
-\nofMPsegments=\count326
-\nofMParguments=\count327
-\everyMPshowfont=\toks30
-\MPscratchCnt=\count328
-\MPscratchDim=\dimen258
-\MPnumerator=\count329
-\makeMPintoPDFobject=\count330
-\everyMPtoPDFconversion=\toks31
+\scratchcounter=\count343
+\scratchdimen=\dimen274
+\scratchbox=\box74
+\nofMPsegments=\count344
+\nofMParguments=\count345
+\everyMPshowfont=\toks41
+\MPscratchCnt=\count346
+\MPscratchDim=\dimen275
+\MPnumerator=\count347
+\makeMPintoPDFobject=\count348
+\everyMPtoPDFconversion=\toks42
 ) (c:/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -525,7 +646,12 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+ (c:/texlive/2024/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
+)
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring OFF on input line 3.
  (Chapters/C1 Brownian Motion Time to Level.out) (Chapters/C1 Brownian Motion Time to Level.out)
@@ -549,7 +675,12 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 4.
  (c:/texlive/2024/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-) [1
+)
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 10.
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 10.
+ [1
 Non-PDF special ignored!
 <special> header=psfrag.pro
 
@@ -597,15 +728,15 @@ Package rerunfilecheck Info: File `"C1 Brownian Motion Time to Level".out' has n
 (rerunfilecheck)             Checksum: EDC288C6F300D3B83B6BBC87640FC310;2171.
  ) 
 Here is how much of TeX's memory you used:
- 14463 strings out of 474103
- 226850 string characters out of 5747481
- 1949496 words of memory out of 5000000
- 36581 multiletter control sequences out of 15000+600000
- 575185 words of font info for 82 fonts, out of 8000000 for 9000
+ 15991 strings out of 474103
+ 250740 string characters out of 5747481
+ 1950496 words of memory out of 5000000
+ 38049 multiletter control sequences out of 15000+600000
+ 581126 words of font info for 104 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  110i,19n,117p,730b,471s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfsx2488.pfb>
-Output written on "Chapters/C1 Brownian Motion Time to Level.pdf" (11 pages, 304424 bytes).
+Output written on "Chapters/C1 Brownian Motion Time to Level.pdf" (11 pages, 304432 bytes).
 PDF statistics:
  207 PDF objects out of 1000 (max. 8388607)
  147 compressed objects within 2 object streams
