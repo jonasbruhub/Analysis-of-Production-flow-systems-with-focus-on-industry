@@ -6,3 +6,4 @@ Simulations and code/cycle_production_data.csv
 **/*.out
 **/*.synctex.gz
 **/*.toc
+**/*.bbl
