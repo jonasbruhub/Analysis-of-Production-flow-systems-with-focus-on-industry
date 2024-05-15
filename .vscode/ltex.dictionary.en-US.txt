@@ -12,3 +12,5 @@ exponentiated
 Gaussians
 Exponentiated
 deconvolution
+Bruun
+Hubrechts

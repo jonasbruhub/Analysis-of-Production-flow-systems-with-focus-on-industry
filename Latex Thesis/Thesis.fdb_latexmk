@@ -1,7 +1,7 @@
 # Fdb version 4
-["bibtex Thesis"] 0 "Thesis.aux" "Thesis.bbl" "Thesis" 0 0
+["bibtex Thesis"] 0 "Thesis.aux" "Thesis.bbl" "Thesis" 1715802479.03109 0
   "./References.bib" 1712736499 43153 385cf9a0bfed96bb4037d4c782fe6e7e ""
-  "Appendix1.aux" 1715799621 1320 7d8f604ea160164773b2d444cc447d9a "pdflatex"
+  "Appendix1.aux" 1715802476 1320 7d8f604ea160164773b2d444cc447d9a "pdflatex"
   "GSPNcitation.bib" 0 -1 0 ""
   "Thesis.aux" 0 -1 0 "pdflatex"
   "c:/texlive/2024/texmf-dist/bibtex/bst/base/alpha.bst" 1710763006 23907 a5f93555796fb564b924339521f10a7c ""
@@ -9,9 +9,9 @@
   "Thesis.bbl"
   "Thesis.blg"
   (rewritten before read)
-["pdflatex"] 1715799624.16159 "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Thesis.tex" "Thesis.pdf" "Thesis" 1715799629.37275 0
+["pdflatex"] 1715802471.23676 "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Thesis.tex" "Thesis.pdf" "Thesis" 1715802479.03233 0
   "Acknowledgements.tex" 1710285104 62 9a4dfa1a6985453461f82c11a57d8127 ""
-  "Appendix1.aux" 1715799627 1320 7d8f604ea160164773b2d444cc447d9a "pdflatex"
+  "Appendix1.aux" 1715802476 1320 7d8f604ea160164773b2d444cc447d9a "pdflatex"
   "Appendix1.tex" 1710285104 53 2dfa6e2e37127536219f0fba130f8c9b ""
   "Chapters/C1 Brownian Motion Time to Level.tex" 1712147085 23266 12c673c4be5291dfa957c02e1c198861 ""
   "Chapters/C2 Introduction and Problem.tex" 1712146785 3206 37b52a35d9bcbce61a87b0faae3430d6 ""
@@ -21,12 +21,12 @@
   "Preface.tex" 1710285105 719 b12b2124431f3f08a71235a456ba90ba ""
   "SummaryDK.tex" 1710285105 121 095d078cb12cd2d6cd5f26971e1382ed ""
   "SummaryUK.tex" 1710285105 63 4e3ccfbeb1515c48971f62910f0bb20f ""
-  "Thesis.aux" 1715799627 17882 57bd5966b779dbb3e1924881ea09dd10 "pdflatex"
+  "Thesis.aux" 1715802476 17882 57bd5966b779dbb3e1924881ea09dd10 "pdflatex"
   "Thesis.bbl" 1712867734 416 12418f5ad7f2400d97d0097b240b3c7e "bibtex Thesis"
-  "Thesis.out" 1715799627 4920 b29285b32bf04f158ccac6447b6425da "pdflatex"
-  "Thesis.tex" 1715069879 5421 53819d90a748a01d7c352edb316a2fbc ""
-  "Thesis.toc" 1715799627 2193 43b4229980e98dff72904f451eebdcf4 "pdflatex"
-  "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Thesis.tex" 1715069879 5421 53819d90a748a01d7c352edb316a2fbc ""
+  "Thesis.out" 1715802476 4920 b29285b32bf04f158ccac6447b6425da "pdflatex"
+  "Thesis.tex" 1715802469 5281 7cf7bcddaf0f70691a32f4abf4bee420 ""
+  "Thesis.toc" 1715802476 2193 43b4229980e98dff72904f451eebdcf4 "pdflatex"
+  "c:/Users/jonas/Git/Analysis-of-Production-flow-systems-with-focus-on-industry/Latex Thesis/Thesis.tex" 1715802469 5281 7cf7bcddaf0f70691a32f4abf4bee420 ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1710763419 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1710763419 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1710764551 3524 cb3e574dea2d1052e39280babc910dc8 ""
