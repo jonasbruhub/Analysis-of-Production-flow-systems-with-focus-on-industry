@@ -16,14 +16,16 @@
 \usepackage[T1]{fontenc}                            %Set font encoding for output PDF
 \usepackage[danish,english]{babel}                  %Allows langauge switching (English is default)
 \usepackage{graphicx}                               %Support for including graphics
+\usepackage{epsfig}
 \usepackage{xcolor}                                 %Support for using colours
 \usepackage[hang,normalsize,bf]{caption}            %Make pretty captions
 \usepackage{varioref}                               %Enhances references (\vref {label})
 \usepackage{fancyhdr}                               %Pretty headers/footers
 \usepackage{hyperref}                               %References package
+\usepackage{amsthm}
 \usepackage{amsmath,amssymb,latexsym}               %AMS and other symbols
 \usepackage{epic,eepic,epsfig,graphics,psfrag}      %Figure/picture packages
-\usepackage{theorem}                                %Allows creation of custom enviroments
+% \usepackage{theorem}                                %Allows creation of custom enviroments
 \usepackage{breqn}
 \usepackage{float}
 \usepackage{diagbox}
@@ -31,6 +33,11 @@
 \usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 \usepackage{longtable}
 % \usepackage{cleveref}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{bm}                                     % For bold symbols
+\usepackage{aliascnt}
+
 %
 %==================================================================================================
 % PAGE GEOMETRY
@@ -124,14 +131,45 @@
 %==================================================================================================
 % ENVIROMENTS SETUP
 %==================================================================================================
-\newtheorem{lemma}{Lemma}[chapter]
-\newtheorem{proposition}[lemma]{Proposition}
-\newtheorem{theorem}[lemma]{Theorem}
-\newtheorem{corollary}[lemma]{Corollary}{\theorembodyfont{\rmfamily}
-    \newtheorem{definition}[lemma]{Definition}}\theoremheaderfont{\scshape\bfseries}
-\newenvironment{proof}{{\scshape Proof.}}{}
-\newcommand{\qed}{\hfill $\square$ \vspace{5mm}}
+% \theoremstyle{lemma}
+% \newtheorem{lemma}{Lemma}[chapter]
+
+% \theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}[chapter]
+
+\newtheorem{corollary}{Corollary}[theorem]
+
+\newtheorem{lemma}[theorem]{Lemma}
+
+% \theoremstyle{proposition}
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+
+
+
+
+
+% \theoremstyle{remark}
+% \newtheorem{corollary}[lemma]{Corollary}{\theorembodyfont{\rmfamily}
+    % \newtheorem{definition}[lemma]{Definition}}\theoremheaderfont{\scshape\bfseries}
+
+
+% \newenvironment{proof}{{\scshape Proof.}}{}
+\renewcommand{\qed}{\hfill $\square$ \vspace{5mm}}
+
+% \theoremstyle{remark}
 \newtheorem{example}{Example}[chapter]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% Make so that /autoref works with algorithms
+\newcommand{\algorithmautorefname}{Algorithm}
+\newcommand{\propositionautorefname}{Proposition}
+\newcommand{\lemmaautorefname}{Lemma}
+\newcommand{\corollaryautorefname}{Corollary}
+\newcommand{\exampleautorefname}{Example}
 %
 %==================================================================================================
 % CHAPTER AND APPENDIX STYLING SETUP
@@ -170,3 +208,4 @@
 
 \usepackage{subfiles}
 % % % EOF % % %
+

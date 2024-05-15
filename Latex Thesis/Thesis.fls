@@ -48,6 +48,8 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
+INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/epsfig.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/epsfig.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/xcolor/xcolor.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/xcolor/xcolor.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics-cfg/color.cfg
@@ -121,6 +123,8 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 INPUT c:/texlive/2024/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 INPUT c:/texlive/2024/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/amscls/amsthm.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/amscls/amsthm.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/amsmath/amsmath.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/amsmath/amsmath.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/amsmath/amsopn.sty
@@ -141,15 +145,8 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/eepic/epic.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/eepic/epic.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/eepic/eepic.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/eepic/eepic.sty
-INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/epsfig.sty
-INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/epsfig.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/psfrag/psfrag.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/psfrag/psfrag.sty
-INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/theorem.sty
-INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/theorem.sty
-INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/thp.sty
-INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/thp.sty
-INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/thp.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/breqn/breqn.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/breqn/breqn.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/l3kernel/expl3.sty
@@ -185,6 +182,18 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/graphics/color.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/longtable.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/longtable.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/algorithms/algorithm.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/algorithms/algorithm.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/base/ifthen.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/base/ifthen.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/bm.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/tools/bm.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/oberdiek/aliascnt.sty
+INPUT c:/texlive/2024/texmf-dist/tex/latex/oberdiek/aliascnt.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/subfiles/subfiles.sty
 INPUT c:/texlive/2024/texmf-dist/tex/latex/import/import.sty
@@ -258,6 +267,16 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/base/ulasy.fd
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy7.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy5.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib7.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib5.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasyb10.tfm
 INPUT ./SummaryDK.tex
 INPUT ./SummaryDK.tex
 INPUT ./SummaryDK.tex
@@ -314,6 +333,18 @@ INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasyb10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasyb10.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasyb10.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecrm1440.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
@@ -422,11 +453,84 @@ INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy9.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/latex-fonts/lasy6.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib9.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib6.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy9.tfm
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm
 INPUT ./figures/Multiple cycles data/Cleaning Autocorrelation.png
 INPUT ./figures/Multiple cycles data/Cleaning Autocorrelation.png
 INPUT figures/Multiple cycles data/Cleaning Autocorrelation.png
 INPUT ./figures/Multiple cycles data/Cleaning Autocorrelation.png
 INPUT ./figures/Multiple cycles data/Cleaning Autocorrelation.png
+INPUT ./Chapters/C4 Method.tex
+INPUT ./Chapters/C4 Method.tex
+INPUT Chapters/C4 Method.tex
+INPUT ./Chapters/C4 Method.tex
+INPUT ./Chapters/C4 Method.tex
+INPUT Chapters/C4 Method.tex
+INPUT c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ecrm0700.tfm
+INPUT ./figures/ND examples/Gaussian 3x3 large s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s uniforms.pdf
+INPUT figures/ND examples/Gaussian 3x3 large s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 medium s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 medium s uniforms.pdf
+INPUT figures/ND examples/Gaussian 3x3 medium s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 medium s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 medium s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 small s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 small s uniforms.pdf
+INPUT figures/ND examples/Gaussian 3x3 small s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 small s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 small s uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s X3 KDE.pdf
+INPUT figures/ND examples/Gaussian 3x3 large s X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power uniforms.pdf
+INPUT figures/ND examples/Gaussian 3x3 large s power uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power uniforms.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power X3 KDE.pdf
+INPUT figures/ND examples/Gaussian 3x3 large s power X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power X3 KDE.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s.pdf
+INPUT figures/ND examples/Gaussian 3x3 large s.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power.pdf
+INPUT figures/ND examples/Gaussian 3x3 large s power.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power.pdf
+INPUT ./figures/ND examples/Gaussian 3x3 large s power.pdf
+INPUT ./figures/ND examples/Gaussian copula sample contour.pdf
+INPUT ./figures/ND examples/Gaussian copula sample contour.pdf
+INPUT figures/ND examples/Gaussian copula sample contour.pdf
+INPUT ./figures/ND examples/Gaussian copula sample contour.pdf
+INPUT ./figures/ND examples/Gaussian copula sample contour.pdf
+INPUT ./figures/ND examples/Gaussian copula sample pdf.pdf
+INPUT ./figures/ND examples/Gaussian copula sample pdf.pdf
+INPUT figures/ND examples/Gaussian copula sample pdf.pdf
+INPUT ./figures/ND examples/Gaussian copula sample pdf.pdf
+INPUT ./figures/ND examples/Gaussian copula sample pdf.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical contour.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical contour.pdf
+INPUT figures/ND examples/Gaussian copula theoretical contour.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical contour.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical contour.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical pdf.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical pdf.pdf
+INPUT figures/ND examples/Gaussian copula theoretical pdf.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical pdf.pdf
+INPUT ./figures/ND examples/Gaussian copula theoretical pdf.pdf
 INPUT ./Appendix1.tex
 INPUT ./Appendix1.tex
 OUTPUT Appendix1.aux
@@ -442,12 +546,16 @@ INPUT ./Appendix1.aux
 INPUT Appendix1.aux
 INPUT ./Thesis.out
 INPUT ./Thesis.out
+INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb
+INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb
+INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
@@ -455,6 +563,7 @@ INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
+INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb
@@ -462,6 +571,7 @@ INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb
+INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb

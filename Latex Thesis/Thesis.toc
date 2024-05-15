@@ -21,5 +21,9 @@
 \contentsline {section}{\numberline {4.3}Production phases}{21}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}Correlations}{24}{subsection.4.3.1}%
 \contentsline {section}{\numberline {4.4}Cleaning operations}{29}{section.4.4}%
-\contentsline {chapter}{\numberline {A}Stuff}{37}{appendix.A}%
-\contentsline {chapter}{Bibliography}{39}{appendix.A}%
+\contentsline {chapter}{\numberline {5}Method}{37}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Copula based network discovery}{37}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Algorithms}{41}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Examples}{43}{section.5.3}%
+\contentsline {chapter}{\numberline {A}Stuff}{51}{appendix.A}%
+\contentsline {chapter}{Bibliography}{53}{appendix.A}%

@@ -4,9 +4,59 @@
 
 \chapter{Projekt problemer / veje at gå}
 
+F:
 \begin{itemize}
-    \item Læring af causal struktur (https://wires.onlinelibrary.wiley.com/doi/full/10.1002/widm.1449)
-    \item GSPN (generalized stochastic petri nets). Ideen med dette er god til at håndetere parallelism \cite{Balbo2007}. Ændring af data til at være parallelt tilføjelse af de første par stoffer
+    \item Total tid for operation fordeling : $\Sigma X_u$ -> eller mere komplekst udtryk hvis e.g. via. GSPN eller copula baseret approach
+    \item Ud fra kendskab til kemisk process, hvor meget bliver der så produceret (betinget eller joint) af tider + påfyldningsændringer
+          \begin{itemize}
+              \item Delta masser i påfyldningsfaser
+              \item sammenhæng med tid brugt i andre steps
+              \item kemisk process er veldifineret når komponenter kendes. Antages blot at tiderne til preprocessering er så blandet godt nok og kan reagere ordentligt
+              \item Comment: Svært at sige så meget om når man ikke har nogle mål på det eller kemisk kendskab
+          \end{itemize}
+    \item hvor meget kan input rate være af input materiale(r) (fra overordnede systemer) før der begynder at ske ophobning i buffer tanke -> hvor meget går til spilde
+          \begin{itemize}
+              \item ligeledes hvornår er det for lidt. Er der et sweetspot værdi eller et område den kan svinge indenfor før det går galt (inden for en tidshorisont)?
+          \end{itemize}
 \end{itemize}
 
+
+RQ:
+\begin{itemize}
+    \item Hvordan kan vi fra data opdage causal netværksstruktur?
+          \begin{itemize}
+              \item massebalance constraint på NCE (artikel om copula baseret struktur)
+          \end{itemize}
+    \item Ud fra netværksstruktur / model for tider og masseændringer, kan vi lave bedre optimering end "bare" median tider
+          \begin{itemize}
+              \item Ikke helt sikker på hvad dette skulle indeholde
+          \end{itemize}
+    \item Modellere en batch produktion (unit operations) med GSPN (PHSPN)
+    \item Hvordan kan man indføre uforudsete fejl/dropout af batches
+    \item Hvordan kan man fit MPH* fordeling (total tid, ændringer i fyldeniveauer) for at få en samlet fordeling for tiderne eller deres korrelationsstruktur (kan man få fyldeniveauer ind i dette)
+    \item Hvordan kan man opstille et netværk af batch processer og
+\end{itemize}
+
+
+
+% 1. Antage eller opdage causale links
+% 2. Opstille resulterende GSPN eller PHSPN
+
+
+
+% Phasee type stochastic petri net (underklasse af GSPN)
+
+
+
+% Et lille problem: Kan ikke se hvor meget der er genereret af det stof man gerne vil have ud... -> så skal nok ikke være et RQ, men kan stadig bruge fyldningsvariabel til at lave et netværk (med i dette tilfælde 2D variable)
 \end{document}
+
+
+Nonparametric-copula-entropy and network deconvolution method for causal discovery in complex manufacturing systems:
+https://link.springer.com/article/10.1007/s10845-021-01751-w
+
+Læring af causal struktur:
+https://wires.onlinelibrary.wiley.com/doi/full/10.1002/widm.1449
+
+GSPN (generalized stochastic petri nets). Ideen med dette er god til at håndetere parallelism \cite{Balbo2007}
+- Ændring af data til at være parallelt tilføjelse af de første par stoffer

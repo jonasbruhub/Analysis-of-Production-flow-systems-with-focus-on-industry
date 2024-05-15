@@ -4,3 +4,11 @@ stochasticity
 Autocorrelation
 autocorrelation
 covary
+integrand
+deconvoluted
+Deconvolution
+eigendecomposition
+exponentiated
+Gaussians
+Exponentiated
+deconvolution
