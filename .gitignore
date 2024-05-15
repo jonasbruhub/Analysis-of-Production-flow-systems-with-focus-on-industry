@@ -5,3 +5,4 @@ Simulations and code/cycle_production_data.csv
 **/*.log
 **/*.out
 **/*.synctex.gz
+**/*.toc
