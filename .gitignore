@@ -1,4 +1,5 @@
 Simulations and code/cycle_production_data.csv
+Simulations and code/PyPackageJonas/__pycache__
 # Dont sync auxilary files from latex
 **/*.aux
 **/*.fdb_latexmk
