@@ -1,6 +1,12 @@
 library("evmix")
 library("pracma")
 
+
+samples = c(0.1)
+
+
+
+
 x <- as.matrix(rbind(
   c(0.01, 0.4, 0.5, 0.6, 0.99),
   c(0.01, 0.6, 0.5, 0.4, 0.99)

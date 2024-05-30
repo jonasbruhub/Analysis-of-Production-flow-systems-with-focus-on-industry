@@ -24,6 +24,7 @@
 \usepackage{hyperref}                               %References package
 \usepackage{amsthm}
 \usepackage{amsmath,amssymb,latexsym}               %AMS and other symbols
+\usepackage{mathtools}
 \usepackage{epic,eepic,epsfig,graphics,psfrag}      %Figure/picture packages
 % \usepackage{theorem}                                %Allows creation of custom enviroments
 \usepackage{breqn}
@@ -141,6 +142,11 @@
 
 \newtheorem{lemma}[theorem]{Lemma}
 
+% \theoremstyle{definition}
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+
 % \theoremstyle{proposition}
 \newaliascnt{proposition}{theorem}
 \newtheorem{proposition}[proposition]{Proposition}
@@ -170,6 +176,7 @@
 \newcommand{\lemmaautorefname}{Lemma}
 \newcommand{\corollaryautorefname}{Corollary}
 \newcommand{\exampleautorefname}{Example}
+\newcommand{\definitionautorefname}{Definition}
 %
 %==================================================================================================
 % CHAPTER AND APPENDIX STYLING SETUP

@@ -5,6 +5,21 @@
 
 \chapter{Method}
 
+\begin{definition}\label{def:induced norm}
+    Induced Norm.
+
+    A matrix norm $\left|\left|\left|\;\cdot\;\right|\right|\right|$ is said to be induced by the vector norm $||\;\cdot\;||$  when
+    $$\left|\left|\left|A\right|\right|\right| = \sup_{\left|\left|x\right|\right| = 1} ||Ax||$$
+\end{definition}
+See e.g. \textcolor{red}{https://www.anandinstitute.org/pdf/Roger_A.Horn.\%20_Matrix_Analysis_2nd_edition(BookSee.org).pdf}
+
+\begin{definition}\label{def:sub-multiplicative matrix norm}
+    Sub-multiplicative Matrix norm
+
+    A matrix norm $\left|\left|\left| \; \cdot \; \right|\right|\right|$ is said to be sub-multiplicative, if for every $A,B \in \mathbb{F}^{n\times n}$ where $\mathbb{F}$ is either the real or complex field:
+    $$\left|\left|\left| AB\right|\right|\right| \leq \left|\left|\left| A \right|\right|\right|\cdot \left|\left|\left| B \right|\right|\right|$$
+\end{definition}
+
 \section{Copula based network discovery}
 Suppose a set of random variables $(X_i)$ is given. The method presented in this section aims to discover direct relationships between pairs $X_i$ and $X_j$ for $i\neq j$. These relationships can be presented using an undirected graph. We will later discuss methods of directing edges such that a causal network may be discovered.
 
@@ -341,6 +356,51 @@ We continue with a similar example to the previous one. The key difference is th
 
 \end{proof}
 
+\begin{equation}\label{eq:Network Informaiton Convolution}
+    G_{obs} = \sum_{k \geq 1} G_{dir}^k
+\end{equation}
+
+
+\subsection{Ensuring convergence and the effect of $\beta$}
+From \textcolor{red}{Network Deconvolution - A General Method to Distinguish
+    Direct Dependencies over Networks - Supplementary Notes} and their implementation found at their webpage at \textcolor{red}{https://compbio.mit.edu/nd/} there seem to be an inconsistency between code and theory. In this section, we shall thus investigate from where the discrepancy arises. Initially, from the formulation in \autoref{eq:Network Informaiton Convolution}, for the right-hand side to converge, it must have spectral radius at most $1$ and to ensure convergence, less than $1$. In the latter case,
+
+
+\subsection{Robustness to noise}
+They show that the procedure is robust noise by considering that the observed information matrix is influenced by some noise $N\in \mathbb{R}^{n\times n}$ and characterize the noise by its Euclidean norm $||N||_{2} \coloneq \sup_{||x||_2 = 1} ||Nx||_2$. They show that
+$$||G_{dir} - \hat{G}_{dir}||_{2} \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma \right)$$
+where $\gamma$ is the spectral norm of $N$ and $\delta$ is the spectral norm of $\hat{G}_{obs}$. However, this upper bound can actually be computed when $\delta + \gamma < 1$ and diverges when $\delta + \gamma > 1$. Furthermore, the result can be generalized to other norms than the spectral norm. In particular, the Frobenius norm admits a similar upper bound on the difference. Consider any matrix norm $\left|\left|\left|\; \cdot \; \right|\right|\right|$ for which $\left|\left|\left| A B \right|\right|\right| \leq \left|\left|\left|A\right|\right|\right| \cdot \left|\left|\left| B \right|\right|\right|$. It then follows that
+\begin{align*}
+    \left|\left|\left| G_{dir} - \hat{G}_{dir} \right|\right|\right| & = \left|\left|\left| G_{obs} \left(I + G_{obs}\right)^{-1} - \hat{G}_{obs} \left(I + \hat{G}_{obs}\right)^{-1} \right|\right|\right|   \\
+                                                          & = \left|\left|\left| - \sum_{k\geq 1} \left( - G_{obs}\right)^k  +  \sum_{k\geq 1} \left(-\hat{G}_{obs}\right)^k \right|\right|\right| \\
+                                                          & \leq \sum_{k\geq 1} \left|\left|\left|  G_{obs}^k  -  \left(G_{obs} + N\right)^k \right|\right|\right| \\
+                                                          & \leq \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \left|\left|\left| N \right|\right|\right|^i \left|\left|\left| G_{obs} \right|\right|\right|^{k-i}                           \\
+                                                          & = \sum_{k\geq 1} \left( \left( \,\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\,\right)^k - \left|\left|\left| G_{obs} \right|\right|\right|^k \right)                                           \\
+                                                          & = \frac{\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left(\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\right)} - \frac{\left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left|\left|\left| G_{obs} \right|\right|\right|}
+\end{align*}
+Where the final equality assumes that $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| < 1$ and by splitting up the sum into $2$ geometric series. However, we also show that the series diverge when $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| > 1$ which is not directly apparent as it is a difference geometric series. Namely, by the ratio test, letting $\gamma = \left|\left|\left| N \right|\right|\right|$ and $\delta = \left|\left|\left| G_{obs} \right|\right|\right|$ as by \textcolor{red}{supp. notes NetworkDeconvolution-AGeneralMethodtoD...}
+\begin{align*}
+    \lim_{n\to \infty} \left|\frac{ \left(\gamma + \delta\right)^{n+1} - \delta^{n+1}}{\left(\gamma + \delta\right)^n - \delta^n}\right| &= \lim_{n\to \infty}\left|\frac{ \left(\gamma + \delta\right) \left(1 + \frac{\gamma}{\delta}\right)^n - \delta}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|\\
+    & = \lim_{n\to \infty}\left|\delta + \gamma \frac{\left(1 + \frac{\gamma}{\delta} \right)^n}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|\\
+    & = \lim_{n\to \infty} \left|\delta + \gamma \frac{1}{1 - \left( 1 + \frac{\gamma}{\delta} \right) ^{-n}}\right|\\
+    & = \left| \gamma + \delta \right| = \gamma + \delta
+\end{align*}
+as $\gamma, \delta > 0$ unless they are the zero-matrix in which case the above is nonsensical from a perspective of interest. The above shows that indeed the above result diverges when $\gamma + \delta > 1$.
+
+Thus, for the spectral norm, denoted by $\left|\left|\left|\, \cdot \,\right|\right|\right|_2$, one simply needs the fact that it is sub-multiplicative (\autoref{def:sub-multiplicative matrix norm}) which follows from the fact that the spectral norm is induced by the $l_2$ norm (see \autoref{def:induced norm}) on $\mathbb{R}$, and hence
+$$\sup_{||x||_2 = 1}\left|\left|ABx\right|\right| \leq \left|\left|A\right|\right|_2 \cdot \sup_{\left|\left|x\right|\right|_2=1}{\left|\left|Bx\right|\right|} = \left|\left|A\right|\right|_2\, \left|\left|B\right|\right|_2$$
+which by definition means that $||AB||_2 \leq ||A||_2\, ||B||_2$. The Frobenius norm $\left|\left|\left|\; \cdot \;\right|\right|\right|_F$ is also sub-multiplicative and depending on the use case may be very useful.
+
+
+% where we have used $||A||_F = \sqrt{\sum_{k=1}^n \sigma_k^2 \left(A\right)} \leq \sqrt{n} \sigma_1\left(A\right)$ for $A \in \mathbb{C}^{n \times n}$
+
+
+% $$|||A|||_2 \geq ||A||_\max$$
+
+% \left|\left|  \right|\right|_F
+
+\subsection{Quick made up example}
+As a thought up experiment for the underlying
 \end{document}
 
 

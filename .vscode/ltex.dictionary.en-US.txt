@@ -14,3 +14,4 @@ Exponentiated
 deconvolution
 Bruun
 Hubrechts
+Frobenius
