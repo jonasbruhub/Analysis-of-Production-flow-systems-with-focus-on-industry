@@ -2,40 +2,185 @@
 \graphicspath{{\subfix{../figures/}}}
 % \epstopdfsetup{outdir={../figures/}}
 \begin{document}
+% effects of scaling g_obs
+% "bevis" for antagelse ikke holder for e.g. normalfordeling, men numerisk hvorfor det går godt??
+% Hvad hvis man sætter entropi i diagonalen i stedet for 0? eller 1 hvis correlation. Undersøg numerisk.
+% for at øge computer stabilitet kan G_obs skaleres til den har spektral radius mindre end 1. Spektrum/egenværdier numerisk mindre end 1
+% $\rho\left(G_{obs}\right) < 1$ ??
+
+% UNDERSØG: bruger original artikel at spektral radius af G_obs skal være mindre end 1? Det skal den ikke
+% Det følger af proposition 5.3 / corrolary 5.2.1 at for en 1D manifold, under grænseværdien, at MI bare kan regnes som entropi for 1 af variablene (hvis det er 1-to-1??)
+
+% Det er en vigtig del af correlation og MI at de virker for mixed variables. MI virker fordi continuert er grænsen for en diskretisering af en kontinuert variabel, så giver mening definitionsmæssigt at sammenligne kontinuert og diskret MI.
+
 
 \chapter{Method}
 
-\begin{definition}\label{def:induced norm}
-    Induced Norm.
+\section{Causal discovery}
+In this section, we shall discuss the method for network deconvolution, originally proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}. The underlying problem is inferring direct effects and dependencies. From this, using prior information on the production setup, we shall be able to infer causal dependencies by directing the resulting edges from the network deconvolution (ND) algorithm. Particularly, the framework and general algorithm proposed Feizi et al. stems from a graph-theoretic approach to the problem of inferring direct dependencies. Namely, suppose that observations are made of some properties of in this case a chemical process. We shall represent these properties as vertices (nodes) $V$ and dependencies between properties as edges. Initially, when observing the vertices, we observe both direct and indirect effects. Particularly, a vertex $v_1$ might influence some other vertex $v_3$ through another vertex $v_2$ if $v_2$ depends on $v_1$ and $v_3$ of $v_2$. In this case, we will observe that $v_1$ influences $v_3$, but actually it is $v_2$ that has a direct influence on $v_3$. In graph-theoretical terms, we thus observe the transitive closure of the information that flows between vertices but want to infer the underlying network structure.
 
-    A matrix norm $\left|\left|\left|\;\cdot\;\right|\right|\right|$ is said to be induced by the vector norm $||\;\cdot\;||$  when
-    $$\left|\left|\left|A\right|\right|\right| = \sup_{\left|\left|x\right|\right| = 1} ||Ax||$$
-\end{definition}
-See e.g. \textcolor{red}{https://www.anandinstitute.org/pdf/Roger_A.Horn.\%20_Matrix_Analysis_2nd_edition(BookSee.org).pdf}
+An important note on the algorithm to come is that we only use vertices that we have observed. Namely, the underlying structure might be as in \autoref{subfig:hidden nodes example unobserved} with an unobserved node/variable (named $U$ in this case). However, without any more assumptions or modelling choices we would (ideally) infer the network structure depicted in \autoref{subfig:hidden nodes example resulting graph}.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/Hidden nodes/graph example w hidden.pdf}
+        \caption{}
+        \label{subfig:hidden nodes example unobserved}
+    \end{subfigure}
+    %
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/Hidden nodes/graph example wo hidden.pdf}
+        \caption{}
+        \label{subfig:hidden nodes example resulting graph}
+    \end{subfigure}
+    \caption{(a) An example of a causal structure depicted as a graph. When observing the network, only nodes $0$, $1$ and $2$ are observed/recorded. (b) The resulting inferred graph from observational data. Although this is not a complete picture of the true underlying dynamics of the system, if only the observed variables are of interest, this will be an equally proper representation of the system. Furthermore, in practice this means no further assumptions are made which can and can not be of desire. Namely, if prior information is accessible one might introduce new nodes in the inferred network.}
+    \label{fig:hidden nodes example}
+\end{figure}
+With these initial comments, we proceed with the general setup and assumptions for network deconvolution based on observations.
 
-\begin{definition}\label{def:sub-multiplicative matrix norm}
-    Sub-multiplicative Matrix norm
+\subsection{Setup and assumptions}
+Suppose a set of $N$ random variables $(X_i)$ is given. The method presented in this section aims to discover direct relationships between pairs $X_i$ and $X_j$ for $i\neq j$. These relationships will be presented by an undirected graph as in the previous section. In particular, we shall let each random variable $X_i$ be represented by a vertex in a graph. We will later discuss a way of directing edges such that a causal network may be discovered i.e. a directed acyclic graph that may be used for inference.
 
-    A matrix norm $\left|\left|\left| \; \cdot \; \right|\right|\right|$ is said to be sub-multiplicative, if for every $A,B \in \mathbb{F}^{n\times n}$ where $\mathbb{F}$ is either the real or complex field:
-    $$\left|\left|\left| AB\right|\right|\right| \leq \left|\left|\left| A \right|\right|\right|\cdot \left|\left|\left| B \right|\right|\right|$$
-\end{definition}
+The method proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} then works as follows. Given an observed matrix $G_{obs} \in \mathbb{R}^{N \times N}$ of similarities between each pair of variables, we shall deduce a matrix $G_{dir} \in \mathbb{R}^{N \times N}$ of direct similarities between each pair of random variables $X_i$ and $X_j$. The measure of similarity, can in practice be any desired measure such a correlation, mutual information which we will focus on in this thesis. See \autoref{seq:Information measures and computation} for a further discussion on these two measures. Note that the algorithm presented will in theory work for non-symmetric measures as well such as \textit{Interaction information}, \textit{Directed information} and \textit{Normalized information}.
 
-\section{Copula based network discovery}
-Suppose a set of random variables $(X_i)$ is given. The method presented in this section aims to discover direct relationships between pairs $X_i$ and $X_j$ for $i\neq j$. These relationships can be presented using an undirected graph. We will later discuss methods of directing edges such that a causal network may be discovered.
+The (direct) network is then presented by the discovered $G_{dir}$ containing only the direct effects i.e. interaction between pairs of variables which can be viewed as weights on the edges of the complete graph with nodes representing the random variables. As we shall see in section \autoref{subseq:Robustness to noise}, the algorithm is somewhat robust to noise in the sense that we can ensure accuracy depending on the level of noise observed present in $G_{obs}$ and on the norm chosen (from a certain, although rather general, set of norms). This hints to that a threshold on the inferred weights on the edges of the network might be a good idea which is further solidified by the facts that often only the most influential variables are of importance when trying to control the process.
 
-One way of discovering such a network from a set of observations is through mutual information. Namely, suppose that we have obtained a matrix $G_{obs}$ with similarities between each pair of random variables. We will use mutual information as similarity. Let $G_{dir}$ be the information on each edge of the graph i.e. only the direct effects between pairs of variables.
-$$G_{obs} = G_{dir} + G_{indir} = G_{dir} + G_{dir}^2 + G_{dir}^3 + \dots = \left(I - G_{dir}\right)^{-1} - I = G_{dir} \left(I - G_{dir}\right)^{-1}$$
-where it is assumed that the above infinite sum converges. A necessary and sufficient condition for this is that $\rho \left(G_dir\right) < 1$ where $\rho\left( \cdot \right)$ denotes the spectral radius.
+The first assumption is that the observed matrix of co-dependence $G_{obs}$ may be expressed as
+\begin{equation}
+    G_{obs} = G_{dir} + G_{indir}
+\end{equation}
+Namely, that the direct and indirect effects can be added together to get the total and thus observed interdependence between each pair of variables. Often, this is not the case as we shall see later on. However, the error made from this assumption and the ones to be presented seem to be small enough that the discovered network accurately resemble the true underlying network.
 
-It follows that $G_{dir}$ can be calculated as
-$$G_{dir} = G_{obs} \left(I + G_{obs}\right)^{-1}$$
-Furthermore, as described by ... . As $G_{obs}$ is symmetric it is diagonalizable with a matrix $U$ such that $\Lambda_{obs} = U^T G_{obs} U$ where $\Lambda_{obs}$ is a diagonal matrix containing the spectral values with multiplicity in any ordering. It follows that since $\rho\left(G_{obs}\right) < 1$, $\lambda_{obs} + I$ is also invertible and
+The second and final assumption is that the indirect effects $G_{indir}$ can be computed in terms of $G_{dir}$. Namely, that
+\begin{equation}
+    G_{indir} = G_{dir}^2 + G_{dir}^3 + \dots
+\end{equation}
+i.e. that the observed \textit{information} exchanged on an edge $e_{ij}$ between nodes $X_i$ and $X_j$ is the sum second, third etc. order effects, each given by the information on the $n$-path (where $n$ is the order of the (diminishing) indirect effect) again assumed to a sum of products. In other terms, the second order indirect effect between $X_i$ and $X_j$ (given as the $(i,j)$ element of $G_{dir}^2$) is the sum of products on edges $e_{ik}$ and $e_{kj}$ for all $k$
+$$\left[G_{dir}^2\right]_{ij} = \sum_{k=1}^N e_{ik}\,e_{kj}$$
+where $e_{ij}$ is the $(i,j)$ element of $G_{dir}$. Immediately, we observe that $e_{ii}$ is of interest in terms of its physical meaning. The co-dependence between a random variable and itself might be somewhat ambiguous or even undefined depending on the measure. Thus, the meaning of (non-existing) edges $e_{ii}$ will be of interest later on when using the method on controlled cases to see if any sense can be made of these.
+
+Thus, from the above assumptions, it follows that we can express $G_{obs}$ as
+\begin{equation}
+    G_{obs} = G_{dir} + G_{dir}^2 + G_{dir}^3 + \dots
+\end{equation}
+Hence, for $G_{dir}$ to exist, it must have spectral radius at most $1$ as otherwise, the above sum diverges and thus $G_{obs}$ will not exist. I.e. $\rho\left(G_{dir}\right) < 1$. Thus, assuming convergence we can rewrite the infinite series as
+\begin{equation}\label{eq:Gobs from Gdir}
+    G_{obs} = G_{dir} \left(I - G_{dir}\right)^{-1}
+\end{equation}
+It immediately follows that $G_{dir}$ is given by (can be proved by directly inserting the above expression for $G_{obs}$)
+\begin{equation}
+    G_{dir} = G_{obs} \left(I + G_{obs}\right)^{-1}
+\end{equation}
+Furthermore, if the measure of dependence between pairs of variables is symmetric, then so is $G_{obs}$ and hence diagonalizable by some orthogonal matrix $U$ such that $G_{obs} = U \Lambda_{obs} U^T$ (with the columns of $U$ being eigenvectors of $G_{obs}$). It follows that $G_{dir}$ can be expressed in a simple (and later computationally efficient) way
 $$G_{dir} = U \Lambda_{dir} U^T$$
-Where $\Lambda_{dir} = \Lambda_{obs} \left(I + \Lambda_{obs}\right)^{-1}$ i.e. $\left[\Lambda_{dir}\right]_{ii} = \frac{\lambda_{obs}}{1 + \lambda_{obs}}$ and $0$ elsewhere. Whether this is better than a normal inversion of $I + G_{obs}$ is at this point unknown.
+where $\Lambda_{dir} = \Lambda_{obs} \left(I + \Lambda_{obs}\right)^{-1}$.
 
-At this point, we only need $G_{obs}$ and as mentioned earlier we will use mutual information. However, to make the calculations more robust and efficient we will use a closely related measure of dependence, namely CE which is defined as follows
+We note that from the above one needs $\left( I + G_{obs}\right)^{-1}$ to be well-defined which is equivalent to $-1 \not\in \sigma_{G_{obs}}$ i.e. $-1$ is not an eigenvalue of $G_{obs}$. To see that this is indeed the case whenever $\rho\left(G_{dir}\right) < 1$, and that $I + G_{obs}$ is thus invertible we use \autoref{eq:Gobs from Gdir} and simplify
+\begin{align*}
+    I + G_{obs} & = I + G_{dir} \left(I-G_{dir}\right)^{-1}                                                \\
+                & = \left(I-G_{dir}\right)\left(I-G_{dir}\right)^{-1} + G_{dir}\left(I-G_{dir}\right)^{-1} \\
+                & = \left(I-G_{dir}\right)^{-1}
+\end{align*}
+which is clearly invertible. Furthermore, we note that under the assumption $\rho\left(G_{dir}\right) < 1$ we can not place any bound on the spectral radius of $G_{obs}$. Namely, if $v$ is a unit eigenvector of $G_{dir}$ with eigenvalue $\lambda$ such that $|\lambda|<1$, then $v$ is also an eigenvector of $G_{obs}$ as
+$$G_{obs} v = \sum_{k=1}^\infty G_{dir}^k v = \sum_{k=1}^\infty \lambda v = \frac{\lambda}{1-\lambda} v$$
+i.e. $\left(\frac{\lambda}{1-\lambda},v\right)$ is an eigenpair of $G_{obs}$ and since $\frac{\lambda}{1-\lambda} \in (-1/2, \infty)$ for $\lambda\in (-1,1)$ we can in general not bound the spectral radius of $G_{obs}$, although we should never observe an eigenvalue equal to or below $-1/2$ (which again proves that $-1$ is not an eigenvalue of $G_{obs}$).
+
+Now, before discussing the implementation and analyzing the algorithm both analytically and through examples, we will take a closer look at the similarity measures that are to be used with this method and that in the end will make up the matrix $G_{obs}$. Namely, \textit{mutual information} and \textit{correlation}.
+
+
+\section{Information measures and computation}\label{seq:Information measures and computation}
+In this section we discuss two measures that can be used to construct the matrices of codependency from the previous section. Namely, we shall touch on correlation and discuss what one might choose to call Copula-based entropy. However, before discussing Copula entropy (CE) we first need to define what a copula is.
+
+\subsection{Copula}
+Given a set of $N$ random variables $X_1,\dots, X_N$, a copula is loosely speaking a distribution function with support $[0,1]^N$ incorporating the dependence structure between the random variables. Given a joint distribution function $F$ and (invertible) marginals $F_1,\dots,F_N$ we define a copula $C$ as
+$$F(x_1,\dots,x_N) = \mathbb{P}\left(X_1\leq x_1,\dots, X_N\leq x_N\right) = C\left(F_1\left(x_1\right),\dots,F_N\left(x_N\right)\right)$$
+Letting $u_i = F_i\left(x_i\right) \in [0,1]$ it is clear that $C$ is a distribution function as described above \cite{Copula-handbook}. Furthermore, it follows that the marginals of $C$ are uniform. We thus define a copula in probabilistic terms as
+\begin{definition}[Copula]\label{def:copula}
+    A function $C:[0,1]^d \to [0,1]$ is called a copula if it has uniform marginals and is a distribution function for a $d$-dimensional random vector $\mathbf{X}$.
+\end{definition}
+An important and fundamental theorem of copulas for especially continuous random variables where the marginals are also continuous functions is stated by Sklar:
+\begin{theorem}[Sklar's theorem] \label{thm: Sklar}
+    For a random vector $\boldsymbol X$ with CDF $F$ and univariate marginal CDFs $F_1, \dots, F_d$. There exists a copula $C$ such that
+    \begin{equation}\label{eq:sklar}
+        F(x_1,\dots,x_d) = C(F_1(x_1), \dots, F_d(x_d))
+    \end{equation}
+    If $X$ is continuous, $C$ is unique; otherwise $C$ is uniquely determined on the Cartesian product of the ranges of distribution functions $F_i$, $\prod \text{Ran}\left(F_i\right)$.
+\end{theorem}
+Note that the last statement for non-continuous random variables can be made unique by instead using subcopulas, a generalization of copulas with domain $I$ only a subdomain of the unit hypercube $\mathbb{I}^d = [0,1]^d$ containing all faces of the unit hyper cube. However, there are infinitely many ways of extending such a subcopula to a copula $C$\cite{Copula-modeling-for-discrete-random-vectors}. In our case, this means that for discrete and/or mixed variables, we will later have to work around this non-uniqueness when calculating mutual information. The example made by Geenens\cite{Copula-modeling-for-discrete-random-vectors} is a bivariate random vector of independent variables $X \sim \text{Bern}\left(\pi_X\right)$ and $Y\sim \text{Bern}\left(\pi_Y\right)$. The support of $F_X$ and $F_Y$ is then $\{0, 1-\pi_X\}$ and $\{0, 1-\pi_Y\}$ respectively. Due to the restriction on the boundary of the unit square, the only unique point of a copula $C$ is then $(1-\pi_X, 1-\pi_Y)$, and by independence we must have
+$$C\left(1-\pi_X, 1-\pi_Y\right) = (1-\pi_X)( 1-\pi_Y)$$
+Geenens then proceed to define an uncountable set of copulas that fulfill the above criterion which further illustrates that the basic concepts of copulas are not well suited for discrete random vectors. Note that in the article it is however argued how one can extend the concept to a more general concept that works for mixed variables.
+
+From \autoref{eq:sklar} we see that a copula is thus simply just a function that \textit{couples} the marginals of a random vector to the joint distribution. The following corollary follows immediately
+\begin{corollary}[Coordinate transformation] \label{coro: Coordinate transformation}
+    Under the assumptions of \autoref{thm: Sklar}, given any set $(T_1, \dots, T_d)$ of strictly increasing functions, if $C$ is a copula of $(X_1,\dots, X_d)$ then it is also a copula of $(T_1(X_1), \dots, T_d(X_d))$.
+\end{corollary}
+\begin{proof}
+    Suppose $(X_1 , \dots , X_d)$ permits a copula $C$ and let $T_i$ be given as stated. Consider coordinate wise the result of the transformation $Y_i = T_i(X_i)$ and consider the CDF $F_{Y_i}(y_i)$
+    $$F_{Y_i}(y_i) = \mathbb{P}\left(Y_i \leq y_i\right) = \mathbb{P}\left(T_i^{-1}(Y_i) \leq T_i^{-1}(y_i)\right) = \mathbb{P}\left(X_i \leq x_i\right) = F_{X_i}(x_i)$$
+    Thus
+    \begin{align*}
+        F_{\boldsymbol X} (x_1,\dots , x_d) & = C\left( F_{X_1}(x_1), \dots, F_{X_d}(x_d)\right) \\
+                                            & = C\left( F_{Y_1}(y_1), \dots, F_{Y_d}(y_d)\right) \\
+                                            & = F_{\boldsymbol Y}(y_1, \dots, y_d)
+    \end{align*}
+    where Sklar's theorem have been used for the final equality.
+\end{proof}
+The above corollary is actually equivalent with a seemingly stronger statement and follows easily
+\begin{proposition}
+    Since $T_i$ is strictly increasing, the inverse $T_i^{-1}$ exists and is also strictly increasing. Thus, the above implication is bidirectional and hence for strictly increasing functions $T_i$, $C$ is a copula of $\left(X_1,\dots,X_d\right)$ if and only if it is a copula of $\left(T_1(X_1),\dots, T_d(X_d)\right)$.
+\end{proposition}
+
+
+\textcolor{red}{casuality svarer til at lave nedre/øvre trekant. Er der forskel i at gør edet før og efter for en symmetrisk matrix?}
+
+
+
+\subsection{Mutual information and Copula entropy}
+In this section we introduce Copula entropy as done in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} and see how it actually is equal to the well known mutual information. The name comes from the general definition of (differential) entropy as we shall see shortly. However, first we define mutual information between a set of random variables
+\begin{definition}[Mutual information]\label{def:mutual information}
+    For a discrete random vector $\boldsymbol{X} = \{X_i\}$, we define the mutual information as
+    $$I(\boldsymbol{X}) = \sum_{\boldsymbol{x} \in \mathcal{X}} f(\boldsymbol{x}) \, \log_b\left(\frac{f(\boldsymbol{x})}{\prod_{i} f_i\left(x_i\right)}\right)$$
+    where $\mathcal{X}$ is the domain of the random vector $\boldsymbol{X}$ and $f$ is the joint probability mass function with marginals $f_i$. Similarly, for continuous random vectors with $f$ the joint probability density function we define
+    $$I(\boldsymbol{X}) = \int_{\boldsymbol{x} \in \mathcal{X}} f(\boldsymbol{x}) \, \log_b\left(\frac{f(\boldsymbol{x})}{\prod_{i} f_i\left(x_i\right)}\right)\, d\boldsymbol{x}$$
+    where the base of the logarithm $b$ is often chosen to be $2$, $e$ or $10$ although the choice is unimportant as all logarithms are equivalent up to a scaling factor.
+\end{definition}
+\textcolor{red}{As we shall see later, the continuous version is the limit of the discrete version}
+
+We immediately proceed with defining both entropy and differential entropy
+\begin{definition}[Entropy]\label{def:entropy}
+    The (joint) entropy of a discrete random vector $\boldsymbol{X}$ is defined as
+    $$H\left(\boldsymbol{X}\right) = - \sum_{\boldsymbol{x}\in \mathcal{X}} f(\boldsymbol{x}) \, \log_b f(\boldsymbol{x})$$
+\end{definition}
+
+\begin{definition}[Differential entropy]\label{def:differential entropy}
+    The (joint) differential entropy defined for a continuous random vector $\boldsymbol{X}$ is defined as
+    $$h(\boldsymbol{X}) = - \int_{\boldsymbol{x} \in \mathcal{X}} f\left(\boldsymbol{x}\right) \, \log_b f\left(\boldsymbol{x}\right) \, d\boldsymbol{x}$$
+\end{definition}
+
+\textcolor{red}{We shall see shortly that these are not the limit of each other (discrete to continuous) but when using MI it does not matter and even makes implemtaiton simpler}
+
+
+\begin{align*}
+    I\left(\boldsymbol{X}\right) & = \int_{\boldsymbol{x} \in \mathcal{X}} f\left(\boldsymbol{x}\right) \, \log_b f\left(\boldsymbol{x}\right) \, d\boldsymbol{x} - \sum_{i = 1}^{d} \int_{\boldsymbol{x} \in \mathcal{X}} f\left(\boldsymbol{x}\right) \, \log_b f_i\left(x_i\right) \, d\boldsymbol{x}\\
+    & = \int_{\boldsymbol{x} \in \mathcal{X}} f\left(\boldsymbol{x}\right) \, \log_b f\left(\boldsymbol{x}\right) \, d\boldsymbol{x} - \sum_{i = 1}^{d} \int_{x_i \in \mathcal{X}_i} f_i\left(\boldsymbol{x}\right) \, \log_b f_i\left(x_i\right) \, d x_i\\
+    &= \sum_{i=1}^{d} h\left(X_i\right) - h\left(\boldsymbol{X}\right)
+\end{align*}
+and similarly for the discrete variant.
+
+
+where the base $b$, initially, can be chosen at will as all logarithms are equal up to a scalar multiple of each other.
+
+
+
+
+\textcolor{red}{forskellige baser og egentlig ikke et rigtigt valg. Dog er det forskellig skallering af G obs som vi senere viser har en effekt på højere ordens led. Kommenter på/henvis til dette i senere afsnit.}
+
+
+However, to make the calculations more robust and efficient we will use a closely related measure of dependence, namely CE which is defined as follows
 $$ CE\left(X_1,\dots, X_n\right) = -\int \dots \int_{[0,1]^n} c\left(u_1,\dots, u_n\right) \log_{b}c\left(u_1,\dots, u_n\right) \, d u_1 \dots d u_n$$
-where $c(\cdot)$ is the uniquely defined copula of the joint distribution $f_{\mathbf{X}}(\cdot)$. We show that the above is indeed equal to the negative mutual information. First, we realize that from definition,
+where $c(\cdot)$ is the uniquely defined copula density of the joint distribution $f_{\mathbf{X}}(\cdot)$. We show that the above is indeed equal to the negative mutual information. First, we realize that from definition,
 \begin{align*}
     c(u_1,\dots , u_n) & = \partial_{\mathbf{u}} C(u_1,\dots,u_n)                                                        \\
                        & = \partial_{\mathbf{u}} F\left(F_1^{-1}\left(u_1\right), \dots, F_n^{-1}\left(u_n\right)\right) \\
@@ -47,8 +192,45 @@ Thus
         & =\int\dots \int_{[0,1]^n} c\left(u_1,\dots, u_n\right) \log c\left(u_1\dots,u_n\right) \, d F_1(x_1), \dots, d F_n(x_n)                                                                      \\
         & = \int \dots \int_{\mathbb{R}^n} \frac{f(x_1,\dots, x_n)}{f_1(x_1)\dots f_n(x_n)} \log\left(\frac{f(x_1,\dots, x_n)}{f_1(x_1)\dots f_n(x_n)}\right) f_1(x_1)\dots f_n(x_n) \, dx_1\dots dx_n \\
         & = \int \dots \int_{\mathbb{R}^n} f(x_1,\dots, x_n) \log\left(\frac{f(x_1,\dots, x_n)}{f_1(x_1)\dots f_n(x_n)}\right)  \, dx_1\dots dx_n                                                      \\
-        & = MI
+        & = I\left(\boldsymbol{X}\right)
 \end{align*}
+
+
+
+
+
+
+\subsection{Entropy and mutual information in the limit}\label{subsec:limit entropy and MI}
+Originally, entropy $H$ is only defined for discrete variables. A closely related but yet very different measure for continuous variables is differential entropy $h$ defined as
+$$h(X) = \int_{\mathbb{R}} f(x) \, \log{f(x)}\,dx$$
+Although one may think of this as the limit of (discrete) entropy, this is not the case. Namely, consider the support of $f(x)$ (here assumed to be the entire real line) binned into intervals i.e. a discretization of the continuous random variable $X$. To make notation simpler, we shall bin into equal-sized intervals of width $\Delta$. Then, for each interval $[i\Delta, (i+1)\Delta)$ for $i \in \mathbb{Z}$, there exists an $x_i$ such that the probability mass on this interval is represented by this $x_i$:
+$$f(x_i) \Delta = \int_{i\Delta}^{(i+1)\Delta} f(x) \, dx$$
+Clearly, this discretization is a valid distribution as
+$$\sum_{i\in\mathbb{Z}} f(x_i) \Delta = \int_{\mathbb{R}} f(x) \, dx = 1$$
+and in the limit, as $\Delta \to 0$ we recover the original distribution $f(x)$. However, if we try to calculate the entropy of this discretization, denoted by $H^{\Delta}$, we get a diverging limit
+\begin{align*}
+    H^{\Delta} & = \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i) \Delta}                                             \\
+               & = \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} + \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{\Delta} \\
+               & = \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} + \log{\Delta}
+\end{align*}
+Clearly, the first summand in the above expresion converges to the differential entropy as $\Delta \to 0$ whereas $\log{\Delta} \to - \infty$.
+
+A similar argument for the joint entropy between the discretization of $X_1$ and $X_2$, denoted by $H^{\Delta}_{12}$, results in
+$$H^{\Delta}_{12} = \sum_{i,j \in \mathbb{Z}} f\left(x_1^{(i)}, x_2^{(j)}\right) \Delta_1 \Delta_2 \log{f\left(x_1^{(i)}, x_2^{(j)}\right)} + \log{\Delta_1} + \log{\Delta_2}$$
+where $x_1^{(i)}\in[i\Delta_1, (i+1)\Delta_1)$ and $x_2^{(j)}\in [j\Delta_2, (j+1)\Delta_2)$ are defined such that
+$$f\left(x_1^{(i)}, x_2^{(j)}\right)\Delta_1 \Delta_2 = \int_{j\Delta_2}^{(j+1)\Delta_2}\int_{i\Delta_1}^{(i+1)\Delta_1} f(x_1,x_2) \, dx_1 dx_2,\quad \forall i,j\in\mathbb{Z}$$
+Note that clearly $\left(x_1^{(i)},x_2^{(j)}\right)$ exists for all $i,j\in \mathbb{Z}$. Again, the joint entropy diverges however, when computing the mutual information, we see that the diverging terms cancel. Namely, from \textcolor{red}{reference til information ud fra entropy proposition}
+\begin{align*}
+    I^{\Delta}_{12} & = H^{\Delta}_1 + H^{\Delta}_2 - H^{\Delta}_{12}                                                                                                       \\
+                    & = \sum_{i\in\mathbb{Z}} f_1\left(\tilde{x}_1^{(i)}\right) \Delta_1 \log{f_1\left(\tilde{x}_1^{(i)}\right)} + \log{\Delta_1}                           \\
+                    & \quad + \sum_{j\in\mathbb{Z}} f_2\left(\tilde{x}_2^{(j)}\right) \Delta_2 \log{f_2\left(\tilde{x}_2^{(j)}\right)} + \log{\Delta_2}                     \\
+                    & \quad - \sum_{i,j\in\mathbb{Z}} f\left(x_1^{(i)},x_2^{(j)}\right) \Delta_1 \Delta_2 \log{f\left(x_1^{(i)},x_2^{(j)}\right)} - \log{\Delta_1 \Delta_2} \\
+                    & \to h(X_1) + h(X_2) - h(X_1,X_2)\; \text{as}\; \Delta_1,\Delta_2 \to 0
+\end{align*}
+Thus, the limit of the mutual information for discrete random variables is indeed the mutual information defined for continuous random variables and can be computed either as the limit of discretizing the probability density function and then computing entropies or just using the initial definition for mutual information \textcolor{red}{definition til mutual information}.
+
+\newpage
+At this point, we only need $G_{obs}$ and as mentioned earlier we will use mutual information. \textcolor{red}{ref til afsnit om CE}
 Hence, we obtain $G_{obs}$ from the pairwise copula entropy (CE)
 $$G_{obs} = \begin{bmatrix}
         0        & - CE_{12} & \dots  & - CE_{1n} \\
@@ -61,43 +243,27 @@ Although theoretically $-NCE_{ii} = \infty$ for all $i$, we put $0$ in the diago
 
 Finally, from the deconvoluted information matrix $D_{dir}$ we may choose a threshold $t$ for choosing which edges are significant. The choice of $t$
 
+\subsection{Correlation}
+\textcolor{red}{introducer correlation hurtigt og kommenter på at det kan bruges som codependence mål og derefter ikke kan regnes ud fra copula}
 
-\newpage
-\begin{theorem}[Sklar's theorem] \label{thm: Sklar}
-    For a random vector $\boldsymbol X$ with CDF $F$ and univariate marginal CDFs $F_1, \dots, F_d$. There exists a copula $C$ such that
-    $$ F(x_1,\dots,x_d) = C(F_1(x_1), \dots, F_d(x_d)) $$
-    If $X$ is continuous, $C$ is unique.
-\end{theorem}
+In this section we show that in general, the copula does imply correlation. Namely, given a copula $C$ for some set $\{X_i\}_{i\in I}$ indexed by $I$, one can not calculate $\rho$ between any pair $(X_i ,X_j)$, $i\neq j$. This is easily shown by the following argument.
 
-The following corollary follows immediately
-\begin{corollary} \label{coro: Coordinate transformation}
-    Coordinate transformation
+First, note that from \autoref{coro: Coordinate transformation}, $C$ is also a copula for $Z_i \coloneq \left( X_i - \mu_i\right) / \sigma_i$ for $\in \in I$ where $\mu_i = \mathbb{E}[X_i]$ and $\sigma_i = \sqrt{\text{Var} \, X_i}$. Clearly, the correlation coefficient for $Z_i$ and $Z_j$ is the same as between $X_i$ and $X_j$. We thus proceed trying to calculate the correlation between any pair $Z_i$ and $Z_j$.
+\begin{align*}
+    \rho_{ij} & = \int\int_{\mathbb{R}^2} z_i z_j f_{ij}(z_i,z_j) \, dz_i \, dz_j                       \\
+              & = \int\int_{[0,1]^2} F_i^{-1}(u_i) \, F_j^{-1}(u_j) \, c_{ij}(u_i, u_j) \, du_i \, du_j
+\end{align*}
+where $c_{ij}$ density version of the copula defined for $X_i$ and $X_j$ and $F_i$ and $F_j$ are the marginals of $Z_i$ and $Z_j$ with mean $0$ and variance $1$. From the above, it is then clear for a fixed, non-constant copula $C$, the correlation depends on the marginals of $X_i$ and $X_j$. Also, we see that a constant copula density (only admissible if $c \equiv 1$ on $[0,1]^2$ and $0$ elsewhere) always results in $\rho_{ij} = 0$ as
+$$\int_0^1 F^{-1}(u) \, du = \int_{\mathbb{R}} z f(z) \, dz = 0$$
+again, under the assumption that $Z_i$ has mean $0$.
 
-    Under the assumptions of \autoref{thm: Sklar}, given any set $(T_1, \dots, T_d)$ of strictly increasing functions, if $C$ is a copula of $(X_1,\dots, X_d)$ then it is also a copula of $(T_1(X_1), \dots, T_d(X_d))$.
-\end{corollary}
-
-\begin{proof}
-    Suppose $(X_1 , \dots , X_d)$ permits a copula $C$ and let $T_i$ be given as stated. Consider coordinate wise the result of the transformation $Y_i = T_i(X_i)$ and consider the CDF $F_{Y_i}(y_i)$
-    $$F_{Y_i}(y_i) = \mathbb{P}\left(Y_i \leq y_i\right) = \mathbb{P}\left(T_i^{-1}(Y_i) \leq T_i^{-1}(y_i)\right) = \mathbb{P}\left(X_i \leq x_i\right) = F_{X_i}(x_i)$$
-    Thus
-    \begin{align*}
-        F_{\boldsymbol X} (x_1,\dots , x_d) & = C\left( F_{X_1}(x_1), \dots, F_{X_d}(x_d)\right) \\
-                                            & = C\left( F_{Y_1}(y_1), \dots, F_{Y_d}(y_d)\right) \\
-                                            & = F_{\boldsymbol Y}(y_1, \dots, y_d)
-    \end{align*}
-    where Sklar's theorem have been used for the final equality.
-\end{proof}
-
-The above corollary is actually equivalent with a seemingly stronger statement and follows easily
-\begin{proposition}
-    Since $T_i$ is strictly increasing, the inverse $T_i^{-1}$ exists and is also strictly increasing. Thus, the above implication is bidirectional and hence for strictly increasing functions $T_i$, $C$ is a copula of $\left(X_1,\dots,X_d\right)$ if and only if it is a copula of $\left(T_1(X_1),\dots, T_d(X_d)\right)$.
-\end{proposition}
+Thus, we conclude that indeed mutual information and correlation is very different measures of codependency (as correlation depends on the marginals whereas mutual information does not) and that it does not make much sense to introduce copulas in the setting of correlation.
 
 
 
 
-\newpage
-\section{Algorithms}
+\section{Copula based network discovery}
+
 \begin{algorithm}[H]
     \caption{$G_{obs}$ computation}\label{alg:Gobs1}
     \begin{algorithmic}
@@ -160,8 +326,89 @@ The above corollary is actually equivalent with a seemingly stronger statement a
 \end{proof}
 
 
+\subsection{KDE methods}
+
+
 
 \newpage
+\begin{proposition} \label{prop:MI bivariate gaussian}
+    Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
+    $$\Sigma =
+        \begin{bmatrix}
+            \sigma_1^2             & \rho \sigma_1 \sigma^2 \\
+            \rho \sigma_1 \sigma_2 & \sigma_2^2
+        \end{bmatrix}
+    $$
+    Then the mutual information $I\left(X_1, X_2\right) = -\frac{1}{2}\ln \left(1 - \rho^2\right)$.
+\end{proposition}
+\begin{proof}
+    This follows by direct computation Using e.g. that $I(X_1, X_2) = h(X_1) + h(X_2) - h(X_1, X_2)$
+\end{proof}
+
+\begin{equation}\label{eq:Network Informaiton Convolution}
+    G_{obs} = \sum_{k \geq 1} G_{dir}^k
+\end{equation}
+
+
+\subsection{Ensuring convergence and the effect of $\beta$}
+From \textcolor{red}{Network Deconvolution - A General Method to Distinguish Direct Dependencies over Networks - Supplementary Notes} and their implementation found at their webpage at \textcolor{red}{https://compbio.mit.edu/nd/} there seem to be an inconsistency between code and theory. In this section, we shall thus investigate from where the discrepancy arises. Initially, from the formulation in \autoref{eq:Network Informaiton Convolution}, for the right-hand side to converge, it must have spectral radius at most $1$ and to ensure convergence, less than $1$. In the latter case,
+
+
+\textcolor{red}{Noget introduktion til at vi først lige kører nogle basale definition afsted, som kommer til at blive brugt senere}
+\begin{definition}\label{def:induced norm}
+    Induced Norm.
+
+    A matrix norm $\left|\left|\left|\;\cdot\;\right|\right|\right|$ is said to be induced by the vector norm $||\;\cdot\;||$  when
+    $$\left|\left|\left|A\right|\right|\right| = \sup_{\left|\left|x\right|\right| = 1} ||Ax||$$
+\end{definition}
+See \cite{MATRIX_ANALYSIS-Horn_Johnson_2012}
+
+\begin{definition}\label{def:sub-multiplicative matrix norm}
+    Sub-multiplicative Matrix norm
+
+    A matrix norm $\left|\left|\left| \; \cdot \; \right|\right|\right|$ is said to be sub-multiplicative, if for every $A,B \in \mathbb{F}^{n\times n}$ where $\mathbb{F}$ is either the real or complex field:
+    $$\left|\left|\left| AB\right|\right|\right| \leq \left|\left|\left| A \right|\right|\right|\cdot \left|\left|\left| B \right|\right|\right|$$
+\end{definition}
+
+\subsection{Robustness to noise}\label{subseq:Robustness to noise}
+They show that the procedure is robust noise by considering that the observed information matrix is influenced by some noise $N\in \mathbb{R}^{n\times n}$ and characterize the noise by its Euclidean norm $||N||_{2} \coloneq \sup_{||x||_2 = 1} ||Nx||_2$. They show that
+$$||G_{dir} - \hat{G}_{dir}||_{2} \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma \right)$$
+where $\gamma$ is the spectral norm of $N$ and $\delta$ is the spectral norm of $\hat{G}_{obs}$. However, this upper bound can actually be computed when $\delta + \gamma < 1$ and diverges when $\delta + \gamma > 1$. Furthermore, the result can be generalized to other norms than the spectral norm. In particular, the Frobenius norm admits a similar upper bound on the difference. Consider any matrix norm $\left|\left|\left|\; \cdot \; \right|\right|\right|$ for which $\left|\left|\left| A B \right|\right|\right| \leq \left|\left|\left|A\right|\right|\right| \cdot \left|\left|\left| B \right|\right|\right|$. It then follows that
+\begin{align*}
+    \left|\left|\left| G_{dir} - \hat{G}_{dir} \right|\right|\right| & = \left|\left|\left| G_{obs} \left(I + G_{obs}\right)^{-1} - \hat{G}_{obs} \left(I + \hat{G}_{obs}\right)^{-1} \right|\right|\right|                                                                                                                                                                                                   \\
+                                                                     & = \left|\left|\left| - \sum_{k\geq 1} \left( - G_{obs}\right)^k  +  \sum_{k\geq 1} \left(-\hat{G}_{obs}\right)^k \right|\right|\right|                                                                                                                                                                                                 \\
+                                                                     & \leq \sum_{k\geq 1} \left|\left|\left|  G_{obs}^k  -  \left(G_{obs} + N\right)^k \right|\right|\right|                                                                                                                                                                                                                                 \\
+                                                                     & \leq \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \left|\left|\left| N \right|\right|\right|^i \left|\left|\left| G_{obs} \right|\right|\right|^{k-i}                                                                                                                                                               \\
+                                                                     & = \sum_{k\geq 1} \left( \left( \,\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\,\right)^k - \left|\left|\left| G_{obs} \right|\right|\right|^k \right)                                                                                                                                 \\
+                                                                     & = \frac{\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left(\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\right)} - \frac{\left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left|\left|\left| G_{obs} \right|\right|\right|}
+\end{align*}
+Where the final equality assumes that $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| < 1$ and by splitting up the sum into $2$ geometric series. However, we also show that the series diverge when $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| > 1$ which is not directly apparent as it is a difference geometric series. Namely, by the ratio test, letting $\gamma = \left|\left|\left| N \right|\right|\right|$ and $\delta = \left|\left|\left| G_{obs} \right|\right|\right|$ as by \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} \textcolor{red}{supp. notes NetworkDeconvolution-AGeneralMethodtoD...}
+\begin{align*}
+    \lim_{n\to \infty} \left|\frac{ \left(\gamma + \delta\right)^{n+1} - \delta^{n+1}}{\left(\gamma + \delta\right)^n - \delta^n}\right| & = \lim_{n\to \infty}\left|\frac{ \left(\gamma + \delta\right) \left(1 + \frac{\gamma}{\delta}\right)^n - \delta}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right| \\
+                                                                                                                                         & = \lim_{n\to \infty}\left|\delta + \gamma \frac{\left(1 + \frac{\gamma}{\delta} \right)^n}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|                       \\
+                                                                                                                                         & = \lim_{n\to \infty} \left|\delta + \gamma \frac{1}{1 - \left( 1 + \frac{\gamma}{\delta} \right) ^{-n}}\right|                                                         \\
+                                                                                                                                         & = \left| \gamma + \delta \right| = \gamma + \delta
+\end{align*}
+as $\gamma, \delta > 0$ unless they are the zero-matrix in which case the above is nonsensical from a perspective of interest. The above shows that indeed the above result diverges when $\gamma + \delta > 1$.
+
+Thus, for the spectral norm, denoted by $\left|\left|\left|\, \cdot \,\right|\right|\right|_2$, one simply needs the fact that it is sub-multiplicative (\autoref{def:sub-multiplicative matrix norm}) which follows from the fact that the spectral norm is induced by the $l_2$ norm (see \autoref{def:induced norm}) on $\mathbb{R}$, and hence
+$$\sup_{||x||_2 = 1}\left|\left|ABx\right|\right| \leq \left|\left|A\right|\right|_2 \cdot \sup_{\left|\left|x\right|\right|_2=1}{\left|\left|Bx\right|\right|} = \left|\left|A\right|\right|_2\, \left|\left|B\right|\right|_2$$
+which by definition means that $||AB||_2 \leq ||A||_2\, ||B||_2$. The Frobenius norm $\left|\left|\left|\; \cdot \;\right|\right|\right|_F$ is also sub-multiplicative and depending on the use case may be very useful.
+
+
+% where we have used $||A||_F = \sqrt{\sum_{k=1}^n \sigma_k^2 \left(A\right)} \leq \sqrt{n} \sigma_1\left(A\right)$ for $A \in \mathbb{C}^{n \times n}$
+
+
+% $$|||A|||_2 \geq ||A||_\max$$
+
+% \left|\left|  \right|\right|_F
+
+\subsection{Normal example error}
+\textcolor{red}{Eksempel medd normal fordeling og fejlen der bliver lavet vha. algoritmen.}
+
+
+
+\chapter{Results}
 \section{Examples}
 In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and \autoref{alg:ND} works in junction and, if so, observe how the algorithm can fail and what may be done to correct such cases. Initially, a few simple examples involving exponentiated multivariate Gaussians $\boldsymbol Y $.
 
@@ -342,65 +589,57 @@ We continue with a similar example to the previous one. The key difference is th
 
 
 \newpage
-\begin{proposition} \label{prop:MI bivariate gaussian}
-    Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
-    $$\Sigma =
-        \begin{bmatrix}
-            \sigma_1^2             & \rho \sigma_1 \sigma^2 \\
-            \rho \sigma_1 \sigma_2 & \sigma_2^2
-        \end{bmatrix}
-    $$
-    Then the mutual information $I\left(X_1, X_2\right) = -\frac{1}{2}\ln \left(1 - \rho^2\right)$.
-\end{proposition}
-\begin{proof}
 
-\end{proof}
+\section{sammenligning af metoder for at finde MI}
+Sammenligning af gammel metode og "min"
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example all.pdf}
+        \caption{}
+        \label{subfig:d}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example zoom.pdf}
+        \caption{}
+        \label{subfig:dd}
+    \end{subfigure}
+    \caption{Evaluation of MI for new method for different N. \textcolor{red}{Bør sammenlignes med artiekl fundet (har sat i bibtex) og original papers (ikke Kina)}}
+    \label{fig:dd}
+\end{figure}
 
-\begin{equation}\label{eq:Network Informaiton Convolution}
-    G_{obs} = \sum_{k \geq 1} G_{dir}^k
-\end{equation}
-
-
-\subsection{Ensuring convergence and the effect of $\beta$}
-From \textcolor{red}{Network Deconvolution - A General Method to Distinguish
-    Direct Dependencies over Networks - Supplementary Notes} and their implementation found at their webpage at \textcolor{red}{https://compbio.mit.edu/nd/} there seem to be an inconsistency between code and theory. In this section, we shall thus investigate from where the discrepancy arises. Initially, from the formulation in \autoref{eq:Network Informaiton Convolution}, for the right-hand side to converge, it must have spectral radius at most $1$ and to ensure convergence, less than $1$. In the latter case,
-
-
-\subsection{Robustness to noise}
-They show that the procedure is robust noise by considering that the observed information matrix is influenced by some noise $N\in \mathbb{R}^{n\times n}$ and characterize the noise by its Euclidean norm $||N||_{2} \coloneq \sup_{||x||_2 = 1} ||Nx||_2$. They show that
-$$||G_{dir} - \hat{G}_{dir}||_{2} \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma \right)$$
-where $\gamma$ is the spectral norm of $N$ and $\delta$ is the spectral norm of $\hat{G}_{obs}$. However, this upper bound can actually be computed when $\delta + \gamma < 1$ and diverges when $\delta + \gamma > 1$. Furthermore, the result can be generalized to other norms than the spectral norm. In particular, the Frobenius norm admits a similar upper bound on the difference. Consider any matrix norm $\left|\left|\left|\; \cdot \; \right|\right|\right|$ for which $\left|\left|\left| A B \right|\right|\right| \leq \left|\left|\left|A\right|\right|\right| \cdot \left|\left|\left| B \right|\right|\right|$. It then follows that
-\begin{align*}
-    \left|\left|\left| G_{dir} - \hat{G}_{dir} \right|\right|\right| & = \left|\left|\left| G_{obs} \left(I + G_{obs}\right)^{-1} - \hat{G}_{obs} \left(I + \hat{G}_{obs}\right)^{-1} \right|\right|\right|   \\
-                                                          & = \left|\left|\left| - \sum_{k\geq 1} \left( - G_{obs}\right)^k  +  \sum_{k\geq 1} \left(-\hat{G}_{obs}\right)^k \right|\right|\right| \\
-                                                          & \leq \sum_{k\geq 1} \left|\left|\left|  G_{obs}^k  -  \left(G_{obs} + N\right)^k \right|\right|\right| \\
-                                                          & \leq \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \left|\left|\left| N \right|\right|\right|^i \left|\left|\left| G_{obs} \right|\right|\right|^{k-i}                           \\
-                                                          & = \sum_{k\geq 1} \left( \left( \,\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\,\right)^k - \left|\left|\left| G_{obs} \right|\right|\right|^k \right)                                           \\
-                                                          & = \frac{\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left(\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\right)} - \frac{\left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left|\left|\left| G_{obs} \right|\right|\right|}
-\end{align*}
-Where the final equality assumes that $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| < 1$ and by splitting up the sum into $2$ geometric series. However, we also show that the series diverge when $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| > 1$ which is not directly apparent as it is a difference geometric series. Namely, by the ratio test, letting $\gamma = \left|\left|\left| N \right|\right|\right|$ and $\delta = \left|\left|\left| G_{obs} \right|\right|\right|$ as by \textcolor{red}{supp. notes NetworkDeconvolution-AGeneralMethodtoD...}
-\begin{align*}
-    \lim_{n\to \infty} \left|\frac{ \left(\gamma + \delta\right)^{n+1} - \delta^{n+1}}{\left(\gamma + \delta\right)^n - \delta^n}\right| &= \lim_{n\to \infty}\left|\frac{ \left(\gamma + \delta\right) \left(1 + \frac{\gamma}{\delta}\right)^n - \delta}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|\\
-    & = \lim_{n\to \infty}\left|\delta + \gamma \frac{\left(1 + \frac{\gamma}{\delta} \right)^n}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|\\
-    & = \lim_{n\to \infty} \left|\delta + \gamma \frac{1}{1 - \left( 1 + \frac{\gamma}{\delta} \right) ^{-n}}\right|\\
-    & = \left| \gamma + \delta \right| = \gamma + \delta
-\end{align*}
-as $\gamma, \delta > 0$ unless they are the zero-matrix in which case the above is nonsensical from a perspective of interest. The above shows that indeed the above result diverges when $\gamma + \delta > 1$.
-
-Thus, for the spectral norm, denoted by $\left|\left|\left|\, \cdot \,\right|\right|\right|_2$, one simply needs the fact that it is sub-multiplicative (\autoref{def:sub-multiplicative matrix norm}) which follows from the fact that the spectral norm is induced by the $l_2$ norm (see \autoref{def:induced norm}) on $\mathbb{R}$, and hence
-$$\sup_{||x||_2 = 1}\left|\left|ABx\right|\right| \leq \left|\left|A\right|\right|_2 \cdot \sup_{\left|\left|x\right|\right|_2=1}{\left|\left|Bx\right|\right|} = \left|\left|A\right|\right|_2\, \left|\left|B\right|\right|_2$$
-which by definition means that $||AB||_2 \leq ||A||_2\, ||B||_2$. The Frobenius norm $\left|\left|\left|\; \cdot \;\right|\right|\right|_F$ is also sub-multiplicative and depending on the use case may be very useful.
-
-
-% where we have used $||A||_F = \sqrt{\sum_{k=1}^n \sigma_k^2 \left(A\right)} \leq \sqrt{n} \sigma_1\left(A\right)$ for $A \in \mathbb{C}^{n \times n}$
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original all.pdf}
+        \caption{}
+        \label{subfig:d}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original zoom.pdf}
+        \caption{}
+        \label{subfig:dd}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original high corr.pdf}
+        \caption{}
+        \label{subfig:dd}
+    \end{subfigure}
+    \caption{Evaluation of MI for old method for different N. Ligner der er knæk ved fporhold lig 1. Men ved næremere undersøgelse blev det fundet ud af at det ikke helt er tilfældet, og derudover vil der skulle laves en algoritmisk måde at finde dette knæk på. Savitzky–Golay filter kunne være en mulighed, eller gruppere e.g. 5 forskellige bins og tag gennemsnit. Efter smoothing kan anden afledte tæt på 0 bruges, til at finde hvornår stykket bliver fladt (tilnærmelses vist)}
+    \label{fig:ddd}
+\end{figure}
 
 
-% $$|||A|||_2 \geq ||A||_\max$$
+\textcolor{red}{Inkluder flere exempler end blot gaussian as done by \cite{Estimating-mutual-information-Kraskov}}
 
-% \left|\left|  \right|\right|_F
-
-\subsection{Quick made up example}
-As a thought up experiment for the underlying
 \end{document}
 
 

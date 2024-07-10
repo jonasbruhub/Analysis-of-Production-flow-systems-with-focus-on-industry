@@ -15,3 +15,6 @@ deconvolution
 Bruun
 Hubrechts
 Frobenius
+eigenpair
+subcopula
+subcopulas

@@ -18,7 +18,7 @@
 \usepackage{graphicx}                               %Support for including graphics
 \usepackage{epsfig}
 \usepackage{xcolor}                                 %Support for using colours
-\usepackage[hang,normalsize,bf]{caption}            %Make pretty captions
+\usepackage[normalsize,bf]{caption}            %Make pretty captions
 \usepackage{varioref}                               %Enhances references (\vref {label})
 \usepackage{fancyhdr}                               %Pretty headers/footers
 \usepackage{hyperref}                               %References package
@@ -177,6 +177,14 @@
 \newcommand{\corollaryautorefname}{Corollary}
 \newcommand{\exampleautorefname}{Example}
 \newcommand{\definitionautorefname}{Definition}
+
+% \renewcommand{\sectionautorefname}{Section}
+\addto\extrasenglish{
+    \def\sectionautorefname{Section}
+    \def\subsectionautorefname{Subsection}
+}
+
+
 %
 %==================================================================================================
 % CHAPTER AND APPENDIX STYLING SETUP
