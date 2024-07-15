@@ -18,3 +18,8 @@ Frobenius
 eigenpair
 subcopula
 subcopulas
+entropies
+summand
+convolving
+Sklar
+CDFs

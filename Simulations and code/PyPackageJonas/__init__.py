@@ -298,3 +298,27 @@ def probfun_n(x,w,mu,Sig):
         pdf += np.exp( logpdf )
     
     return pdf
+
+
+
+# tests
+def KolmogorovSmirnovTestUnif(U, printOut = True):
+    n_samples = U.__len__()
+    
+    # theoretical distribution (x -> x, when x in [0,1])
+    F_H = lambda x : np.min( [np.ones(x.shape), np.max( np.vstack([x , np.zeros(x.shape)]) , axis = 0)], axis = 0 )
+
+    # emperical distribution sampled at many points deviation from theoretical dist.
+    xx = np.linspace(0,1,10_000)
+    D_N = np.abs((U <= xx[:,None]).mean(axis=1) - F_H(xx)).max()
+
+    # Adjusted test statistic (according to BO slides using no estimated parameters etc.)
+    D_N_adjusted = ( np.sqrt(n_samples) + 0.12 + 0.11/np.sqrt(n_samples) ) * D_N
+
+    p_value = scipy.special.kolmogorov(D_N_adjusted)
+
+    if printOut:
+        print(f"Test-stat. :          {D_N}")
+        print(f"Adjusted test-stat. : {D_N_adjusted}")
+        print(f"p-value :             {p_value}")
+    return D_N, D_N_adjusted, p_value
