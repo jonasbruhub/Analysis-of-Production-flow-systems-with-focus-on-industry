@@ -3,6 +3,7 @@
 % \epstopdfsetup{outdir={../figures/}}
 \usepackage{xr}
 \externaldocument{C4 Method}
+\externaldocument{../_BackMatter/Appendix1}
 \begin{document}
 
 \chapter{Results}
@@ -240,14 +241,14 @@ Sammenligning af gammel metode og "min"
         \centering
         \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example all.pdf}
         \caption{}
-        \label{subfig:d}
+        \label{subfig:new MI method all}
     \end{subfigure}%
     ~
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example zoom.pdf}
         \caption{}
-        \label{subfig:dd}
+        \label{subfig:new MI method all zoom}
     \end{subfigure}
     \caption{Evaluation of MI for new method for different N. \textcolor{red}{Bør sammenlignes med artiekl fundet (har sat i bibtex) og original papers (ikke Kina)}}
     \label{fig:dd}
@@ -273,7 +274,7 @@ Sammenligning af gammel metode og "min"
         \centering
         \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original high corr.pdf}
         \caption{}
-        \label{subfig:dd}
+        \label{subfig:ddd}
     \end{subfigure}
     \caption{Evaluation of MI for old method for different N. Ligner der er knæk ved fporhold lig 1. Men ved næremere undersøgelse blev det fundet ud af at det ikke helt er tilfældet, og derudover vil der skulle laves en algoritmisk måde at finde dette knæk på. Savitzky–Golay filter kunne være en mulighed, eller gruppere e.g. 5 forskellige bins og tag gennemsnit. Efter smoothing kan anden afledte tæt på 0 bruges, til at finde hvornår stykket bliver fladt (tilnærmelses vist)}
     \label{fig:ddd}
