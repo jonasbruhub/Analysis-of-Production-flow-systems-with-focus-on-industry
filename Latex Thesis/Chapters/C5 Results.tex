@@ -10,6 +10,22 @@
 \section{Examples}
 In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and \autoref{alg:ND} works in junction and, if so, observe how the algorithm can fail and what may be done to correct such cases. Initially, a few simple examples involving exponentiated multivariate Gaussians $\boldsymbol Y $.
 
+\subsection{Gaussian CE error}\label{sec:gaussian MI error}
+\textcolor{red}{Eksempel medd normal fordeling og fejlen der bliver lavet vha. algoritmen.}
+\begin{proposition} \label{prop:MI bivariate gaussian}
+    Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
+    $$\Sigma =
+        \begin{bmatrix}
+            \sigma_1^2             & \rho \sigma_1 \sigma^2 \\
+            \rho \sigma_1 \sigma_2 & \sigma_2^2
+        \end{bmatrix}
+    $$
+    Then the mutual information $I\left(X_1, X_2\right) = -\frac{1}{2}\ln \left(1 - \rho^2\right)$.
+\end{proposition}
+\begin{proof}
+    This follows by direct computation Using e.g. that $I(X_1, X_2) = h(X_1) + h(X_2) - h(X_1, X_2)$
+\end{proof}
+
 \begin{example} \label{ex:1}
     Exponentiated multivariate Gaussian
 

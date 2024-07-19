@@ -1,6 +1,8 @@
 \documentclass[../Thesis.tex]{subfiles}
 \graphicspath{{\subfix{../figures/}}}
 % \epstopdfsetup{outdir={../figures/}}
+\usepackage{xr}
+\externaldocument{C5 Results}
 \begin{document}
 % effects of scaling g_obs
 % "bevis" for antagelse ikke holder for e.g. normalfordeling, men numerisk hvorfor det går godt??
@@ -253,7 +255,11 @@ Finally, before moving on to correlation as a measure of similarity, we discuss 
 In this section, we shall discuss the differences between entropy and differential entropy and observe how this difference cancels when computing mutual information. In fact, we shall see that mutual information defined for continuous random vectors is the limit of the discrete version which will be useful later when implementing the algorithm.
 
 First, although one may think differential entropy this as the limit of (discrete) entropy, this is not the case. Namely, consider the support of $f(x)$ (here assumed to be the entire real line) binned into intervals i.e. a discretization of the continuous random variable $X$, which we shall denote $X^{\Delta}$. To make notation simpler, we shall bin into equal-sized intervals of width $\Delta$. Then, for each interval $[i\Delta, (i+1)\Delta]$ for $i \in \mathbb{Z}$, there exists an $x_i$ such that the probability mass on this interval is represented by this $x_i$:
-\textcolor{blue}{$$\mathbb{P}\left(X^{\Delta} = x_i\right) = f(x_i) \Delta = \int_{i\Delta}^{(i+1)\Delta} f(x) \, dx$$}
+\textcolor{blue}{
+    \begin{equation}\label{eq:one dim discretization}
+        \mathbb{P}\left(X^{\Delta} = x_i\right) = f(x_i) \Delta = \int_{i\Delta}^{(i+1)\Delta} f(x) \, dx
+    \end{equation}
+}
 Clearly, this discretization is a valid distribution as
 $$\sum_{i\in\mathbb{Z}} f(x_i) \Delta = \int_{\mathbb{R}} f(x) \, dx = 1$$
 and in the limit, as $\Delta \to 0$ we recover the original distribution $f(x)$. However, if we try to calculate the entropy of this discretization, denoted by $H^{\Delta}$, we get a diverging limit
@@ -331,7 +337,38 @@ By \autoref{thm:copula entropy equals mutual information} we can compute the mut
         -CE_{n1} & -CE_{n2}  & \dots  & 0
     \end{bmatrix}
 \end{equation}
-where $n$ is the number of nodes in the graph i.e. random variables that we have observed. Notice that we have chosen the diagonal elements as $0$ since information between a random variable $X$ and itself is not really well-defined and when trying to compute this numerically, we observe diverging results as also discussed in the previous section. Furthermore, only the information that propagates through the network is of interest and so setting $0$ in the diagonal avoids a bias when (de)convolving the information or any similarity in general.
+where $n$ is the number of nodes in the graph i.e. random variables that we have observed. Notice that we have chosen the diagonal elements as $0$ since information between a random variable $X$ and itself is not really well-defined and when trying to compute this numerically, we observe diverging results as also discussed in the previous section. Furthermore, only the information that propagates through the network is of interest and so setting $0$ in the diagonal avoids a bias when (de)convolving the information or any similarity in general. Especially for mutual information where the information between a variable and itself diverges to $\infty$ thus in the limit, from \autoref{eq:Gdir from Gobs}, we would get the identity matrix which does not tell us much about the direct dependencies.
+
+\autoref{alg:Gobs1} then follows immediately from \autoref{eq:Gobs matrix}
+\begin{algorithm}[H]
+    \caption{$G_{obs}$ computation}\label{alg:Gobs1}
+    \begin{algorithmic}
+        \Require $n > 0$             \Comment{Number of variables}
+        \State $G_{obs} \gets \boldsymbol 0$
+        \For{$1\leq i , j \leq n\; | \; i\neq j$}
+        \State Estimate $F_i$ and $F_j$ from $x_i^{\mathcal{D}}$ and $x_j^{\mathcal{D}}$
+        \State $u_i^{\mathcal{D}} \gets F_i(x_i^{\mathcal{D}})$
+        \State $u_j^{\mathcal{D}} \gets F_j(x_j^{\mathcal{D}})$
+        \State Estimate $c_{ij}$ from $u_i^{\mathcal{D}}$ and $u_j^{\mathcal{D}}$
+        \State Compute $NCE_{ij}$
+        \State $\left[G_{obs}\right]_{ij} \gets -NCE_{ij}$
+        \EndFor
+        \State \Return $G_{obs}$
+    \end{algorithmic}
+\end{algorithm}
+Namely, for each entry in $G_{obs}$, except for the diagonal elements, first estimate the cumulative distributions of $X_i$ and $X_j$ based on samples $x_i^{\mathcal{D}}$. Then, transform the samples by the estimated distribution function to obtain corresponding uniform samples. This may be done outside the loop to increase computational efficiency. From the paired samples $(x_i^{\mathcal{D}},x_j^{\mathcal{D}})$, estimate the Copula density $c_{ij}$ and finally use this to compute the mutual information/Copula entropy. Methods for estimating the densities and in continuation hereof the distribution functions are presented in \autoref{subsec:KDE methods}. The negative Copula entropy is then recorded in $(i,j)$ entry of $G_{obs}$. We note that the algorithm can be optimized for symmetric measures such as Copula entropy itself, to only loop through $i<j$ and saving the computed entropy in the $(j,i)$ entry as well. Also, as Copula entropy diverges as $X_i$ and $X_j$ are jointly distributed closer to a one-dimensional manifold, ideally there should be a check for such or the user should check the paired observations to exclude such variable combinations.
+
+From \autoref{subsec:limit entropy and MI}, to calculate the (joint) copula entropy of a continuous random vector, we simply discretize the domain of each random variable and use the estimated copula density evaluated at these points to estimate the total Copula entropy. Furthermore, if one or more elements of the random vector are mixed random variables, we choose the discrete events to be their own bins and discretize the rest or in the context of \autoref{alg:Gobs1} only estimate the distribution functions for the continuous component of the random variable. This works due to the Copula entropy for continuous random variables being the limit of the discretization and as such, the Copula entropy is well-defined for mixed random variables as well.
+
+We continue with an example of how this discretization of a mixed random variable would work. Notice that we only have a discrete event (an atom) at $0$ as this resembles the observed behavior of the delays, although the example could be extended to more complex discrete distributions.
+
+\begin{example}[Discrization of mixed random variable]\label{ex:discrization of mixed random variable}
+    Let $X$ be a mixture of an atom in e.g. $0$ and an exponential with parameter $\lambda$ with proportions $p$ and $1-p$. Then, a discretization of $X$ is $0$ with probability mass $p$ and the remaining support $(0,\infty)$ discretized in some way with total probability mass $1-p$ and each bin having probability according to \autoref{eq:one dim discretization} scaled with $1-p$. If the bin size is a constant $\Delta$, then for the discretized variable $X^{\Delta}$, we have $\mathbb{P}\left(X^{\Delta} = 0\right) = p$ and $\mathbb{P}\left(X^{\Delta} = x_i\right) = (1-p) \exp{(-\lambda i \Delta)}\left(1- \exp(-\lambda \Delta)\right)$, where $x_i$ is given by
+    $$x_i = i \Delta  + \frac{1}{\lambda} \left(\log \left( \lambda \Delta\right) - \log \left(1 - e^{-\lambda \Delta}\right)\right), \quad i \in \mathbb{N}_0$$
+\end{example}
+
+
+
 
 
 
@@ -344,111 +381,113 @@ where $n$ is the number of nodes in the graph i.e. random variables that we have
 
 
 
-\begin{algorithm}[H]
-    \caption{$G_{obs}$ computation}\label{alg:Gobs1}
-    \begin{algorithmic}
-        \Require $n > 0$             \Comment{Number of variables}
-        % \Ensure $y = x^n$
-        % \State $y \gets 1$
-        % \State $X \gets x$
-        % \State $N \gets n$
-        \For{$1\leq i < j \leq n$}
-        \State Estimate $F_i$ and $F_j$ from $x_i^{\mathcal{D}}$ and $x_j^{\mathcal{D}}$
-        \State $u_i^{\mathcal{D}} \gets F_i(x_i^{\mathcal{D}})$
-        \State $u_j^{\mathcal{D}} \gets F_j(x_j^{\mathcal{D}})$
-        \State Estimate $C_{ij}$ from $u_i^{\mathcal{D}}$ and $u_j^{\mathcal{D}}$
-        \State Compute $NCE_{ij}$
-        \State $G_{ij}, G_{ji} \gets -NCE_{ij}$
-        \EndFor
-    \end{algorithmic}
-\end{algorithm}
-
-Finally, from the deconvoluted information matrix $D_{dir}$ we may choose a threshold $t$ for choosing which edges are significant. The choice of $t$
-
+\subsection{Network deconvolution}
+At this point, we have obtained a convolved matrix of information $G_{obs}$ and are ready to use \autoref{eq:Gdir from Gobs}. We present the original algorithm from \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} in the case $G_{obs}$ is symmetric and hence diagonalizable by an orthogonal matrix $U$. The original \texttt{Matlab} implementation was translated to \texttt{Python} and is summarized in the following pseudocode.
 \begin{algorithm}[H]
     \caption{(ND) Network Deconvolution}\label{alg:ND}
     \begin{algorithmic}
-        \Require $G_{obs}$             \Comment{Input observational matrix}
+        \Require $G_{obs}$, $\alpha$, $\beta$             %\Comment{Input observational matrix}
         % \For{$0\leq i < j < N$}
-        \State $\left[G_{obs}\right]_{ii} \gets 0, \; \forall 1\leq i \leq N$                    \Comment{zero-diagonal}
-        \State $Q_p \gets G_{[1-\alpha]}$
-        \State Set $G_{obs}$ 0, where $G_{obs} < Q_p$
-        \State Compute eigendecomposition $Q,\Lambda$ of $G_{obs}$
+        \State $\left[G_{obs}\right]_{ii} \gets 0, \; \forall i\in \{1,\dots, N\}$                    \Comment{ensure zero-diagonal}
+        % \State $Q_p \gets G_{[1-\alpha]}$
+        \State $\left[G_{obs}\right]_{ij} \gets 0$, when $\left[G_{obs}\right]_{ij} < Q_{\alpha}\left(G_{obs}\right)$
+        \State Compute eigendecomposition $U,\Lambda$ of $G_{obs}$
         \State $\lambda^+ \gets  \max{ \left( \lambda^{\text{max}},0 \right) }$
-        \State $\lambda^- \gets -\min{ \left( \lambda^{\text{min}},0 \right) }$
-        \State $m^+ \gets \frac{1-\beta}{\beta} \lambda^+$
-        \State $m^- \gets \frac{1+\beta}{\beta} \lambda^-$
-        \State $m \gets \max{\left( m^+, m^- \right)}$
-        \State $\hat{\Lambda} \gets \Lambda \left(mI + \Lambda\right)^{-1}$
-        \State \Return $Q \hat{\Lambda} Q^T$
+        \State $\lambda^- \gets \min{ \left( \lambda^{\text{min}},0 \right) }$
+        \State $c_s^+ \gets \frac{1-\beta}{\beta} \lambda^+$
+        \State $c_s^- \gets \frac{1+\beta}{\beta} \lambda^-$
+        \State $c_s \gets \max{\left( c_s^+, - c_s^- \right)}$
+        \State $\hat{\Lambda} \gets \Lambda \left(c_s^{-1}I + \Lambda\right)^{-1}$
+        \State \Return $U \hat{\Lambda} U^T$
         % \EndFor
     \end{algorithmic}
 \end{algorithm}
+where $Q_{\alpha} \left(G_{obs}\right)$ denotes the $\alpha$ quantile of the strictly upper (or lower due to symmetry) triangular part of $G_{obs}$. We note the two extra parameters $alpha$ and $\beta$ which we will discuss shortly. In particular, the paper contains conflicting information on how to find $\beta$ from how it is defined. Furthermore, they include some analysis on the robustness of the above deconvolution algorithm but only in a somewhat particular case and with some confusion on matrix norms and spectral radius. This analysis on robustness, we will extend and clarify in the following \autoref{subseq:Robustness to noise}.
 
-\begin{remark}
-    The $1-\alpha$ quantile, denoted by $G_{[1-alpha]}$ (of the upper triangular matrix), can be computed in many ways. As it is only used to filter the $G_{obs}$ matrix, its precise value does not matter. Only the property $\alpha$ part of the observations are below $Q_{1-\alpha}$ and $1-\alpha$ are above (or equal to) $Q_{1-\alpha}$. This property is for example fulfilled by the quantile function \texttt{quantile} from \texttt{NumPy} (v. 1.26.4). Thus setting $\alpha = 1$ will result in $G_{obs}$ retaining all entries (except for the diagonal entries).
-\end{remark}
+From the definition of $Q_{\alpha}\left(G_{obs}\right)$ it is clear that the $\alpha$ parameter is a filter on the observed edges and is useful if one wants to filter out insignificant observations. However, in practice, as we will see, it is often not very influential except for large $\alpha$ (corresponding to many edges set to $0$) as small perturbations from e.g. imperfect calculations should not influence the results for fairly conditioned matrices as we shall observe in \autoref{sec:gaussian MI error}. Thus, setting $\alpha = 0$ retains all values in $G_{obs}$ after setting the diagonal equal to $0$. As a technical detail, we note that the \texttt{quantile} function from \texttt{NumPy} (v. 1.26.4) has been used to find this quantile as quantiles can be defined in many ways from a data set.
 
-\begin{remark}
-    The $\beta \in (0,1)$ parameter serves as a sort of regularization. The algorithm above also maps the maximum absolute value of the eigenvalues (the spectral radius) to $\beta$ as is also pointed out in the implementation of \textcolor{red}{Source code from Nature paper at https://compbio.mit.edu/nd/index.html}. The proof of this is shown below
-\end{remark}
-
-\begin{proof}
-    To show that eigenvalues i.e. the diagonal elements of $\Lambda$ resulting from \autoref{alg:ND} all fall in the interval $[-\beta, \beta]$ (i.e. $\sigma\left(Q \Lambda Q^T\right) \subseteq [-\beta, \beta]$) where at least one $\lambda$ is mapped to either $-\beta$ or $\beta$, first notice that clearly the resulting eigenvalues of $G_{dir} = Q \hat{\Lambda} Q^T$ are clearly given by $\frac{\lambda_i}{m + \lambda_i}$ where $(\lambda_i)_{\{1,\dots, N\}}$ are the (real) eigenvalues of $G_{obs}$ from the definition of $\hat{\Lambda}$. We will show the above by first considering $\lambda \geq 0$ and $\lambda < 0$.
-
-    For $\lambda \geq 0$, clearly $m \geq \frac{1-\beta}{\beta} \lambda^+$, thus
-    $$\frac{\lambda}{m + \lambda} = \frac{1}{1 + m/\lambda} \leq \frac{1}{1 + \frac{\lambda^+}{\lambda} \frac{1-\beta}{\beta}} \leq \frac{1}{1 + \frac{1-\beta}{\beta}} = \beta$$
-    where the final inequality follows from $\lambda \leq \lambda^+$. Hence $[0,\lambda^+] \to [0, \beta]$.
-
-    Furthermore, for $0 > \lambda \geq -\lambda^- $, note that also $m \geq \frac{1+\beta}{\beta} \lambda^-$. Since $\beta \in (0,1]$, $m + \lambda \geq \frac{1 + \beta}{\beta} \lambda^- + \lambda> 0$ and thus $\frac{\lambda}{m + \lambda} < 0$ which implies
-        $$- \frac{\lambda}{m + \lambda} \leq  \frac{- \lambda}{\frac{1 + \beta}{\beta}\lambda^- + \lambda} = \frac{1}{\frac{1+ \beta}{\beta} \frac{\lambda^-}{-\lambda} - 1} \leq \frac{1}{ \frac{1+\beta}{\beta} - 1} = \beta$$
-        i.e. $[-\lambda^-,0) \to [-\beta, 0)$. This shows that indeed all the eigenvalues of $G_{dir}$ is numerically less that or equal to $\beta$. Finally, assuming $m\neq 0$ or equivalently that $G_{obs} \neq \mathbf{0}$, either $m = \frac{1-\beta}{\beta}\lambda^+$ (and thus $\lambda^+ \neq 0$ is an eigenvalue of $G_{obs}$) for which the above shows that indeed $\lambda^+$ is mapped to $\beta$ or $m = \frac{1+\beta}{\beta} \lambda^-$ (and hence $\lambda^- \neq 0$ and thus $-\lambda^-$ is an eigenvalue of $G_{obs}$) for which $-\lambda^-$ is mapped to $-\beta$. This shows that $G_dir$ indeed has an eigenvalue which numerical value is $\beta$.
-\end{proof}
-
-\subsection{Ensuring convergence and the effect of $\beta$}
-From \textcolor{red}{Network Deconvolution - A General Method to Distinguish Direct Dependencies over Networks - Supplementary Notes} and their implementation found at their webpage at \textcolor{red}{https://compbio.mit.edu/nd/} there seem to be an inconsistency between code and theory. In this section, we shall thus investigate from where the discrepancy arises. Initially, from the formulation in \autoref{eq:Network Informaiton Convolution}, for the right-hand side to converge, it must have spectral radius at most $1$ and to ensure convergence, less than $1$. In the latter case,
+Finally, we note that the $\beta \in (0,1)$ parameter corresponds to a scaling of $G_{obs}$ such that the resulting spectral norm of $G_{dir}$ is $\beta$. From \autoref{alg:ND} it is seen that it serves as a regularization on the eigenvalues of $G_{obs}$ and although this is discussed in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}, their results do not conform with their implementation, and we thus comment on this and what else could be done to ensure convergence of the algorithm in the following section. Also, in practice we choose a threshold $t$ on the elements of $G_{dir}$ returned from \autoref{alg:ND} to further filter out insignificant direct dependencies.
 
 
-\textcolor{red}{Noget introduktion til at vi først lige kører nogle basale definition afsted, som kommer til at blive brugt senere}
-\begin{definition}\label{def:induced norm}
-    Induced Norm.
 
-    A matrix norm $\left|\left|\left|\;\cdot\;\right|\right|\right|$ is said to be induced by the vector norm $||\;\cdot\;||$  when
-    $$\left|\left|\left|A\right|\right|\right| = \sup_{\left|\left|x\right|\right| = 1} ||Ax||$$
-\end{definition}
-See \cite{MATRIX_ANALYSIS-Horn_Johnson_2012}
 
-\begin{definition}\label{def:sub-multiplicative matrix norm}
-    Sub-multiplicative Matrix norm
 
+
+\subsection{Ensuring convergence and the effect of \texorpdfstring{$\beta$}{beta}}
+In this section we will further discuss the effect of $\beta$ and how the steps for rescaling the observed similarity matrix $G_{obs}$ are derived. In particular, we will reformulate the original derivation from \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} as there is a discrepancy between their code\footnote{https://compbio.mit.edu/nd/} and their proof of choosing a scaling parameter $c_s$ of $G_{obs}$. Namely, denote $\tilde{G}_{obs}$ as the rescaled $G_{obs}$ such that $\tilde{G}_{obs} = c_s G_{obs}$. Choosing $c_s$ as in \autoref{alg:ND} i.e. $c_s = \max \left( \frac{1-\beta}{\beta} \lambda^+,  -\frac{1+\beta}{\beta} \lambda^- \right)$ where $\lambda^+$ is the largest positive eigenvalue of $G_{obs}$ (and $0$ if no eigenvalue is positive) and $\lambda^-$ is the most negative eigenvalue of $G_{obs}$ (and $0$ if no eigenvalue is negative) then implies $\tilde{G}_{dir}$ obtained from the new $\tilde{G}_{obs}$ has spectral radius $\beta < 1$ i.e. a proper $G_{dir}$ with the largest numerical eigenvalue equal to $\beta$. This holds in general and not only for symmetric $G_{obs}$ as we will see in the following. However, when $G_{obs}$ is symmetric the resulting $\tilde{G}_{dir}$ can easily be expressed through the eigendecomposition of $G_{obs}$, $U$, $\Lambda$ as
+\begin{align*}
+    \tilde{G}_{dir} & = \tilde{G}_{obs} \left( I + \tilde{G}_{obs}\right)^{-1}         \\
+                    & = c_s G_{obs} \left( I + c_s G_{obs}\right)^{-1}                 \\
+                    & = U c_s \Lambda U^T \left( U U^T + U c_s \Lambda U^T\right)^{-1} \\
+                    & = U c_s \Lambda U^T U \left( I + c_s \Lambda\right)^{-1} U^T     \\
+                    & = U \Lambda \left(c_s^{-1} I + \Lambda\right)^{-1}U^T
+\end{align*}
+which can also be seen in \autoref{alg:ND}. Thus, with everything else explained about the algorithm, we show that the resulting $\tilde{G}_{dir}$ in general have spectral radius $\beta$.
+
+Let $\left(\lambda, v\right)$ be an eigenpair of $G_{obs}$ with $\lambda \neq 0$, it then follows that $\left(\frac{\lambda}{c_s^{-1} + \lambda}, v\right)$ is an eigenpair of $\tilde{G}_{dir}$. Then, following the arguments in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} (which we have redone to know why the original implementation and derivation differs), we obtain that for a $\lambda$ in $[0,\infty)$, $(-c_s^{-1},0)$ or $(-\infty, 0]$ to be mapped to $[-\beta, \beta]$ we have that
+\begin{align*}
+    c_s^{-1}  \geq \frac{1-\beta}{\beta} \lambda^+,\quad c_s^{-1}  \geq -\frac{1+\beta}{\beta} \lambda^-
+\end{align*}
+Thus, the smallest $c_s^{-1}$ we can choose to ensure that $\rho\left(\tilde{G}_{dir}\right) \leq \beta$ is by $c_s = \min \left(\frac{1-\beta}{\beta} \lambda^+,-\frac{1+\beta}{\beta} \lambda^- \right)$ which also implies that $\rho\left(\tilde{G}_{dir}\right) = \beta$ as either the most negative or most positive eigenvalue is mapped to $\beta$ or $-\beta$ respectively. This coincides with the original implementation, noting that some error has been made in the original discussion of the parameter $\beta$ in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}. Furthermore, we note that if we just want the algorithm to converge, as we discussed before, this is equivalent to $\sigma\left(\tilde{G}_{obs}\right) \subseteq (-1/2, \infty)$, so really, we can just choose $c_s^{-1} = -(2+\delta) \lambda^-$ for some small $\delta$ if $\lambda^- < -1/2$ and otherwise not scale $G_{obs}$ to preserve the structure. Finally, we note that as $\beta$ tends to $0$, higher order interactions become less significant as can clearly be seen from \autoref{eq:Gobs from Gdir}. Thus, $\beta$ also allows us to tune how much influence higher order interactions should have and one should try different $\beta$ to see how influenced results are to higher order effects.
+
+
+
+
+
+
+\subsection{Robustness to noise}\label{subseq:Robustness to noise}
+Finally, before discussing how to compute and estimate the mutual information between two random variables based on observations, we turn our heads to error analysis of the deconvolution algorithm. It is important to understand how well the algorithm performs subject to noise and errors. Namely, in the case of mutual information, the assumption that higher order effects can be calculated as a sum of matrix powers of the direct effects does not hold. Thus, if we can say quantize the error in $G_{obs}$, we can from the following analysis quantize the resulting error in $G_{dir}$. We shall first discuss the original result from \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}, correcting some errors in terms of definitions and see how their result can also be expressed as an absolute upper bound on the error instead of only how this error behaves for small perturbations. Furthermore, we shall extend their result to not only hold when $\rho\left(G_{obs}\right) < 1$ and $\rho\left(G_{obs} + N\right) < 1$ where $N$ is some noise e.g. from computation or assumptions that does not completely hold.
+
+% \left|\left|  \right|\right|
+
+
+The original result states that $\left|\left| G_{dir} - \tilde{G}_{dir} \right|\right|_2 \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma\right)$ where $\left|\left| \cdot \right|\right|_2$ is the Euclidean norm also known as the spectral norm as this is equal to the largest singular value of the input matrix. However, they note that the Euclidean norm of a matrix $M$ is equal to $\sqrt{\sum_{i,j} m_{ij}^2}$ which is incorrect. This is the Frobenius norm, and instead it should have been defined as
+$$\left|\left| M \right|\right|_2 = \sup_{\left|\left| x \right|\right|_2 = 1} \left|\left| Mx \right|\right|_2 = \sigma_{\max}\left(M\right)$$
+They then proceed to let $\gamma$ be the largest absolute eigenvalue of $N$ and $\delta$ the largest absolute eigenvalue of $\tilde{G}_{obs} = G_{obs} + N$ however as the noise may be both positive and negative, it is easier to define $\delta$ as the largest absolute eigenvalue of $G_{obs}$ instead which we will do in the following. We note that $\gamma$ and $\delta$ are not the spectral/Euclidian norm of $N$ and $G_{obs}$ respectively as in general, we only have $\rho\left(M\right) \leq \left|\left| M \right|\right|_2$. However, if $G_{obs}$ and $N$ are both (real) symmetric matrices, then the spectral norms are equal to the largest absolute eigenvalues of $G_{obs}$ and $N$ respectively. Thus, if instead one wanted to measure the difference in the direct dependency matrices in terms of e.g. the Frobenius norm, it is important to differentiate between the spectral radius and the norm that is actually being used. Finally, before constructing the actual upper bound on the error instead of quantizing the asymptotic behavior for small $\gamma$, we note that $\left|\left| \cdot \right|\right|_2$ is a sub-multiplicative matrix norm defined as bellow (\cite{MATRIX_ANALYSIS-Horn_Johnson_2012}), and that we shall assume that $\rho\left(G_{obs}\right), \rho\left(\tilde{G}_{obs}\right) < 1$.
+\begin{definition}[Sub-multiplicative Matrix norm]\label{def:sub-multiplicative matrix norm}
     A matrix norm $\left|\left|\left| \; \cdot \; \right|\right|\right|$ is said to be sub-multiplicative, if for every $A,B \in \mathbb{F}^{n\times n}$ where $\mathbb{F}$ is either the real or complex field:
     $$\left|\left|\left| AB\right|\right|\right| \leq \left|\left|\left| A \right|\right|\right|\cdot \left|\left|\left| B \right|\right|\right|$$
 \end{definition}
-
-\subsection{Robustness to noise}\label{subseq:Robustness to noise}
-They show that the procedure is robust noise by considering that the observed information matrix is influenced by some noise $N\in \mathbb{R}^{n\times n}$ and characterize the noise by its Euclidean norm $||N||_{2} \coloneq \sup_{||x||_2 = 1} ||Nx||_2$. They show that
-$$||G_{dir} - \hat{G}_{dir}||_{2} \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma \right)$$
-where $\gamma$ is the spectral norm of $N$ and $\delta$ is the spectral norm of $\hat{G}_{obs}$. However, this upper bound can actually be computed when $\delta + \gamma < 1$ and diverges when $\delta + \gamma > 1$. Furthermore, the result can be generalized to other norms than the spectral norm. In particular, the Frobenius norm admits a similar upper bound on the difference. Consider any matrix norm $\left|\left|\left|\; \cdot \; \right|\right|\right|$ for which $\left|\left|\left| A B \right|\right|\right| \leq \left|\left|\left|A\right|\right|\right| \cdot \left|\left|\left| B \right|\right|\right|$. It then follows that
-\begin{align*}
-    \left|\left|\left| G_{dir} - \hat{G}_{dir} \right|\right|\right| & = \left|\left|\left| G_{obs} \left(I + G_{obs}\right)^{-1} - \hat{G}_{obs} \left(I + \hat{G}_{obs}\right)^{-1} \right|\right|\right|                                                                                                                                                                                                   \\
-                                                                     & = \left|\left|\left| - \sum_{k\geq 1} \left( - G_{obs}\right)^k  +  \sum_{k\geq 1} \left(-\hat{G}_{obs}\right)^k \right|\right|\right|                                                                                                                                                                                                 \\
-                                                                     & \leq \sum_{k\geq 1} \left|\left|\left|  G_{obs}^k  -  \left(G_{obs} + N\right)^k \right|\right|\right|                                                                                                                                                                                                                                 \\
-                                                                     & \leq \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \left|\left|\left| N \right|\right|\right|^i \left|\left|\left| G_{obs} \right|\right|\right|^{k-i}                                                                                                                                                               \\
-                                                                     & = \sum_{k\geq 1} \left( \left( \,\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\,\right)^k - \left|\left|\left| G_{obs} \right|\right|\right|^k \right)                                                                                                                                 \\
-                                                                     & = \frac{\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left(\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right|\right)} - \frac{\left|\left|\left| G_{obs} \right|\right|\right|}{1 - \left|\left|\left| G_{obs} \right|\right|\right|}
-\end{align*}
-Where the final equality assumes that $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| < 1$ and by splitting up the sum into $2$ geometric series. However, we also show that the series diverge when $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| > 1$ which is not directly apparent as it is a difference geometric series. Namely, by the ratio test, letting $\gamma = \left|\left|\left| N \right|\right|\right|$ and $\delta = \left|\left|\left| G_{obs} \right|\right|\right|$ as by \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} \textcolor{red}{supp. notes NetworkDeconvolution-AGeneralMethodtoD...}
+As we do not use any property of the spectral norm except that it is sub-multiplicative, we shall consider any norm $\left|\left| \cdot \right|\right|$ in general that is also sub-multiplicative. Thus, consider the norm of the difference $G_{dir} - \tilde{G}_{dir}$:
+\begin{equation}\label{eq:original noise error bound}
+    \begin{split}
+        \left|\left| G_{dir} - \hat{G}_{dir} \right|\right| & = \left|\left| G_{obs} \left(I + G_{obs}\right)^{-1} - \hat{G}_{obs}\left(I+\hat{G}_{obs}\right)^{-1}\right|\right|                                                                                                                                                                                                                    \\
+                                                            & = \left|\left| - \sum_{k\geq 1} \left( - G_{obs}\right)^k  +  \sum_{k\geq 1} \left(-\hat{G}_{obs}\right)^k \right|\right|                                                                                                                                                                                                              \\
+                                                            & \leq \sum_{k\geq 1} \left|\left|  G_{obs}^k  -  \left(G_{obs} + N\right)^k \right|\right|                                                                                                                                                                                                                                              \\
+                                                            & \leq \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \left|\left| N \right|\right|^i \left|\left| G_{obs} \right|\right|^{k-i}                                                                                                                                                               \\
+                                                            & = \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \gamma ^i \delta^{k-i}\\
+                                                            & = \sum_{k\geq 1} \left( \left( \gamma + \delta\right)^k - \delta^k \right)                                                                                                                                 \\
+                                                            & = \frac{\gamma + \delta}{1 - \gamma - \delta} - \frac{\delta}{1 - \delta} \\
+                                                            & = \frac{\gamma}{(1-\gamma - \delta)(1-\delta)}
+    \end{split}
+\end{equation}
+where in the second to last inequality, we assume that $\gamma + \delta < 1$ as then both $\sum \left(\gamma + \delta\right)^k$ and $\sum \delta^k$ converges as $\gamma + \delta \geq \delta \geq 0$ and hence also the difference of the sums converges. Also, the second equality uses that the spectral norm of $G_{obs}$ and $\tilde{G}_{obs}$ is less than $1$ in order to express the inverses as infinite series. Thus, the above bound on the difference $G_{dir} - \tilde{G}_{dir}$ does not hold in every case and we observe for fixed $\gamma$, the bound tends to $\infty$ as $\delta \to 1$. Furthermore, we note that the final infinite sum diverges whenever $\gamma + \delta > 1$ through the following argument using the ratio test for infinite sums which is needed because we can not conclude on the convergence of a difference of diverging sums solely from the fact that the individual sums diverge:
 \begin{align*}
     \lim_{n\to \infty} \left|\frac{ \left(\gamma + \delta\right)^{n+1} - \delta^{n+1}}{\left(\gamma + \delta\right)^n - \delta^n}\right| & = \lim_{n\to \infty}\left|\frac{ \left(\gamma + \delta\right) \left(1 + \frac{\gamma}{\delta}\right)^n - \delta}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right| \\
                                                                                                                                          & = \lim_{n\to \infty}\left|\delta + \gamma \frac{\left(1 + \frac{\gamma}{\delta} \right)^n}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|                       \\
                                                                                                                                          & = \lim_{n\to \infty} \left|\delta + \gamma \frac{1}{1 - \left( 1 + \frac{\gamma}{\delta} \right) ^{-n}}\right|                                                         \\
                                                                                                                                          & = \left| \gamma + \delta \right| = \gamma + \delta
 \end{align*}
-as $\gamma, \delta > 0$ unless they are the zero-matrix in which case the above is nonsensical from a perspective of interest. The above shows that indeed the above result diverges when $\gamma + \delta > 1$.
+assuming that $\gamma, \delta > 0$ corresponding to neither $N$ nor $G_{obs}$ is the zero matrix in which case the above analysis in nonsensical.
 
-Thus, for the spectral norm, denoted by $\left|\left|\left|\, \cdot \,\right|\right|\right|_2$, one simply needs the fact that it is sub-multiplicative (\autoref{def:sub-multiplicative matrix norm}) which follows from the fact that the spectral norm is induced by the $l_2$ norm (see \autoref{def:induced norm}) on $\mathbb{R}$, and hence
-$$\sup_{||x||_2 = 1}\left|\left|ABx\right|\right| \leq \left|\left|A\right|\right|_2 \cdot \sup_{\left|\left|x\right|\right|_2=1}{\left|\left|Bx\right|\right|} = \left|\left|A\right|\right|_2\, \left|\left|B\right|\right|_2$$
-which by definition means that $||AB||_2 \leq ||A||_2\, ||B||_2$. The Frobenius norm $\left|\left|\left|\; \cdot \;\right|\right|\right|_F$ is also sub-multiplicative and depending on the use case may be very useful.
+Before continuing with a more general bound on the error, we first note that examples of sub-multiplicative matrix norms are every induced norm such as the spectral norm and the Frobenius norm which is often useful when interpreting error. Also, the max norm is \textit{not} sub-multiplicative, but a scaled version is (which is true for any matrix norm from the fact that all matrix norms are equivalent).
+
+% where $\gamma$ is the spectral norm of $N$ and $\delta$ is the spectral norm of $\hat{G}_{obs}$. However, this upper bound can actually be computed when $\delta + \gamma < 1$ and diverges when $\delta + \gamma > 1$. Furthermore, the result can be generalized to other norms than the spectral norm. In particular, the Frobenius norm admits a similar upper bound on the difference. Consider any matrix norm $\left|\left|\left|\; \cdot \; \right|\right|\right|$ for which $\left|\left|\left| A B \right|\right|\right| \leq \left|\left|\left|A\right|\right|\right| \cdot \left|\left|\left| B \right|\right|\right|$. It then follows that
+
+% Where the final equality assumes that $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| < 1$ and by splitting up the sum into $2$ geometric series. However, we also show that the series diverge when $\left|\left|\left| N \right|\right|\right| + \left|\left|\left| G_{obs} \right|\right|\right| > 1$ which is not directly apparent as it is a difference geometric series. Namely, by the ratio test, letting $\gamma = \left|\left|\left| N \right|\right|\right|$ and $\delta = \left|\left|\left| G_{obs} \right|\right|\right|$ as by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} \textcolor{red}{supp. notes NetworkDeconvolution-AGeneralMethodtoD...}
+% \begin{align*}
+%     \lim_{n\to \infty} \left|\frac{ \left(\gamma + \delta\right)^{n+1} - \delta^{n+1}}{\left(\gamma + \delta\right)^n - \delta^n}\right| & = \lim_{n\to \infty}\left|\frac{ \left(\gamma + \delta\right) \left(1 + \frac{\gamma}{\delta}\right)^n - \delta}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right| \\
+%                                                                                                                                          & = \lim_{n\to \infty}\left|\delta + \gamma \frac{\left(1 + \frac{\gamma}{\delta} \right)^n}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|                       \\
+%                                                                                                                                          & = \lim_{n\to \infty} \left|\delta + \gamma \frac{1}{1 - \left( 1 + \frac{\gamma}{\delta} \right) ^{-n}}\right|                                                         \\
+%                                                                                                                                          & = \left| \gamma + \delta \right| = \gamma + \delta
+% \end{align*}
+% as $\gamma, \delta > 0$ unless they are the zero-matrix in which case the above is nonsensical from a perspective of interest. The above shows that indeed the above result diverges when $\gamma + \delta > 1$.
+
+% Thus, for the spectral norm, denoted by $\left|\left|\left|\, \cdot \,\right|\right|\right|_2$, one simply needs the fact that it is sub-multiplicative (\autoref{def:sub-multiplicative matrix norm}) which follows from the fact that the spectral norm is induced by the $l_2$ norm (see \autoref{def:induced norm}) on $\mathbb{R}$, and hence
+% $$\sup_{||x||_2 = 1}\left|\left|ABx\right|\right| \leq \left|\left|A\right|\right|_2 \cdot \sup_{\left|\left|x\right|\right|_2=1}{\left|\left|Bx\right|\right|} = \left|\left|A\right|\right|_2\, \left|\left|B\right|\right|_2$$
+% which by definition means that $\left|\left|AB\right|\right|_{2} \leq \left|\left|A\right|\right|_2 \left|\left|B\right|\right|_2$. 
+
+% The Frobenius norm $\left|\left|\left|\; \cdot \;\right|\right|\right|_F$ is also sub-multiplicative and depending on the use case may be very useful.
 
 
 % where we have used $||A||_F = \sqrt{\sum_{k=1}^n \sigma_k^2 \left(A\right)} \leq \sqrt{n} \sigma_1\left(A\right)$ for $A \in \mathbb{C}^{n \times n}$
@@ -458,35 +497,92 @@ which by definition means that $||AB||_2 \leq ||A||_2\, ||B||_2$. The Frobenius 
 
 % \left|\left|  \right|\right|_F
 
-\subsection{KDE methods}
+% But through \autoref{thm:Inverse of sum of matrices}, we can do even better and consider in general the difference $G_{dir} - \tilde{G}_{dir}$. Namely, at this point we do not assume that the spectral radius of $G_{obs}$ and $G_{obs} + N$ are smaller than $1$.
+
+
+Now, consider the general case, where we do not restrict the spectral radius of either $G_{obs}$ or $N$ except such that $G_{obs}$ and $\tilde{G}_{obs}$ admits direct similarity matrices $G_{dir}$ and $\tilde{G}_{dir}$ (with spectral radius less than $1$). To obtain a more general result, we shall use the following result from \cite{On-Deriving-the-Inverse-of-a-Sum-of-Matrices}, which is very useful when doing matrix perturbation analysis.
+\begin{theorem}[Inverse of sum of matrices]\label{thm:Inverse of sum of matrices}
+    Let $A,B\in \mathbb{R}^{n\times n}$ such that $A$ and $A+B$ are invertible. Then the inverse of $A+B$ can be expressed as
+    $$\left(A+B\right)^{-1} = A^{-1} - A^{-1} B \left(A + B\right)^{-1}$$
+\end{theorem}
+The proof of the above is simple through direct computation. Hence, we continue to once again consider the difference $G_{dir} - \tilde{G}_{dir}$
+\begin{align*}
+    G_{dir} - \tilde{G}_{dir} & = G_{obs} \left(I + G_{obs}\right)^{-1} - \left(G_{obs} + N\right) \left(I + G_{obs} + N\right)^{-1}                             \\
+                              & = G_{obs} \left( \left(I + G_{obs}\right)^{-1} - \left(I + G_{obs} + N\right)^{-1} \right) - N \left(I + G_{obs} + N\right)^{-1} \\
+                              & = G_{obs} \left(I + G_{obs}\right)^{-1} N \left( I + G_{obs} + N \right)^{-1} - N \left(I + G_{obs} + N\right)^{-1}              \\
+                              & = - \left(I + G_{obs}\right)^{-1} N \left(I + G_{obs} + N\right)^{-1}
+\end{align*}
+where the third equality follows from \autoref{thm:Inverse of sum of matrices}. This way, we have a simple exact expression for the difference without any further assumptions on $G_{obs}$ and $N$. Now, under a sub-multiplicative norm $\left|\left|\cdot\right|\right|$ we can bound the norm of the difference in the following way.
+\begin{equation}\label{eq:better error bound on g_dir deviation}
+    \left|\left|G_{dir} - \tilde{G}_{dir}\right|\right| \leq \left|\left| N \right|\right| \, \left|\left| \left(I + G_{obs}\right)^{-1} \right|\right|\, \left|\left| \left(I + G_{obs} + N\right)^{-1} \right|\right|
+\end{equation}
+We note that if once again, we assume that the spectral radius of $G_{obs}$ and $G_{obs} + N$ are smaller than $1$, we rediscover \autoref{eq:original noise error bound}. \autoref{eq:better error bound on g_dir deviation} also shows that in general, if $N$ is small or $G_{obs}$ is large we should observe small errors which is also what we would expect intuitively. The above result is also very useful when later on in \autoref{sec:gaussian MI error} we discuss the error from using mutual information in the case of a multi-variate Gaussian.
+
+From \autoref{eq:better error bound on g_dir deviation}, by another application of \autoref{thm:Inverse of sum of matrices}, we find the relative error in general to be bounded as follows
+$$\frac{\left|\left|G_{dir} - \tilde{G}_{dir}\right|\right|}{\left|\left|G_{dir}\right|\right|} \leq \left|\left| N \right|\right| \, \left|1 - \frac{\left|\left| I \right|\right|}{\left|\left| G_{obs} \left(I +G_{obs}\right)^{-1} \right|\right|} \right|\, \left|\left| \left(I + G_{obs} + N\right)^{-1} \right|\right|$$
+
+Finally, before discussing the methods for estimating the copula density, we comment on some frequently used matrix norms and show some explicit bounds on the error only using the difference of $G_{obs}$ and $\tilde{G}_{obs}$, $N$. Namely, we shall consider the max norm and Frobenius norm of the difference $G_{dir} - \tilde{G}_{dir}$ and note that from \cite{GoluVanl96}, we can relate the Euclidean norm to the Frobenius and max norm in the following way. Namely, for any matrix $A\in \mathbb{R}^{n\times n}$ it holds that
+$$\left|\left| A \right|\right|_2 \leq \left|\left| A \right|\right|_F \leq \sqrt{n} \left|\left| A \right|\right|_2$$
+$$\left|\left| A \right|\right|_{\max} \leq \left|\left| A \right|\right|_2 \leq n \left|\left| A \right|\right|_{\max} $$
+Finally, if $G_{obs}$ and $N$ are symmetric, the singular values are equal to the absolute eigenvalues for $G_{obs}$ and $\tilde{G}_{obs}$ and because $\sigma\left(I + G_{obs}\right), \sigma\left(I + \tilde{G}_{obs}\right) \subseteq (1/2, \infty)$ implies $\sigma\left(\left(I + G_{obs}\right)^{-1}\right), \sigma\left(\left( I +\tilde{ G}_{obs}\right)^{-1}\right) \subseteq (0,2)$ we infer that $\left|\left| \left(I + G_{obs}\right)^{-1} \right|\right|_2 , \left|\left| \left(I + \tilde{G}_{obs}\right)^{-1} \right|\right|_2\leq 2$. Using this with the above equivalence on the Euclidean norm with \autoref{eq:better error bound on g_dir deviation}, we conclude that
+\begin{equation}\label{eq:G_dir difference frob and max bounds}
+    \begin{split}
+        \left|\left| G_{dir} - \tilde{G}_{dir} \right|\right|_F \leq 4 \sqrt{d} \left|\left| N \right|\right|_F\\
+        \left|\left| G_{dir} - \tilde{G}_{dir} \right|\right|_{\max} \leq 4 d \left|\left| N \right|\right|_{\max}
+    \end{split}
+\end{equation}
+This clearly shows us that for small networks (thus small $d$) we risk smaller errors in terms of the Frobenius and max norm (which is not surprising) which are clearly interpreted through the difference of individual element of $G_{dir}$ and $\tilde{G}_{dir}$ and that the max norm scales linearly with the number of nodes while the Frobenius difference only scales with the square root of the number of nodes.
+% Finally, before continuing with how to estimate the mutual information in practice, we note that $\beta$ has an effect on the above results also, namely, it is easy to show by extending the above argumentation a little, that as 
+
+\subsection{KDE methods}\label{subsec:Mutual information estimation and KDE methods}
 \textcolor{red}{Det her mangler lige}
 
 
-\newpage
 
 
 
-
-
-
-\subsection{Normal example error}
-\textcolor{red}{Eksempel medd normal fordeling og fejlen der bliver lavet vha. algoritmen.}
-\begin{proposition} \label{prop:MI bivariate gaussian}
-    Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
-    $$\Sigma =
-        \begin{bmatrix}
-            \sigma_1^2             & \rho \sigma_1 \sigma^2 \\
-            \rho \sigma_1 \sigma_2 & \sigma_2^2
-        \end{bmatrix}
-    $$
-    Then the mutual information $I\left(X_1, X_2\right) = -\frac{1}{2}\ln \left(1 - \rho^2\right)$.
-\end{proposition}
-\begin{proof}
-    This follows by direct computation Using e.g. that $I(X_1, X_2) = h(X_1) + h(X_2) - h(X_1, X_2)$
-\end{proof}
 
 
 
 
 \end{document}
 
+
+
+
+% \begin{definition}[Induced Norm]\label{def:induced norm}
+%     A matrix norm $\left|\left|\left|\;\cdot\;\right|\right|\right|$ is said to be induced by the vector norm $||\;\cdot\;||$  when
+%     $$\left|\left|\left|A\right|\right|\right| = \sup_{\left|\left|x\right|\right| = 1} ||Ax||$$
+% \end{definition}
+% See \cite{MATRIX_ANALYSIS-Horn_Johnson_2012}
+
+
+
+
+
+
+% They show that the procedure is robust noise by considering that the observed information matrix is influenced by some noise $N\in \mathbb{R}^{n\times n}$ and characterize the noise by its Euclidean norm $||N||_{2} \coloneq \sup_{||x||_2 = 1} ||Nx||_2$. They show that
+% $$||G_{dir} - \hat{G}_{dir}||_{2} \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma \right)$$
+
+
+
+
+
+
+% From \textcolor{red}{Network Deconvolution - A General Method to Distinguish Direct Dependencies over Networks - Supplementary Notes} and their implementation found at their webpage at \footnote{\textcolor{red}{https://compbio.mit.edu/nd/}} there seem to be an inconsistency between code and theory. In this section, we shall thus investigate from where the discrepancy arises. Initially, from the formulation in \autoref{eq:Network Informaiton Convolution}, for the right-hand side to converge, it must have spectral radius at most $1$ and to ensure convergence, less than $1$. In the latter case,
+
+
+
+
+
+% \begin{proof}
+%     To show that eigenvalues i.e. the diagonal elements of $\Lambda$ resulting from \autoref{alg:ND} all fall in the interval $[-\beta, \beta]$ (i.e. $\sigma\left(Q \Lambda Q^T\right) \subseteq [-\beta, \beta]$) where at least one $\lambda$ is mapped to either $-\beta$ or $\beta$, first notice that clearly the resulting eigenvalues of $G_{dir} = Q \hat{\Lambda} Q^T$ are clearly given by $\frac{\lambda_i}{m + \lambda_i}$ where $(\lambda_i)_{\{1,\dots, N\}}$ are the (real) eigenvalues of $G_{obs}$ from the definition of $\hat{\Lambda}$. We will show the above by first considering $\lambda \geq 0$ and $\lambda < 0$.
+
+%     For $\lambda \geq 0$, clearly $m \geq \frac{1-\beta}{\beta} \lambda^+$, thus
+%     $$\frac{\lambda}{m + \lambda} = \frac{1}{1 + m/\lambda} \leq \frac{1}{1 + \frac{\lambda^+}{\lambda} \frac{1-\beta}{\beta}} \leq \frac{1}{1 + \frac{1-\beta}{\beta}} = \beta$$
+%     where the final inequality follows from $\lambda \leq \lambda^+$. Hence $[0,\lambda^+] \to [0, \beta]$.
+
+%     Furthermore, for $0 > \lambda \geq -\lambda^- $, note that also $m \geq \frac{1+\beta}{\beta} \lambda^-$. Since $\beta \in (0,1]$, $m + \lambda \geq \frac{1 + \beta}{\beta} \lambda^- + \lambda> 0$ and thus $\frac{\lambda}{m + \lambda} < 0$ which implies
+%         $$- \frac{\lambda}{m + \lambda} \leq  \frac{- \lambda}{\frac{1 + \beta}{\beta}\lambda^- + \lambda} = \frac{1}{\frac{1+ \beta}{\beta} \frac{\lambda^-}{-\lambda} - 1} \leq \frac{1}{ \frac{1+\beta}{\beta} - 1} = \beta$$
+%         i.e. $[-\lambda^-,0) \to [-\beta, 0)$. This shows that indeed all the eigenvalues of $G_{dir}$ is numerically less that or equal to $\beta$. Finally, assuming $m\neq 0$ or equivalently that $G_{obs} \neq \mathbf{0}$, either $m = \frac{1-\beta}{\beta}\lambda^+$ (and thus $\lambda^+ \neq 0$ is an eigenvalue of $G_{obs}$) for which the above shows that indeed $\lambda^+$ is mapped to $\beta$ or $m = \frac{1+\beta}{\beta} \lambda^-$ (and hence $\lambda^- \neq 0$ and thus $-\lambda^-$ is an eigenvalue of $G_{obs}$) for which $-\lambda^-$ is mapped to $-\beta$. This shows that $G_dir$ indeed has an eigenvalue which numerical value is $\beta$.
+% \end{proof}

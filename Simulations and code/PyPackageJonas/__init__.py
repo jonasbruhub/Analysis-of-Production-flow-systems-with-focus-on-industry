@@ -26,12 +26,14 @@ from networkx.drawing.nx_agraph import graphviz_layout
 
 colormap_corr = LinearSegmentedColormap.from_list("", ["#8B0000","white","#00008B"])
 
-def ND(G_obs, alpha = 1, beta = 0.99):
+def ND(G_obs, alpha = 0, beta = 0.99):
+    # alpha : how many (percent) edges should be set to 0. I.e. how many entries should be set to 0 in G_obs
+
     G = G_obs.copy()   
     n = G.shape[0]
     
     # Filter out small values
-    q = np.quantile(G[np.triu_indices(n)], 1-alpha)
+    q = np.quantile(G[np.triu_indices(n)], alpha)
     G[G < q] = 0
     
     eg = np.linalg.eig(G)
