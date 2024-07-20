@@ -23,3 +23,10 @@ summand
 convolving
 Sklar
 CDFs
+convolved
+subdiagonal
+superdiagonal
+Cholesky
+deconvolved
+deconvolve
+deconvolving

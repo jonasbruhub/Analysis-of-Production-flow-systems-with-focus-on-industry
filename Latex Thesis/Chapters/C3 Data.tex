@@ -7,16 +7,18 @@
 
 In this section, we will describe and analyze the data used in this thesis. The data stems from a simulation study on a chemical batch production system and comprises six time series from which the time stamps (in hours) and level in a tank is of the most interest. The goal of this section is to describe how different phases of the production covary. The data is chosen as it resembles an actual production data set but is also implemented with what at first glance seem to be fairly realistic variation and noise in measurements. Overall, the point of this example data is to exemplify what one may encounter in a real batch production system and from this try to build a model in order to predict or quantify the behavior of the system or learn hidden (causal) structure important for optimization etc. 
 
-We define a set of phases/units $\mathcal{U}$ that each batch comprises. In this case, units are identified with IDs 1 through 10 (with subunits such as 3.1) described further in \autoref{tab:absolute phase ID batch count}. Then, for each unit, we define the stochastic variables $X_u$ and $X^D_u$ to be the duration and delay after a unit respectively. It is also important to keep track of the level in the tank after each unit is finished, and we thus define variables $M_u$ and $M^D_u$ to be the level in the tank after unit $u$ and its associated delay respectively. As the units are executed in sequence, as is the case in this data, a simple representation of the variables can easily be visualized and is shown in \autoref{fig:variable description} below.
+We define a set of phases/units $\mathcal{U}$ that each batch consists of. In this case, units are identified with IDs 1 through 10 (with subunits such as 3.1) described further in \autoref{tab:absolute phase ID batch count}. Then, for each unit, we define the random variable $X_u$ to be the total time a batch spends in unit $u$ i.e. the sojourn time related to unit $u$. We also define the random variables $X_u^P$ and $X^D_u$ to be the duration of the actual \textit{processing} and \textit{delay} respectively such that $X_{u} = X_u^P + X_u^D$. It is also important to keep track of the level in the tank after each unit is finished, and we thus define variables $M_u$ and $M^D_u$ to be the level in the tank after unit $u$ and its associated delay respectively. As the units are executed in sequence, as is the case in this data, a simple representation of the variables can easily be visualized and is shown in \autoref{fig:variable description} below.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=.7\linewidth]{figures/Multiple cycles data/variable desciption.png}
-    \caption{Exemplification of the variables $X_i$, $X^D_i$, $M_i$, $M^D_i$.}
+    \caption{Exemplification of the variables $X_u^P$, $X^D_u$, $M_u^P$, $M^D_u$.}
     \label{fig:variable description}
 \end{figure}
 
 % We define the variables $X_u$, $D_u$ and $M_u$ to be the duration, delay and level in the tank at the end of each phase/unit operation $u$.
+
+We note that during the delay for unit $u$, there is a change in mass while also, delays are will not always occur between operations. A further investigation of the data set shows that it is common in some units that delays effect the mass while for others it does not. 
 
 
 
@@ -29,17 +31,19 @@ Initially, we present some basic statistics in \autoref{tab:cycle basic stats} f
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c|c|c}
-        Cycle & \#batch & $\mu$  & $\sigma^2$ & $\sigma$ & $\sigma / \mu$ \\ \hline
+        Cycle & \#batch & $\hat{\mu}$  & $s^2$ & $s$ & $s / \hat{\mu}$ \\ \hline
         A     & 66      & 14.776 & 3.641      & 1.908    & 0.1291         \\
         B     & 64      & 15.644 & 3.915      & 1.979    & 0.1265         \\
         C     & 61      & 17.714 & 2.330      & 1.526    & 0.08617        \\
         D     & 60      & 18.069 & 6.922      & 2.631    & 0.1456         \\
         E     & 60      & 18.088 & 9.613      & 3.100    & 0.1714         \\
-        F     & 63      & 17.227 & 7.766      & 2.787    & 0.1618
+        F     & 63      & 17.227 & 7.766      & 2.787    & 0.1618         \\\hline
+        all   & 374     & 16.876 & 7.218      & 2.687    & 0.1592
     \end{tabular}
-    \caption{Per cycle batch duration statistics}
+    \caption{Per cycle batch duration statistics i.e. $\sum_u X_u$ per batch and for all batches combined}
     \label{tab:cycle basic stats}
 \end{table}
+
 
 Each batch comprises several states. These include adding materials (IDs 1 through 4), centrifugation (ID 5), product transfer (the precipitate generated from the centrifugation, ID 6), chemical reaction (ID 7), a post operation state (\textcolor{red}{Probably to let it cool down to a point where it is ready for further processing}, ID 8), Cooling of the product (ID 9), material transfer (transfer the gained product before cleaning of the reaction vessel and/or prepare for the next reaction batch, ID 10). Notice that there is a total of 374 batches throughout the 6 observed cycles.
 
@@ -72,7 +76,7 @@ As it may be of interest to investigate the correlation structure of different m
     \label{tab:absolute phase ID batch count}
 \end{table}
 
-Investigating when these inadequacies occur reveals that they are the last batch from each of the cycles. For example, the final batch from cycle A only goes to phase 6 (the product transfer). This can however be explained from the fact that simulation only last for 1100 hours for each cycle and is thus simply cut-off here. As we do not know if these final operations were done at the time the simulations were cut off (which is likely not the case), the final phase for each of the final batches should be disregarded. The cut-off can also be observed in \autoref{fig:last batch example}. Furthermore, throwing away 6 incomplete batches out of the total 374 will likely not harm the analysis and is thus thrown away as this will make the analysis much simpler later on.
+Investigating when these apparent inconsistencies occur reveals that they are the last batch from each of the cycles. For example, the final batch from cycle A only goes to phase 6 (the product transfer). This can however be explained from the fact that simulation only last for 1100 hours for each cycle and is thus simply cut-off here. As we do not know if these final operations were done at the time the simulations were cut off (which is likely not the case), the final phase for each of the final batches should be disregarded. The cut-off can also be observed in \autoref{fig:last batch example}. Furthermore, throwing away 6 incomplete batches out of the total 374 will likely not harm the analysis and is thus thrown away as this will make the analysis much simpler later on.
 
 % Bliver den afbrudt midt i?? -> Ja, den sidste i hver bliver afbrudt midt i en af phaserne
 \begin{figure}[h]

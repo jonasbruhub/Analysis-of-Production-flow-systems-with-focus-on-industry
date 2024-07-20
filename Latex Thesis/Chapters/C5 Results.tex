@@ -7,11 +7,17 @@
 \begin{document}
 
 \chapter{Results}
-\section{Examples}
-In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and \autoref{alg:ND} works in junction and, if so, observe how the algorithm can fail and what may be done to correct such cases. Initially, a few simple examples involving exponentiated multivariate Gaussians $\boldsymbol Y $.
+\textcolor{red}{en intro til hvad der kommer til at være resultater ift. }
 
-\subsection{Gaussian CE error}\label{sec:gaussian MI error}
-\textcolor{red}{Eksempel medd normal fordeling og fejlen der bliver lavet vha. algoritmen.}
+In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and \autoref{alg:ND} works in junction and individually. We shall observe how the algorithms can fail and what may be done to correct such cases.
+
+\textcolor{red}{Overordnet pointe er at genere forskellige mulige graphisce modeller, som senere ville kunne bruges til at lave PGM el.l. Er nok bedst som et ekspolartivt værktøj, og vi undersøger her forskellige situationer, og hvornår der kan ske fejl ud fra om det er lange kæder af kausalitet eller mere komplekse strukturer}
+
+% Initially, a few simple examples involving exponentiated multivariate Gaussians $\boldsymbol Y $.
+
+
+\section{Gaussian chains}
+In this section we discuss the errors made from the assumption that indirect effects can be computed as a sum of powers of the direct effects, i.e. $G_{indir} = \sum_{k\geq 1} G_{dir}^k$. In particular, on a theoretical level, we shall observe the error in $G_{obs}$ based on the above assumption of how similarities are \textit{convolved} which we equate with the noise $N$ from \autoref{subseq:Robustness to noise}, although it is a systematic error. To do this, we shall in this section use a multivariate Gaussian to be able to control the correlation and as an extension of this, the mutual information between pairs of random variables. As we already know, correlation and mutual information is independent of the mean and variance of each of the variables however for a bivariate Gaussian the mutual information is given by the correlation as stated in the following proposition.
 \begin{proposition} \label{prop:MI bivariate gaussian}
     Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
     $$\Sigma =
@@ -25,6 +31,155 @@ In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and 
 \begin{proof}
     This follows by direct computation Using e.g. that $I(X_1, X_2) = h(X_1) + h(X_2) - h(X_1, X_2)$
 \end{proof}
+Thus, if we know a correlation structure of a Gaussian random vector, we also know the mutual information between every pair of variables which we shall now use in the following made up example. Namely, what we shall denote as a Gaussian chain defined as a Gaussian random vector in the following way. Let $\boldsymbol X$ be a $d$-dimensional Gaussian random vector, the $\boldsymbol X$ is a standard Gaussian chain if it can be written in the following way in terms of $d$ independent standard normal variables $Z_i$ up to a permutation i.e. there exists a permutation of the variables of the random vector $\boldsymbol X$ that permits the following structure.
+\begin{equation}\label{eq:Gaussian chain def}
+    \begin{split}
+        X_1 & = Z_1                                                      \\
+        X_2 & = \rho_{1,2} X_1 + \sqrt{1 - \rho_{1,2}^2} Z_2             \\
+        X_3 & = \rho_{2,3} X_2 + \sqrt{1 - \rho_{2,3}^2} Z_3             \\
+            & \vdots                                                     \\
+        X_d & = \rho_{d-1, d} X_{d-1} + \sqrt{1 - \rho_{d-1, d}^2} Z_{d}
+    \end{split}
+\end{equation}
+It follows that the marginals have variance $1$ as clearly $\text{Var} \left[X_1\right] = \text{Var}\left[Z_1\right] = 1$ and for $i > 1$, $\text{Var}\left[X_i\right] = \rho_{i-1,i}^2 \text{Var}\left[X_{i-1}\right] + \left(1 - \rho_{i-1,i}^2\right) \text{Var} \left[Z_i\right] = 1$ by independence of $X_{i-1}$ and $Z_i$. Thus, the above structure also implies the Cholesky factorization of the correlation matrix for $\boldsymbol X$, namely
+$$L = \begin{bmatrix}
+        1                          &                                   &                                                        &        &                          \\
+        \rho_{1,2}                 & \sqrt{1 - \rho_{1,2}^2}           &                                                        &        &                          \\
+        \rho_{2,3}\rho_{1,2}       & \rho_{2,3}\sqrt{1 - \rho_{1,2}^2} & \sqrt{1 - \rho_{2,3}^2}                                &        &                          \\
+        \vdots                     &                                   &                                                        & \ddots &                          \\
+        \prod_{i=2}^d \rho_{i-1,i} & \dots                             & \sqrt{1 - \rho_{j-1,j}^2} \prod_{i=j+1}^d \rho_{i-1,i} & \dots  & \sqrt{1- \rho_{d-1,d}^2}
+    \end{bmatrix}$$
+Which will allow us to both sample from such a chain and calculate $G_{dir}$ and $G_{obs}$ theoretically. However, in this example, it is easier to calculate the correlation between the variable $X_i$ and $X_j$ directly. As the variance of each variable is $1$ we simply calculate the covariance. We assume without loss of generality that $i < j$ whence
+$$\text{Cov}\left[X_i, X_j\right] = \text{Cov}\left[X_i, \rho_{j-1,j} X_{j-1} + \sqrt{1 - \rho_{j-1,j}^2}Z_j\right] = \rho_{j-1,j} \text{Cov}\left[X_i, X_{j-1}\right]$$
+which by induction implies $\rho_{i,j} = \prod_{k=i+1}^{j} \rho_{k-1,k} = \rho_{j,i}$. At this point, we are almost ready to use the algorithms from the previous chapter. First, we will only use \autoref{alg:ND} to deconvolve the network based on theoretical correlations and later mutual information. However, before doing so, we note that from the definition in \autoref{eq:Gaussian chain def} the random variable $\boldsymbol X$ exhibits a Markovian property. Namely, the $X_i$ above can be understood discrete stochastic process as they are successively drawn based only on the previous variable $X_{i-1}$ i.e. $f\left(X_i \mid X_{i-1}, X_{i-1} , \dots , X_{1}\right) = f\left(X_i \mid X_{i-1}\right)$. Thus, if the algorithm works as intended, we should observe that the deconvolved network is a \textit{chain} of variables as shown in the \autoref{fig:gaussian chain expected res}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .7\linewidth]{figures/ND examples/Gaussian chain.png}
+    \caption{The graphical representation of a Gaussian chain. Arrows signify a possible causal structure. If furthermore, one assumes that $X_1$ is generated first, then $X_2$ and so on, this is the only causal structure that would make sense.}
+    \label{fig:gaussian chain expected res}
+\end{figure}
+Thus, we now have the expected result, and we proceed with using correlation and mutual information to try and rediscover this structure in the following two sections
+
+\subsection{Gaussian chain deconvolution using correlation}
+In this section, we will use the observed correlation i.e. $\rho_{i,j} = \prod_{k=i+1}^{j} \rho_{k-1,k}$ for the elements of $G_{obs}$ with $i< j$. Note that although it makes sense to consider the correlation between a variable and itself, we shall as discussed before set the diagonal to $0$. Furthermore, we have the choice of using either a symmetrical $G_{obs}$ or a (upper or lower) triangular $G_{obs}$. We shall first use an upper triangular $G_{obs}$ but before using deconvolving using \autoref{eq:Gdir from Gobs} we note that we can actually get the result theoretically. Also, as $G_{obs}$ is in this case strictly upper triangular, the spectral radius is $0$ and hence we have no problems with converge of the infinite sum of powers of (the uniquely defined) $G_{dir}$. From the above, it is clear that $G_{obs}$ is given as follows
+$$G_{obs} = \begin{bmatrix}
+        0 & \rho_{1,2} & \rho_{1,2}\,\rho_{2,3} & \dots & \prod_{k=2}^{d} \rho_{k-1,k} \\
+          & 0          & \rho_{2,3}             & \dots & \prod_{k=3}^{d} \rho_{k-1,k} \\
+          &            & \ddots                 &       & \vdots                       \\
+          &            &                        & 0     & \rho_{d-1,d}                 \\
+          &            &                        &       & 0
+    \end{bmatrix}$$
+Now, let $G_{dir}$ be given as follows
+$$G_{dir} = \begin{bmatrix}
+        0 & \rho_{1,2} &            &        &              \\
+          & 0          & \rho_{2,3} &        &              \\
+          &            & \ddots     & \ddots &              \\
+          &            &            & 0      & \rho_{d-1,d} \\
+          &            &            &        & 0
+    \end{bmatrix}$$
+then $G_{dir}^2$ is given by
+$$G_{dir}^2 = \begin{bmatrix}
+        0 & 0 & \rho_{1,2}   \, \rho_{2,3} &                          &        &                               \\
+          & 0 & 0                          & \rho_{2,3} \, \rho_{3,4} &        &                               \\
+          &   & \ddots                     & \ddots                   & \ddots &                               \\
+          &   &                            & 0                        & 0      & \rho_{d-2,d-1}\, \rho_{d-1,d} \\
+          &   &                            &                          & 0      & 0
+    \end{bmatrix}$$
+It is not hard to show that in fact $\sum_{k\geq} G_{dir}^k = \sum_{k=1}^d G_{dir}^k = G_{obs}$. Thus, if we know a graph topological ordering of the variables corresponding to the structural causal model, we completely recover (without any error) the direct dependencies/correlation from to the initial definition in \autoref{eq:Gaussian chain def}. This actually holds for a general \textit{chain} where $Z_i$ can follow any distribution as long as they are independent as the above computations did not use the fact that $Z_i$ follows a standard Gaussian. From this, we might think that if we have a topological ordering of the variables this is the preferred method, and it is as long as correlation is a good enough measure of similarity/codependency. Albeit this is only shown for the special case of a chain, in \autoref{sec:General Gaussian graph} we consider the more general case and conclude that this indeed holds. Regarding the comment on correlation being a good enough measure of similarity, a prototypical case is when joint probability density function of two variables resemble a parabola. Namely, let $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ i.e. the joint distribution function is a parabola with a Gaussian noise added along the second dimension. In \autoref{fig:MI parabola example}, $1000$ samples from this distribution is shown for $\sigma = 1/10$ along with the expectation $\mathbb{E}\left[X_2 | X_1\right]$. It is not hard to show that the covariance between $X_1$ and $X_2$ is $0$ however we clearly see a relationship between the two variables. In fact, computing the mutual information results in $I\left(X_1,X_2\right) \approx 1.030$ implying $X_1 \not\perp X_2$ i.e. there exists a higher order (non-linear) dependency. Thus, if the algorithm permits, we would prefer mutual information to correlation as we can then use observed higher order relationships to infer a causal structure.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\linewidth]{figures/Mutual information figures/parabola example.pdf}
+    \caption{1000 samples generated from $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ with $\sigma = 1/10$. The mutual information is calculated theoretically to be $I\left(X_1,X_2\right) \approx 1.030$ amd repeated simulations show that the empirical correlation is symmetric around $0$ supporting the claim that the underlying correlation is in fact $0$} % 1.0296516475133333
+    \label{fig:MI parabola example}
+\end{figure}
+On a more technical point of view, we note that mutual information is a measures how dense the joint distribution is, invariant to scale. In a way, it is a measure of how close the joint distribution is to a lower dimensional manifold.
+
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/triangular G obs.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/G dir from triangular G obs.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \caption{Triangular, correlation}
+    % \label{}
+\end{figure}
+
+
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/symmetric G obs.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/G dir from symmetric G obs.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from symmetric G obs.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \caption{Symmetric, correlatoin}
+    % \label{}
+\end{figure}
+
+
+... changing alpha did not do a lot as we expect from how G obs looks. Hpwever, we can get closer by applying a larger threshhold. have chosen such that looks fairly sparse but is likely biased from my own prior knowledge
+
+
+\subsection{Gaussian chain deconvolution using mutual information}
+
+
+\section{General Gaussian graph}\label{sec:General Gaussian graph}
+% where the Cholesky decomposed correlation matrix non-zero only in the diagonal and subdiagonal up to a permutation and possibly an operation with the transpose operator to ensure that 
+
+...correlation is positive semi definite, so always eig greater than 0
+
+
+% (with the superdiagonal and subdiagonal being equal of course) or if the correlation matrix is equivalent to such a matrix under a permutation matrix $P$ (a matrix of unit elements, summing to $1$ in every row and column) i.e. if $C$ is a Gaussian chain, so is $P^T C P$. An example of a $4$-Gaussian chain is
+% $$C = \begin{bmatrix}
+%     1 & \rho_{12} & 0 & 0\\
+%     \rho_{21} & 1 & \rho_{23} & 0\\
+%     0 & \rho{32} & 1 & \rho_{34}\\
+%     0 & 0 & \rho_{43} & 1
+% \end{bmatrix}$$
+
+
+
+
+% \section{Examples}
+
+
+\section{CE computation}\label{sec:gaussian MI error}
+Gaussian example
+\textcolor{red}{Eksempel medd normal fordeling og fejlen der bliver lavet vha. algoritmen.}
+
 
 \begin{example} \label{ex:1}
     Exponentiated multivariate Gaussian
@@ -198,7 +353,7 @@ In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and 
         \end{bmatrix}
     $$
     \textcolor{red}{Test om denne G er lige den teoretiske. Eller nærmere, argumenter for hvorfor vi ikke laver en test, eller hvad man kunne gøre. Har samplet fra en simultan normalfordeling, så kan lave en til en mellem MI og korrelation. }
-    
+
     From the confidence density for the correlation $\rho$ given the emperical correlation $r$ is given by
     $$f\left(\rho \mid r,\nu\right) = \frac{\nu (\nu-1) \Gamma(\nu-1)}{\sqrt{2\pi} \Gamma(\nu + \frac{1}{2})} \frac{\left(1-r^2\right)^{\frac{\nu-1}{2}} \left(1-\rho^2\right)^{\frac{\nu-2}{2}} }{\left(1-r\rho\right)^{\frac{2\nu-1}{2}}} F\left(\frac{3}{2}, -\frac{1}{2}, \nu+\frac{1}{2}, \frac{1+r\rho}{2}\right)$$
     from the mutual information, we can calculate the absolute correlation. Notice that the density does not change when reversing both $r$ and $\rho$ simultaniously, thus, wlog, assume $r\geq 0$, then we can calculate a CI for $\rho$ (which will be negated if we had used $-r$ instead and thus would be identical when taking the absolute value). If the original CI $[a,b]$ contains $0$ i.e. $a<0$, we shall write the CI for the absolute correlation as $[0,b]$ instead. This way, we can compare the absoulte correlations and see if they are the same (by checking if the CI contains the theoretical correlation) by \cite{Confidence-in-Correlation}. Using numerical integration (fast enough with high numerical accuracy from many bins, 1 mil bins, yielding probability mass 1.0000000000008133), can compute CI for absolute correlation
