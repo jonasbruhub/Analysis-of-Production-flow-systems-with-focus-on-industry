@@ -63,13 +63,15 @@ Thus, we now have the expected result, and we proceed with using correlation and
 
 \subsection{Gaussian chain deconvolution using correlation}
 In this section, we will use the observed correlation i.e. $\rho_{i,j} = \prod_{k=i+1}^{j} \rho_{k-1,k}$ for the elements of $G_{obs}$ with $i< j$. Note that although it makes sense to consider the correlation between a variable and itself, we shall as discussed before set the diagonal to $0$. Furthermore, we have the choice of using either a symmetrical $G_{obs}$ or a (upper or lower) triangular $G_{obs}$. We shall first use an upper triangular $G_{obs}$ but before using deconvolving using \autoref{eq:Gdir from Gobs} we note that we can actually get the result theoretically. Also, as $G_{obs}$ is in this case strictly upper triangular, the spectral radius is $0$ and hence we have no problems with converge of the infinite sum of powers of (the uniquely defined) $G_{dir}$. From the above, it is clear that $G_{obs}$ is given as follows
-$$G_{obs} = \begin{bmatrix}
+\begin{equation}\label{eq:Gaussian chain G_obs trinagular form}
+    G_{obs} = \begin{bmatrix}
         0 & \rho_{1,2} & \rho_{1,2}\,\rho_{2,3} & \dots & \prod_{k=2}^{d} \rho_{k-1,k} \\
           & 0          & \rho_{2,3}             & \dots & \prod_{k=3}^{d} \rho_{k-1,k} \\
           &            & \ddots                 &       & \vdots                       \\
           &            &                        & 0     & \rho_{d-1,d}                 \\
           &            &                        &       & 0
-    \end{bmatrix}$$
+    \end{bmatrix}
+\end{equation}
 Now, let $G_{dir}$ be given as follows
 $$G_{dir} = \begin{bmatrix}
         0 & \rho_{1,2} &            &        &              \\
@@ -201,13 +203,66 @@ Thus, at this point we have a rather good understanding of how the method works 
 % Hvis den forkerte topologiske struktur benyttes, kan det give underlige resultater? -> Umiddelbart ja, for man ville ikke finde de rho i den originale definition, og der vil opstå effekter af et sådan forkert valgt topologisk orden.
 
 
+
+
 \newpage
+
+% Fejl regning for symmetrisk case? -> har undladt, da det er lidt mere komplekst og er nemmere at kvatificere med direkte udregninger
 \subsection{Gaussian chain deconvolution using mutual information}
-Using \autoref{prop:MI bivariate gaussian}, we can transform $G_{obs}$ from the previous section to be in terms of mutual information instead of correlation. It is not hard to show that in this case, even for Gaussian chains, there is some error as we shall see shortly.
+In this section, we continue the example from the previous section but instead of using correlation as a measure of similarity, we will use mutual information. Immediately, we note that mutual information or Copula entropy does not propagate as assumed in \autoref{eq:Gobs from Gdir}. As an example, from \autoref{prop:MI bivariate gaussian}, we know that the mutual information in the case of a Gaussian chain between a variable $X_i$ and the next variable $X_{i+1}$ is $-1/2 \log\left(1 - \rho_{i,i+1}^2\right)$ and similarly, using \autoref{eq:Gaussian chain G_obs trinagular form}, we have that
+$$I\left(X_i, X_{i+2}\right) = -\frac{1}{2} \log \left(1 - \rho_{i,i+1}^2 \rho_{i+1,i+2}^2\right)$$
+Thus, if $G_{dir}$ is triangular, using \autoref{eq:Gobs from Gdir} we should observe the following at the $(i,i+2)$ entry of $G_{obs}$ instead
+$$\frac{1}{4} \log\left(1 - \rho_{i,i+1}^2\right)\,\log\left(1 - \rho_{i+1,i+2}^2\right)$$
+I.e. we make an error (which we could take to be the noise $N$ from \autoref{subseq:Robustness to noise}) for second order effects equal to
+$$-\frac{1}{2} \log \left(1 - \rho_{i,i+1}^2 \rho_{i+1,i+2}^2\right) - \frac{1}{4} \log\left(1 - \rho_{i,i+1}^2\right)\,\log\left(1 - \rho_{i+1,i+2}^2\right)$$
+In general, for a Gaussian chain, we have that
+$$N_{i,j} = -\frac{1}{2} \log\left( 1 - \prod_{k=i+1}^{j} \rho_{k-1,k}^2\right) - \left(-\frac{1}{2}\right)^{j-i}\prod_{k=i+1}^{j} \log\left(1 - \rho_{k-1,k}^2\right)$$
+As we will see in \autoref{fig:2 chain MI error} and \autoref{fig:3 and 4 chain MI error}, for Gaussian chains we can expect some of the same bleeding behavior as observed in \autoref{fig:Gaussian chain symmetric G_obs using correlation} where we did not use the topological ordering but based the deconvolution on correlation. In particular, from the figures below, we see that for $3$-chains, the error is in many cases close to $0$ and for most combinations of $\rho_{1,2}$ and $\rho_{2,3}$ less than $0.1$. Furthermore, we note that the errors are the largest when it is a strongly connected $3$-chain i.e. if both $\rho_{1,2}$ and $\rho_{2,3}$ are close to $1$ which again resemble the behavior seen in the case of a symmetrical $G_{obs}$ using correlation as the measure of association although in this case, the error does not propagate to the same extend which we shall also see shortly, when applying the deconvolution algorithm. Notice that as as only the absolute value of the correlation matters, we only show the error for $\rho_{1,2}, \rho_{2,3} \geq 0$.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\linewidth]{figures/Gaussian Chain Theoretical/2 chain error - MI.pdf}
+    \caption{The error made by the assumption of $G_{obs}$ and $G_{dir}$ for second order observed effect. Although mutual information does not comply with the underlying assumptions, we observe that in the case of a Gaussian $2$-chain, we can expect the error to be relatively small.}
+    \label{fig:2 chain MI error}
+\end{figure}
 
-% Figure om fejl man laver step by step. Ud fra figur er det også mest 2-, 4-, etc. led ude der er fejl på
+We extend the above discussion to $4$- and $5$-chains (i.e. $j = i + 3$ and $j = i + 4$ in the above expression for $N_{ij}$) to see how the error propagates in more detail. This is shown in \autoref{fig:3 and 4 chain MI error} for three different scenarios of a $4$-chain and a single $5$-chain. In particular, as the error $N_{i,j}$ is symmetric in $\rho_{1,2}$, $\rho_{2,3}$ and $\rho_{3,4}$ (and $\rho_{4,5}$ in the case of a $5$-chain) and because it is hard to accurately show four or five dimensional surfaces, we keep to a fixed set of $\rho_{3,4}$ and $\rho_{4,5}$ when investigating. For the $4$-chain, choosing $\rho_{2,3} = 0.9$ (corresponding to mutual information about $0.8304$) approximately results in the same error as in \autoref{fig:2 chain MI error} and if $\rho_{2,3}$ is above e.g. $0.95$, we get a worse propagation of errors compared to the $3$-chain. Finally, from \autoref{subfig:Gaussian 5 chain MI error}, we see the same picture i.e. that keeping the correlations and hence information between subsequent variable low results in smaller errors in $G_{obs}$ and hence the inferred $G_{dir}$. Note that under the assumption of a topological ordering such that $G_{obs}$ is strictly upper triangular results in $\rho\left(G_{obs}\right) = 0$ such that no rescaling is necessary (although different choices of the base of the logarithm would have an effect on how much higher order associations influence $G_{dir}$).
 
+% Ud fra plots, kan vi konkludere at fejlene ved at bruge den transformere G_obs ud fra correlation ikke er så lang væk fra det man ville få ud fra convolution af G_dir (under antagelse af at summen convergerer -> det gør den altid, fordi G_dir er strengt øvre trekant, så "inf" sum er faktisk begrænset/endelig)
 
+Having obtained a good understanding of how shifting to mutual information instead of correlation in the case of Gaussian chains, we continue with the above example now using mutual information as the elements of $G_{obs}$ based on the correlation matrix from the previous section. Using a triangular $G_{obs}$ we observe similar behavior to that of original example using a triangular $G_{obs}$ but with correlation as can be seen from \autoref{fig:Gaussian chain triangular G_obs using mutual information}. In particular, we do not observe the same magnitude of bleeding effects as in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. However, we observe
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/3 chain error - MI - rho3 0_7.pdf}
+        \caption{$4$-chain $\rho_{3,4} = 0.7$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/3 chain error - MI - rho3 0_9.pdf}
+        \caption{$4$-chain $\rho_{3,4} = 0.9$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/3 chain error - MI - rho3 0_95.pdf}
+        \caption{$4$-chain $\rho_{3,4} = 0.95$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/4 chain error - MI - rho3 0_85 rho4 0_6.pdf}
+        \caption{$5$-chain $\rho_{3,4} = 0.85$, $\rho_{4,5} = 0.6$}
+        \label{subfig:Gaussian 5 chain MI error}
+    \end{subfigure}
+    \caption{Errors of convolving mutual information along a $4$-chain (a), (b), (c) and a $5$-chain (d). Due to symmetry in the expression of the error, only the first $2$ links i.e. $\rho_{1,2}$ and $\rho_{2,3}$ are varied on $[0,1]$ respectively. Only positive correlations are shown as the sign of the correlation cancels in the expression for the error. We note that large correlations and hence large mutual information on each edge results in larger error. In particular, when not too many of the links are strong, we have almost $0$ error.}
+    \label{fig:3 and 4 chain MI error}
+\end{figure}
+the same tendency to miss weak connections as was also observed in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. All in all, we get very good results using a triangular $G_{obs}$ even though mutual information does not have the same properties as correlation. In particular, this is what we expected as we have only used $\rho_{i,i+1} \leq 0.9$, from the above investigation of the error.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -227,20 +282,20 @@ Using \autoref{prop:MI bivariate gaussian}, we can transform $G_{obs}$ from the 
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=.9\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 2_1e-2.pdf}
-        \caption{$G_{dir}$ as a graph}
+        \caption{$G_{dir}$ from $t = 2.1\cdot 10^{-2}$}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
-    \caption{Triangular, mutual information, cutoff $2.1 \, 10^{-2}$. The rest of the figures in appendix (other cutoff). Other cutoff can be seen in \autoref{fig:Gaussian chain symmetric G_obs using mutual information different cutoff}}
-    % \label{}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 4_6e-2.pdf}
+        \caption{$G_{dir}$ from $t = 4.6\cdot 10^{-2}$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \caption{Using mutual information as the measure of similarity as well as assuming a topological order i.e. making $G_{obs}$ strictly triangular as seen in (a) we almost perfectly infer $G_{dir}$ as seen in (b) except for $\left[G_{dir}\right]_{6,9}$. Choosing cutoffs $t = 2.1\cdot 10^{-2}$ (c) and $t = 4.6\cdot 10^{-2}$ (d) it is clear that adjusting the threshold we can get a better result than using a symmetric $G_{obs}$ with correlation.}
+    \label{fig:Gaussian chain triangular G_obs using mutual information}
 \end{figure}
-
-
-
-
-
-
-
-
+Finally, we use the corresponding symmetric $G_{obs}$ (rescaled such that the largest absolute eigenvalue of $G_{dir}$ is $0.99$) which results in $G_{dir}$ and the graph using a threshold $t=4.88\cdot 10^{-2}$ shown in \autoref{fig:Gaussian chain symmetric G_obs using mutual information}. Again, we observe some bleeding on the more strongly connected sub-chain as with the symmetric $G_{obs}$ using correlation in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. Again, we observe comparable results and note that increasing the threshold would disconnect $X_3$ and $X_4$ before removing the higher order effects.
 \begin{figure}[h]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -263,9 +318,12 @@ Using \autoref{prop:MI bivariate gaussian}, we can transform $G_{obs}$ from the 
         \caption{$G_{dir}$ as a graph}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
-    \caption{symmetric, mutual information, cutoff $4.88 \cdot 10^{-2}$. Performance almost on par with correlation.}
-    % \label{}
+    \caption{Using a symmetric $G_{obs}$ containing the observed mutual information (a) we infer a $G_{dir}$ (b) comparable to that if we had used correlation instead. Choosing the threshold $t = 4.88 \cdot 10^{-2}$ seem a good compromise between connectedness and density resulting in an almost identical discovered network structure to that of using a symmetric correlation $G_{obs}$.}
+    \label{fig:Gaussian chain symmetric G_obs using mutual information}
 \end{figure}
+
+In conclusion, we have seen what errors can arise in the discovered network using both correlation and mutual information as the measure of association. Namely, long strongly connected chains seem to be a problem if one does not know a topological ordering of the variables, in which case these are heavily reduced  as seen in \autoref{fig:Gaussian chain triangular G_obs using correlation} and \autoref{fig:Gaussian chain triangular G_obs using mutual information}. Thus, we proceed in the next section by considering a more complicated underlying (Gaussian) network to observe if other unwanted effects can occur and if a topological ordering is necessary if the network is not simply a path.
+
 
 
 
