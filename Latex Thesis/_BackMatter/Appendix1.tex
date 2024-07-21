@@ -33,4 +33,33 @@ where $\rho_a$ and $r_a$ is the absolute correlation and empirical correlation r
 
 As an example, suppose $r_a=0.06$ with $1000$ observations. Then a $95\%$ CI for $|\rho|$ is $[0, 0.11164]$ whereas if on had observed $r_a = 0.07$ the CI would be $[0.01071, 0.1314]$. These CI could then be used to test the absolute correlation of a bivariate Gaussian i.e. for $r_a = 0.07$ based on $1000$ observations would be rejected as stemming from a Gaussian with absolute correlation $0.01$ on a $5\%$ significance level.
 
+
+\section{Gaussian chain deconvolution}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 2e-2.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 2_1e-2.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 4_51e-2.pdf}
+        \caption{}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \caption{Triangular, mutual information, cutoff $2\cdot 10^{-10}$, $2.1 \cdot 10^{-2}$ and $4.51 \cdot 10^{-2}$.}
+    \label{fig:Gaussian chain symmetric G_obs using mutual information different cutoff}
+\end{figure}
+
 \end{document}

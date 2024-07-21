@@ -16,9 +16,10 @@ In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and 
 % Initially, a few simple examples involving exponentiated multivariate Gaussians $\boldsymbol Y $.
 
 
+\newpage
 \section{Gaussian chains}
 In this section we discuss the errors made from the assumption that indirect effects can be computed as a sum of powers of the direct effects, i.e. $G_{indir} = \sum_{k\geq 1} G_{dir}^k$. In particular, on a theoretical level, we shall observe the error in $G_{obs}$ based on the above assumption of how similarities are \textit{convolved} which we equate with the noise $N$ from \autoref{subseq:Robustness to noise}, although it is a systematic error. To do this, we shall in this section use a multivariate Gaussian to be able to control the correlation and as an extension of this, the mutual information between pairs of random variables. As we already know, correlation and mutual information is independent of the mean and variance of each of the variables however for a bivariate Gaussian the mutual information is given by the correlation as stated in the following proposition.
-\begin{proposition} \label{prop:MI bivariate gaussian}
+\begin{proposition}\label{prop:MI bivariate gaussian}
     Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
     $$\Sigma =
         \begin{bmatrix}
@@ -88,78 +89,190 @@ $$G_{dir}^2 = \begin{bmatrix}
 It is not hard to show that in fact $\sum_{k\geq} G_{dir}^k = \sum_{k=1}^d G_{dir}^k = G_{obs}$. Thus, if we know a graph topological ordering of the variables corresponding to the structural causal model, we completely recover (without any error) the direct dependencies/correlation from to the initial definition in \autoref{eq:Gaussian chain def}. This actually holds for a general \textit{chain} where $Z_i$ can follow any distribution as long as they are independent as the above computations did not use the fact that $Z_i$ follows a standard Gaussian. From this, we might think that if we have a topological ordering of the variables this is the preferred method, and it is as long as correlation is a good enough measure of similarity/codependency. Albeit this is only shown for the special case of a chain, in \autoref{sec:General Gaussian graph} we consider the more general case and conclude that this indeed holds. Regarding the comment on correlation being a good enough measure of similarity, a prototypical case is when joint probability density function of two variables resemble a parabola. Namely, let $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ i.e. the joint distribution function is a parabola with a Gaussian noise added along the second dimension. In \autoref{fig:MI parabola example}, $1000$ samples from this distribution is shown for $\sigma = 1/10$ along with the expectation $\mathbb{E}\left[X_2 | X_1\right]$. It is not hard to show that the covariance between $X_1$ and $X_2$ is $0$ however we clearly see a relationship between the two variables. In fact, computing the mutual information results in $I\left(X_1,X_2\right) \approx 1.030$ implying $X_1 \not\perp X_2$ i.e. there exists a higher order (non-linear) dependency. Thus, if the algorithm permits, we would prefer mutual information to correlation as we can then use observed higher order relationships to infer a causal structure.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.7\linewidth]{figures/Mutual information figures/parabola example.pdf}
-    \caption{1000 samples generated from $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ with $\sigma = 1/10$. The mutual information is calculated theoretically to be $I\left(X_1,X_2\right) \approx 1.030$ amd repeated simulations show that the empirical correlation is symmetric around $0$ supporting the claim that the underlying correlation is in fact $0$} % 1.0296516475133333
+    \includegraphics[width=.55\linewidth]{figures/Mutual information figures/parabola example.pdf}
+    \caption{1000 samples generated from $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ with $\sigma = 1/10$. The mutual information is calculated theoretically to be $I\left(X_1,X_2\right) \approx 1.030$ and repeated simulations show that the empirical correlation is symmetric around $0$ supporting the claim that the underlying correlation is in fact $0$} % 1.0296516475133333
     \label{fig:MI parabola example}
 \end{figure}
-On a more technical point of view, we note that mutual information is a measures how dense the joint distribution is, invariant to scale. In a way, it is a measure of how close the joint distribution is to a lower dimensional manifold.
+On a more technical point of view, we note that mutual information is a measure of how dense the joint distribution is, invariant to scale. In a way, it is a measure of how close the joint distribution is to a lower dimensional manifold.
 
-
+We proceed with a $10$-Gaussian chain defined by the following correlations:
+\begin{equation}\label{eq:Example Gaussian chain}
+    \begin{aligned}
+        \rho_{1,2} & = 0.6, & \rho_{2,3} & = 0.5, & \rho_{3,4}  & = 0.4 \\
+        \rho_{4,5} & = 0.2, & \rho_{5,6} & = 0.9, & \rho_{6,7}  & = 0.8 \\
+        \rho_{7,8} & = 0.9, & \rho_{8,9} & = 0.8, & \rho_{9,10} & = 0.7
+    \end{aligned}
+\end{equation}
+We have chosen correlations of different sizes to check if the deconvolution is robust in presence of both strong and weak links. In particular, $X_5$ is only $\rho_{4,5}^2 = 4\%$ of $X_4$ and the remaining $96\%$ is noise/indescribable variance i.e. a very weak link between the first part of the chain up to and including $X_4$ and the rest. However, as discussed above, if let $G_{obs}$ be upper triangular, we should completely rediscover these direct relations which is indeed also the case. In particular, from \autoref{fig:Gaussian chain triangular G_obs using correlation} we observe that the inferred network, represented by $G_{dir}$, is indeed a chain of variables and is exactly equal to the theoretical $G_{dir}$ as we would expect (up to very small rounding errors of the size $10^{-16}$). The \textit{estimated} $G_{dir}$ is also shown as a directed graph which the initial topological assumption implies, with edges wherever $G_{dir}$ is non-zero.
 \begin{figure}[h]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/triangular G obs.pdf}
-        \caption{}
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/triangular G obs.pdf}
+        \caption{$G_{obs}$}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/G dir from triangular G obs.pdf}
-        \caption{}
-        % \label{fig:Gaussian 3x3 large s}
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/G dir from triangular G obs.pdf}
+        \caption{$G_{dir}$}
+        \label{subfig:Gaussian chain triangular G_obs using correlation - G_dir}
     \end{subfigure}
     \\[\baselineskip]
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs.pdf}
-        \caption{}
+        \includegraphics[width=.9\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs.pdf}
+        \caption{$G_{dir}$ as a digraph}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
-    \caption{Triangular, correlation}
-    % \label{}
+    \caption{Results from using an upper triangular $G_{obs}$ and correlation to infer the causal network structure. (a) shows the upper triangular $G_{obs}$ with the correlation between every pair of variables. (b) shows the deconvolved $G_{obs}$ and as we expect, the superdiagonal contains the original correlations given in \autoref{eq:Example Gaussian chain}. (c) shows $G_{dir}$ represented as a digraph and matches the expected result.}
+    \label{fig:Gaussian chain triangular G_obs using correlation}
 \end{figure}
+We now proceed to investigate what happens when we remove the prior information of the topological ordering. Namely, if $G_{obs}$ is no longer triangular but symmetric. In particular, let $T_{dir}$ be given as $G_{dir}$ above. We then have that $G_{dir}$ in the symmetric case is $T_{dir} + T_{dir}^T$ and similarly for $G_{obs}$, $G_{obs} = T_{obs} + T_{obs}^T$. Clearly, $I + G_{obs}$ is positive definite as it is a proper correlation matrix. However, that also implies that we might have eigenvalues of $G_{obs}$ less than or equal to $-1/2$ which we know from \autoref{subsec:Setup and assumptions} is not the result of a $G_{dir}$ such that \autoref{eq:Gobs from Gdir} holds as then the infinite sum diverges. However, as $-1$ is not an eigenvalue of $G_{obs}$, we will investigate what happens if one tries to use \autoref{eq:Gdir from Gobs} anyway.
 
+First, we shall however discuss the errors being made using the symmetric $G_{obs}$ and $G_{dir}$. Namely, we investigate the powers of $G_{dir}$:
+$$G_{dir}^2 = \left(T_{dir} + T_{dir}^T\right)^2 = T_{dir}^2 + \left(T_{dir}^T\right)^2 + T_{dir} T_{dir}^T + T_{dir}^T T_{dir}$$
+Higher power can be calculated similarly, but for the second power we already observe an error. The first two terms corresponds to a reflection of the second order effects that we saw above and know to be true, whence the final two terms, that add to a diagonal matrix, is an error and will propagate with higher order powers of $G_{dir}$. Through simple calculation the resulting error is
+$$T_{dir} T_{dir}^T + T_{dir}^T T_{dir} = \begin{bmatrix}
+        \rho_{1,2}^2 + \rho_{2,3}^2 &                             &        & \\
+                                    & \rho_{2,3}^2 + \rho_{3,4}^2 &        & \\
+                                    &                             & \ddots & \\
+                                    &   &   & \rho_{d-2,d-1}^2 + \rho_{d-1,d}^2
+    \end{bmatrix}$$
+Thus, for chains, we expect larger errors for sub-chains with strong links i.e. a subgraph of a chain that is also a chain where the correlation from one variable to the next is large. Using $G_{obs} = T_{obs} + T_{obs}^T$ we have that the smallest eigenvalue is approximately $\lambda_{\min} \approx -0.92263$ thus, multiplying $G_{obs}$ with a constant $c_s < 0.54192$ will make $G_{dir}$ have spectral radius at most $1$. The results vary with one or two edges for the choice of $c_s$ and in the following we have chosen $c_s = 0.53651$ resulting in $\rho\left(G_{dir}\right) \approx 0.98020$ and $\tilde{G}_{obs}$ and $\tilde{G}_{dir}$ as seen in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. From \autoref{subfig:Gaussian chain symmetric G_obs using correlation - G_dir} we see that some correlation/association seem to bleed to variables $2$ or $3$ edges away which we of course know is not true given the Markov property discussed above. However, it is also clear that the error here is that the original assumption does not hold since using a symmetric $G_{obs}$ imply that the measure of similarity flows both ways where in this case it is very much unidirectional.
 
-
+From \autoref{fig:Gaussian chain symmetric G_obs using correlation} conclude that we are somewhat able to rediscover the causal structure. Not surprisingly, we observe that the weak link between $X_4$ and $X_5$ is one of the first to break and that we observe some extra edges between the later more strongly linked sub-chain as by the above discussion. Finally, before presenting the results for the unscaled $G_{obs}$ (such that the smallest eigenvalue is larger than $-1/2$) we note that changing the parameter $\alpha$ in \autoref{alg:ND} did not have much of an effect indicating that the network is quite sparse (as we also know it to be) as even removing $65\%$ of the smallest correlations from $G_{obs}$ did not have any effect. The chosen threshold of $t=0.2$ on $G_{dir}$ seemed to be the best compromise of a connected graph and the density of the edges (although this is somewhat biased from prior knowledge of the true graphical structure).
+% Also, trying to have $1$ in the diagonal instead of $0$ worsened the result
 \begin{figure}[h]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/symmetric G obs.pdf}
-        \caption{}
-        % \label{fig:Gaussian 3x3 large s}
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/symmetric G obs.pdf}
+        \caption{$G_{obs}$}
+        % \label{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/G dir from symmetric G obs.pdf}
-        \caption{}
-        % \label{fig:Gaussian 3x3 large s}
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/G dir from symmetric G obs.pdf}
+        \caption{$G_{dir}$}
+        \label{subfig:Gaussian chain symmetric G_obs using correlation - G_dir}
     \end{subfigure}
     \\[\baselineskip]
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from symmetric G obs.pdf}
-        \caption{}
-        % \label{fig:Gaussian 3x3 large s}
+        \includegraphics[width=.9\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from symmetric G obs.pdf}
+        \caption{$G_{dir}$ as a graph}
+        % \label{}
     \end{subfigure}
-    \caption{Symmetric, correlatoin}
-    % \label{}
+    \caption{Using a symmetric $G_{obs}$ as shown in (a), we observe that higher order effects start to emerge as can be seen in (b). The main response is still in the superdiagonal and subdiagonal as we expect, where some similarity seems to bleed to nearby nodes/variables thus making the threshold used important for the resulting graph. For (c), a threshold $t=0.2$ was used to obtain a decent compromise between connectedness and denseness of the direct association.}
+    \label{fig:Gaussian chain symmetric G_obs using correlation}
 \end{figure}
+% minimize error in g_dir from equation on error?
+Finally, we try using the unscaled $G_{obs}$ in \autoref{eq:Gdir from Gobs}. Interestingly, we find that the true structure emerges as can be seen from \autoref{fig:Gaussian chain symmetric G_obs using correlation - unscaled}. Although the \textit{correlations} in \autoref{subfig:Gaussian chain symmetric G_obs using correlation - G_dir - unscaled} are not really correlations they do resemble those discovered in \autoref{subfig:Gaussian chain triangular G_obs using correlation - G_dir}. On closer inspection, it is not apparent how they are related except that it is a non-linear relationship. Although in this case it seemed to work not rescaling $G_{obs}$ in order to discover the causal structure we will in general not apply this to real world scenarios as the method is not well-defined in terms of assumptions and what the resulting $G_{dir}$ should be interpreted as.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/symmetric G obs - unscaled.pdf}
+        \caption{$G_{obs}$}
+        % \label{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/G dir from symmetric G obs - unscaled.pdf}
+        \caption{$G_{dir}$}
+        \label{subfig:Gaussian chain symmetric G_obs using correlation - G_dir - unscaled}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from symmetric G obs - unscaled.pdf}
+        \caption{$G_{dir}$ as a graph}
+        % \label{}
+    \end{subfigure}
+    \caption{Using an unscaled (symmetric) $G_{obs}$ results in a good recovery of the causal structure as seen in (b) and (c). However, at this point it is not clear whether it holds only for chains and using correlation or if it is a more general phenomenon.}
+    \label{fig:Gaussian chain symmetric G_obs using correlation - unscaled}
+\end{figure}
+Thus, at this point we have a rather good understanding of how the method works on Gaussian chains if one uses correlation as a measure of association. Furthermore, if one knows (a plausible) topological ordering of the variables, we are able to perfectly rediscover the network of direct dependencies. However, as noted above, correlation is not always a good measure of similarity. Thus, we proceed experimenting with mutual information on the same Gaussian chain.
+
+% Hvis den forkerte topologiske struktur benyttes, kan det give underlige resultater? -> Umiddelbart ja, for man ville ikke finde de rho i den originale definition, og der vil opstå effekter af et sådan forkert valgt topologisk orden.
 
 
-... changing alpha did not do a lot as we expect from how G obs looks. Hpwever, we can get closer by applying a larger threshhold. have chosen such that looks fairly sparse but is likely biased from my own prior knowledge
-
-
+\newpage
 \subsection{Gaussian chain deconvolution using mutual information}
+Using \autoref{prop:MI bivariate gaussian}, we can transform $G_{obs}$ from the previous section to be in terms of mutual information instead of correlation. It is not hard to show that in this case, even for Gaussian chains, there is some error as we shall see shortly.
+
+% Figure om fejl man laver step by step. Ud fra figur er det også mest 2-, 4-, etc. led ude der er fejl på
 
 
-\section{General Gaussian graph}\label{sec:General Gaussian graph}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/triangular G obs - MI.pdf}
+        \caption{$G_{obs}$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/G dir from triangular G obs - MI.pdf}
+        \caption{$G_{dir}$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 2_1e-2.pdf}
+        \caption{$G_{dir}$ as a graph}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \caption{Triangular, mutual information, cutoff $2.1 \, 10^{-2}$. The rest of the figures in appendix (other cutoff). Other cutoff can be seen in \autoref{fig:Gaussian chain symmetric G_obs using mutual information different cutoff}}
+    % \label{}
+\end{figure}
+
+
+
+
+
+
+
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/symmetric G obs - MI.pdf}
+        \caption{$G_{obs}$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/G dir from symmetric G obs - MI.pdf}
+        \caption{$G_{dir}$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from symmetric G obs - MI - cutoff 4_88e-2.pdf}
+        \caption{$G_{dir}$ as a graph}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \caption{symmetric, mutual information, cutoff $4.88 \cdot 10^{-2}$. Performance almost on par with correlation.}
+    % \label{}
+\end{figure}
+
+
+
+\newpage
+\section{Directed acyclic Gaussian graph}\label{sec:General Gaussian graph}
 % where the Cholesky decomposed correlation matrix non-zero only in the diagonal and subdiagonal up to a permutation and possibly an operation with the transpose operator to ensure that 
 
-...correlation is positive semi definite, so always eig greater than 0
 
 
 % (with the superdiagonal and subdiagonal being equal of course) or if the correlation matrix is equivalent to such a matrix under a permutation matrix $P$ (a matrix of unit elements, summing to $1$ in every row and column) i.e. if $C$ is a Gaussian chain, so is $P^T C P$. An example of a $4$-Gaussian chain is
@@ -178,7 +291,8 @@ On a more technical point of view, we note that mutual information is a measures
 
 \section{CE computation}\label{sec:gaussian MI error}
 Gaussian example
-\textcolor{red}{Eksempel medd normal fordeling og fejlen der bliver lavet vha. algoritmen.}
+
+\textcolor{red}{Example using Gaussian distribution and the error the algorithm makes.}
 
 
 \begin{example} \label{ex:1}
@@ -356,7 +470,7 @@ Gaussian example
 
     From the confidence density for the correlation $\rho$ given the emperical correlation $r$ is given by
     $$f\left(\rho \mid r,\nu\right) = \frac{\nu (\nu-1) \Gamma(\nu-1)}{\sqrt{2\pi} \Gamma(\nu + \frac{1}{2})} \frac{\left(1-r^2\right)^{\frac{\nu-1}{2}} \left(1-\rho^2\right)^{\frac{\nu-2}{2}} }{\left(1-r\rho\right)^{\frac{2\nu-1}{2}}} F\left(\frac{3}{2}, -\frac{1}{2}, \nu+\frac{1}{2}, \frac{1+r\rho}{2}\right)$$
-    from the mutual information, we can calculate the absolute correlation. Notice that the density does not change when reversing both $r$ and $\rho$ simultaniously, thus, wlog, assume $r\geq 0$, then we can calculate a CI for $\rho$ (which will be negated if we had used $-r$ instead and thus would be identical when taking the absolute value). If the original CI $[a,b]$ contains $0$ i.e. $a<0$, we shall write the CI for the absolute correlation as $[0,b]$ instead. This way, we can compare the absoulte correlations and see if they are the same (by checking if the CI contains the theoretical correlation) by \cite{Confidence-in-Correlation}. Using numerical integration (fast enough with high numerical accuracy from many bins, 1 mil bins, yielding probability mass 1.0000000000008133), can compute CI for absolute correlation
+    from the mutual information, we can calculate the absolute correlation. Notice that the density does not change when reversing both $r$ and $\rho$ simultaneously, thus, without loss of generality, assume $r\geq 0$, then we can calculate a CI for $\rho$ (which will be negated if we had used $-r$ instead and thus would be identical when taking the absolute value). If the original CI $[a,b]$ contains $0$ i.e. $a<0$, we shall write the CI for the absolute correlation as $[0,b]$ instead. This way, we can compare the absolute correlations and see if they are the same (by checking if the CI contains the theoretical correlation) by \cite{Confidence-in-Correlation}. Using numerical integration (fast enough with high numerical accuracy from many bins, 1 mil bins, yielding probability mass 1.0000000000008133), can compute CI for absolute correlation
 
     \autoref{sec:bivar gauss abs correlation CI}
 
