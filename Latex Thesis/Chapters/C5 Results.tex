@@ -6,7 +6,7 @@
 \externaldocument{../_BackMatter/Appendix1}
 \begin{document}
 
-\chapter{Results}
+\chapter{Results}\label{chap:results}
 \textcolor{red}{en intro til hvad der kommer til at være resultater ift. }
 
 In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and \autoref{alg:ND} works in junction and individually. We shall observe how the algorithms can fail and what may be done to correct such cases.
@@ -137,10 +137,10 @@ First, we shall however discuss the errors being made using the symmetric $G_{ob
 $$G_{dir}^2 = \left(T_{dir} + T_{dir}^T\right)^2 = T_{dir}^2 + \left(T_{dir}^T\right)^2 + T_{dir} T_{dir}^T + T_{dir}^T T_{dir}$$
 Higher power can be calculated similarly, but for the second power we already observe an error. The first two terms corresponds to a reflection of the second order effects that we saw above and know to be true, whence the final two terms, that add to a diagonal matrix, is an error and will propagate with higher order powers of $G_{dir}$. Through simple calculation the resulting error is
 $$T_{dir} T_{dir}^T + T_{dir}^T T_{dir} = \begin{bmatrix}
-        \rho_{1,2}^2 + \rho_{2,3}^2 &                             &        & \\
-                                    & \rho_{2,3}^2 + \rho_{3,4}^2 &        & \\
-                                    &                             & \ddots & \\
-                                    &   &   & \rho_{d-2,d-1}^2 + \rho_{d-1,d}^2
+        \rho_{1,2}^2 + \rho_{2,3}^2 &                             &        &                                   \\
+                                    & \rho_{2,3}^2 + \rho_{3,4}^2 &        &                                   \\
+                                    &                             & \ddots &                                   \\
+                                    &                             &        & \rho_{d-2,d-1}^2 + \rho_{d-1,d}^2
     \end{bmatrix}$$
 Thus, for chains, we expect larger errors for sub-chains with strong links i.e. a subgraph of a chain that is also a chain where the correlation from one variable to the next is large. Using $G_{obs} = T_{obs} + T_{obs}^T$ we have that the smallest eigenvalue is approximately $\lambda_{\min} \approx -0.92263$ thus, multiplying $G_{obs}$ with a constant $c_s < 0.54192$ will make $G_{dir}$ have spectral radius at most $1$. The results vary with one or two edges for the choice of $c_s$ and in the following we have chosen $c_s = 0.53651$ resulting in $\rho\left(G_{dir}\right) \approx 0.98020$ and $\tilde{G}_{obs}$ and $\tilde{G}_{dir}$ as seen in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. From \autoref{subfig:Gaussian chain symmetric G_obs using correlation - G_dir} we see that some correlation/association seem to bleed to variables $2$ or $3$ edges away which we of course know is not true given the Markov property discussed above. However, it is also clear that the error here is that the original assumption does not hold since using a symmetric $G_{obs}$ imply that the measure of similarity flows both ways where in this case it is very much unidirectional.
 
@@ -329,6 +329,25 @@ In conclusion, we have seen what errors can arise in the discovered network usin
 
 \newpage
 \section{Directed acyclic Gaussian graph}\label{sec:General Gaussian graph}
+
+
+Let $\mathcal{G}$ be the graph that represents the network and label the nodes such that they form a topological ordering. Then the resulting $G_{dir}$ of the weights is clearly upper triangular a directed edge can not go from an index $j$ to another index $i$ such that $i<j$. Then, for each node $i$, the predecessors is a subset of the nodes with $j < i$ and furthermore, the set immediate predecessors which we shall denote $N^-_i$ is a subset of these
+
+\begin{equation}
+    \begin{split}
+        \left[G_{obs}\right]_{i,j} & = \text{Cov}\left[X_i , \sum_{k \in N^-_j} \vec{\rho}_{k,j} \, X_k\right] \\
+                                   & = \sum_{k \in N^-_j}\vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]      \\
+                                   & = \sum_{k \in 1}^{j-1} \vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]   \\
+                                   & = \vec{\rho}_{i,j} + \sum_{k \in 1}^{d} \vec{\rho}_{k,j} \left[G_{obs}\right]_{i,k}
+    \end{split}
+\end{equation}
+where for the final inequality, we use that $\vec{\rho}_{k,j} = 0$ for $k > j-1$ and since $\left[G_{obs}\right]_{i,j} = \text{Cov}\left[X_i,X_j\right]$ except for a zero-diagonal we need to add $\vec{\rho}_{i,j}$ also.
+
+implying that $G_{obs} = \left(G_{obs} + I\right) G_{dir}$ such that indeed $G_{obs} = G_{dir} \left(I - G_{dir}\right)^{-1}$
+
+
+Define the direct dependencies
+
 % where the Cholesky decomposed correlation matrix non-zero only in the diagonal and subdiagonal up to a permutation and possibly an operation with the transpose operator to ensure that 
 
 
