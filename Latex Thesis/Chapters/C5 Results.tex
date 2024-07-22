@@ -328,12 +328,12 @@ In conclusion, we have seen what errors can arise in the discovered network usin
 
 
 \newpage
-\section{Directed acyclic Gaussian graph}\label{sec:General Gaussian graph}
+\section{Directed acyclic Gaussian graphs}\label{sec:General Gaussian graph}
 In this section, we will expand on the results from the previous section by considering a more general structure. In particular, let $\mathcal{G}$ be a directed acyclic graph with nodes corresponding to variables from a random vector $\boldsymbol X$ with directed edges indicating direct dependencies. Clearly, such a DAG has a topological ordering and as such we shall index the variables $1$ through $d$ such that if the index of a variable is $i$, and $j$ is the index of another element of the random vector $\boldsymbol X$, then $i < j$ implies there is no (directed) path from $j$ to $i$. Note that since a topological ordering is not necessarily unique, we can not infer that there is a (directed) path from $i$ to $j$ or even if $k$ is reachable form $j$ (i.e. there exists a path from $j$ to $k$) it does not follow that $k$ is reachable from $i$. In \autoref{fig:General gaussian graph illustration} a subset of such a DAG is shown with a possible labelling where $i < j$ and $k_m < k_n$ when $m < n$. It is then the weights along these directed edges which we will once again call $G_{dir}$ that we wish to infer based on the transitive closure. As an example, from \autoref{fig:General gaussian graph illustration}, the transitive closure would result in an observed similarity between $i$ and $j$ although no $1$ path i.e. single direct edge connects the two variables.
 \begin{figure}[h]
     \centering
     \includegraphics[width = .7\linewidth]{figures/ND examples/Gaussian graph illustration.png}
-    \caption{}
+    \caption{a general network where i and j are connected through multiple paths}
     \label{fig:General gaussian graph illustration}
 \end{figure}
 From the definition of the labels, it is clear that $G_{dir}$ is once again strictly upper triangular as entries below the diagonal corresponds to edges going from a random variable with an index $i$ to another random variable with index $j$ such that $i > j$ which is clearly a contradiction. Also, the diagonal elements are $0$ as there can not be any loops in DAGs.
@@ -341,69 +341,72 @@ From the definition of the labels, it is clear that $G_{dir}$ is once again stri
 Similarly to the definition of (Gaussian) chains, based on $d$ independent (or even just pairwise uncorrelated) random variables $Z_i$ we can define a general network of random variables $X_i$ based on $\boldsymbol Z$ in the following way
 \begin{equation}\label{eq:Gaussian network in terms of Z}
     \begin{split}
-        X_1 & = Z_1\\
-        X_2 & = \vec{\rho}_{1,2} X_1 + \sqrt{1 - \vec{\rho}_{1,2}^2} Z_2\\
-        X_3 & = \vec{\rho}_{1,3} X_1 + \vec{\rho}_{2,3} X_2 + c_3 Z_3\\
-        & \vdots\\
-        X_d &= \sum_{k < d} \vec{\rho}_{k,d} X_k + c_d Z_d
+        X_1 & = Z_1                                                      \\
+        X_2 & = \vec{\rho}_{1,2} X_1 + \sqrt{1 - \vec{\rho}_{1,2}^2} Z_2 \\
+        X_3 & = \vec{\rho}_{1,3} X_1 + \vec{\rho}_{2,3} X_2 + c_3 Z_3    \\
+            & \vdots                                                     \\
+        X_d & = \sum_{k < d} \vec{\rho}_{k,d} X_k + c_d Z_d
     \end{split}
 \end{equation}
 where $c_i$ is chosen such that $\text{Var}\left(X_i\right) = 1$ to make the analysis later on carries out simpler as then $\vec{\rho}_{i,j}$ is actually the \textit{direct} correlation between the variables indexed $i$ and $j$ as shown in \autoref{fig:General gaussian graph illustration}. Of course, for the variance of each random variable to be $1$ there must be some constraints on the chosen $\vec{\rho}_{i,j}$ such as neither one of them can exceed $1$ in absolute value. Furthermore, consider the following bound on the variance of $X_i$ assuming $c_k$ for $k < i$ have been chosen such that $\text{Var}\left(X_k\right) = 1$.
-\begin{align*}
-    \text{Var}\left[X_i\right] &= \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} \text{Cov} \left[X_k,X_l\right] + c_i^2\\
-    & \leq  \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} + c_i^2\\
-    & = \left(\sum_{k < i} \rho_{k,i}\right)^2 + c_i^2
-\end{align*}
+\begin{equation}\label{eq:bound on variance for network variable from the sum of ingoing weights}
+    \begin{aligned}
+        \text{Var}\left[X_i\right] & = \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} \text{Cov} \left[X_k,X_l\right] + c_i^2 \\
+                               & \leq  \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} + c_i^2                             \\
+                               & = \left(\sum_{k < i} \rho_{k,i}\right)^2 + c_i^2
+    \end{aligned}
+\end{equation}
 where we have used that $Z_i$ is uncorrelated with $X_k$ for $k < i$ and that the covariance between variables with variance $1$ is at most $1$ to obtain the inequality. Hence, choosing the sum of the ingoing edges to be at most $1$ for every node ensures that the constants $c_i$ for $i\in\left\{2,\dots, d\right\}$ exist in order to make the variance of each $X_i$ $1$. This, we will use in the following example to easily build a network such that $\vec{\rho}_{i,j}$ is the pure correlation.
 
-However, before constructing an example and using bot correlation and mutual information we must determine the theoretical $G_{obs}$ for both cases. To do this, we shall consider the $(i,j)$ element of $G_{obs}$ when using correlation as a measure of similarity and later use mutual information based on these correlations and \autoref{prop:MI bivariate gaussian} in the case of $\boldsymbol Z$ being a Gaussian random vector. To calculate $\left[G_{obs}\right]_{i,j}$ we shall consider the immediate predecessors to node $j$ in the graph $\mathcal{G}$ corresponding to \autoref{eq:Gaussian network in terms of Z}. The immediate predecessors or \textit{in-neighbors} of a node $j$ is denoted $N^-\left(X_j\right)$ or in shorthand notation $N^-_j$. An example of this is shown in \autoref{fig:Gaussian graph illustration - immediate predecessor}.
+However, before constructing an example and using bot correlation and mutual information we must determine the theoretical $G_{obs}$ for both cases. To do this, we shall consider the $(i,j)$ element of $G_{obs}$ when using correlation as a measure of similarity and later use mutual information based on these correlations and \autoref{prop:MI bivariate gaussian} in the case of $\boldsymbol Z$ being a Gaussian random vector. To calculate $\left[G_{obs}\right]_{i,j}$ we shall consider the immediate predecessors to node $j$ in the graph $\mathcal{G}$ corresponding to \autoref{eq:Gaussian network in terms of Z}. The immediate predecessors or \textit{in-neighbors} of a node $j$ is denoted $N^-\left(X_j\right)$ or in shorthand notation $N^-_j$. An example of this is shown in \autoref{fig:Gaussian graph illustration - immediate predecessor} where the in-neighbors of $j$ has been marked in red. With this notation, we proceed with the computation of the $(i,j)$ entry of $G_{obs}$ which is the covariance between $X_i$ and $X_j$ when $i < j$ and $0$ elsewhere.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .7\linewidth]{figures/ND examples/Gaussian graph illustration - immediate predecessor.png}
+    \caption{illustration of the in-neighbours}
+    \label{fig:Gaussian graph illustration - immediate predecessor}
+\end{figure}
+\begin{equation}
+    \begin{split}
+        \left[G_{obs}\right]_{i,j} & = \text{Cov}\left[X_i , \sum_{k \in N^-_j} \vec{\rho}_{k,j} \, X_k + c_j Z_j\right]           \\
+                                   & = \text{Cov}\left[X_i , \sum_{k \in N^-_j} \vec{\rho}_{k,j} \, X_k\right]           \\
+                                   & = \sum_{k \in N^-_j}\vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]                \\
+                                   & = \sum_{k \in 1}^{j-1} \vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]             \\
+                                   & = \vec{\rho}_{i,j} + \sum_{k \in 1}^{d} \vec{\rho}_{k,j} \left[G_{obs}\right]_{i,k}
+    \end{split}
+\end{equation}
+For the fourth equality, we have used that $\vec{\rho}_{k,j} = 0$ whenever $k \not\in N^-_j$ which again for the fifth equality holds for any $k \geq j$. Furthermore, since $\left[G_{obs}\right]_{i,i} = 0$ we need to add $\vec{\rho}_{i,j}$ to make the final equality hold. It is clear that the above can also be expressed as a matrix equation, namely
+$$G_{obs} = G_{obs}G_{dir} + G_{dir}$$
+Hence, as $G_{dir}$ is strictly upper triangular thus making $I - G_{dir}$ invertible, we can directly express $G_{obs}$ in terms of $G_{dir}$. We find that
+$$G_{obs} = G_{dir} \left(I - G_{dir}\right)^{-1}$$
+which we recognize as \autoref{eq:Gobs from Gdir} hence also for a general network (and not just a chain), using correlation and knowing/assuming a topological order of the random variables we are able to perfectly rediscover $G_{dir}$ from $G_{obs}$.
+
+With the above, we then define an example Gaussian network with the following weights and shown in \autoref{fig:Gaussian network example - ground truth} to get a better understanding of this example hopefully should reappear after deconvolution using both correlation and mutual information respectively.
+\begin{equation}
+    \begin{aligned}
+        \vec{\rho}_{1,2} & = 0.7, & \vec{\rho}_{5,6} & = 0.5, & \vec{\rho}_{2,7} & = 0.3\\
+        \vec{\rho}_{6,7} & = 0.3, & \vec{\rho}_{6,8} & = 0.7, & \vec{\rho}_{4,9} & = 0.3\\
+        \vec{\rho}_{8,9} & = 0.3, & \vec{\rho}_{7,10} & = 0.4, & \vec{\rho}_{9,10} & = 0.2
+    \end{aligned}
+\end{equation}
+In particular, from \autoref{eq:bound on variance for network variable from the sum of ingoing weights} and \autoref{fig:2 chain MI error} and \autoref{fig:3 and 4 chain MI error}, we suspect that the bleeding effects observed for the Gaussian chain won't appear in this case.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .6\linewidth]{figures/Gaussian Network Theoretical/Network graph - ground truth.pdf}
+    \caption{ground truth graph}
+    \label{fig:Gaussian network example - ground truth}
+\end{figure}
+
 
 
 
 \textcolor{red}{here}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width = .7\linewidth]{figures/ND examples/Gaussian graph illustration - immediate predecessor.png}
-    \caption{}
-    \label{fig:Gaussian graph illustration - immediate predecessor}
-\end{figure}
-% Let $\mathcal{G}$ be the graph that represents the network and label the nodes such that they form a topological ordering
-
-Then the resulting $G_{dir}$ of the weights is clearly upper triangular a directed edge can not go from an index $j$ to another index $i$ such that $i<j$. Then, for each node $i$, the predecessors is a subset of the nodes with $j < i$ and furthermore, the set immediate predecessors (or the \textit{in-neighbors}) which we shall denote $N^-_i$ is a subset of these
-
-\begin{equation}
-    \begin{split}
-        \left[G_{obs}\right]_{i,j} & = \text{Cov}\left[X_i , \sum_{k \in N^-_j} \vec{\rho}_{k,j} \, X_k\right] \\
-                                   & = \sum_{k \in N^-_j}\vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]      \\
-                                   & = \sum_{k \in 1}^{j-1} \vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]   \\
-                                   & = \vec{\rho}_{i,j} + \sum_{k \in 1}^{d} \vec{\rho}_{k,j} \left[G_{obs}\right]_{i,k}
-    \end{split}
-\end{equation}
-where for the final inequality, we use that $\vec{\rho}_{k,j} = 0$ for $k > j-1$ and since $\left[G_{obs}\right]_{i,j} = \text{Cov}\left[X_i,X_j\right]$ except for a zero-diagonal we need to add $\vec{\rho}_{i,j}$ also.
-
-implying that $G_{obs} = \left(G_{obs} + I\right) G_{dir}$ such that indeed $G_{obs} = G_{dir} \left(I - G_{dir}\right)^{-1}$
-
-
-Define the direct dependencies
-
-% where the Cholesky decomposed correlation matrix non-zero only in the diagonal and subdiagonal up to a permutation and possibly an operation with the transpose operator to ensure that 
-
-
-
-% (with the superdiagonal and subdiagonal being equal of course) or if the correlation matrix is equivalent to such a matrix under a permutation matrix $P$ (a matrix of unit elements, summing to $1$ in every row and column) i.e. if $C$ is a Gaussian chain, so is $P^T C P$. An example of a $4$-Gaussian chain is
-% $$C = \begin{bmatrix}
-%     1 & \rho_{12} & 0 & 0\\
-%     \rho_{21} & 1 & \rho_{23} & 0\\
-%     0 & \rho{32} & 1 & \rho_{34}\\
-%     0 & 0 & \rho_{43} & 1
-% \end{bmatrix}$$
 
 
 
 
+\newpage
 % \section{Examples}
-
 
 \section{CE computation}\label{sec:gaussian MI error}
 Gaussian example

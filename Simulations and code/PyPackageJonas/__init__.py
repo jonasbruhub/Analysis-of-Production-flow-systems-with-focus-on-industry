@@ -324,3 +324,9 @@ def KolmogorovSmirnovTestUnif(U, printOut = True):
         print(f"Adjusted test-stat. : {D_N_adjusted}")
         print(f"p-value :             {p_value}")
     return D_N, D_N_adjusted, p_value
+
+
+# mutual informaiton from correlation (Gaussian)
+def GaussianCorrelationToMutualInformation(rho):
+    # Warning, may return nan or inf for rho = 1
+    return -0.5 * np.log(1 - rho**2)
