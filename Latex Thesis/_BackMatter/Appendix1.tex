@@ -62,4 +62,33 @@ As an example, suppose $r_a=0.06$ with $1000$ observations. Then a $95\%$ CI for
     \label{fig:Gaussian chain symmetric G_obs using mutual information different cutoff}
 \end{figure}
 
+
+
+\section{Gaussian network deconvolution}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Network Theoretical/triangular G obs - cor.pdf}
+        \caption{$G_{obs}$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figures/Gaussian Network Theoretical/G dir from triangular G obs - cor.pdf}
+        \caption{$G_{dir}$}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{figures/Gaussian Network Theoretical/Graph from triangular G obs - cor.pdf}
+        \caption{$G_{dir}$ as a graph}
+        % \label{fig:Gaussian 3x3 large s}
+    \end{subfigure}
+    \caption{For the linear network defined in \autoref{eq:example Gaussian network}, using a triangular $G_{obs}$ (a) with the true topological structure we are able to perfectly rediscover the causal structure as seen in (b) and (c).}
+    \label{fig:Gaussian network triangular G_obs using correlation}
+\end{figure}
+
 \end{document}

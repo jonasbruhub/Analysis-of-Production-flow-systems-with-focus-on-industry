@@ -540,9 +540,22 @@ This clearly shows us that for small networks (thus small $d$) we risk smaller e
 \textcolor{red}{Det her mangler lige}
 
 
+B-spline - non-uniform marginals
 
 
+\subsection{M-splines}
+M-spline - need to normalize distributions
 
+\cite{Monotone-Regression-Splines-in-Action} a set of $n$ basis functions indexed by $i$. Letting the order of the basis function equal $p+1$ such that the basis functions are polynomials of degree p. Define knots to be $t_1 = \dots = t_k = 0$ and $t_{n+1} = \dots = t_{n+k} = 1$. furthermore, we choose the remaining $n-k$ (interior) knots to be equally distributed on $[0,1]$ i.e. if $3$ interior points, they are $1/4$, $1/2$ and $3/4$ respectively.
+\begin{align}
+    M_{i,1}\left(t\right) &= \frac{1}{t_{i+1} - t_i}\\
+    M_{i,k}\left(t\right) &= \frac{k\left( \left(t - t_i\right) M_{i,k-1}\left(t\right) + \left(t_{i+k} - t\right) M_{i+1,k-1}\left(t\right)\right)}{\left(k-1\right) \left(t_{i+k} - t_{i}\right)} 
+\end{align}
+
+A better spline
+
+
+KDE: Naïve KDE, boundary effects, using that from the article, diffusion based KDE
 
 
 
