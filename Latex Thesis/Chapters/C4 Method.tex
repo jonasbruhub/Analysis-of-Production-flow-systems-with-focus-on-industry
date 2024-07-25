@@ -540,22 +540,153 @@ This clearly shows us that for small networks (thus small $d$) we risk smaller e
 \textcolor{red}{Det her mangler lige}
 
 
+\subsection{B-splines}
 B-spline - non-uniform marginals
+
+\cite{A-Practical-Guide-to-Splines} Cox-de Boor recursion formula
+\begin{align}
+    B_{i,0}\left(t\right) &= 1, \quad t\in [t_i, T_{i+1})\\
+    B_{i,k}\left(t\right) &= \frac{t-t_i}{t_{i+k} - t_{i}} B_{i,k-1}\left(t\right) + \frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} B_{i+1,k-1}\left(t\right)
+\end{align}
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=.7\linewidth]{figures/MI estimation/B-spline basis functions - degree 3.pdf}
+%     \caption{}
+%     \label{}
+% \end{figure}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/B-spline basis functions - degree 3.pdf}
+        \caption{}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/B-spline marginal dist - degree 3.pdf}
+        \caption{}
+    \end{subfigure}
+\end{figure}
+
+Have the useful property that $\sum_i B_{i,k} ( t ) = 1$ for all $k$ and $t$. However, as we will be using this when trying to estimate mutual information from a copula, we have a very specific problem, namely, the marginals are not discrete uniform. $i \in \{1,\dots,n\}$ basis functions
+
+Let $\boldsymbol X$ be a random vector of $d$, i.i.d uniformly distributed random variables $X_j$. Then the random variable corresponding to the probability mass assigned to bin $i$, $P_i$, is given by 
+$$P_i = \frac{1}{d} \sum_{j = 1}^d B_{i,p}\left(X_j\right)$$
+thus, the expected value of $P_i$ is (independently of $d$)
+$$\mathbb{E}\left[P_i\right] = \mathbb{E}\left[B_{i,p}\left(X_j\right)\right] = \int_{0}^{1} B_{i,p}\left(x\right)\, dx$$
+Ideally, this should be equal for all $i$ as we want the marginal to be uniform as per definition of a Copula density. However, this is not the case. In fact, 
+
+
+In particular, we can calculate the expected probability mass for each bin $i$ as 
+
 
 
 \subsection{M-splines}
 M-spline - need to normalize distributions
 
-\cite{Monotone-Regression-Splines-in-Action} a set of $n$ basis functions indexed by $i$. Letting the order of the basis function equal $p+1$ such that the basis functions are polynomials of degree p. Define knots to be $t_1 = \dots = t_k = 0$ and $t_{n+1} = \dots = t_{n+k} = 1$. furthermore, we choose the remaining $n-k$ (interior) knots to be equally distributed on $[0,1]$ i.e. if $3$ interior points, they are $1/4$, $1/2$ and $3/4$ respectively.
+\cite{Monotone-Regression-Splines-in-Action} a set of $n$ basis functions indexed by $i$. Letting the order of the basis function equal $p+1$ such that the basis functions are polynomials of degree p. Define knots to be $t_1 = \dots = t_k = 0$ and $t_{n+1} = \dots = t_{n+k} = 1$. furthermore, we choose the remaining $n-k$ (interior) knots to be equally distributed on $[0,1]$ i.e. if $3$ interior points, they are $1/4$, $1/2$ and $3/4$ respectively. (slightly reformualted to agree with the notation for B splines)
 \begin{align}
-    M_{i,1}\left(t\right) &= \frac{1}{t_{i+1} - t_i}\\
+    M_{i,0}\left(t\right) &= \frac{1}{t_{i+1} - t_i}, \quad t\in [t_i, T_{i+1})\\
     M_{i,k}\left(t\right) &= \frac{k\left( \left(t - t_i\right) M_{i,k-1}\left(t\right) + \left(t_{i+k} - t\right) M_{i+1,k-1}\left(t\right)\right)}{\left(k-1\right) \left(t_{i+k} - t_{i}\right)} 
 \end{align}
+such that $M_{i,p}$ is a degree $p$ polynomial on $[t_i, t_{i+p+1})$
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/M-spline basis functions - degree 3.pdf}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/M-spline marginal dist - degree 3.pdf}
+        \caption{}
+    \end{subfigure}
+    \caption{$P_i$ is area of each rectangle i.e. $0.2$.}
+\end{figure}
+
+it follows that each of these $M_{i,p+1}$ basis splines integrate to $1$ which, as we saw before is important for uniform marginals. In particular, if we instead let the basis functions be $\tilde{M}_{i,p} = \frac{1}{n} M_{i,p}$, The marginal is uniform. However now there is the downside that basis functions do not sum to $1$ as with the B-spline. Namely, points near the boundary are weighted more than points on the inside as is illustrated below
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .55\linewidth]{figures/MI estimation/M-spline coefficient sum - degree 3.pdf}
+    \caption{}
+    % \label{}
+\end{figure}
+
+
+
+
+
+
+
+\subsection{A better spline}
+In theory, we could make a set of splines ourselves, that has both of the desired properties of B-splines and M-splines. I.e. a set of piecewise polynomials, which we shall denote $Q_{i,p}$, that has both the property that 
+$$\sum_{i = 1}^n Q_{i,p} (t) = 1$$
+and 
+$$\int_{0}^{1} Q_{i,p} (t) \, dt = \frac{1}{n} $$
+Actually, both M- and B-splines satisfies this for $p = 0$ as they are then both piecewise constant and non-zero on disjoint intervals. From this, one can the construct such sets of $Q_{i,p}$ in the following way. Namely, start with the piecewise constant functions, $Q_{i,0}$ depicted in \autoref{fig:spline order 0 - Q} as boxes in the case $n = 5$.
+
+
+\begin{figure}[h]
+    \centering
+    \includesvg[width=.7\linewidth]{figures/MI estimation/Q_spline_construction_step_1.svg}
+    \caption{}
+    \label{fig:spline order 0 - Q}
+\end{figure}
 
 A better spline
 
+\begin{figure}[h]
+    \centering
+    \includesvg[width=.7\linewidth]{figures/MI estimation/Q-spline construction - step 2.svg}
+    \caption{}
+    \label{fig:spline order 0 - Q - step 2}
+\end{figure}
 
-KDE: Naïve KDE, boundary effects, using that from the article, diffusion based KDE
+Cut off function has derivative 0 at top and is halfway down at the sides
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline basis functions - degree 3.pdf}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline marginal dist - degree 3.pdf}
+        \caption{}
+    \end{subfigure}
+    \caption{$P_i$ is area of each rectangle i.e. $0.2$.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .55\linewidth]{figures/MI estimation/Q-spline coefficient sum - degree 3.pdf}
+    \caption{}
+    % \label{}
+\end{figure}
+This example does however not work well for many bins, in particular, due to the splines not overlapping that much i.e. a poor regularization on the smoothness. However, the method used for constructing this set of splines can be extended to bleed into multiple neighboring bins just as for B- and M-splines.
+
+
+
+
+\subsection{Naïve KDE}
+Reflection (ikke så god)
+
+\subsection{Boundary corrected KDE}
+Den fra artikel i kina
+
+
+
+\subsection{Diffusion based KDE}
+
+% KDE: Naïve KDE, boundary effects, using that from the article, diffusion based KDE
 
 
 

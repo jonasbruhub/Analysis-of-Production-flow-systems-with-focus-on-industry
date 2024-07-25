@@ -330,3 +330,216 @@ def KolmogorovSmirnovTestUnif(U, printOut = True):
 def GaussianCorrelationToMutualInformation(rho):
     # Warning, may return nan or inf for rho = 1
     return -0.5 * np.log(1 - rho**2)
+
+
+
+def ka0(trunc_point, boundary = "lower", h = None):
+    if boundary == "lower":
+        return scipy.stats.norm.cdf(trunc_point)
+    elif boundary == "lower-upper":
+        return scipy.stats.norm.cdf(trunc_point) - scipy.stats.norm.cdf(trunc_point - 1/h)
+
+def ka1(trunc_point, boundary = "lower", h = None):
+    if boundary == "lower":
+        return -scipy.stats.norm.pdf(trunc_point)
+    elif boundary == "lower-upper":
+        return scipy.stats.norm.pdf(trunc_point - 1/h) - scipy.stats.norm.pdf(trunc_point)
+
+def ka2(trunc_point, boundary = "lower", h = None):
+    if boundary == "lower":
+        return ka0(trunc_point) + trunc_point * ka1(trunc_point)
+    elif boundary == "lower-upper":
+        return ka0(trunc_point) + trunc_point * ka1(trunc_point) - (ka0(trunc_point - 1/h) + (trunc_point - 1/h) * ka1(trunc_point - 1/h))
+
+def JonesDensity(x, kern_centers, h, boundary = "lower-upper"):
+    trunc_points = x / h
+
+    a0 = ka0(trunc_points, boundary = boundary, h = h)
+    a1 = ka1(trunc_points, boundary = boundary, h = h)
+    a2 = ka2(trunc_points, boundary = boundary, h = h)
+
+    denom = (a2*a0 - a1**2)
+    lx = a2/denom
+    mx = a1/denom
+
+    u = (x - kern_centers[:,None]) / h
+
+
+    return ((lx - mx*u) * scipy.stats.norm.pdf(u)).mean(axis = 0)/h
+
+
+def KernelJones1D(kern_centers, h = None, boundary = "lower-upper", proper = True):
+    n = kern_centers.__len__()
+    if h == None:
+        h = n**(-1/5) * kern_centers.var()**0.5
+    
+    def kern(x):
+
+        trunc_points = x / h
+
+        a0 = ka0(trunc_points, boundary = boundary, h = h)
+        a1 = ka1(trunc_points, boundary = boundary, h = h)
+        a2 = ka2(trunc_points, boundary = boundary, h = h)
+
+        denom = (a2*a0 - a1**2)
+        lx = a2/denom
+        mx = a1/denom
+
+        u = (x - kern_centers[:,None]) / h
+
+
+        return ((lx - mx*u) * scipy.stats.norm.pdf(u)).mean(axis = 0)/h
+    
+    if proper:
+        c = scipy.integrate.quad(kern, 0, 1)[0]
+    else:
+        c = 1
+    
+    return lambda x : kern(x) / c
+
+
+def KernelJones2D(kern_centers, h = None, boundary = "lower-upper", proper = True):
+    if kern_centers.shape[0] != 2:
+        raise AttributeError("Error: kern_centers shoud be a 2xn array")
+    
+    if (h != None):
+        if (h.shape != (2,)):
+            raise AttributeError("Error: h should be a (2,) array")
+    
+    n = kern_centers.shape[1]
+    if h == None:
+        h = n**(-1/5) * kern_centers.var(axis = 1)**0.5
+
+    h = h[:,None]
+
+
+    # def kern_x(x):
+    #     trunc_points = x / h[0]
+    #     a0 = ka0(trunc_points, boundary = boundary, h = h[0])
+    #     a1 = ka1(trunc_points, boundary = boundary, h = h[0])
+    #     a2 = ka2(trunc_points, boundary = boundary, h = h[0])
+
+    #     denom = (a2*a0 - a1**2)
+    #     lx = a2/denom
+    #     mx = a1/denom
+    #     u = (x - kern_centers[0,:]) / h[0]
+
+    #     return ((lx - mx*u) * scipy.stats.norm.pdf(u)).mean(axis = 0)/h[0]
+    
+    # if proper:
+    #     c_x = scipy.integrate.quad(kern_x, 0, 1)[0]
+    # else:
+    #     c_x = 1
+
+
+    # def kern_y(y):
+    #     trunc_points = y / h[0]
+    #     a0 = ka0(trunc_points, boundary = boundary, h = h[1])
+    #     a1 = ka1(trunc_points, boundary = boundary, h = h[1])
+    #     a2 = ka2(trunc_points, boundary = boundary, h = h[1])
+
+    #     denom = (a2*a0 - a1**2)
+    #     lx = a2/denom
+    #     mx = a1/denom
+    #     u = (y - kern_centers[1,:]) / h[1]
+
+    #     return ((lx - mx*u) * scipy.stats.norm.pdf(u)).mean(axis = 0)/h[1]
+    
+    # if proper:
+    #     c_y = scipy.integrate.quad(kern_y, 0, 1)[0]
+    # else:
+    #     c_y = 1
+
+    # c = np.vstack([c_x, c_y])
+
+    
+    def kern(x):
+        trunc_points = x / h
+
+        a0 = ka0(trunc_points, boundary = boundary, h = h)
+        a1 = ka1(trunc_points, boundary = boundary, h = h)
+        a2 = ka2(trunc_points, boundary = boundary, h = h)
+
+        denom = (a2*a0 - a1**2)
+        lx = a2/denom
+        mx = a1/denom
+
+        u = (x[:,:,None] - kern_centers[:,None,:]) / h[:,:,None]
+
+        # print(u.shape)
+        # print(lx[:,:,None].shape)
+
+        # print((lx[:,:,None] - mx[:,:,None]*u).shape)
+        # print(scipy.stats.norm.pdf(u).shape)
+
+        # print(h[:,:,None].shape)
+        # print(c[:,None].shape)
+        
+
+        temp = ((lx[:,:,None] - mx[:,:,None]*u) * scipy.stats.norm.pdf(u))/h[:,:,None] # / c[:,None]
+        # print(temp.shape)
+        return (temp[0,:,:] * temp[1,:,:] ).mean(axis = 1)
+    
+
+    
+    c = scipy.integrate.dblquad( lambda x,y : kern(np.vstack([x,y])) ,0,1,0,1)[0]
+    
+    
+    
+    return lambda x : kern(x) / c
+
+
+def KernelJones2D_nonnegative(kern_centers, h = None, boundary = "lower-upper", proper = True):
+    if kern_centers.shape[0] != 2:
+        raise AttributeError("Error: kern_centers shoud be a 2xn array")
+    
+    if (h != None):
+        if (h.shape != (2,)):
+            raise AttributeError("Error: h should be a (2,) array")
+    
+    n = kern_centers.shape[1]
+    if h == None:
+        h = n**(-1/5) * kern_centers.var(axis = 1)**0.5
+
+    h = h[:,None]
+
+
+    
+    def kern(x):
+        trunc_points = x / h
+
+        a0 = ka0(trunc_points, boundary = boundary, h = h)
+        a1 = ka1(trunc_points, boundary = boundary, h = h)
+        a2 = ka2(trunc_points, boundary = boundary, h = h)
+
+        denom = (a2*a0 - a1**2)
+        lx = a2/denom
+        mx = a1/denom
+
+        u = (x[:,:,None] - kern_centers[:,None,:]) / h[:,:,None]
+
+        # print(u.shape)
+        # print(lx[:,:,None].shape)
+
+        # print((lx[:,:,None] - mx[:,:,None]*u).shape)
+        # print(scipy.stats.norm.pdf(u).shape)
+
+        # print(h[:,:,None].shape)
+        # print(c[:,None].shape)
+        
+
+        f_til = ((lx[:,:,None] - mx[:,:,None]*u) * scipy.stats.norm.pdf(u))/h[:,:,None] # / c[:,None]
+        f_til = np.prod(f_til, axis = 0 ).mean(axis = 1)
+
+        f_hat = scipy.stats.norm.pdf(u) / h[:,:,None] / a0[:,:,None]
+        f_hat = np.prod(f_hat, axis = 0).mean(axis = 1)
+        # print(temp.shape)
+        return f_hat * np.exp( f_til / f_hat - 1 )
+    
+    
+    print("Computing normalization constants")
+    c = scipy.integrate.dblquad( lambda x,y : kern(np.vstack([x,y])) ,0,1,0,1)[0]
+    
+    
+    
+    return lambda x : kern(x) / c
