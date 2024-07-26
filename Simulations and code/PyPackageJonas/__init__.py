@@ -537,9 +537,132 @@ def KernelJones2D_nonnegative(kern_centers, h = None, boundary = "lower-upper", 
         return f_hat * np.exp( f_til / f_hat - 1 )
     
     
-    print("Computing normalization constants")
-    c = scipy.integrate.dblquad( lambda x,y : kern(np.vstack([x,y])) ,0,1,0,1)[0]
-    
+    print("Computing normalization constants...", end = "")
+    i_res = scipy.integrate.dblquad( lambda x,y : kern(np.vstack([x,y])) ,0,1,0,1)
+    c = i_res[0]
+    print(" done. " + f"integral acc. : {i_res[1]}")
     
     
     return lambda x : kern(x) / c
+
+
+
+def KernelJones2D_nonnegative_version_Jonas(kern_centers, h = None, boundary = "lower-upper", proper = True):
+    if kern_centers.shape[0] != 2:
+        raise AttributeError("Error: kern_centers shoud be a 2xn array")
+    
+    if not(h is None):
+        if (h.shape != (2,)):
+            raise AttributeError("Error: h should be a (2,) array")
+    
+    n = kern_centers.shape[1]
+    if h is None:
+        h = n**(-1/5) * kern_centers.var(axis = 1)**0.5
+
+    h = h[:,None]
+
+
+    
+    def kern(x):
+        trunc_points = x / h
+
+        a0 = ka0(trunc_points, boundary = boundary, h = h)
+        a1 = ka1(trunc_points, boundary = boundary, h = h)
+        a2 = ka2(trunc_points, boundary = boundary, h = h)
+
+        denom = (a2*a0 - a1**2)
+        lx = a2/denom
+        mx = a1/denom
+
+        u = (x[:,:,None] - kern_centers[:,None,:]) / h[:,:,None]
+
+        # print(u.shape)
+        # print(lx[:,:,None].shape)
+
+        # print((lx[:,:,None] - mx[:,:,None]*u).shape)
+        # print(scipy.stats.norm.pdf(u).shape)
+
+        # print(h[:,:,None].shape)
+        # print(c[:,None].shape)
+        
+
+        f_til = ((lx[:,:,None] - mx[:,:,None]*u) * scipy.stats.norm.pdf(u))/h[:,:,None] # / c[:,None]
+        f_til = np.prod(f_til, axis = 0 ).mean(axis = 1)
+
+        f_hat = scipy.stats.norm.pdf(u) / h[:,:,None] / a0[:,:,None]
+        f_hat = np.prod(f_hat, axis = 0).mean(axis = 1)
+        # print(temp.shape)
+        return f_hat * np.exp( (f_til - f_hat) / ( f_hat + .01) )
+    
+    
+    print("Computing normalization constants...", end = "")
+    # i_res = scipy.integrate.dblquad( lambda x,y : kern(np.vstack([x,y])) ,0,1,0,1)
+    # c = i_res[0]
+    c = 1
+    # print(" done. " + f"integral acc. : {i_res[1]}")
+    
+    
+    return lambda x : kern(x) / c
+
+
+def Kernel2D_GaussCopula(kern_centers, h = None):
+    if kern_centers.shape[0] != 2:
+        raise AttributeError("Error: kern_centers shoud be a 2xn array")
+    
+    if not (h is None):
+        if (h.shape != (2,)):
+            raise AttributeError("Error: h should be a (2,) array")
+   
+
+    kern_centers_u = scipy.stats.norm.ppf(kern_centers)
+
+    if h is None:
+        mu_hat = kern_centers_u.mean(axis = 1)
+        s2_hat = kern_centers_u.var(ddof = 1, axis = 1)
+        n = kern_centers_u.shape[1]
+        h_GC = s2_hat**0.5 * ( ( 2 * mu_hat**2 * s2_hat + 3 * (1 - s2_hat)**2 ) * n )**(-0.2)
+        h = h_GC
+
+        h = n**(-1/5) * kern_centers_u.var(axis = 1)**0.5
+
+    h = h[:,None]
+
+    # print(h.shape)
+
+    exp_fac = (1-h**2) / 2 / h**2 / (2 - h**2)
+    c = 1 / (h * (2 - h**2)**0.5)
+
+    # print(kern_centers_u.shape)
+
+    def kern(x):
+        xinv = scipy.stats.norm.ppf(x)
+        
+        emp = np.exp( - (1 - h**2) * xinv**2 * exp_fac)
+
+
+        temp = 2 * kern_centers_u[:,:,None] @ xinv[:,None,:]
+        temp = ( 1 - h[:,None,:]**2 ) * kern_centers_u[:,:,None]**2 - temp
+        
+
+        s = np.exp( - exp_fac[:,:,None] * ( ( 1 - h[:,None,:]**2 ) * kern_centers_u[:,:,None]**2 - 2 * kern_centers_u[:,:,None] @ xinv[:,None,:] )) 
+
+        res = s * emp[:,None,:] * c[:,:,None]
+
+        return np.prod(res, axis = 0).mean(axis = 0)
+    
+    return kern
+
+
+def gen_gaus_c(rho):
+    # x,y in [0,1]
+    c = 1 / (1 - rho**2) ** 0.5
+    def kern(x,y):
+        xinv = scipy.stats.norm.ppf(x)
+        yinv = scipy.stats.norm.ppf(y)
+
+        # print(np.abs(xinv).max(), np.abs(yinv).max())
+        
+        p = -1 / 2 / (1 - rho**2) * (rho**2 * (xinv**2 + yinv**2) - 2 * rho * xinv * yinv)
+        return c * np.exp(p)
+
+    return kern

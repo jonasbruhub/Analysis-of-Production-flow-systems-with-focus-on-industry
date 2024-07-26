@@ -682,6 +682,41 @@ Reflection (ikke så god)
 \subsection{Boundary corrected KDE}
 Den fra artikel i kina
 
+We shall also try the method briefly presented in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems}, which is based on \cite{Jones1993SimpleBC}. It is a first order kernel but only specified in one dimension and initially only for a lower bound. The 
+
+Furthermore, in \cite{A-simple-nonnegative-boundary-correction-method-for-kernel-density-estimation}, Jones and Foster propose an extension to handle the possible negativity of the estimate density.
+
+Also, in R we see a copula method which is a $[0,1]$ domain method using gaussian copula as kernel such that it is reflexive in x and kernel point Xi. Could also be used and we have implemented this as the above using the products of kernel. \cite{Kernel-Type-Density-Estimation-on-the-Unit-Interval}
+
+
+using the one from china, we get that for large correlation, the algorithm on 500x500 does not do well (refer to image on convergence when accurate PDF -> improved scheme by adaptively increasing the mesh size if one gets a large MI)
+
+
+% R documentation for bckden
+https://search.r-project.org/CRAN/refmans/evmix/html/bckden.html
+
+% suicide data for at sammenligne implementering
+
+Hvad med denne: 
+\cite{Estimating-mutual-information-Kraskov}
+
+
+
+% @article{0833f3a6-edb6-3c71-b4f9-5491bc3f60ad,
+%  ISSN = {00359238},
+%  URL = {http://www.jstor.org/stable/2981988},
+%  abstract = {Using techniques of density estimation, an estimate is made of the risk of suicide as a function of time under psychiatric treatment. Data from the Mental Health Enquiry, and also from a local study involving the selection of matched controls, are considered, and the dependence on sex and age investigated. In most cases, risk decreases at a rate roughly inversely proportional to the square root of time.},
+%  author = {J. B. Copas and M. J. Fryer},
+%  journal = {Journal of the Royal Statistical Society. Series A (General)},
+%  number = {2},
+%  pages = {167--176},
+%  publisher = {[Royal Statistical Society, Wiley]},
+%  title = {Density Estimation and Suicide Risks in Psychiatric Treatment},
+%  urldate = {2024-07-26},
+%  volume = {143},
+%  year = {1980}
+% }
+
 
 
 \subsection{Diffusion based KDE}
