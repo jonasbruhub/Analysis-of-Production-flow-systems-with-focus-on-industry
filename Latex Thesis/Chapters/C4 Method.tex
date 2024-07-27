@@ -3,6 +3,7 @@
 % \epstopdfsetup{outdir={../figures/}}
 \usepackage{xr}
 \externaldocument{C5 Results}
+\externaldocument{../_BackMatter/Appendix1}
 \begin{document}
 % effects of scaling g_obs
 % "bevis" for antagelse ikke holder for e.g. normalfordeling, men numerisk hvorfor det går godt??
@@ -675,53 +676,193 @@ This example does however not work well for many bins, in particular, due to the
 
 
 
-
+\newpage
 \subsection{Naïve KDE}
-Reflection (ikke så god)
+As we shall see in \textcolor{red}{REFERENCE TIL RESULTAT AFSNIT OM EST AF MI UD FRA PERFEKT DENSITET}, if one can accurately determine the Copula density of $X_1$ and $X_2$, then using an approximation of the integral, one can calculate the mutual information to any precision wanted. This clearly follows from the above analysis regarding the behavior of the discretization of $X_1$ and $X_2$ in the limit as the mesh gets more fine. Thus, if we can estimate the joint Copula density well, we obtain a good estimate of the mutual information of $X_1$ and $X_2$. A widely used non-parametric method for density estimation is kernel density estimation. Namely, if $\{{\boldsymbol x}_i\}$ is a set of $n$, $d$-dimensional observations from a population, i.e. $\boldsymbol x_i$ can be both scalars and vectors in the case of a multidimensional distribution, the kernel density estimator (KDE) of the probability density function is in general given as
+\begin{equation}\label{eq:KDE definition}
+    \hat{f}(\boldsymbol x) = \frac{1}{n}\sum_{i=1}^n \frac{1}{\prod_{j= 1}^d \boldsymbol h_{i,j}} K\left(\frac{\boldsymbol x-\boldsymbol x_i}{\boldsymbol h_i}\right)
+\end{equation}
+where $\boldsymbol h_i$ is the bandwidth (vector) associated with observation $\boldsymbol x_i$ and $K$ is the kernel (function), defined on the domain of $\boldsymbol X$ which is often $\mathbb{R}^d$. Often, the bandwidths $\boldsymbol h_i$ are taken to be equal and initially, we shall do so as well. Furthermore, the kernel $K$ is a non-negative function, and is in itself a density function i.e. integrates to $1$ as shown below. This ensures that $\hat{f}$ in \autoref{eq:KDE definition} integrates to $1$ and is non-negative i.e. a proper distribution.
+$$\int_{\mathbb{R}^d} K(\boldsymbol x) \, d\boldsymbol x = 1$$
+In one dimension, a particular useful kernel is the Gaussian kernel given by $K(x) = \phi\left(x\right)$ where $\phi$ is the density function for the standard Normal distribution. $\phi$ is chosen due to its simple behavior and mathematical properties. In particular, we shall see in the following section, that the properties of the Gaussian kernel allows for simple expressions when correcting for a boundary such that computation is quick and efficient. For multiple dimensions, we often consider product kernels, which are kernels $K$ of the form
+\begin{equation}\label{eq:product kernel}
+    K\left(\boldsymbol x\right) = \prod_{i = 1}^{d} K_i\left(x_i\right)
+\end{equation}
+I.e. just a product of kernels. In particular, we choose $K_i = \phi$ again due to the numerical properties. Thus, initially, we have a KDE $\hat{f}$ of the following form where we once again note that $\boldsymbol h_i = \boldsymbol h$ for all $i\in \{1,\dots, n\}$ such that $h_j$ denotes the bandwidth associated with the $j$'th dimensino.
+$$\hat{f}\left(\boldsymbol x\right) = \frac{1}{n\prod_{j = 1}^{d}h_j} \sum_{i=1}^n \prod_{j = 1}^{d} \phi \left(\frac{x_j - x_{i,j}}{h_j}\right)$$
 
+
+
+The choice of bandwidth $\boldsymbol h$ is important regarding a trade-off between the variance and bias of the KDE. In general, we want to choose $h$ as small as possible resulting in the least bias but a too small $\boldsymbol h$ will result in large variance of the estimator. In particular, $\boldsymbol h$ acts as a smoothing parameter like the number of bins from the previous section, but here, we can choose any $h > 0$ making the KDE a much more versatile tool. Often the \textit{Mean Integrated Square Error} (MISE) is used which is the expected $L^2$-norm of $\hat{f} - f$ i.e.
+$$\text{MISE} \left(\hat{f}\right) = \mathbb{E}_{f} \left[\int_{\mathbb{R}^d} \left| \hat{f}\left(\boldsymbol x\right) - f\left(\boldsymbol x\right)\right|^2 \, d\boldsymbol x\right] $$
+which of course depends on $\boldsymbol h$. The expectation $\mathbb{E}_f$ denotes the expectation with respect to the samples $\{\boldsymbol x_i\}$ of $\boldsymbol X$ with (true) density distribution function $f$. Expanding the above expression, we obtain a simple expression relating MISE to the integrated squared bias and integrated variance as shown below
+$$\text{MISE} \left(\hat{f}\right) =  \int_{\mathbb{R}^d} \left| \mathbb{E}_{f}\left[\hat{f}\left(\boldsymbol x\right)\right] - f\left(\boldsymbol x\right)\right|^2 \, d\boldsymbol x  +  \int_{\mathbb{R}^d} \text{Var} \left[ \hat{f}\left(\boldsymbol x\right)\right] \, d\boldsymbol x$$
+It is however quite complicated to optimize the above, and we shall thus often use a simple rule of thumb known as Scott's rule \cite{Scott1992MultivariateDE} for choosing $\boldsymbol h$. Namely, for product kernels, we let the bandwidths of each dimension $j$ equal the following where $\hat{\sigma}_j$ is the standard deviation estimated from the observations of $X_j$
+$$h_{j}^{Scott} = \hat{\sigma}_j n^{-1/(d+4)}, \quad j \in \{1,\dots, d\}$$
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .6\linewidth]{figures/MI estimation/suicide data example.pdf}
+    \caption{The suicide data from MHE. The $86$ observations are shown as a histogram of densities along with Gaussian KDEs with bandwidth $h=5$ and $h=100$ and $h$ chosen from Scott's rule $h = \hat{\sigma} n^{-1/5} \approx 59.86$.}
+    \label{fig:suicide KDE example}
+\end{figure}
+
+In \autoref{fig:suicide KDE example}, we have shown a basic example in one dimension with two different manual choices of the bandwidth $h$ and $h$ chosen by Scott's rule. We have used data from \cite{Density-Estimation-and-Suicide-Risks-in-Psychiatric-Treatment}, tabulated in \cite{Silverman86} which has been used in \cite{Jones1993SimpleBC} which propose a method for correcting the KDE near a boundary which we shall discuss in the following section. The data consists of $86$ observations regarding suicide and is known to be non-negative. In consideration of the reader, we have included the observations in \autoref{tab:suicide data}. It is clear that using $h^{Scott}$ results in what we qualitatively would deem a good estimate for the probability density function as $h = 100$ seen to be overly smoothed whereas $h = 100$ too under-smoothed. In particular, from repeated samples we would expect the estimator using $h= 100$ would have large bias but small variance whereas for $h = 5$ would have much larger variance but smaller bias. However, a problem the estimators, $h = 100$ and $h = h^{Scott}$ especially, have is that they have probability mass below $0$ which in this case is unwanted. I.e. when restricting $\hat{f}$ to $[0,\infty)$ they are no longer proper probability distribution functions as they do not integrate to $1$. A Simple fix could be to simply rescale $\hat{f}$ such that this is the case, but as seen from the example in \autoref{fig:suicide KDE example - rescaled} where this method is applied to the same example as above, this tends to underestimate the peaks especially near the boundary.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .6\linewidth]{figures/MI estimation/suicide data example - rescaled.pdf}
+    \caption{Using a rescaled version of $\hat{f}$ on the interval $[0,\infty)$ and disregarding any probability mass below $x=0$ we obtain proper probability distributions once again. However, neither of the methods capture the peak near the boundary $x=0$. In particular, although $h^{Scott}$ still seem to be a good choice for $h$, the KDE does not capture the tendency observed in the data.}
+    \label{fig:suicide KDE example - rescaled}
+\end{figure}
+
+We note that using a non-constant $h$ would improve on this behavior, but simpler methods exists, and we thus proceed in the next section with a method that shows great promise regarding this seemingly fundamental issue with KDE. In particular, we refer to a systematic way of letting the shape of each of the kernels depend on the associated observation $x_i$.
+
+
+\newpage
 \subsection{Boundary corrected KDE}
-Den fra artikel i kina
+Before introducing the boundary corrected kernels presented by \cite{Jones1993SimpleBC}, we mention another simple method of boundary correction called reflection. Namely, suppose without loss of generality $x = 0$ is the lower boundary of the domain of $\boldsymbol X$ and let $\hat{f}$ be KDE as from the previous section. Then, the reflection boundary corrected KDE denoted $\hat{f}_R$ is defined as
+$$\hat{f}_R(x) = \hat{f}(x) + \hat{f}(-x)$$
+Clearly, $\hat{f}_R$ is non-negative, and it follows from the below that it is also a proper density function as the probability mass is $1$
+$$\int_{0}^{\infty} \hat{f}_R \left(x\right) \, dx = \int_{0}^{\infty} \hat{f} \left(x\right) + \hat{f} \left(-x\right) \, dx = \int_{0}^{\infty} \hat{f} \left(x\right) + \int_{-\infty}^{0}\hat{f} \left(x\right) \, dx = 1$$
+Also, the above is easily extended to two boundaries. Namely, if the domain is $[a,b]$, the reflection boundary corrected KDE is given by
+$$\hat{f}_R\left(x\right) = \hat{f}\left(x\right) + \hat{f}\left(2a-x\right) + \hat{f}\left(2b-x\right),\quad x \in [a,b]$$
+If we once again apply this to the suicide data, comparing to \autoref{fig:suicide KDE example - rescaled} we see a big improvement near the boundary as shown in \autoref{fig:suicide KDE example - reflected}. However, we still proceed with the method originally presented in \cite{Jones1993SimpleBC}. The reason for this is that when testing for distribution type using the Kolmogorov Smirnov test (on a $5\%$ significance level) we reject that the observations originate from $\hat{f}_R$ with $h = 100$.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width = \linewidth]{figures/MI estimation/suicide data example - reflection.pdf}
+        \caption{}
+        \label{fig:suicide KDE example - reflected}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width = \linewidth]{figures/MI estimation/suicide data example - reflection - Kolmogorov Smirnov.pdf}
+        \caption{}
+        \label{fig:Kolmogorov Smirnov DN}
+    \end{subfigure}
+    \caption{}
+\end{figure}
+For $h=5$ we do not but due to the above considerations regarding the integrated point wise variance of the estimator, this choice of $h$ is undesired in either case. For $h = h^{Scott}$ we do not reject the distribution but as the shape of the error resembles the error for $h=100$ we suspect that there is some systematic error which we also see from \autoref{fig:Kolmogorov Smirnov DN}. Furthermore, the largest deviation from the empirical distribution to $\hat{f}_R$ is close to the boundary (as expected). The test statistics (the largest absolute difference $D$ between the distribution functions and the adjusted statistic) is shown in \autoref{tab:relfection Kolmogorov Smirnov} where the adjusted test statistic should be compared to the critical value $1.358$ on a $5\%$ significance level. Furthermore, to really test the kernel density estimators, one should compute the MISE based on bootstrap and/or cross-validation. In particular, this way larger $h$ i.e. more smoothing would be more favorable compared to the Kolmogorov Smirnov test results which shows small $h$ best represent the empirical distribution.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|rr}
+        $h$ & $D$ & Adjusted $D$ \\\hline
+        $5$ & $0.029042$ & $0.27315$ \\
+        $h^{Scott}$ & $0.11262$ & $1.0593$ \\
+        $100$ & $0.19194$ & $1.8053$
+    \end{tabular}
+    \caption{$\left(\sqrt{n} + 0.12 + 0.11/\sqrt{n}\right) D$}
+    \label{tab:relfection Kolmogorov Smirnov}
+\end{table}
+% \cite{Jones1993SimpleBC} also shows that the error the method of reflection  $\mathbb{E}\left[\right]$
 
-We shall also try the method briefly presented in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems}, which is based on \cite{Jones1993SimpleBC}. It is a first order kernel but only specified in one dimension and initially only for a lower bound. The 
+We now turn our attention to the boundary corrected KDE from \cite{Jones1993SimpleBC}. They shortly described this in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} where it was used to estimate the mutual information in terms of Copula entropy. However, issues arise when using this KDE in terms of non-negativity of the KDE and the facts that it does not integrate to unity. All of these issues can however be handled in a general way without effecting the results regarding bias of the estimator as we shall also see from the above example on suicide data. In particular, \cite{Jones1993SimpleBC} show that the bias of their estimator $\hat{f}_L$ is of order $\mathcal{O}\left(h^2\right)$ whereas the reflection method discussed above has $\mathcal{O}\left(h\right)$ bias. The basic idea of $\hat{f}_L$ is that it is a linear combination of a symmetric kernel $K$ and $x \, K$ i.e. a first order kernel. They do however only give explicit expressions when a lower bound at $x = 0$ is enforced but the math generalize nicely to $2$ boundaries. In particular, we shall let $x_u$ denote the upper bound of the domain and keep $x= 0$ as the lower bound. Before continuing with the derivation and results regarding implementation for the Gaussian kernel we note that in \texttt{R}\footnote{https://search.r-project.org/CRAN/refmans/evmix/html/bckden.html}, there is a library \texttt{evmix} which implements the boundary corrected KDE from \cite{Jones1993SimpleBC} but only for $1$ dimension and only with a lower bound at $x=0$. We thus expand on this library (although in \texttt{Python}) to include both lower and upper bounds and furthermore, generalize to multiple dimensions using a product kernel as noted in \autoref{eq:product kernel}.
 
-Furthermore, in \cite{A-simple-nonnegative-boundary-correction-method-for-kernel-density-estimation}, Jones and Foster propose an extension to handle the possible negativity of the estimate density.
+To expand on the boundary corrected KDE to include an upper bound on the domain, we define the functions $a_m\left(x\right)$. Note that in \cite{Jones1993SimpleBC}, they define $a_m$ as a function of $p = x / h$ where $h$ is the bandwidth, but to keep the expression later on easier to understand in terms of kernel centers etc. we instead define them as a function of $x \in [0,x_u]$. The reason for initially defining $a_m$ in terms of $h$ is to keep the bandwidth out of the expression, which we then define as follows, when there is no upper bound
+$$a_m\left(x\right) = \int_{-\infty}^{\frac{x}{h}} u^m K\left(u\right) \, du, \quad x\in [0,\infty)$$
+The above is actually equal to the part of the $m$th moment of the kernel centered at $x$ (and width bandwidth $h$), that is inside the interval $[0,\infty)$ up to a difference in sign. In particular, using the change of variables $z=x-hu$ we have that 
+$$a_m\left(x\right) = \left(-1\right)^m  \int_{0}^{\infty} \left(\frac{z-x}{h}\right)^m \, \frac{1}{h}K\left(\frac{z-x}{h}\right) \, dz$$
+where we have used that $K$ assumed to be symmetric. Indeed, the above is as described the part of the $m$th moment that comes from $[0,\infty)$ (up to a difference in sign) of the kernel that is centered at $x$ with bandwidth $h$. From this, it is a natural extension to replace the upper bound of the integral with $x_u$ which, when expanding on the initial definition in \cite{Jones1993SimpleBC} as done in e.g. \cite{Simple-and-effective-boundary-correction-for-kernel-densities-and-regression-with-an-application-to-the-world-income-and-Engel-curve-estimation} turns out to be the correct adjustment. Thus, $a_m$ can be understood as part of the moments which we shall then use as normalizing functions. Thus, for an upper bound $x_u$ we find that instead $a_m$ is defined as
+$$a_m\left(x\right) = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u^m K\left(u\right)\, du, \quad x\in [0,x_u]$$
+The boundary adjusted KDE which we shall denote $K^L$ and index depending on the $i$'th kernel center is then given by
+\begin{equation}\label{eq:jones bc corrected kernel}
+    K_i^{L} \left(x\right) = \frac{1}{h}\frac{a_2\left(x\right) - a_1\left(x\right) \frac{x - x_i}{h}}{a_0 \left(x\right) a_2\left(x\right) - a_1^2 \left(x\right) } \, K\left(\frac{x - x_i}{h}\right)
+\end{equation}
+For the Gaussian kernel, $a_m\left(x\right)$ for $m \in \{0,1,2\}$ are easily computed and implemented in code through standard routines as they have simple closed forms in terms of $\phi$ and $\Phi$, i.e. the standard Gaussian density and distribution functions. Namely, for $a_0$ we simply have that by definition of $\Phi$
+\begin{align*}
+    a_0\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} \phi(u) \, du\\
+     & = \Phi\left(\frac{x}{h}\right) - \Phi\left(\frac{x-x_u}{h}\right)
+\end{align*}
+And similarly, for $a_1$, using that $\int u \,\phi \left(u\right) \, du = - \phi\left(u\right) + C$
+\begin{align*}
+    a_1\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u \phi(u) \, du\\
+     & = \phi \left(\frac{x-x_u}{h}\right)-\phi\left(\frac{x}{h}\right)
+\end{align*}
+Finally, for $a_2$ we have, using integration by parts for the first step
+\begin{align*}
+    a_2\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u^2 \phi(u) \, du\\
+     & = \left[- u \phi \left(u\right)\right]_{\frac{x-x_u}{h}}^{\frac{x}{h}} + \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} \phi \left(u\right) \, du\\
+     & = \left(\frac{x-x_u}{h} \phi\left(\frac{x - x_u}{h}\right) - \frac{x}{h} \phi\left(\frac{x}{h}\right)\right) + \left(\Phi\left(\frac{x}{h}\right) - \Phi\left(\frac{x-x_u}{h}\right)\right)\\
+     & = \frac{x}{h} a_1\left(x\right) - \frac{x_u}{h} \phi \left(\frac{x - x_u}{h}\right) + a_0\left(x\right)
+\end{align*}
+From the improved bias of $\mathcal{O} \left(h^2\right)$ for $K_i^L$, we have then obtained an estimator that should perform better in terms of a smaller MISE as we have less bias and by choosing $h$ optimally, we should expect small variance as well. \autoref{fig:suicide KDE example - jones1993} shows the KDE $\hat{f}_L$ using $K^L$ as the kernel (with $x_u = \infty$) and is compared to the reflected kernel from above using the same bandwidth. We note that $\hat{f}_L$ has be rescaled such that it integrates to unity on $[0,\infty)$. Also, from \autoref{fig:Kolmogorov Smirnov DN - jones1993} we see that the density is not statistically significant, and although we can not conclude from this alone, we observe that the deviation from the empirical distribution functions is less than that of the reflected KDE. 
+
+As noted above, we need to rescale $\hat{f}_L$ to unity as the kernels in \autoref{eq:jones bc corrected kernel} does not have unit integrals. Furthermore, $\hat{f}_L$ is not even ensured to be non-negative. This can be handled in multiple ways. One way is to simply take the maximum of $\hat{f}_L$ and $0$ effectively cutting off any negative density however in \cite{A-simple-nonnegative-boundary-correction-method-for-kernel-density-estimation}, a method is given for KDE based on $K_i^L$ specifically, ensuring the $\mathcal{O}\left(h^2\right)$ bias of the estimator. Namely, let $K^N_i$ be given as
+$$K^N_i \left(x\right) = \frac{1}{h\,a_0\left(x\right)} K\left(\frac{x-x_i}{h}\right)$$
+which is then the kernel, locally renormalized using $a_0$. We then define the related KDE as
+$$\hat{f}_N \left(x\right) = \frac{1}{n} \sum_{i = 1}^{n} K_i^N \left(x\right)$$
+which is then non-negative everywhere as $a_0\left(x\right), K\left(x\right) > 0$. The non-negative boundary corrected KDE, denoted $\hat{f}_P \left(x\right)$ is then defined as
+$$\hat{f}_P \left(x\right) =\hat{f}_N \left(x\right) \, e ^{\frac{\hat{f}_L \left(x\right)}{\hat{f}_N \left(x\right)} - 1} $$
+This $\hat{f}_P$ is also shown in \autoref{fig:suicide KDE example - jones1993 - total figure} resulting in identical density functions. We note that $\hat{f}_P$ works by multiplying the non-negative $\hat{f}_N$ by a (large positive) constant when $\hat{f}_L$ is larger than $\hat{f}_N$ and thus drives $\hat{f}_N$ towards $\hat{f}_L$. However, from implementation and trying on different distributions, sometimes we observe some odd behavior that can easily be derived from the definition of $\hat{f}_P$. Thus, we propose a modification to overcome these odd properties of $\hat{f}_P$. Namely, suppose both $\hat{f}_L$ and $\hat{f}_N$ are close to $0$ at some point $x$. If $\hat{f}_L$ is a magnitude of $10$ larger than $\hat{f}_N$, then $\hat{f}_P$ is approximately $8000 \cdot \hat{f}_N$ which even if $\hat{f}_N$ is small may be large. Thus, it is possible even if both  are close to $0$, that $\hat{f}_P >> 0$ which is in contrast to what we would want from the estimator. Thus, we propose a regularized KDE version of $\hat{f}_P$ denoted $\hat{f}_{regP}$ which is obtained from first rewriting $\hat{f}_P$ as follows
+$$\hat{f}_P\left(x\right) = \bar{f}\left(x\right) \, e^{\frac{\tilde{f}\left(x\right) - \hat{f}\left(x\right)}{\hat{f}\left(x\right)} }$$
+then, we introduce the regularizing parameters $\lambda \geq 0$ such that 
+$$\hat{f}_{regP}\left(x\right) = \bar{f}\left(x\right) \, e^{\frac{\tilde{f}\left(x\right) - \hat{f}\left(x\right)}{\hat{f}\left(x\right) + \lambda} }$$
+In practice, we have found that $\lambda = 0.001$ is a sufficient regularization whilst preserving the shape. A small $\lambda$ is preferred as then we are ensured $\mathcal{O}\left(h^2\right)$ behavior of the bias. In \autoref{fig:suicide KDE example - jones1993 - total figure} we have also shown this regularized version with $\lambda = 0.001$ and observe that it is basically identical to $\hat{f}_P$ on the domain while also behaving well numerically for large $x$, where the issue discussed above arise for $\hat{f}_P$.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width = \linewidth]{figures/MI estimation/suicide data example - Jones1993.pdf}
+        \caption{}
+        \label{fig:suicide KDE example - jones1993}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \centering
+        \includegraphics[width = \linewidth]{figures/MI estimation/suicide data example - Jones1993 - Kolmogorov Smirnov.pdf}
+        \caption{}
+        \label{fig:Kolmogorov Smirnov DN - jones1993}
+    \end{subfigure}
+    \caption{}
+    \label{fig:suicide KDE example - jones1993 - total figure}
+\end{figure}
+
+
+\newpage
+
+
+
+% Den fra artikel i kina
+
+% We shall also try the method briefly presented in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems}, which is based on \cite{Jones1993SimpleBC}. It is a first order kernel but only specified in one dimension and initially only for a lower bound. The 
+
+
 
 Also, in R we see a copula method which is a $[0,1]$ domain method using gaussian copula as kernel such that it is reflexive in x and kernel point Xi. Could also be used and we have implemented this as the above using the products of kernel. \cite{Kernel-Type-Density-Estimation-on-the-Unit-Interval}
 
 
-using the one from china, we get that for large correlation, the algorithm on 500x500 does not do well (refer to image on convergence when accurate PDF -> improved scheme by adaptively increasing the mesh size if one gets a large MI)
+using the one from china, we get that for large correlation, the algorithm on 700 x 700 does not do well (refer to image on convergence when accurate PDF -> improved scheme by adaptively increasing the mesh size if one gets a large MI)
 
 
 % R documentation for bckden
-https://search.r-project.org/CRAN/refmans/evmix/html/bckden.html
+% https://search.r-project.org/CRAN/refmans/evmix/html/bckden.html
 
 % suicide data for at sammenligne implementering
 
-Hvad med denne: 
-\cite{Estimating-mutual-information-Kraskov}
+In \cite{Estimating-mutual-information-Kraskov} they propose an approach using k-nearest neighbours which appear to give good results for $N \geq 300$. Using some of the core ideas from this paper, one could perhaps deduce a better non-global estimator of $h$. They show that they have in general better performance for estimating $I$ which we have not dived into, but comparing their results to what we shall later observe from our own implementations, theirs are very good and accurate and from more than 300 observations, $\rho = 0.9$ should be estimated within $0.01$ according to their figure 2 where we also observe a general trend that the larger the correlations is and thus information, the larger the error which is to be expected as almost identical correlation can have vastly different mutual information for large enough $\rho$.
+
+We shall see that for a pre-fixed bandwidth, we obtain an error around $0.2$ and as we shall see, adjusting the bandwidth corrects this. However, to make the framework more self-drive, we hence have the need for a more general scheme of choosing the optimal kernel (locally)
 
 
 
-% @article{0833f3a6-edb6-3c71-b4f9-5491bc3f60ad,
-%  ISSN = {00359238},
-%  URL = {http://www.jstor.org/stable/2981988},
-%  abstract = {Using techniques of density estimation, an estimate is made of the risk of suicide as a function of time under psychiatric treatment. Data from the Mental Health Enquiry, and also from a local study involving the selection of matched controls, are considered, and the dependence on sex and age investigated. In most cases, risk decreases at a rate roughly inversely proportional to the square root of time.},
-%  author = {J. B. Copas and M. J. Fryer},
-%  journal = {Journal of the Royal Statistical Society. Series A (General)},
-%  number = {2},
-%  pages = {167--176},
-%  publisher = {[Royal Statistical Society, Wiley]},
-%  title = {Density Estimation and Suicide Risks in Psychiatric Treatment},
-%  urldate = {2024-07-26},
-%  volume = {143},
-%  year = {1980}
-% }
+% \cite{Density-Estimation-and-Suicide-Risks-in-Psychiatric-Treatment} for data used in original Jones paper for boundary correction
 
 
 
 \subsection{Diffusion based KDE}
+\cite{Kernel-density-estimation-via-diffusion} shows great promise also, we have implemented this in python as well but have chosen to focus on the above methods as time did not permit the exploration of this method further. However, we shall later see some results on this algorithm that shows why this method should be investigated further and hence why it is mentioned here
+
+The very big advantage and selling point for this method is that it does not use any transform or boundary correction except for the Neumann boundary conditions
+
+
+Sample from beta density given by $4 \left(1- x\right)^3$ for $x\in \left[0,1\right]$ such that $F(x) = 1 - (1-x)^4$ and hence we can sample from this using e.g. $X = 1 - (1-U)^{1/4}$
 
 % KDE: Naïve KDE, boundary effects, using that from the article, diffusion based KDE
+
+The adaptive kernel density estimator also works ok, but in this context it seem to be have too small bandwidths. It works using a regularized EM algorithm but again, due to limit of time, we did not pursue this further although choosing how much the bandwith is regularized or penalizing the integral of the absolute second order derivative would likely improve the results.
 
 
 

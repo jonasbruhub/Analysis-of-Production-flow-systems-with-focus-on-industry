@@ -374,7 +374,6 @@ def KernelJones1D(kern_centers, h = None, boundary = "lower-upper", proper = Tru
         h = n**(-1/5) * kern_centers.var()**0.5
     
     def kern(x):
-
         trunc_points = x / h
 
         a0 = ka0(trunc_points, boundary = boundary, h = h)
@@ -386,12 +385,46 @@ def KernelJones1D(kern_centers, h = None, boundary = "lower-upper", proper = Tru
         mx = a1/denom
 
         u = (x - kern_centers[:,None]) / h
-
-
-        return ((lx - mx*u) * scipy.stats.norm.pdf(u)).mean(axis = 0)/h
+        return ((lx - mx*u) * scipy.stats.norm.pdf(u)).mean(axis = 0)/h * (x >= 0)
     
     if proper:
-        c = scipy.integrate.quad(kern, 0, 1)[0]
+        if boundary == "lower-upper":
+            c = scipy.integrate.quad(kern, 0, 1)[0]
+        elif boundary =="lower":
+            c = scipy.integrate.quad(kern, 0, np.inf)[0]
+    else:
+        c = 1
+    
+    return lambda x : kern(x) / c
+
+def KernelJones1D_nonnegative(kern_centers, h = None, boundary = "lower-upper", proper = True, lambda_ = 0):
+    n = kern_centers.__len__()
+    if h == None:
+        h = n**(-1/5) * kern_centers.var()**0.5
+    
+    def kern(x):
+        trunc_points = x / h
+
+        a0 = ka0(trunc_points, boundary = boundary, h = h)
+        a1 = ka1(trunc_points, boundary = boundary, h = h)
+        a2 = ka2(trunc_points, boundary = boundary, h = h)
+
+        denom = (a2*a0 - a1**2)
+        lx = a2/denom
+        mx = a1/denom
+
+        u = (x - kern_centers[:,None]) / h
+        f_til = ((lx - mx*u) * scipy.stats.norm.pdf(u)).mean(axis = 0)/h * (x >= 0)
+
+        f_bar = (1 / a0 * scipy.stats.norm.pdf(u)).mean(axis = 0)/h * (x >= 0)
+    
+        return f_bar * np.exp( (f_til - f_bar) / (f_bar + lambda_ ))
+    
+    if proper:
+        if boundary == "lower-upper":
+            c = scipy.integrate.quad(kern, 0, 1)[0]
+        elif boundary =="lower":
+            c = scipy.integrate.quad(kern, 0, 1000)[0]
     else:
         c = 1
     
@@ -547,7 +580,7 @@ def KernelJones2D_nonnegative(kern_centers, h = None, boundary = "lower-upper", 
 
 
 
-def KernelJones2D_nonnegative_version_Jonas(kern_centers, h = None, boundary = "lower-upper", proper = True):
+def KernelJones2D_nonnegative_version_Jonas(kern_centers, h = None, boundary = "lower-upper", proper = True, lambda_ = 0.001):
     if kern_centers.shape[0] != 2:
         raise AttributeError("Error: kern_centers shoud be a 2xn array")
     
@@ -592,7 +625,7 @@ def KernelJones2D_nonnegative_version_Jonas(kern_centers, h = None, boundary = "
         f_hat = scipy.stats.norm.pdf(u) / h[:,:,None] / a0[:,:,None]
         f_hat = np.prod(f_hat, axis = 0).mean(axis = 1)
         # print(temp.shape)
-        return f_hat * np.exp( (f_til - f_hat) / ( f_hat + .01) )
+        return f_hat * np.exp( (f_til - f_hat) / ( f_hat + lambda_) )
     
     
     print("Computing normalization constants...", end = "")

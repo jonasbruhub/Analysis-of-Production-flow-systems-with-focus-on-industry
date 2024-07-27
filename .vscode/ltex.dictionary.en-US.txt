@@ -34,3 +34,5 @@ subgraph
 Markovian
 DAGs
 piecewise
+Kolmogorov
+Smirnov
