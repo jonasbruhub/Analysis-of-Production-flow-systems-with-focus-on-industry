@@ -825,22 +825,12 @@ In practice, we have found that $\lambda = 0.001$ is a sufficient regularization
 
 
 
-% Den fra artikel i kina
-
-% We shall also try the method briefly presented in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems}, which is based on \cite{Jones1993SimpleBC}. It is a first order kernel but only specified in one dimension and initially only for a lower bound. The 
-
-
 
 Also, in R we see a copula method which is a $[0,1]$ domain method using gaussian copula as kernel such that it is reflexive in x and kernel point Xi. Could also be used and we have implemented this as the above using the products of kernel. \cite{Kernel-Type-Density-Estimation-on-the-Unit-Interval}
 
 
-using the one from china, we get that for large correlation, the algorithm on 700 x 700 does not do well (refer to image on convergence when accurate PDF -> improved scheme by adaptively increasing the mesh size if one gets a large MI)
 
 
-% R documentation for bckden
-% https://search.r-project.org/CRAN/refmans/evmix/html/bckden.html
-
-% suicide data for at sammenligne implementering
 
 In \cite{Estimating-mutual-information-Kraskov} they propose an approach using k-nearest neighbours which appear to give good results for $N \geq 300$. Using some of the core ideas from this paper, one could perhaps deduce a better non-global estimator of $h$. They show that they have in general better performance for estimating $I$ which we have not dived into, but comparing their results to what we shall later observe from our own implementations, theirs are very good and accurate and from more than 300 observations, $\rho = 0.9$ should be estimated within $0.01$ according to their figure 2 where we also observe a general trend that the larger the correlations is and thus information, the larger the error which is to be expected as almost identical correlation can have vastly different mutual information for large enough $\rho$.
 
@@ -848,7 +838,6 @@ We shall see that for a pre-fixed bandwidth, we obtain an error around $0.2$ and
 
 
 
-% \cite{Density-Estimation-and-Suicide-Risks-in-Psychiatric-Treatment} for data used in original Jones paper for boundary correction
 
 
 
@@ -860,9 +849,9 @@ The very big advantage and selling point for this method is that it does not use
 
 Sample from beta density given by $4 \left(1- x\right)^3$ for $x\in \left[0,1\right]$ such that $F(x) = 1 - (1-x)^4$ and hence we can sample from this using e.g. $X = 1 - (1-U)^{1/4}$
 
-% KDE: Naïve KDE, boundary effects, using that from the article, diffusion based KDE
 
-The adaptive kernel density estimator also works ok, but in this context it seem to be have too small bandwidths. It works using a regularized EM algorithm but again, due to limit of time, we did not pursue this further although choosing how much the bandwith is regularized or penalizing the integral of the absolute second order derivative would likely improve the results.
+
+The adaptive kernel density estimator also works ok, but in this context it seems to be having too small bandwidths. It works using a regularized EM algorithm but again, due to limit of time, we did not pursue this further although choosing how much the bandwidth is regularized or penalizing the integral of the absolute second order derivative would likely improve the results.
 
 
 
@@ -871,20 +860,18 @@ The adaptive kernel density estimator also works ok, but in this context it seem
 
 
 
-
-% \begin{definition}[Induced Norm]\label{def:induced norm}
-%     A matrix norm $\left|\left|\left|\;\cdot\;\right|\right|\right|$ is said to be induced by the vector norm $||\;\cdot\;||$  when
-%     $$\left|\left|\left|A\right|\right|\right| = \sup_{\left|\left|x\right|\right| = 1} ||Ax||$$
-% \end{definition}
-% See \cite{MATRIX_ANALYSIS-Horn_Johnson_2012}
+% using the one from china, we get that for large correlation, the algorithm on 700 x 700 does not do well (refer to image on convergence when accurate PDF -> improved scheme by adaptively increasing the mesh size if one gets a large MI)
 
 
 
 
 
 
-% They show that the procedure is robust noise by considering that the observed information matrix is influenced by some noise $N\in \mathbb{R}^{n\times n}$ and characterize the noise by its Euclidean norm $||N||_{2} \coloneq \sup_{||x||_2 = 1} ||Nx||_2$. They show that
-% $$||G_{dir} - \hat{G}_{dir}||_{2} \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma \right)$$
+
+
+
+
+
 
 
 
