@@ -1,9 +1,9 @@
 \documentclass[../Thesis.tex]{subfiles}
 \graphicspath{{\subfix{../figures/}}}
 % \epstopdfsetup{outdir={../figures/}}
-\usepackage{xr}
-\externaldocument{C4 Method}
-\externaldocument{../_BackMatter/Appendix1}
+% \usepackage{xr}
+% \externaldocument{C4 Method}
+% \externaldocument{../_BackMatter/Appendix1}
 \begin{document}
 
 \chapter{Results}\label{chap:results}
@@ -665,7 +665,7 @@ $$
 
 From the confidence density for the correlation $\rho$ given the emperical correlation $r$ is given by
 $$f\left(\rho \mid r,\nu\right) = \frac{\nu (\nu-1) \Gamma(\nu-1)}{\sqrt{2\pi} \Gamma(\nu + \frac{1}{2})} \frac{\left(1-r^2\right)^{\frac{\nu-1}{2}} \left(1-\rho^2\right)^{\frac{\nu-2}{2}} }{\left(1-r\rho\right)^{\frac{2\nu-1}{2}}} F\left(\frac{3}{2}, -\frac{1}{2}, \nu+\frac{1}{2}, \frac{1+r\rho}{2}\right)$$
-from the mutual information, we can calculate the absolute correlation. Notice that the density does not change when reversing both $r$ and $\rho$ simultaneously, thus, without loss of generality, assume $r\geq 0$, then we can calculate a CI for $\rho$ (which will be negated if we had used $-r$ instead and thus would be identical when taking the absolute value). If the original CI $[a,b]$ contains $0$ i.e. $a<0$, we shall write the CI for the absolute correlation as $[0,b]$ instead. This way, we can compare the absolute correlations and see if they are the same (by checking if the CI contains the theoretical correlation) by \cite{Confidence-in-Correlation}. Using numerical integration (fast enough with high numerical accuracy from many bins, 1 mil bins, yielding probability mass 1.0000000000008133), can compute CI for absolute correlation
+from the mutual information, we can calculate the absolute correlation. Notice that the density does not change when reversing both $r$ and $\rho$ simultaneously, thus, without loss of generality, assume $r\geq 0$, then we can calculate a CI for $\rho$ (which will be negated if we had used $-r$ instead and thus would be identical when taking the absolute value). If the original CI $[a,b]$ contains $0$ i.e. $a<0$, we shall write the CI for the absolute correlation as $[0,b]$ instead. This way, we can compare the absolute correlations and see if they are the same (by checking if the CI contains the theoretical correlation) by \cite{Confidence_in_Correlation}. Using numerical integration (fast enough with high numerical accuracy from many bins, 1 mil bins, yielding probability mass 1.0000000000008133), can compute CI for absolute correlation
 
 \autoref{sec:bivar gauss abs correlation CI}
 

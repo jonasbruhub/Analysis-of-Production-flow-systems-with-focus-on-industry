@@ -30,7 +30,7 @@
 
 \newpage
 \section{Confidence interval for absolute correlation in bivariate Gaussian}\label{sec:bivar gauss abs correlation CI}
-From \cite{Confidence-in-Correlation}, given a bivariate Gaussian, the confidence distribution of $\rho$ given the empirical correlation $r$ based on $n$ observations is given by
+From \cite{Confidence_in_Correlation}, given a bivariate Gaussian, the confidence distribution of $\rho$ given the empirical correlation $r$ based on $n$ observations is given by
 $$f\left(\rho \mid r,\nu\right) = \frac{\nu (\nu-1) \Gamma(\nu-1)}{\sqrt{2\pi} \Gamma(\nu + \frac{1}{2})} \frac{\left(1-r^2\right)^{\frac{\nu-1}{2}} \left(1-\rho^2\right)^{\frac{\nu-2}{2}} }{\left(1-r\rho\right)^{\frac{2\nu-1}{2}}} F\left(\frac{3}{2}, -\frac{1}{2}, \nu+\frac{1}{2}, \frac{1+r\rho}{2}\right)$$
 where $F\left(a,b,c,z\right)$ is the Gaussian hypergeometric function and $\nu = n-1$. That is, given a sample correlation $r$, what is the confidence in $\rho$ in terms of a distribution. In the following figure, a sample correlation $r=0.8$ and $r=0$ has been used with varying number of observations (degrees of freedom) in figures \autoref{subfig:gaussian correlation dist 0.8} and \autoref{subfig:gaussian correlation dist 0} respectively.
 \begin{figure}[h]
