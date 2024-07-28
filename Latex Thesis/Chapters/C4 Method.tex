@@ -537,8 +537,8 @@ Finally, if $G_{obs}$ and $N$ are symmetric, the singular values are equal to th
 This clearly shows us that for small networks (thus small $d$) we risk smaller errors in terms of the Frobenius and max norm (which is not surprising) which are clearly interpreted through the difference of individual element of $G_{dir}$ and $\tilde{G}_{dir}$ and that the max norm scales linearly with the number of nodes while the Frobenius difference only scales with the square root of the number of nodes.
 % Finally, before continuing with how to estimate the mutual information in practice, we note that $\beta$ has an effect on the above results also, namely, it is easy to show by extending the above argumentation a little, that as 
 
-\subsection{KDE methods}\label{subsec:Mutual information estimation and KDE methods}
-\textcolor{red}{Det her mangler lige}
+\section{Estimating mutual information}\label{subsec:Mutual information estimation and KDE methods}
+
 
 
 \subsection{B-splines}
@@ -821,38 +821,86 @@ In practice, we have found that $\lambda = 0.001$ is a sufficient regularization
     \caption{}
     \label{fig:suicide KDE example - jones1993 - total figure}
 \end{figure}
+Before continuing with a few more interesting methods of density estimation and mutual information estimation in particular, we note that in the same \texttt{R} package there is a KDE based on the Gaussian Copula density which at first glance might seem a good choice especially if we are trying to estimate the density of a Copula that we know to be Gaussian. The KDE is based on \cite{Kernel-Type-Density-Estimation-on-the-Unit-Interval}, and trivially we get that the domain of the basis functions is already $[0,1]$. In particular, the kernel for a given bandwidth $h$ and kernel center $x_i$ is given by
+$$K^{GC}_i \left(x\right) = \frac{1}{h \sqrt{2-h^2}} e^{-\frac{\left(1 - h^2\right)}{2 h^2 \left(2-h^2\right)} \left( \left(1 - h^2\right) \left(\left(\Phi^{-1} \left(x\right)\right)^2 + \left(\Phi^{-1} \left(x_i\right)\right)^2 \right) - 2 \Phi^{-1} \left(x\right) \, \phi^{-1}\left(x_i\right) \right) }$$
+which is obtained by letting $h^2 = 1-\rho$ in the original expression for the Gaussian Copula density. However, in practice, we shall see that this choice of kernel has some numerical instabilities especially for large correlations i.e. small $h$ and does not perform as well as $\hat{f}_{regP}$ even when using their optimal bandwidth.
 
+FUrthermore, we note that as observations are initially transformed such that they are approximately uniform on $[0,1]$, the variance of these uniform observations $u_i = \hat{F}\left(x_i\right)$ will also be approximately $1/12$ and hence the Scott rule of thumb will give a near constant bandwidth. However, as we shall see later, the performance is drastically improved by choosing smaller bandwidth for subdomains with high density. We thus note that a local bandwidth should be considered in the future. This could e.g. by using $k$-nearest neighbor and the distances of these which is the basic idea of \cite{Estimating-mutual-information-Kraskov}. Although we will not be using this method as it is out of scope for this paper, we note that their estimator seem to result in good estimates when $n \geq 300$. Using the core ideas of this paper, one could perhaps deduce a better algorithm for choosing $h$ globally or locally.
 
-\newpage
+Finally, we note that a recent method based on diffusion \cite{A-Novel-Nonparametric-Density-Estimator} \cite{Kernel-density-estimation-via-diffusion} which shows great potential. Without going into too much detail, it works by considering the PDE
+$$\frac{\partial}{\partial t} \hat{f}\left(x;t\right) = \frac{1}{2} \frac{\partial^2}{\partial x^2} \hat{f}\left(x;t\right)$$
+where $t = h^2$. The Gaussian kernel is then the unique solution when the domain is $\mathbb{R}$ with condition $\hat{f}\left[x;0\right] = \frac{1}{n} \sum_{i=1}^{n} \delta \left(x-x_i\right)$ i.e. the observations is the boundary condition at $h=0$. If instead we add that the support should be e.g. $[0,1]$ the Neumann boundary conditions on the boundary results in an analytical solution. Namely, from the boundary conditions
+$$\frac{\partial}{\partial x} \hat{f}\left(x;t\right) \bigg\rvert_{x = 0} = \frac{\partial}{\partial x} \hat{f}\left(x;t\right) \bigg\rvert_{x = 1} = 0$$
+the analytical solution to $\hat{f}$ is 
+$$\hat{f}_D\left(x ; t\right) = \frac{1}{n} \sum_{i=1}^{n} K_i^D \left(x\right)$$
+where
+$$K_i^D \left(x\right) = \frac{1}{h}\sum_{k=-\infty}^{\infty} \phi\left(\frac{x - \left(2k+x_i\right)}{h}\right) + \phi\left(\frac{x - \left(2k-x_i\right)}{h}\right)$$
+which is similar to the reflection method from above. They even give an algorithm for calculating $t$ which from the example below appear to work very well. Before presenting this example we note that although it is out of scope to use this method in the following chapter, it would be interesting to see how well it would perform as it is the only KDE here that does not use any transformation near the boundary while still being consistent at the boundary as they show in \cite{Kernel-density-estimation-via-diffusion}.
 
+\begin{example}[Diffusion based KDE]
+    Let $X\sim \text{Beta} \left(1,4\right)$ such that $f(x) = 4 \left(1- x\right)^3$ for $x\in \left[0,1\right]$ and thus $F\left(x\right) = 1 - (1-x)^4$. Generating $1000$ samples from the distribution and using the algorithm in \cite{Kernel-density-estimation-via-diffusion} to estimate the bandwidth, we get a bandwidth $h^D = 0.05461$ whereas with Scott's rule we get $h ^{Scott} = 0.04145$. From \autoref{fig:beta dsitribution example} we see that diffusion and the regularized boundary corrected KDE $\hat{f}_{regP}$ from above agree almost everywhere. Only near the lower boundary at $x=0$ there is a significant difference and here $\hat{f}_{regP}$ seem to fit the true distribution better. This is due to the Neumann boundary condition which enforce $\hat{f}_D$ to have horizontal derivative at both boundaries. Note that we have used both the $h^D$ and $h^{Scott}$ bandwidth for the regularized boundary corrected KDE resulting in basically no difference.
 
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width = .7\linewidth]{figures/MI estimation/beta dist example - comparison with diffusion and jones.pdf}
+        \caption{Using the diffusion based KDE on samples from a $\text{Beta}\left(1,4\right)$ distribution, we see that in general it fits very well. Only at the boundary $x=0$ there seems to be a problem which on the other hand, $\hat{f}_{regP}$ does not seem to suffer from to the same extend. In particular, repeating the experiment, $\hat{f}_{regP}$ is on average $4$ at $x = 0$ while $\hat{f}_{D}$ constantly seem to undershoot.}
+        \label{fig:beta dsitribution example}
+    \end{figure}
+\end{example}
+At this point, we thus have a complete set of methods for both estimating the mutual information from observations and from these, algorithms to estimate the (causal) structure depending on assumptions regarding direction i.e. a topological ordering of the variables. We thus proceed with numerical results in the following chapter and apply the framework on both fully controlled systems and the observations from \autoref{chap:data}.
 
-
-Also, in R we see a copula method which is a $[0,1]$ domain method using gaussian copula as kernel such that it is reflexive in x and kernel point Xi. Could also be used and we have implemented this as the above using the products of kernel. \cite{Kernel-Type-Density-Estimation-on-the-Unit-Interval}
-
-
-
-
-
-In \cite{Estimating-mutual-information-Kraskov} they propose an approach using k-nearest neighbours which appear to give good results for $N \geq 300$. Using some of the core ideas from this paper, one could perhaps deduce a better non-global estimator of $h$. They show that they have in general better performance for estimating $I$ which we have not dived into, but comparing their results to what we shall later observe from our own implementations, theirs are very good and accurate and from more than 300 observations, $\rho = 0.9$ should be estimated within $0.01$ according to their figure 2 where we also observe a general trend that the larger the correlations is and thus information, the larger the error which is to be expected as almost identical correlation can have vastly different mutual information for large enough $\rho$.
-
-We shall see that for a pre-fixed bandwidth, we obtain an error around $0.2$ and as we shall see, adjusting the bandwidth corrects this. However, to make the framework more self-drive, we hence have the need for a more general scheme of choosing the optimal kernel (locally)
-
-
-
-
-
-
-\subsection{Diffusion based KDE}
-\cite{Kernel-density-estimation-via-diffusion} shows great promise also, we have implemented this in python as well but have chosen to focus on the above methods as time did not permit the exploration of this method further. However, we shall later see some results on this algorithm that shows why this method should be investigated further and hence why it is mentioned here
-
-The very big advantage and selling point for this method is that it does not use any transform or boundary correction except for the Neumann boundary conditions
-
-
-Sample from beta density given by $4 \left(1- x\right)^3$ for $x\in \left[0,1\right]$ such that $F(x) = 1 - (1-x)^4$ and hence we can sample from this using e.g. $X = 1 - (1-U)^{1/4}$
-
-
-
-The adaptive kernel density estimator also works ok, but in this context it seems to be having too small bandwidths. It works using a regularized EM algorithm but again, due to limit of time, we did not pursue this further although choosing how much the bandwidth is regularized or penalizing the integral of the absolute second order derivative would likely improve the results.
 
 \end{document}
+
+
+
+
+
+
+
+
+% \newpage
+
+% vi har nu vores endelig KDE, men i R var der også en copula function som så interessant ud. kernel er så bare gaussian copula. 
+
+
+% Also, in R we see a copula method which is a $[0,1]$ domain method using gaussian copula as kernel such that it is reflexive in x and kernel point Xi. Could also be used and we have implemented this as the above using the products of kernel. \cite{Kernel-Type-Density-Estimation-on-the-Unit-Interval}
+
+% Vi kan dog i resultater se at den ikke performer specialet godt, også selvom man bruger deres "optimerede" bandwidth.
+
+
+
+% Vi ser senere i resultater at bandwidth er stort set ens da var 1/12 (uniform). Og for høje correlation, kan det betale sig at sætte lav bandwidth. 
+
+% We shall see that for a pre-fixed bandwidth, we obtain an error around $0.2$ and as we shall see, adjusting the bandwidth corrects this. However, to make the framework more self-drive, we hence have the need for a more general scheme of choosing the optimal kernel (locally)
+
+
+
+
+% Så en adaptive metode til at bestemme lokale bandwidth ville være godt. En metode der minder om er:
+
+
+% In \cite{Estimating-mutual-information-Kraskov} they propose an approach using k-nearest neighbours which appear to give good results for $N \geq 300$. Using some of the core ideas from this paper, one could perhaps deduce a better non-global estimator of $h$. They show that they have in general better performance for estimating $I$ which we have not dived into, but comparing their results to what we shall later observe from our own implementations, theirs are very good and accurate and from more than 300 observations, $\rho = 0.9$ should be estimated within $0.01$ according to their figure 2 where we also observe a general trend that the larger the correlations is and thus information, the larger the error which is to be expected as almost identical correlation can have vastly different mutual information for large enough $\rho$.
+
+
+
+% Dog, eksisterer følgende artikel hvor lokal bandwidth bruges. \cite{A-Novel-Nonparametric-Density-Estimator}. Dog ved at oversætte deres kode fandt vi at bandwidth skulle regulariseres mere (så generelt større), men vi har valgt ikke at fotsætte med dette, dog nævne fordi kunne være smart ift. problem med ikke lokal bandwidth for ovenstående
+
+% Samme forfatter har også (senere), med en anden lavet density estimator ud fra diffusion og givet algoritme. Der er bandwidth dog konstant, men mulighed for at den kunne performe bedre. Vi nævner et kort eksempel, hvor vi viser styrken ved algoritmen, som helt selv finder en god h (ud fra MISE)
+
+
+
+
+
+
+% \subsection{Diffusion based KDE}
+% \cite{Kernel-density-estimation-via-diffusion} shows great promise also, we have implemented this in python as well but have chosen to focus on the above methods as time did not permit the exploration of this method further. However, we shall later see some results on this algorithm that shows why this method should be investigated further and hence why it is mentioned here
+
+% The very big advantage and selling point for this method is that it does not use any transform or boundary correction except for the Neumann boundary conditions
+
+
+% Sample from beta density given by $4 \left(1- x\right)^3$ for $x\in \left[0,1\right]$ such that $F(x) = 1 - (1-x)^4$ and hence we can sample from this using e.g. $X = 1 - (1-U)^{1/4}$
+
+
+
+% The adaptive kernel density estimator also works ok, but in this context it seems to be having too small bandwidths. It works using a regularized EM algorithm but again, due to limit of time, we did not pursue this further although choosing how much the bandwidth is regularized or penalizing the integral of the absolute second order derivative would likely improve the results.
