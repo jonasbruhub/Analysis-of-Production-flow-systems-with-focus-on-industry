@@ -2,30 +2,171 @@
 \graphicspath{{\subfix{../figures/}}}
 \begin{document}
 
-\chapter{
-    Problemformulering / Introduktion
-}
+\chapter{Introduction}
+In present days, rising customer requirements regarding product quality and quantity is the key performance measure for manufacturers. Pharmaceutical production firms such as Novo Nordisk especially have seen an increase in customer interest  \cite{NOVO_Wegovy_update}. It is thus of great interest how to efficiently schedule such production flows. Reducing the production time and increasing production in general is hence a major challenge for industry but also for academia. In general, complicated production systems, consisting of multiple disjoint processes, can involve many processes that may or may not influence each other and propagate through the production system. In pharmaceutical productions systems this encompasses processes such as filtration, reaction of chemical agents, centrifugation and many other depending on the drug substance that is to be produced.
 
-In many production facilities, planning is a big part of maximizing some index. Whether this is production throughput over some time period and thus often also the economic surplus or some other key index, it is of great importance to have an underlying model to describe the observed variation. In particular in operational research, the schedules may drift in suboptimal ways if the variation is not considered.
+The duration of each process, the quantity being processed of different substances among other factors all have sources of variation. For example, a human operated part of a process is a known source of variation. How such variations propagate and effect other processes can be hard to detect without extensive exploration and knowledge of the undergoing processes of the system. Hence, it is of great interest from an industrial point of view to efficiently discover such relations and further use these to make informed decisions along the execution of such processes. In particular, sudden deviations and inaccuracies may occur but having a good understanding of the causal effects of the production system and how these deviations are expected to propagate can be crucial for keeping production throughput. More specifically, at some point in the process a human may need to manually remove deposits from a reaction tank or adjust the pH by adding NaOH. This can influence how long the product stay in the reaction tank and further impact subsequent processes. In particular, it is of interest to deduce whether such variation influence a process further down the line directly or if it is an indirect effect i.e. the variation in a process influencing the variation in the next process and so on called transitive effects.
+
+Due to the inherent graphical nature of the problem i.e. inferring the direct effects by filtering out transitive effects, it is natural to take a graphical approach to the problem. Graphical models have been proposed by \cite{1601981848}. Bayesian networks \cite{1581131860} \cite{Inferring_Cellular_Networks_Using_Probabilistic_Graphical_Models} and the strongly related belief propagation algorithm for inference on graphical models \cite{Identification_of_direct_residue_contacts_in_protein-protein_interaction_by_message_passing} are also well known methods, however they are all computationally expensive on large scale systems and typically require prior assumptions or are limited to specific applications. We note that there exists many feature selection algorithms, but it is often not inherently clear how to extend these if one wants a detailed structure of how the effects propagate. Namely, feature selection is often applied if one only wants to understand how a set of variables influence a specific measure. It is thus often not capable of identifying where errors originate and how they propagate.
+
+Thus, the objective of this thesis is to quantify the impact of each process in a production system on a specific measure of performance here taken to be time through a systematic method by inferring the direct dependencies in the network representing true \textit{interactions} thus removing transitive effects. In particular
+
+\begin{table}[h]
+    \begin{tabularx}{\textwidth}{rX}
+        \textit{Given};      & historical observations of sojourn times, delays, concentration changes and more from a production system\\
+        \textit{Determine};  & the causal structure and/or dependency relations between the attributes of the processes                              \\
+        \textit{Subject to}; & limited observations and possible prior topological considerations                                                    \\
+    \end{tabularx}
+\end{table}
+
+Based on existing material on the topic \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} \cite{An_effective_approach_for_causal_variables_analysis_in_diesel_engine_production_by_using_mutual_information_and_network_deconvolution} we shall in particular investigate the robustness of the method through perfectly controlled simulations and based on theoretical results and extend the algorithm to infer causal direction subject to certain assumptions instead of only direct dependencies which initially are represented by undirected edges. The robustness is considered both in terms of the assumptions driving the algorithm and particularly also the accuracy of the estimator of mutual information which does not seem to be covered in the existing literature.
+
+The rest of the thesis is structured as follows. In \autoref{chap:data}, we introduce the data simulated from \cite{benchmark-model-to-generate-batch-process-data} which is subject to multiple error sources that need manual handling. In particular, we present some initial analysis of the simulated observations and conclude that a more advanced method for discovering the direct effects between the durations of each process. In \autoref{chap:method} we present the method proposed in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} and methods for computing and estimating mutual information. We apply the method in \autoref{chap:results} and explore potential shortcomings of the method for removing indirect effects and estimating the information between pairs of variables on controlled simulations before finally applying everything to the data from \autoref{chap:data}. Finally, in \autoref{chap:conclusion} we summarize our findings and comment on the properties of the presented methodology.
 
 
-Furthermore, from a salesman point of view, expected production and time intervals can be of great use when planning and also building production facilities. Namely, one might find that increasing the volume or efficiency of some part of the facility would increase the production throughput and profitability. This is also known as bottleneck analysis and require some understanding of the underlying mechanics and a stochastic model of this could improve the strength of such results.
+% \newpage
+
+% In many production facilities, planning is a big part of maximizing some index. Whether this is production throughput over some time period and thus often also the economic surplus or some other key index, it is of great importance to have an underlying model to describe the observed variation. In particular in operational research, the schedules may drift in suboptimal ways if the variation is not considered.
 
 
-Therefore, the primary objective of this paper/thesis is to investigate and model the yield and time of a production flow with focus on the pharmaceutical and chemical production industry. More precisely, we will be building a statistical model for a single process, with the purpose of being able to describe the variation in the yield of the production cycle and production times. This will then be used to analyze potential bottlenecks.
+% Furthermore, from a salesman point of view, expected production and time intervals can be of great use when planning and also building production facilities. Namely, one might find that increasing the volume or efficiency of some part of the facility would increase the production throughput and profitability. This is also known as bottleneck analysis and require some understanding of the underlying mechanics and a stochastic model of this could improve the strength of such results.
 
-Furthermore, it will be interesting to construct a network of such processes as is typically the case in industry. We shall see how much can be said about such a network and what obstacles one may encounter when trying to analyze such networks which is this thesis will initially be treated as networks of queues.
+
+% Therefore, the primary objective of this paper/thesis is to investigate and model the yield and time of a production flow with focus on the pharmaceutical and chemical production industry. More precisely, we will be building a statistical model for a single process, with the purpose of being able to describe the variation in the yield of the production cycle and production times. This will then be used to analyze potential bottlenecks.
+
+% Furthermore, it will be interesting to construct a network of such processes as is typically the case in industry. We shall see how much can be said about such a network and what obstacles one may encounter when trying to analyze such networks which is this thesis will initially be treated as networks of queues.
+
+
+
+
+
 
 
 
 % With the possibility  
 
 
+% \newpage
+
+
+% \cite{An_effective_approach_for_causal_variables_analysis_in_diesel_engine_production_by_using_mutual_information_and_network_deconvolution}
+% With the rising customers’ requirements for product quality, the performance consistency, especially the rated power consistency of diesel engines has become the core issue of concern to manufacturers. How to reduce the engine power fluctuations of the same batch is a major challenge for both the industry and academia. However, as one of the most complicate discrete manufacturing systems, the whole production of diesel engine involves hundreds of processes such as cylinder casting, core parts machining, final assembly, benchmark test and so on (Arturo Garza-Reyes et al. 2014). In such a complex production system, the implementation of each process may have a direct or indirect impact on the final performance (e.g. rated power) of the diesel engine. Since millions of networked sensors are embedded in the diesel engine production line, a large number of parameters on various stations are inspected to ensure the product quality. Massive manufacturing data now can be captured and analyzed, which significantly promote the research on “data-driven quality control”. However, not all parameters are correlated to the engine power. More accurately, most of these manufacturing data may have no relations at all with the engine power. In order to avoid the blindness of power consistency control, a research problem that how to effectively determine the highly related manufacturing parameters with the engine performance (e.g. rated power) must be investigated.
+
+% Many groups have developed different methods to deal with the above research problem. Du et al. (2010, 2012) identify the root cause in fixture identification procedure based on PSN and control chart. Zhou and Jiang (2014) proposed a variation source identification framework with evidence theory. Alaeddini and Dogan (2011) employed Bayesian network to perform variation source identification. Jia (2012) used one-dimension nonlinear regression method to help select parameters correlated with oil temperature, and established empirical formula to compensate the oil temperature. Chang et al. (2016) established a decision system based on rough sets and k-means clustering algorithm to evaluate the approximate dependencies between clearance parameter and quality level of diesel engine. Besides, there are several typical feature selection algorithms, such as Correlation Feature Selection (CFS) (Hall 1998), Fast Correlation-Based Filter (FCBF)(Yu and Liu 2003, 2004), and ReliefF (Kong et al. 2012), which can identify relevant features as well as redundancy among relevant features. CFS is achieved by the hypothesis that a good feature subset is one that contains features highly correlated with the target, yet uncorrelated with each other. FCBF is a fast filter method which can identify relevant features as well as redundancy among relevant features without pairwise correlation analysis. ReliefF is an extension of Relief, which aims to find the nearest neighbors with respect to important attributes. In fact, since the data is contaminated by the variable indirect relationships, the observed correlations maybe noisy and inaccurate. The transitive effects of correlations are considered as a main source of indirect relationships (Barzel and Barabási 2013; Sun et al. 2015)
+
+% As we can see from Fig. 1, numbers of error source exists in production line, they may come from fixture, workbench, spindle of CNC and etc (Li et al. 2017a). When machining a product, these errors will gather together in laterally and result in flatness error, roundness error and etc. At the same time, because post-process is based on the datum of preprocess, there are coupling association between processes. So, datum errors from pre-process will be transferred into post-processes.
+
+% More specifically, we take the milling process of cylinder surface as an example, as shown in Fig. 2. In the first process, the milling machine is used to process the positioning standard of the side surface of cylinder as the post-processing positioning reference. If the milling tool is worn, the wear tool will directly lead to machining error when the joint surface of the cylinder is machined and therefore lead to the fluctuations of roughness and other quality indicators. At the same time, the positioning reference error from the first process will indirectly result in the machining error of the joint surface of the cylinder. The transmission of the machining error indicates that the process quality fluctuation is superimposed by the direct and indirect effects of the previous process.
+
+
+% In order to find direct information flows by filtering the transitive effects, many researches have been carried on, e.g. graphical models (Wainwright and Jordan 2008), Bayesian network (Friedman 2004), and the message-passing algorithm (Weigt et al. 2009). However, these methods are computationally expensive when dealing with massive parameters (Fuente et al. 2004; Veiga et al. 2007). Besides they are normally designed for specific applications, such as gene regulatory network inference, protein structure prediction (Hopf et al. 2012; Weigt et al. 2009; Feizi et al. 2013; Jones et al. 2011), thus limiting their applicability. 
+
+
+% To fill up with the above research gap, this paper proposes a new effective approach to determine the highly related manufacturing parameters with the diesel engine power based on mutual information (MI) and network deconvolution (ND) algorithm. The rest of this paper is organized as follows. In Sect. 2, we introduce the proposed normalized mutual information and the network deconvolution (NMI-ND) algorithm for feature selection. In Sect. 3, experimental study is carried out to demonstrate the effectiveness of the NMI-ND algorithm. Section 4 gives the explanation of analysis with diesel engine data. Finally, in Sect. 5, we summarize the present study and draw some conclusions.
+
+
+% Diesel engine manufacturing is a typical multi-stage production system. The transmission and coupling of quality deviations lead to the variation of the final quality. In order to determine the highly related parameters with the engine power from massive captured manufacturing data to guide the process control, correlation analysis between variables are performed first. Considering the coupling and transfer effect introduced above, transitive noise exists in the correlations observed, so the network deconvolution (ND) is used to distinguish the direct and indirect correlations.
+
+
+
+% \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}
+% Network science has been widely adopted in recent years in diverse
+% settings, including molecular and cell biology1, social sciences2, information science3, document mining4 and other data mining applications. Networks provide an efficient representation for variable
+% interdependencies, represented as weighted edges between pairs of
+% nodes, with the edge weight typically corresponding to the confidence
+% or the strength of a given relationship. Given a set of observations
+% relating the values that elements of the network take in different conditions, a network structure is typically inferred by computing the
+% pairwise correlation, mutual information or other similarity metrics
+% between each pair of nodes.
+
+% The resulting edges include numerous indirect dependencies owing
+% to transitive effects of correlations. For example, if there is a strong
+% dependency between nodes 1 and 2, and between nodes 2 and 3 in the
+% true (direct) network, high correlations will also be visible between
+% nodes 1 and 3 in the observed (direct and indirect) network, thus
+% inferring an edge from node 1 to node 3, even though there is no
+% direct information flow between them (Fig. 1a). Moreover, even if a
+% true relationship exists between a pair of nodes, its strength may be
+% over-estimated owing to additional indirect relationships, and distinguishing the convolved direct and indirect contributions is a daunting
+% task. As the size of networks increases, a very large number of indirect edges may be due to second-order, third-order and higher-order
+% interactions, resulting in diffusion of the information contained in
+% the direct network, and leading to inaccurate network structures and
+% network weights in many applications
+
+% Several approaches have been proposed to infer direct dependencies among variables in a network. For example, partial correlations
+% have been used to characterize conditional relationships among small
+% sets of variables12–14, and probabilistic approaches, such as maximum
+% entropy models, have been used to identify informative network
+% edges10,15,16. Other works use graphical models and message-passing
+% algorithms to characterize direct information flows in a network17,18,
+% or variations of Granger causality19 to capture the dynamic relationships among variables20–22. Alternative approaches formulated
+% the problem of separating direct from indirect dependencies as a
+% general feature-selection problem23–25, using Bayesian networks26–28,
+% or using an information-theoretic approach to eliminate indirect
+% information flow in the network29. These methods are limited to
+% relatively low-order interaction terms29, or are computationally very
+% expensive12–14, or are designed for specific applications10,15–17,30,31,
+% thus limiting their applicability.
+
+% In this paper, we formulate the problem of network deconvolution
+% in a graph-theoretic framework. Our goal is a systematic method for
+% inferring the direct dependencies in a network, corresponding to true
+% interactions, and removing the effects of transitive relationships that
+% result from indirect effects. When the matrix of direct dependencies
+% is known, all transitive relationships can be computed by summing
+% this direct matrix and all its powers, corresponding to the transitive
+% closure of a weighted adjacency matrix, which convolves all direct
+% and indirect paths at all lengths (Fig. 1b). Given an observed matrix
+% of correlations that contains both direct and indirect effects, our task
+% is to recover the original direct matrix that gave rise to the observed
+% matrix. For a weighted network where edge weights represent the
+% confidence, mutual information or correlation strength relating two
+% elements in the network, the inverse problem seeks to recognize the
+% fraction of the weight of each edge attributable to direct versus indirect contributions, rather than to keep or remove unit-weight edges.
+% This inverse problem is dramatically harder than the forward problem
+% of transitive closure, as the original matrix is not known.
+
+% We introduce an algorithm for network deconvolution that can efficiently solve the inverse problem of transitive closure of a weighted
+% adjacency matrix, by use of decomposition principles of eigenvectors
+% and eigenvalues, and by exploiting the closed form solution of infinite
+% Taylor series. We demonstrate the effectiveness of this approach and
+% our algorithm in several large-scale networks from different domains
+% and with different properties (Supplementary Table 1). First, we seek
+% to distinguish likely direct targets in gene regulatory networks as a postprocessing step for diverse gene network inference methods, and show
+% that network deconvolution improves both global and local network
+% quality. Second, we show the effectiveness of network deconvolution in
+% distinguishing directly interacting amino-acid residues based on pairwise mutual information data in multispecies protein alignments. Third,
+% we apply network deconvolution to a social network setting using a coauthorship network that contains solely connectivity information, and
+% show that the resulting edge weights are able to distinguish strong and
+% weak ties independently inferred based on the number of joint papers
+% and additional co-authors. The wide applicability of network deconvolution suggests that such a closed-form solution is not only of important
+% theoretical use in reversing the effect of matrix transitive closure, but also
+% of wide practical applicability in a diverse set of real-world networks.
 
 
 
 
 
+% \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems}
+% With the trend of information and intelligence in manufacturing enterprises, mass manufacturing process data are collected and stored. These data contain the inherent laws of complex manufacturing process, so they have huge practical values and numerous opportunities for scientifc discovery. Mining meaningful data relationships, especially causality in complex manufacturing systems is a promising theoretical and engineering problem. Association and directionality are important topics in data-driven causal discovery. Given a observation dataset that manufacturing process parameters take in diferent conditions, a topological structure can be inferred by computing the pairwise correlation, such as mutual information or other association metrics (Feizi et al. 2013) For example, a true topological path Xi→Xk→Xj  can result in an observable response between Xi  and Xj , falsely suggesting the existence of a direct association between them (Barzel and Barabási, 2013). The association between Xi  and Xk, and Xk and Xj  can be called direct associations, which represent causality. And the association between Xi and Xj , can be called indirect association, which means non-causality. For a complex manufacturing system, the implementation of each process may have a direct or indirect effect on the final product quality. There are also direct and indirect associations among process parameters (Qin et al. 2018). Therefore, how to accurately measure and distinguish direct and indirect associations poses a challenge for causal discovery in complex manufacturing systems.
+
+% To meet the above research challenge, a two-stage causal discovery method for complex manufacturing systems is proposed in this paper. Stage 1: According to copula theory and kernel density estimation (KDE) method, the nonparametric copula entropy (NCE) is used to quantify the association relationship between parameters, and construct the global association matrix of the system. Stage 2: The network deconvolution (ND) algorithm is designed to extract the direct association information from the global association matrix.
+
+% The rest of this paper is structured as follows: Related studies are reviewed in “Literature review” section. In “NCE-ND method for causal analysis” section, the NCEND causal analysis method is proposed and validated by an open gene expression dataset. In “Experimental application” section, the experimental application and analysis discussion are carried out for the historical data from the real diesel engine manufacturing system. The section of “Conclusions and future works” summarizes the main conclusions of this paper, and puts forward some issues that may need further research in the future.
+
+
+
+% In this section, studies related to the research topic are reviewed, furthermore some contributions and gaps to the extant literature are also summarized.
+
+% Traditionally, Pearson correlation coefcient is widely used to measure the linear relationship between the observed variables. Frigieri et al. (2019) conducted correlation analysis between noise density and machining parameters in hardened steel turning by Pearson correlation coefcient. In addition, the Kendall and Spearman rank correlation coefcients can be used to measure the consistency of the changes between the two random variables. They belong to the nonparametric statistical method, which does not require the edge distributions of random variables, thus ensuring a wider range of applications (Croux \& Dehon, 2010). However, these three methods can only measure the linear correlation between random variables
+
+% Mutual information (MI) is a way of information measurement in information theory (Cover \& Thomas, 2012), which can be understood as the information of one random variable contained in another random variable. If two random variables are independent, the corresponding MI is zero, and if they have a certain correlation, the MI is a positive value. MI can describe nonlinear correlation, and it is not susceptible to noise and data transformation in the process of initialization, so it has attracted wide attention. For example, MI is used to construct gene regulatory networks for gene expression data in the feld of gene regulation (Altay \& Emmert-Streib, 2010). But it is also true that estimating MI is not always easy. In practical applications, the estimation accuracy of MI has an directly efect on the identifcation of dependency between random variables (Han \& Ren, 2015). Based on entropy estimates by k-nearest neighbor distance, Kraskov et al. (2004) presented two classes of improved MI estimators from random point samples based on joint probability density distribution. Using the Kraskov’s methods, Rossi et al. (2006) suggested the use of the MI to estimate the association of spectral variables in a prediction problem and presented a efective method to select the spectral variables based on their MI with the output. More recently, based on a similar approach, Fang et al. (2015) improved feature selection method for multidimensional time series to achieve dimension reduction. However, these k-nearest neighbors-based approaches have been confrmed to be inferior to the kernel density estimators (Khan et al., 2007), which is a nonparametric representation of the probability density function (PDF) of random variables (Silverman, 1986). Thomas et al. (2014) used KDE together with the tuning of the kernel's covariance matrix using data attributes to calculate average MI, and achieved good results in MATLAB software.
+
+% In addition, combining copula function (Sklar, 1959) with Shannon entropy theory (Shannon, 1948), Ma and Sun (2008) proposed the defniation of copula entropy (CE). Their research pointed out that MI is equivalent to the opposite number of CE. Therefore, the correlation between variables can be measured by the CE. As a result, the MI estimation method based on CE is widely used in many felds, especially in hydrology and water resources (Chen, 2013; Zachariah \& Reddy, 2013; Chen \& Guo, 2019), fnance (Hu, 2006; Patton, 2002; Xu, 2005; Zhao \& Lin, 2011), and industry (Gu et al., 2019; Jeon et al., 2019; Wei et al., 2019). The common parametric copula functions have the elliptic copula functions, such as n copula and t copula, and the Archimedes copula functions, such as Clayton copula, Frank copula and Gumbel copula (Embrechts et al., 2001). These parameterized forms are based on the ideal hypothesis model, which limits the application of copula theory. At present, some scholars have done some researches on nonparametric copula function. Nicoloutsopoulos (2005) studied parametric and nonparametric methods of copula estimation, especially for Archimedean class of copulas. In order to describe the correlation structure between variables, Huard et al (2006) used Bayesian theory to select copula function. However, further research is rare in the literature.
+
+% In addition to the difculty of accurate estimation, MI cannot detect the direct associations in the network. As an extension of MI, conditional mutual information, point mutual information and partial correlation are widely used to infer network structure or detect direct associations in many areas, including biology, logistics, engineering and social research (Shi et al., 2019). Zhang et al. (2012, 2015, 2016) employed conditional mutual information, conditional mutual inclusion information and point mutual information, respectively, to infer the direct associations in gene regulatory network through gene expression data. It is pointed out that conditional mutual information can quantify the nonlinear relationship between observed data variables, which is superior to linear measures, but there is a serious underestimation problem. In terms of accurately measuring the relationship in the network, point mutual information and condition mutual inclusion information have certain advantages. However, using the methods mentioned above, it is generally assumed that the observed data are normal distribution in order to simplify the amount of calculation, otherwise the calculation cost is unacceptable. The parameters in the production process often do not obey the normal distribution, which makes it difcult for the traditional methods to quantitatively analyze the relationship between process quality parameters and product quality in the manufacturing process. Feizi et al. (2013) proposed ND method to remove chained noise in association networks. It has been verifed and achieved good accuracy in protein amino acid association network, gene regulation network and social network. This method has the advantages of simple calculation, high accuracy and wide range of application, which has been applied to detect the correlation relationship of manufacturing system (Qin et al., 2018). Qin et al. (2018) combined normalized MI and ND to analyze causal variables in diesel engine production, but the efects of calculation accuracy of MI was not studied.
+
+% In conclusion, although MI can be used for measurement of associations, its complex calculation formula makes it difcult to obtain accurate values. The value of MI can be calculated indirectly by CE, which is fast and accurate, but further research is rare about nonparametric copula function. Moreover, there is a lack of literature on the comparison of various association measurement methods and their practical application in the feld of industrial manufacturing.
 
 
 \end{document}
@@ -43,9 +184,9 @@ Need to investigate different ways of modelling this (starting with a simple sys
 \begin{itemize}
     \item \href{https://en.wikipedia.org/wiki/Petri_net}{Petri Net}
     \item ODE Stochastic Chemical Reaction (first order)
-    % \item \href{https://onlinelibrary.wiley.com/doi/epdf/10.1002/ceat.270150109}{A Multiple State Stochastic Model for Deep-bed Filtration}
+          % \item \href{https://onlinelibrary.wiley.com/doi/epdf/10.1002/ceat.270150109}{A Multiple State Stochastic Model for Deep-bed Filtration}
     \item \href{https://www.nature.com/articles/s41597-020-0455-1}{Database of pharmacokinetic time-series data}
     \item \href{https://search.r-project.org/CRAN/refmans/AppliedPredictiveModeling/html/ChemicalManufacturingProcess.html}{Chemical Manufacturing Process Data}'
-    % \item \cite[sample reference]{TuringAward07}
-    % \item \cite{Balbo2007}
+          % \item \cite[sample reference]{TuringAward07}
+          % \item \cite{Balbo2007}
 \end{itemize}

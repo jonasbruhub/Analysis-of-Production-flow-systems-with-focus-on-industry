@@ -24,7 +24,7 @@
 
 % Correlation overholder faktisk antagelserne, men det gør MI ikke. Dog er correlation ikke altid et godt mål for forklaringsgrad, e.g. halvcirkel af perfekt forklaret punkter.
 
-\chapter{Method}
+\chapter{Method}\label{chap:method}
 \textcolor{red}{General introduction to metodeafsnittet og causalitet}
 
 \section{Causal discovery}
@@ -227,7 +227,7 @@ With the definitions of mutual information and entropy we are finally ready to i
     For a continuous random vector $\boldsymbol{X}$ with a uniquely defined Copula $C$, and Copula density $c$, we define the Copula entropy $CE$ of $\boldsymbol{X}$ as
     $$CE\left(\boldsymbol{X}\right) = h\left(\boldsymbol U\right)$$
     where $\boldsymbol U$ has density $c$. In particular,
-    $$CE\left(\boldsymbol{X}\right) = - \mathbb{E}\left[\log_b c\right]$$
+    $$CE\left(\boldsymbol{X}\right) = - \mathbb{E}\left[\log_b c \left(\boldsymbol U\right)\right]$$
     % $$CE\left(\boldsymbol{X}\right) = - \int_{[0,1]^d} c\left(\mathbf{u}\right) \, \log_b c\left(\mathbf{u}\right) \, d\mathbf{u}$$
 \end{definition}
 As stated above, Copula entropy is actually equal to the negative mutual information which we state as a theorem
@@ -249,7 +249,7 @@ As stated above, Copula entropy is actually equal to the negative mutual informa
                                        & = \int_{\mathcal{X}} f(\boldsymbol{x}) \log\left(\frac{f(\boldsymbol{x})}{\prod_{i=1}^{d} f_i\left(x_i\right)}\right) \, d\boldsymbol{x}                                                                                  \\
                                        & = I\left(\boldsymbol{X}\right)
     \end{align*}
-    \textcolor{blue}{where the third equality follows from a change of variables with the trivial substitution $u_i = F_i(x_i)$ such that $du_i = f_i(x_i)\,dx_i$. This concludes the proof.}
+    where $\mathcal{X}$ is the domain of the random variable $\boldsymbol X$ and the third equality follows from a change of variables with the trivial substitution $u_i = F_i(x_i)$ such that $du_i = f_i(x_i)\,dx_i$. This concludes the proof.
 \end{proof}
 Finally, before moving on to correlation as a measure of similarity, we discuss what happens in the limit of mutual information and entropy as we shall later need this as arguments for numerical stability.
 
@@ -257,7 +257,7 @@ Finally, before moving on to correlation as a measure of similarity, we discuss 
 \subsection{Entropy and mutual information in the limit}\label{subsec:limit entropy and MI}
 In this section, we shall discuss the differences between entropy and differential entropy and observe how this difference cancels when computing mutual information. In fact, we shall see that mutual information defined for continuous random vectors is the limit of the discrete version which will be useful later when implementing the algorithm.
 
-First, although one may think differential entropy this as the limit of (discrete) entropy, this is not the case. Namely, consider the support of $f(x)$ (here assumed to be the entire real line) binned into intervals i.e. a discretization of the continuous random variable $X$, which we shall denote $X^{\Delta}$. To make notation simpler, we shall bin into equal-sized intervals of width $\Delta$. Then, for each interval $[i\Delta, (i+1)\Delta]$ for $i \in \mathbb{Z}$, there exists an $x_i$ such that the probability mass on this interval is represented by this $x_i$:
+First, although one may think differential entropy is the limit of (discrete) entropy, this is not the case. Namely, consider the support of $f(x)$ (here assumed to be the entire real line) binned into intervals i.e. a discretization of the continuous random variable $X$, which we shall denote $X^{\Delta}$. To make notation simpler, we shall bin into equal-sized intervals of width $\Delta$. Then, for each interval $[i\Delta, (i+1)\Delta)$ for $i \in \mathbb{Z}$, there exists an $x_i$ such that the probability mass on this interval is represented by this $x_i$:
 \textcolor{blue}{
     \begin{equation}\label{eq:one dim discretization}
         \mathbb{P}\left(X^{\Delta} = x_i\right) = f(x_i) \Delta = \int_{i\Delta}^{(i+1)\Delta} f(x) \, dx
@@ -267,41 +267,41 @@ Clearly, this discretization is a valid distribution as
 $$\sum_{i\in\mathbb{Z}} f(x_i) \Delta = \int_{\mathbb{R}} f(x) \, dx = 1$$
 and in the limit, as $\Delta \to 0$ we recover the original distribution $f(x)$. However, if we try to calculate the entropy of this discretization, denoted by $H^{\Delta}$, we get a diverging limit
 \begin{align*}
-    H^{\Delta} & = \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i) \Delta}                                             \\
-               & = \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} + \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{\Delta} \\
-               & = \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} + \log{\Delta}
+    H^{\Delta} & = -\sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i) \Delta}                                             \\
+               & = -\sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} - \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{\Delta} \\
+               & = -\sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} - \log{\Delta}
 \end{align*}
 Clearly, the first term in the above expression converges to the differential entropy $h\left(X\right)$ as $\Delta \to 0$ whereas $\log{\Delta} \to - \infty$ i.e. the expression diverges altogether when differential entropy is well-defined.
 
 A similar argument for the joint entropy between the discretization of $X_1$ and $X_2$ (and in principle to any number of dimensions), denoted by $H^{\Delta}_{12}$, results in
-$$H^{\Delta}_{12} = \sum_{i,j \in \mathbb{Z}} f\left(x_1^{(i)}, x_2^{(j)}\right) \Delta_1 \Delta_2 \log{f\left(x_1^{(i)}, x_2^{(j)}\right)} + \log{\Delta_1} + \log{\Delta_2}$$
+$$H^{\Delta}_{12} = -\sum_{i,j \in \mathbb{Z}} f\left(x_1^{(i)}, x_2^{(j)}\right) \Delta_1 \Delta_2 \log{f\left(x_1^{(i)}, x_2^{(j)}\right)} - \log{\Delta_1} - \log{\Delta_2}$$
 where $x_1^{(i)}\in[i\Delta_1, (i+1)\Delta_1)$ and $x_2^{(j)}\in [j\Delta_2, (j+1)\Delta_2)$ are defined such that
 $$f\left(x_1^{(i)}, x_2^{(j)}\right)\Delta_1 \Delta_2 = \int_{j\Delta_2}^{(j+1)\Delta_2}\int_{i\Delta_1}^{(i+1)\Delta_1} f(x_1,x_2) \, dx_1 dx_2,\quad \forall i,j\in\mathbb{Z}$$
 Note that clearly $\left(x_1^{(i)},x_2^{(j)}\right)$ exists for all $i,j\in \mathbb{Z}$. Again, the joint entropy diverges however, when computing the mutual information, we see that the diverging terms cancel. Namely, from \autoref{lemma:mutual information and entropy relation}
 \begin{align*}
-    I^{\Delta}_{12} & = H^{\Delta}_1 + H^{\Delta}_2 - H^{\Delta}_{12}                                                                                                                                                                     \\
-                    & = \sum_{i\in\mathbb{Z}} f_1\left(\tilde{x}_1^{(i)}\right) \Delta_1 \log{f_1\left(\tilde{x}_1^{(i)}\right)} + \log{\Delta_1}                                                                                         \\
-                    & \quad + \sum_{j\in\mathbb{Z}} f_2\left(\tilde{x}_2^{(j)}\right) \Delta_2 \log{f_2\left(\tilde{x}_2^{(j)}\right)} + \log{\Delta_2}                                                                                   \\
-                    & \quad - \sum_{i,j\in\mathbb{Z}} f\left(x_1^{(i)},x_2^{(j)}\right) \Delta_1 \Delta_2 \log{f\left(x_1^{(i)},x_2^{(j)}\right)} - \log{\Delta_1 \Delta_2}                                                               \\
-                    & =\sum_{i\in\mathbb{Z}} f_1\left(\tilde{x}_1^{(i)}\right) \log{f_1\left(\tilde{x}_1^{(i)}\right)}\Delta_1 + \sum_{j\in\mathbb{Z}} f_2\left(\tilde{x}_2^{(j)}\right)  \log{f_2\left(\tilde{x}_2^{(j)}\right)}\Delta_2 \\
-                    & \quad -\sum_{i,j\in\mathbb{Z}} f\left(x_1^{(i)},x_2^{(j)}\right) \log{f\left(x_1^{(i)},x_2^{(j)}\right)} \Delta_1 \Delta_2                                                                                          \\
+    I^{\Delta}_{12} & = H^{\Delta}_1 + H^{\Delta}_2 - H^{\Delta}_{12}                                                                                                                                                                      \\
+                    & = -\sum_{i\in\mathbb{Z}} f_1\left(\tilde{x}_1^{(i)}\right) \Delta_1 \log{f_1\left(\tilde{x}_1^{(i)}\right)} - \log{\Delta_1}                                                                                         \\
+                    & \quad - \sum_{j\in\mathbb{Z}} f_2\left(\tilde{x}_2^{(j)}\right) \Delta_2 \log{f_2\left(\tilde{x}_2^{(j)}\right)} - \log{\Delta_2}                                                                                    \\
+                    & \quad + \sum_{i,j\in\mathbb{Z}} f\left(x_1^{(i)},x_2^{(j)}\right) \Delta_1 \Delta_2 \log{f\left(x_1^{(i)},x_2^{(j)}\right)} + \log{\Delta_1 \Delta_2}                                                                \\
+                    & =-\sum_{i\in\mathbb{Z}} f_1\left(\tilde{x}_1^{(i)}\right) \log{f_1\left(\tilde{x}_1^{(i)}\right)}\Delta_1 - \sum_{j\in\mathbb{Z}} f_2\left(\tilde{x}_2^{(j)}\right)  \log{f_2\left(\tilde{x}_2^{(j)}\right)}\Delta_2 \\
+                    & \quad +\sum_{i,j\in\mathbb{Z}} f\left(x_1^{(i)},x_2^{(j)}\right) \log{f\left(x_1^{(i)},x_2^{(j)}\right)} \Delta_1 \Delta_2                                                                                           \\
                     & \to h(X_1) + h(X_2) - h(X_1,X_2)\; \text{as}\; \Delta_1,\Delta_2 \to 0
 \end{align*}
 Thus, the limit of the mutual information for discrete random variables is indeed the mutual information defined for continuous random variables and can be computed either as the limit of discretizing the probability density function and then computing entropies or just using the initial definition for (discrete) mutual information in \autoref{def:mutual information}.
 
 Before continuing, we discuss the case where $X_1$ is equal to $X_2$. In this case, discretizing with a common $\Delta$ we have that
 $$f\left(x_1^{(i)}, x_2^{(j)}\right)\Delta^2 = \int_{j\Delta}^{(j+1)\Delta}\int_{i\Delta}^{(i+1)\Delta} f(x_1,x_2) \, dx_1 dx_2,\quad \forall i,j\in\mathbb{Z}$$
-Clearly, the above integral is $0$ for $i\neq j$. Although $f(x_1,x_2)$ is not well-defined in the usual functional sense, extending to distribution, we might write $f(x_1,x_2) = f(x_2 | x_1) f(x_1)$. In terms of distributions, it works to put $f(x_2 | x_1) = \delta(x_2 - x_1)$ where $\delta$ is the \textit{Dirac delta} distribution, as then $\int_{\mathbb{R}} f(x_1,x_2) \, dx_2 = f(x_1)$ and $f(x_1, x_2)$ is "$0$" when $x_1 \neq x_2$. I.e. the right marginals and probability mass $1$. Then, when calculating the above integral, we get that
+Clearly, the above integral is $0$ for $i\neq j$. Although $f(x_1,x_2)$ is not well-defined in the usual functional sense, extending to distribution, we might write $f(x_1,x_2) = f(x_2 | x_1) f(x_1)$. In terms of distributions, it works to put $f(x_2 | x_1) = \delta(x_2 - x_1)$ where $\delta$ is the \textit{Dirac delta} distribution, as then $\int_{\mathbb{R}} f(x_1,x_2) \, dx_2 = f(x_1)$ and $f(x_1, x_2)$ is "$0$" when $x_1 \neq x_2$. I.e. the marginals and probability mass are correct. Then, when calculating the above integral, we get that
 \begin{align*}
     f\left(x_1^{(i)}, x_1^{(i)}\right)\Delta^2 & = \int_{i\Delta}^{(i+1)\Delta}\int_{i\Delta}^{(i+1)\Delta} f(x_1,x_2) \, dx_1 dx_2 \\
                                                & = \int_{i\Delta}^{(i+1)\Delta} f\left(x_1\right)\, dx_1                            \\
                                                & = f\left(\tilde{x}_1^{(i)}\right)\Delta
 \end{align*}
-Thus, when calculating $I^{\Delta}_{1,2}$ we obtain
+Thus, when calculating $I^{\Delta}$ for two identical variables, we obtain
 \begin{align*}
-    I^{\Delta}_{1,2} & = \sum_{i\in\mathbb{Z}} f_1\left(\tilde{x}_1^{(i)}\right) \log{f_1\left(\tilde{x}_1^{(i)}\right)}\Delta + \sum_{j\in\mathbb{Z}} f_2\left(\tilde{x}_2^{(j)}\right)  \log{f_2\left(\tilde{x}_2^{(j)}\right)}\Delta \\
-                     & \quad - \sum_{i\in\mathbb{Z}} f_1\left(\tilde{x}_1^{(i)}\right) \log{f_1\left(\tilde{x}_1^{(i)}\right)}\Delta - \log \Delta                                                                                      \\
-                     & \to \infty \;\text{as}\; \Delta \to 0
+    I^{\Delta} & = -\sum_{i\in\mathbb{Z}} f\left(\tilde{x}_1^{(i)}\right) \log{f\left(\tilde{x}_1^{(i)}\right)}\Delta - \sum_{j\in\mathbb{Z}} f\left(\tilde{x}_2^{(j)}\right)  \log{f\left(\tilde{x}_2^{(j)}\right)}\Delta \\
+               & \quad + \sum_{i\in\mathbb{Z}} f\left(\tilde{x}_1^{(i)}\right) \log{f\left(\tilde{x}_1^{(i)}\right)}\Delta - \log \Delta                                                                                   \\
+               & \to \infty \;\text{as}\; \Delta \to 0
 \end{align*}
 Thus in practice, it would not make much sense to compare equal variables or even a random vector only defined on a lower dimensional manifold as we would get an infinite Copula entropy.
 
@@ -312,16 +312,18 @@ Thus in practice, it would not make much sense to compare equal variables or eve
 \subsection{Correlation}
 At this point, we have a good understanding of Copula entropy/mutual information for calculations later on. However, another typical measure of similarity is correlation which is easily estimated from sample data. However, in this section we show that in general, we can not compute the correlation coefficient from a Copula which we saw above is the case for mutual information. Namely, given a copula $C$ for some set of random variables $\{X_i\}_{i\in I}$ indexed by finite $I$, one can not calculate $\rho$ between any pair $(X_i ,X_j)$, $i\neq j$ from the copula. This is easily shown by the following argument.
 
-First, note that from \autoref{coro: Coordinate transformation}, $C$ is also a copula for $Z_i \coloneq \left( X_i - \mu_i\right) / \sigma_i$ for $i \in I$ where $\mu_i = \mathbb{E}[X_i]$ and $\sigma_i = \sqrt{\text{Var} \, X_i}$. Clearly, the correlation coefficient for $Z_i$ and $Z_j$ is the same as between $X_i$ and $X_j$. We thus proceed trying to calculate the correlation between any pair $Z_i$ and $Z_j$.
-\begin{align*}
-    \rho_{ij} & = \int\int_{\mathbb{R}^2} z_i z_j f_{ij}(z_i,z_j) \, dz_i \, dz_j                       \\
-              & = \int\int_{[0,1]^2} F_i^{-1}(u_i) \, F_j^{-1}(u_j) \, c_{ij}(u_i, u_j) \, du_i \, du_j
-\end{align*}
+First, note that from \autoref{coro: Coordinate transformation}, $C$ is also a copula for $Z_i \coloneq \left( X_i - \mu_i\right) / \sigma_i$ for $i \in I$ where $\mu_i = \mathbb{E}[X_i]$ and $\sigma_i = \sqrt{\text{Var} \, X_i}$ (assuming that these exist). Clearly, the correlation coefficient for $Z_i$ and $Z_j$ is the same as between $X_i$ and $X_j$. We thus proceed trying to calculate the correlation between any pair $Z_i$ and $Z_j$.
+\begin{equation}\label{eq:corr from copula}
+    \begin{split}
+        \rho_{ij} & = \int\int_{\mathbb{R}^2} z_i z_j f_{ij}(z_i,z_j) \, dz_i \, dz_j                       \\
+                  & = \int\int_{[0,1]^2} F_i^{-1}(u_i) \, F_j^{-1}(u_j) \, c_{ij}(u_i, u_j) \, du_i \, du_j
+    \end{split}
+\end{equation}
 where $c_{ij}$ density version of the copula defined for $X_i$ and $X_j$ and $F_i$ and $F_j$ are the marginals of $Z_i$ and $Z_j$ with mean $0$ and variance $1$. From the above, it is then clear for a fixed, non-constant copula $C$, the correlation depends on the marginals of $X_i$ and $X_j$. Also, we see that a constant copula density (only admissible if $c \equiv 1$ on $[0,1]^2$ and $0$ elsewhere) always results in $\rho_{ij} = 0$ as
 $$\int_0^1 F^{-1}(u) \, du = \int_{\mathbb{R}} z f(z) \, dz = 0$$
-again, under the assumption that $Z_i$ has mean $0$.
+where the final equality follows from the construction of $Z_i$.
 
-Thus, we conclude that indeed mutual information and correlation is very different measures of codependency (as correlation depends on the marginals whereas mutual information does not) and that it does not make much sense to introduce copulas in the setting of correlation albeit at this point we do not favor one measure above the other except if marginals should be insignificant to the network, Copula entropy is preferred.
+Thus, we conclude that indeed mutual information and correlation are very different measures of codependency. Namely, mutual information does not depend on the marginal distributions whereas from \autoref{eq:corr from copula} we see that correlation does. Thus, it does not make much sense to introduce copulas in the setting of correlation albeit at this point we do not favor one measure above the other except if marginals should be insignificant to the network, Copula entropy is preferred.
 
 
 
@@ -359,7 +361,7 @@ where $n$ is the number of nodes in the graph i.e. random variables that we have
         \State \Return $G_{obs}$
     \end{algorithmic}
 \end{algorithm}
-Namely, for each entry in $G_{obs}$, except for the diagonal elements, first estimate the cumulative distributions of $X_i$ and $X_j$ based on samples $x_i^{\mathcal{D}}$. Then, transform the samples by the estimated distribution function to obtain corresponding uniform samples. This may be done outside the loop to increase computational efficiency. From the paired samples $(x_i^{\mathcal{D}},x_j^{\mathcal{D}})$, estimate the Copula density $c_{ij}$ and finally use this to compute the mutual information/Copula entropy. Methods for estimating the densities and in continuation hereof the distribution functions are presented in \autoref{subsec:KDE methods}. The negative Copula entropy is then recorded in $(i,j)$ entry of $G_{obs}$. We note that the algorithm can be optimized for symmetric measures such as Copula entropy itself, to only loop through $i<j$ and saving the computed entropy in the $(j,i)$ entry as well. Also, as Copula entropy diverges as $X_i$ and $X_j$ are jointly distributed closer to a one-dimensional manifold, ideally there should be a check for such or the user should check the paired observations to exclude such variable combinations.
+Namely, for each entry in $G_{obs}$, except for the diagonal elements, first estimate the cumulative distributions of $X_i$ and $X_j$ based on samples $x_i^{\mathcal{D}}$. Then, transform the samples by the estimated distribution function to obtain corresponding uniform samples. This may be done outside the loop to increase computational efficiency. From the paired samples $(x_i^{\mathcal{D}},x_j^{\mathcal{D}})$, estimate the Copula density $c_{ij}$ and finally use this to compute the mutual information/Copula entropy. Methods for estimating the densities and in continuation hereof the distribution functions are presented in \autoref{subsec:Mutual information estimation and KDE methods}. The negative Copula entropy is then recorded in $(i,j)$ entry of $G_{obs}$. We note that the algorithm can be optimized for symmetric measures such as Copula entropy itself, to only loop through $i<j$ and saving the computed entropy in the $(j,i)$ entry as well. Also, as Copula entropy diverges as $X_i$ and $X_j$ are jointly distributed closer to a one-dimensional manifold, ideally there should be a check for such or the user should check the paired observations to exclude such variable combinations.
 
 From \autoref{subsec:limit entropy and MI}, to calculate the (joint) copula entropy of a continuous random vector, we simply discretize the domain of each random variable and use the estimated copula density evaluated at these points to estimate the total Copula entropy. Furthermore, if one or more elements of the random vector are mixed random variables, we choose the discrete events to be their own bins and discretize the rest or in the context of \autoref{alg:Gobs1} only estimate the distribution functions for the continuous component of the random variable. This works due to the Copula entropy for continuous random variables being the limit of the discretization and as such, the Copula entropy is well-defined for mixed random variables as well.
 
@@ -454,13 +456,13 @@ They then proceed to let $\gamma$ be the largest absolute eigenvalue of $N$ and 
 As we do not use any property of the spectral norm except that it is sub-multiplicative, we shall consider any norm $\left|\left| \cdot \right|\right|$ in general that is also sub-multiplicative. Thus, consider the norm of the difference $G_{dir} - \tilde{G}_{dir}$:
 \begin{equation}\label{eq:original noise error bound}
     \begin{split}
-        \left|\left| G_{dir} - \hat{G}_{dir} \right|\right| & = \left|\left| G_{obs} \left(I + G_{obs}\right)^{-1} - \hat{G}_{obs}\left(I+\hat{G}_{obs}\right)^{-1}\right|\right|                                                                                                                                                                                                                    \\
-                                                            & = \left|\left| - \sum_{k\geq 1} \left( - G_{obs}\right)^k  +  \sum_{k\geq 1} \left(-\hat{G}_{obs}\right)^k \right|\right|                                                                                                                                                                                                              \\
-                                                            & \leq \sum_{k\geq 1} \left|\left|  G_{obs}^k  -  \left(G_{obs} + N\right)^k \right|\right|                                                                                                                                                                                                                                              \\
-                                                            & \leq \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \left|\left| N \right|\right|^i \left|\left| G_{obs} \right|\right|^{k-i}                                                                                                                                                               \\
-                                                            & = \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \gamma ^i \delta^{k-i}\\
-                                                            & = \sum_{k\geq 1} \left( \left( \gamma + \delta\right)^k - \delta^k \right)                                                                                                                                 \\
-                                                            & = \frac{\gamma + \delta}{1 - \gamma - \delta} - \frac{\delta}{1 - \delta} \\
+        \left|\left| G_{dir} - \hat{G}_{dir} \right|\right| & = \left|\left| G_{obs} \left(I + G_{obs}\right)^{-1} - \hat{G}_{obs}\left(I+\hat{G}_{obs}\right)^{-1}\right|\right|                            \\
+                                                            & = \left|\left| - \sum_{k\geq 1} \left( - G_{obs}\right)^k  +  \sum_{k\geq 1} \left(-\hat{G}_{obs}\right)^k \right|\right|                      \\
+                                                            & \leq \sum_{k\geq 1} \left|\left|  G_{obs}^k  -  \left(G_{obs} + N\right)^k \right|\right|                                                      \\
+                                                            & \leq \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \left|\left| N \right|\right|^i \left|\left| G_{obs} \right|\right|^{k-i} \\
+                                                            & = \sum_{k \geq 1} \sum_{i=1}^{k} \begin{pmatrix}k\\i\end{pmatrix} \gamma ^i \delta^{k-i}                                                       \\
+                                                            & = \sum_{k\geq 1} \left( \left( \gamma + \delta\right)^k - \delta^k \right)                                                                     \\
+                                                            & = \frac{\gamma + \delta}{1 - \gamma - \delta} - \frac{\delta}{1 - \delta}                                                                      \\
                                                             & = \frac{\gamma}{(1-\gamma - \delta)(1-\delta)}
     \end{split}
 \end{equation}
@@ -530,7 +532,7 @@ $$\left|\left| A \right|\right|_{\max} \leq \left|\left| A \right|\right|_2 \leq
 Finally, if $G_{obs}$ and $N$ are symmetric, the singular values are equal to the absolute eigenvalues for $G_{obs}$ and $\tilde{G}_{obs}$ and because $\sigma\left(I + G_{obs}\right), \sigma\left(I + \tilde{G}_{obs}\right) \subseteq (1/2, \infty)$ implies $\sigma\left(\left(I + G_{obs}\right)^{-1}\right), \sigma\left(\left( I +\tilde{ G}_{obs}\right)^{-1}\right) \subseteq (0,2)$ we infer that $\left|\left| \left(I + G_{obs}\right)^{-1} \right|\right|_2 , \left|\left| \left(I + \tilde{G}_{obs}\right)^{-1} \right|\right|_2\leq 2$. Using this with the above equivalence on the Euclidean norm with \autoref{eq:better error bound on g_dir deviation}, we conclude that
 \begin{equation}\label{eq:G_dir difference frob and max bounds}
     \begin{split}
-        \left|\left| G_{dir} - \tilde{G}_{dir} \right|\right|_F \leq 4 \sqrt{d} \left|\left| N \right|\right|_F\\
+        \left|\left| G_{dir} - \tilde{G}_{dir} \right|\right|_F \leq 4 \sqrt{d} \left|\left| N \right|\right|_F \\
         \left|\left| G_{dir} - \tilde{G}_{dir} \right|\right|_{\max} \leq 4 d \left|\left| N \right|\right|_{\max}
     \end{split}
 \end{equation}
@@ -538,68 +540,71 @@ This clearly shows us that for small networks (thus small $d$) we risk smaller e
 % Finally, before continuing with how to estimate the mutual information in practice, we note that $\beta$ has an effect on the above results also, namely, it is easy to show by extending the above argumentation a little, that as 
 
 \section{Estimating mutual information}\label{subsec:Mutual information estimation and KDE methods}
-
+For \autoref{alg:Gobs1} to work, we need a good and preferably fast estimator of mutual information. \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} proposes to use B-splines for this based on \cite{RePEc:plo:pbio00:0050008} which we shall describe in the following section. It is however quickly apparent that this estimator has some problems when computing mutual information based on the Copula representation. We extend the method to other splines but end up using kernel density estimators (KDE) as they can be regularized in a continuous manner and as a result of this in general show great performance.
 
 
 \subsection{B-splines}
-B-spline - non-uniform marginals
-
-\cite{A-Practical-Guide-to-Splines} Cox-de Boor recursion formula
+A spline is in general a piecewise polynomial \cite{A-Practical-Guide-to-Splines}. We say that a spline is of order $p+1$ if the piecewise polynomials are of order $p$. A particular and widely used type of splines are B-splines which are a basis for all splines such that any spline can be expressed as a linear combination of B-splines. Five B-splines of degree $3$ (order $4$) can be seen in \autoref{subfig:B-spline fuctions} where we denote $B_{i,p}$ as a B-spline of degree $p$. The index $i$ comes from the following. Namely, let $i \in \{1,\dots, m + p + 1\}$, we define knots $t_i$ as where pieces of polynomials meet such that
+$$B_{i,p} \left(t\right) = \begin{cases}
+        \text{non-zero}, & t\in [t_i, t_{i+p+1}) \\
+        0,               & \text{otherwise}
+    \end{cases}$$
+uniquely defines $m$ splines on $[t_{p+1}, t_{m}]$ if we further constraint the splines such that
+$$\sum_{i=1}^{m} B_{i,p} \left(t\right) = 1$$
+The B-splines $B_{i,p}$ can then be evaluated at some $t$ through recursion by the Cox-de Boor recursion formula:
 \begin{align}
-    B_{i,0}\left(t\right) &= 1, \quad t\in [t_i, T_{i+1})\\
-    B_{i,k}\left(t\right) &= \frac{t-t_i}{t_{i+k} - t_{i}} B_{i,k-1}\left(t\right) + \frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} B_{i+1,k-1}\left(t\right)
+    B_{i,0}\left(t\right) & = 1, \quad t\in [t_i, T_{i+1})                                                                                                \\
+    B_{i,k}\left(t\right) & = \frac{t-t_i}{t_{i+k} - t_{i}} B_{i,k-1}\left(t\right) + \frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} B_{i+1,k-1}\left(t\right)
 \end{align}
-
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=.7\linewidth]{figures/MI estimation/B-spline basis functions - degree 3.pdf}
-%     \caption{}
-%     \label{}
-% \end{figure}
-
 \begin{figure}[h]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/MI estimation/B-spline basis functions - degree 3.pdf}
         \caption{}
+        \label{subfig:B-spline fuctions}
     \end{subfigure}%
     ~
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/MI estimation/B-spline marginal dist - degree 3.pdf}
         \caption{}
+        \label{subfig:B-spline marginals}
     \end{subfigure}
+    \caption{}
+    \label{fig:B-splines}
 \end{figure}
+The fact that the B-splines sum to $1$ and that we have $m$ splines of degree $p$ is what we will use to estimate the density and in return the mutual information between two random variables based on observations. Namely, suppose we want to compute the mutual information, this can then be done by discretizing the random variables by binning. Namely, we assign the probability mass $P_{i,j}$ to bin $(i,j)\in \{1,\dots, m\} \times \{1,\dots, m\}$ as the fraction of observations in the domain corresponding to that bin. In particular, using Copula entropy, we would divide the unit interval into $m^2$ equal bins. As we saw earlier, in theory, increasing the number of bins will result in a more and more exact estimate of the mutual information. However, with limited observations, this is not the case as in the limit, the bins would not represent the true underlying distribution due to the finite number of observations. Namely, we would observe a few bins with $1$ observation and many with none. As an example, suppose we have $n$ observations and $m$ bins in both dimensions. Then, for $m$ large enough, $P_{i,j} = \frac{1}{n}$ for a hundred distinct bins as well as the marginal probability masses $P_i = \frac{1}{n}$ and $P_j = \frac{1}{n}$. But then,
+\begin{align*}
+    I\left(X_1^\Delta,X_2^\Delta\right) & = - \sum_{i=1}^{m} P_i \log P_i - \sum_{j=1}^{m} P_j \log P_j + \sum_{i,j = 1}^{m} P_{i,j} \log P_{i,j} \\
+                                        & = - n \left(\frac{1}{n} \log \frac{1}{n}\right)                                                         \\
+                                        & = \log n
+\end{align*}
+which is clearly independent of the true underlying distribution. However, if for each observation $x_j$ we assign it to bin $i$ with probability mass $B_{i,p}\left(x_j\right)$ this problem is mitigated to some extent as long as $m$ is not too large. It follows that in total each $x_j$ is assigned to all $m$ bins with a combined mass $1$ as $\sum_i B_{i,p} ( x_j ) = 1$. Thus, let $\left(\boldsymbol X^{(1)}, \boldsymbol X^{(2)}\right)$ be a pair of random vectors each of $d$ i.i.d variables representing observations drawn from a joint distribution, we then define the B-spline density estimator (i.e. a random variable) for $\boldsymbol X^{(1)}$ as 
+$$P_{i}^{(1)} = \frac{1}{d} \sum_{j = 1}^{d} B_{i,p}\left(X_{j}^{(1)}\right), \quad i\in \{1,\dots, m\}$$
+and similarly for $\boldsymbol X^{(2)}$. Furthermore, the B-spline joint density estimator is given by 
+$$P_{i,j} = \frac{1}{d} \sum_{k= 1}^{m} B_{i,p}\left(X^{(1)}_k\right) \, B_{j,p}\left(X^{(2)}_k\right)$$
+i.e. a product of the probability masses such that $\sum_{i,j = 1}^d P_{i,j} = 1$ and the marginal probability masses are given by $P_{i}^{(1)}$ and $P_{j}^{(2)}$ respectively.
 
-Have the useful property that $\sum_i B_{i,k} ( t ) = 1$ for all $k$ and $t$. However, as we will be using this when trying to estimate mutual information from a copula, we have a very specific problem, namely, the marginals are not discrete uniform. $i \in \{1,\dots,n\}$ basis functions
-
-Let $\boldsymbol X$ be a random vector of $d$, i.i.d uniformly distributed random variables $X_j$. Then the random variable corresponding to the probability mass assigned to bin $i$, $P_i$, is given by 
-$$P_i = \frac{1}{d} \sum_{j = 1}^d B_{i,p}\left(X_j\right)$$
-thus, the expected value of $P_i$ is (independently of $d$)
-$$\mathbb{E}\left[P_i\right] = \mathbb{E}\left[B_{i,p}\left(X_j\right)\right] = \int_{0}^{1} B_{i,p}\left(x\right)\, dx$$
-Ideally, this should be equal for all $i$ as we want the marginal to be uniform as per definition of a Copula density. However, this is not the case. In fact, 
-
-
-In particular, we can calculate the expected probability mass for each bin $i$ as 
-
+However, there is still one problem. Namely, the marginals are not uniform when $p > 0$ when $\boldsymbol X^{(k)}$ is. This can also be seen from \autoref{subfig:B-spline marginals}. This is especially bad when computing Copula entropy as for e.g. a Gaussian random vector we would dramatically underestimate the mutual information as we shall also see in the next chapter. To see that this is the case, consider the expectation of $P_i^{(k)}$ for $k\in \{1,2\}$:
+$$\mathbb{E}\left[P_i^{(k)}\right] = \frac{1}{d} \sum_{j = 1}^{d}\mathbb{E}\left[B_{i,p}\left(X_j^{(k)}\right)\right] = \int_{0}^{1} B_{i,p}\left(x\right)\, dx$$
+Indeed, we would want this to be $\frac{1}{m}$ but from the Cox-de Boor recursion formula, we see that this is not the case. Namely, by choosing the knots as in \cite{RePEc:plo:pbio00:0050008} we see that the bins close to the boundary have too little probability mass. Thus we turn our head to anouther family of splines called M-splines.
 
 
 \subsection{M-splines}
-M-spline - need to normalize distributions
-
-\cite{Monotone-Regression-Splines-in-Action} a set of $n$ basis functions indexed by $i$. Letting the order of the basis function equal $p+1$ such that the basis functions are polynomials of degree p. Define knots to be $t_1 = \dots = t_k = 0$ and $t_{n+1} = \dots = t_{n+k} = 1$. furthermore, we choose the remaining $n-k$ (interior) knots to be equally distributed on $[0,1]$ i.e. if $3$ interior points, they are $1/4$, $1/2$ and $3/4$ respectively. (slightly reformualted to agree with the notation for B splines)
+Another known family of splines called M-splines have exactly the desired property of equal integrals. Namely, the M-splines $M_{i,p}$ all have unit integrals. Thus, rescaling with $\frac{1}{m}$ results in a family of splines $\tilde{M}_{i,p}$ such that on average we have that $P_i = \frac{1}{m}$. The M-splines equivalent to those of \autoref{fig:B-splines} are shown in \autoref{fig:M-splines}. Indeed, we see that the marginals are uniform. M-splines can similarly to B-splines by computed recursively by the following \cite{Monotone-Regression-Splines-in-Action}
 \begin{align}
-    M_{i,0}\left(t\right) &= \frac{1}{t_{i+1} - t_i}, \quad t\in [t_i, T_{i+1})\\
-    M_{i,k}\left(t\right) &= \frac{k\left( \left(t - t_i\right) M_{i,k-1}\left(t\right) + \left(t_{i+k} - t\right) M_{i+1,k-1}\left(t\right)\right)}{\left(k-1\right) \left(t_{i+k} - t_{i}\right)} 
+    M_{i,0}\left(t\right) & = \frac{1}{t_{i+1} - t_i}, \quad t\in [t_i, t_{i+1})                                                                                                                     \\
+    M_{i,k}\left(t\right) & = \frac{k\left( \left(t - t_i\right) M_{i,k-1}\left(t\right) + \left(t_{i+k} - t\right) M_{i+1,k-1}\left(t\right)\right)}{\left(k-1\right) \left(t_{i+k} - t_{i}\right)}
 \end{align}
-such that $M_{i,p}$ is a degree $p$ polynomial on $[t_i, t_{i+p+1})$
+However, now the problem is that the splines no longer sum to $1$ (after rescaling with $\frac{1}{n}$). Namely, we can no longer guarantee that the probability masses $P_{i,j}^M$ based on the M-spline sum to $1$. Thus, a renormalization is needed to ensure a proper probability mass function. From \autoref{fig:M-spline functions sum} we see that the effect of $\sum_{i = 1}^{m}\tilde{M}_{i,p}\left(x\right) \neq 1$ in this case is that observations on the interior are smoothed more than those near the boundary.
 \begin{figure}[h]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/MI estimation/M-spline basis functions - degree 3.pdf}
         \caption{}
+        \label{subfig:M-spline functions}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\textwidth}
@@ -608,71 +613,26 @@ such that $M_{i,p}$ is a degree $p$ polynomial on $[t_i, t_{i+p+1})$
         \caption{}
     \end{subfigure}
     \caption{$P_i$ is area of each rectangle i.e. $0.2$.}
+    \label{fig:M-splines}
 \end{figure}
 
-it follows that each of these $M_{i,p+1}$ basis splines integrate to $1$ which, as we saw before is important for uniform marginals. In particular, if we instead let the basis functions be $\tilde{M}_{i,p} = \frac{1}{n} M_{i,p}$, The marginal is uniform. However now there is the downside that basis functions do not sum to $1$ as with the B-spline. Namely, points near the boundary are weighted more than points on the inside as is illustrated below
+This can however be a useful property especially for a bivariate Gaussian for which the Copula density, as we shall see, have peaks at $(0,0)$ and $(1,1)$ while being relatively smooth elsewhere.
+
+We note that through construction, one can create a family of splines that both sum to 1 have integrals $\frac{1}{m}$. However, as these spline-based smoothing methods does not perform well in general perform very differently for different $m$ with the lack of continuously varying this parameter that acts as a regularizing parameter, as we shall see in \autoref{chap:results}, we only present the method for constructing such splines in \autoref{sec:A family of better splines for Copula entropy estimation} and instead consider a more general way of estimating the Copula density, namely kernel density estimators.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width = .55\linewidth]{figures/MI estimation/M-spline coefficient sum - degree 3.pdf}
     \caption{}
-    % \label{}
+    \label{fig:M-spline functions sum}
 \end{figure}
 
+% \cite{Monotone-Regression-Splines-in-Action} a set of $n$ basis functions indexed by $i$. Letting the order of the basis function equal $p+1$ such that the basis functions are polynomials of degree p. Define knots to be $t_1 = \dots = t_k = 0$ and $t_{n+1} = \dots = t_{n+k} = 1$. furthermore, we choose the remaining $n-k$ (interior) knots to be equally distributed on $[0,1]$ i.e. if $3$ interior points, they are $1/4$, $1/2$ and $3/4$ respectively. (slightly reformualted to agree with the notation for B splines)
 
 
 
 
 
-
-\subsection{A better spline}
-In theory, we could make a set of splines ourselves, that has both of the desired properties of B-splines and M-splines. I.e. a set of piecewise polynomials, which we shall denote $Q_{i,p}$, that has both the property that 
-$$\sum_{i = 1}^n Q_{i,p} (t) = 1$$
-and 
-$$\int_{0}^{1} Q_{i,p} (t) \, dt = \frac{1}{n} $$
-Actually, both M- and B-splines satisfies this for $p = 0$ as they are then both piecewise constant and non-zero on disjoint intervals. From this, one can the construct such sets of $Q_{i,p}$ in the following way. Namely, start with the piecewise constant functions, $Q_{i,0}$ depicted in \autoref{fig:spline order 0 - Q} as boxes in the case $n = 5$.
-
-
-\begin{figure}[h]
-    \centering
-    \includesvg[width=.7\linewidth]{figures/MI estimation/Q_spline_construction_step_1.svg}
-    \caption{}
-    \label{fig:spline order 0 - Q}
-\end{figure}
-
-A better spline
-
-\begin{figure}[h]
-    \centering
-    \includesvg[width=.7\linewidth]{figures/MI estimation/Q-spline construction - step 2.svg}
-    \caption{}
-    \label{fig:spline order 0 - Q - step 2}
-\end{figure}
-
-Cut off function has derivative 0 at top and is halfway down at the sides
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline basis functions - degree 3.pdf}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline marginal dist - degree 3.pdf}
-        \caption{}
-    \end{subfigure}
-    \caption{$P_i$ is area of each rectangle i.e. $0.2$.}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width = .55\linewidth]{figures/MI estimation/Q-spline coefficient sum - degree 3.pdf}
-    \caption{}
-    % \label{}
-\end{figure}
-This example does however not work well for many bins, in particular, due to the splines not overlapping that much i.e. a poor regularization on the smoothness. However, the method used for constructing this set of splines can be extended to bleed into multiple neighboring bins just as for B- and M-splines.
 
 
 
@@ -749,10 +709,10 @@ For $h=5$ we do not but due to the above considerations regarding the integrated
 \begin{table}[h]
     \centering
     \begin{tabular}{l|rr}
-        $h$ & $D$ & Adjusted $D$ \\\hline
-        $5$ & $0.029042$ & $0.27315$ \\
-        $h^{Scott}$ & $0.11262$ & $1.0593$ \\
-        $100$ & $0.19194$ & $1.8053$
+        $h$         & $D$        & Adjusted $D$ \\\hline
+        $5$         & $0.029042$ & $0.27315$    \\
+        $h^{Scott}$ & $0.11262$  & $1.0593$     \\
+        $100$       & $0.19194$  & $1.8053$
     \end{tabular}
     \caption{$\left(\sqrt{n} + 0.12 + 0.11/\sqrt{n}\right) D$}
     \label{tab:relfection Kolmogorov Smirnov}
@@ -763,10 +723,10 @@ We now turn our attention to the boundary corrected KDE from \cite{Jones1993Simp
 
 To expand on the boundary corrected KDE to include an upper bound on the domain, we define the functions $a_m\left(x\right)$. Note that in \cite{Jones1993SimpleBC}, they define $a_m$ as a function of $p = x / h$ where $h$ is the bandwidth, but to keep the expression later on easier to understand in terms of kernel centers etc. we instead define them as a function of $x \in [0,x_u]$. The reason for initially defining $a_m$ in terms of $h$ is to keep the bandwidth out of the expression, which we then define as follows, when there is no upper bound
 $$a_m\left(x\right) = \int_{-\infty}^{\frac{x}{h}} u^m K\left(u\right) \, du, \quad x\in [0,\infty)$$
-The above is actually equal to the part of the $m$th moment of the kernel centered at $x$ (and width bandwidth $h$), that is inside the interval $[0,\infty)$ up to a difference in sign. In particular, using the change of variables $z=x-hu$ we have that 
+The above is actually equal to the part of the $m$th moment of the kernel centered at $x$ (and width bandwidth $h$), that is inside the interval $[0,\infty)$ up to a difference in sign. In particular, using the change of variables $z=x-hu$ we have that
 $$a_m\left(x\right) = \left(-1\right)^m  \int_{0}^{\infty} \left(\frac{z-x}{h}\right)^m \, \frac{1}{h}K\left(\frac{z-x}{h}\right) \, dz$$
-where we have used that $K$ assumed to be symmetric. Indeed, the above is as described the part of the $m$th moment that comes from $[0,\infty)$ (up to a difference in sign) of the kernel that is centered at $x$ with bandwidth $h$. From this, it is a natural extension to replace the upper bound of the integral with $x_u$ which, when expanding on the initial definition in \cite{Jones1993SimpleBC} as done in e.g. 
-\cite{Simple_and_eff_baóundary_correction_for_kern_densities} 
+where we have used that $K$ assumed to be symmetric. Indeed, the above is as described the part of the $m$th moment that comes from $[0,\infty)$ (up to a difference in sign) of the kernel that is centered at $x$ with bandwidth $h$. From this, it is a natural extension to replace the upper bound of the integral with $x_u$ which, when expanding on the initial definition in \cite{Jones1993SimpleBC} as done in e.g.
+\cite{Simple_and_eff_boundary_correction_for_kern_densities}
 turns out to be the correct adjustment. Thus, $a_m$ can be understood as part of the moments which we shall then use as normalizing functions. Thus, for an upper bound $x_u$ we find that instead $a_m$ is defined as
 $$a_m\left(x\right) = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u^m K\left(u\right)\, du, \quad x\in [0,x_u]$$
 The boundary adjusted KDE which we shall denote $K^L$ and index depending on the $i$'th kernel center is then given by
@@ -775,22 +735,22 @@ The boundary adjusted KDE which we shall denote $K^L$ and index depending on the
 \end{equation}
 For the Gaussian kernel, $a_m\left(x\right)$ for $m \in \{0,1,2\}$ are easily computed and implemented in code through standard routines as they have simple closed forms in terms of $\phi$ and $\Phi$, i.e. the standard Gaussian density and distribution functions. Namely, for $a_0$ we simply have that by definition of $\Phi$
 \begin{align*}
-    a_0\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} \phi(u) \, du\\
-     & = \Phi\left(\frac{x}{h}\right) - \Phi\left(\frac{x-x_u}{h}\right)
+    a_0\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} \phi(u) \, du              \\
+                      & = \Phi\left(\frac{x}{h}\right) - \Phi\left(\frac{x-x_u}{h}\right)
 \end{align*}
 And similarly, for $a_1$, using that $\int u \,\phi \left(u\right) \, du = - \phi\left(u\right) + C$
 \begin{align*}
-    a_1\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u \phi(u) \, du\\
-     & = \phi \left(\frac{x-x_u}{h}\right)-\phi\left(\frac{x}{h}\right)
+    a_1\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u \phi(u) \, du           \\
+                      & = \phi \left(\frac{x-x_u}{h}\right)-\phi\left(\frac{x}{h}\right)
 \end{align*}
 Finally, for $a_2$ we have, using integration by parts for the first step
 \begin{align*}
-    a_2\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u^2 \phi(u) \, du\\
-     & = \left[- u \phi \left(u\right)\right]_{\frac{x-x_u}{h}}^{\frac{x}{h}} + \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} \phi \left(u\right) \, du\\
-     & = \left(\frac{x-x_u}{h} \phi\left(\frac{x - x_u}{h}\right) - \frac{x}{h} \phi\left(\frac{x}{h}\right)\right) + \left(\Phi\left(\frac{x}{h}\right) - \Phi\left(\frac{x-x_u}{h}\right)\right)\\
-     & = \frac{x}{h} a_1\left(x\right) - \frac{x_u}{h} \phi \left(\frac{x - x_u}{h}\right) + a_0\left(x\right)
+    a_2\left(x\right) & = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u^2 \phi(u) \, du                                                                                                                                    \\
+                      & = \left[- u \phi \left(u\right)\right]_{\frac{x-x_u}{h}}^{\frac{x}{h}} + \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} \phi \left(u\right) \, du                                                     \\
+                      & = \left(\frac{x-x_u}{h} \phi\left(\frac{x - x_u}{h}\right) - \frac{x}{h} \phi\left(\frac{x}{h}\right)\right) + \left(\Phi\left(\frac{x}{h}\right) - \Phi\left(\frac{x-x_u}{h}\right)\right) \\
+                      & = \frac{x}{h} a_1\left(x\right) - \frac{x_u}{h} \phi \left(\frac{x - x_u}{h}\right) + a_0\left(x\right)
 \end{align*}
-From the improved bias of $\mathcal{O} \left(h^2\right)$ for $K_i^L$, we have then obtained an estimator that should perform better in terms of a smaller MISE as we have less bias and by choosing $h$ optimally, we should expect small variance as well. \autoref{fig:suicide KDE example - jones1993} shows the KDE $\hat{f}_L$ using $K^L$ as the kernel (with $x_u = \infty$) and is compared to the reflected kernel from above using the same bandwidth. We note that $\hat{f}_L$ has be rescaled such that it integrates to unity on $[0,\infty)$. Also, from \autoref{fig:Kolmogorov Smirnov DN - jones1993} we see that the density is not statistically significant, and although we can not conclude from this alone, we observe that the deviation from the empirical distribution functions is less than that of the reflected KDE. 
+From the improved bias of $\mathcal{O} \left(h^2\right)$ for $K_i^L$, we have then obtained an estimator that should perform better in terms of a smaller MISE as we have less bias and by choosing $h$ optimally, we should expect small variance as well. \autoref{fig:suicide KDE example - jones1993} shows the KDE $\hat{f}_L$ using $K^L$ as the kernel (with $x_u = \infty$) and is compared to the reflected kernel from above using the same bandwidth. We note that $\hat{f}_L$ has be rescaled such that it integrates to unity on $[0,\infty)$. Also, from \autoref{fig:Kolmogorov Smirnov DN - jones1993} we see that the density is not statistically significant, and although we can not conclude from this alone, we observe that the deviation from the empirical distribution functions is less than that of the reflected KDE.
 
 As noted above, we need to rescale $\hat{f}_L$ to unity as the kernels in \autoref{eq:jones bc corrected kernel} does not have unit integrals. Furthermore, $\hat{f}_L$ is not even ensured to be non-negative. This can be handled in multiple ways. One way is to simply take the maximum of $\hat{f}_L$ and $0$ effectively cutting off any negative density however in \cite{A-simple-nonnegative-boundary-correction-method-for-kernel-density-estimation}, a method is given for KDE based on $K_i^L$ specifically, ensuring the $\mathcal{O}\left(h^2\right)$ bias of the estimator. Namely, let $K^N_i$ be given as
 $$K^N_i \left(x\right) = \frac{1}{h\,a_0\left(x\right)} K\left(\frac{x-x_i}{h}\right)$$
@@ -800,7 +760,7 @@ which is then non-negative everywhere as $a_0\left(x\right), K\left(x\right) > 0
 $$\hat{f}_P \left(x\right) =\hat{f}_N \left(x\right) \, e ^{\frac{\hat{f}_L \left(x\right)}{\hat{f}_N \left(x\right)} - 1} $$
 This $\hat{f}_P$ is also shown in \autoref{fig:suicide KDE example - jones1993 - total figure} resulting in identical density functions. We note that $\hat{f}_P$ works by multiplying the non-negative $\hat{f}_N$ by a (large positive) constant when $\hat{f}_L$ is larger than $\hat{f}_N$ and thus drives $\hat{f}_N$ towards $\hat{f}_L$. However, from implementation and trying on different distributions, sometimes we observe some odd behavior that can easily be derived from the definition of $\hat{f}_P$. Thus, we propose a modification to overcome these odd properties of $\hat{f}_P$. Namely, suppose both $\hat{f}_L$ and $\hat{f}_N$ are close to $0$ at some point $x$. If $\hat{f}_L$ is a magnitude of $10$ larger than $\hat{f}_N$, then $\hat{f}_P$ is approximately $8000 \cdot \hat{f}_N$ which even if $\hat{f}_N$ is small may be large. Thus, it is possible even if both  are close to $0$, that $\hat{f}_P >> 0$ which is in contrast to what we would want from the estimator. Thus, we propose a regularized KDE version of $\hat{f}_P$ denoted $\hat{f}_{regP}$ which is obtained from first rewriting $\hat{f}_P$ as follows
 $$\hat{f}_P\left(x\right) = \bar{f}\left(x\right) \, e^{\frac{\tilde{f}\left(x\right) - \hat{f}\left(x\right)}{\hat{f}\left(x\right)} }$$
-then, we introduce the regularizing parameters $\lambda \geq 0$ such that 
+then, we introduce the regularizing parameters $\lambda \geq 0$ such that
 $$\hat{f}_{regP}\left(x\right) = \bar{f}\left(x\right) \, e^{\frac{\tilde{f}\left(x\right) - \hat{f}\left(x\right)}{\hat{f}\left(x\right) + \lambda} }$$
 In practice, we have found that $\lambda = 0.001$ is a sufficient regularization whilst preserving the shape. A small $\lambda$ is preferred as then we are ensured $\mathcal{O}\left(h^2\right)$ behavior of the bias. In \autoref{fig:suicide KDE example - jones1993 - total figure} we have also shown this regularized version with $\lambda = 0.001$ and observe that it is basically identical to $\hat{f}_P$ on the domain while also behaving well numerically for large $x$, where the issue discussed above arise for $\hat{f}_P$.
 \begin{figure}[h]
@@ -831,7 +791,7 @@ Finally, we note that a recent method based on diffusion \cite{A-Novel-Nonparame
 $$\frac{\partial}{\partial t} \hat{f}\left(x;t\right) = \frac{1}{2} \frac{\partial^2}{\partial x^2} \hat{f}\left(x;t\right)$$
 where $t = h^2$. The Gaussian kernel is then the unique solution when the domain is $\mathbb{R}$ with condition $\hat{f}\left[x;0\right] = \frac{1}{n} \sum_{i=1}^{n} \delta \left(x-x_i\right)$ i.e. the observations is the boundary condition at $h=0$. If instead we add that the support should be e.g. $[0,1]$ the Neumann boundary conditions on the boundary results in an analytical solution. Namely, from the boundary conditions
 $$\frac{\partial}{\partial x} \hat{f}\left(x;t\right) \bigg\rvert_{x = 0} = \frac{\partial}{\partial x} \hat{f}\left(x;t\right) \bigg\rvert_{x = 1} = 0$$
-the analytical solution to $\hat{f}$ is 
+the analytical solution to $\hat{f}$ is
 $$\hat{f}_D\left(x ; t\right) = \frac{1}{n} \sum_{i=1}^{n} K_i^D \left(x\right)$$
 where
 $$K_i^D \left(x\right) = \frac{1}{h}\sum_{k=-\infty}^{\infty} \phi\left(\frac{x - \left(2k+x_i\right)}{h}\right) + \phi\left(\frac{x - \left(2k-x_i\right)}{h}\right)$$
@@ -843,7 +803,7 @@ which is similar to the reflection method from above. They even give an algorith
     \begin{figure}[h]
         \centering
         \includegraphics[width = .7\linewidth]{figures/MI estimation/beta dist example - comparison with diffusion and jones.pdf}
-        \caption{Using the diffusion based KDE on samples from a $\text{Beta}\left(1,4\right)$ distribution, we see that in general it fits very well. Only at the boundary $x=0$ there seems to be a problem which on the other hand, $\hat{f}_{regP}$ does not seem to suffer from to the same extend. In particular, repeating the experiment, $\hat{f}_{regP}$ is on average $4$ at $x = 0$ while $\hat{f}_{D}$ constantly seem to undershoot.}
+        \caption{Using the diffusion based KDE on $1000$ samples from a $\text{Beta}\left(1,4\right)$ distribution, we see that in general it fits very well. Only at the boundary $x=0$ there seems to be a problem which on the other hand, $\hat{f}_{regP}$ does not seem to suffer from to the same extend. In particular, repeating the experiment, $\hat{f}_{regP}$ is on average $4$ at $x = 0$ while $\hat{f}_{D}$ constantly seem to undershoot.}
         \label{fig:beta dsitribution example}
     \end{figure}
 \end{example}

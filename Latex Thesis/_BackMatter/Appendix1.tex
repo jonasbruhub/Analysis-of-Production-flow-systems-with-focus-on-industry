@@ -29,6 +29,60 @@
 \end{table}
 
 \newpage
+
+
+\subsection{A better spline}\label{sec:A family of better splines for Copula entropy estimation}
+In theory, we could make a set of splines ourselves, that has both of the desired properties of B-splines and M-splines. I.e. a set of piecewise polynomials, which we shall denote $Q_{i,p}$, that has both the property that
+$$\sum_{i = 1}^n Q_{i,p} (t) = 1$$
+and
+$$\int_{0}^{1} Q_{i,p} (t) \, dt = \frac{1}{n} $$
+Actually, both M- and B-splines satisfies this for $p = 0$ as they are then both piecewise constant and non-zero on disjoint intervals. From this, one can the construct such sets of $Q_{i,p}$ in the following way. Namely, start with the piecewise constant functions, $Q_{i,0}$ depicted in \autoref{fig:spline order 0 - Q} as boxes in the case $n = 5$.
+
+
+\begin{figure}[h]
+    \centering
+    \includesvg[width=.7\linewidth]{figures/MI estimation/Q_spline_construction_step_1.svg}
+    \caption{}
+    \label{fig:spline order 0 - Q}
+\end{figure}
+
+A better spline
+
+\begin{figure}[h]
+    \centering
+    \includesvg[width=.7\linewidth]{figures/MI estimation/Q-spline construction - step 2.svg}
+    \caption{}
+    \label{fig:spline order 0 - Q - step 2}
+\end{figure}
+
+Cut off function has derivative 0 at top and is halfway down at the sides
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline basis functions - degree 3.pdf}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline marginal dist - degree 3.pdf}
+        \caption{}
+    \end{subfigure}
+    \caption{$P_i$ is area of each rectangle i.e. $0.2$.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .55\linewidth]{figures/MI estimation/Q-spline coefficient sum - degree 3.pdf}
+    \caption{}
+    % \label{}
+\end{figure}
+This example does however not work well for many bins, in particular, due to the splines not overlapping that much i.e. a poor regularization on the smoothness. However, the method used for constructing this set of splines can be extended to bleed into multiple neighboring bins just as for B- and M-splines.
+
+
+
+\newpage
 \section{Confidence interval for absolute correlation in bivariate Gaussian}\label{sec:bivar gauss abs correlation CI}
 From \cite{Confidence_in_Correlation}, given a bivariate Gaussian, the confidence distribution of $\rho$ given the empirical correlation $r$ based on $n$ observations is given by
 $$f\left(\rho \mid r,\nu\right) = \frac{\nu (\nu-1) \Gamma(\nu-1)}{\sqrt{2\pi} \Gamma(\nu + \frac{1}{2})} \frac{\left(1-r^2\right)^{\frac{\nu-1}{2}} \left(1-\rho^2\right)^{\frac{\nu-2}{2}} }{\left(1-r\rho\right)^{\frac{2\nu-1}{2}}} F\left(\frac{3}{2}, -\frac{1}{2}, \nu+\frac{1}{2}, \frac{1+r\rho}{2}\right)$$
