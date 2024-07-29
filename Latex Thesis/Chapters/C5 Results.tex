@@ -342,8 +342,8 @@ where $c_i$ is chosen such that $\text{Var}\left(X_i\right) = 1$ to make the ana
 \begin{equation}\label{eq:bound on variance for network variable from the sum of ingoing weights}
     \begin{aligned}
         \text{Var}\left[X_i\right] & = \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} \text{Cov} \left[X_k,X_l\right] + c_i^2 \\
-                               & \leq  \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} + c_i^2                             \\
-                               & = \left(\sum_{k < i} \rho_{k,i}\right)^2 + c_i^2
+                                   & \leq  \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} + c_i^2                             \\
+                                   & = \left(\sum_{k < i} \rho_{k,i}\right)^2 + c_i^2
     \end{aligned}
 \end{equation}
 where we have used that $Z_i$ is uncorrelated with $X_k$ for $k < i$ and that the covariance between variables with variance $1$ is at most $1$ to obtain the inequality. Hence, choosing the sum of the ingoing edges to be at most $1$ for every node ensures that the constants $c_i$ for $i\in\left\{2,\dots, d\right\}$ exist in order to make the variance of each $X_i$ $1$. This, we will use in the following example to easily build a network such that $\vec{\rho}_{i,j}$ is the pure correlation.
@@ -357,7 +357,7 @@ However, before constructing an example and using bot correlation and mutual inf
 \end{figure}
 \begin{equation}
     \begin{split}
-        \left[G_{obs}\right]_{i,j} & = \text{Cov}\left[X_i , \sum_{k \in N^-_j} \vec{\rho}_{k,j} \, X_k + c_j Z_j\right]           \\
+        \left[G_{obs}\right]_{i,j} & = \text{Cov}\left[X_i , \sum_{k \in N^-_j} \vec{\rho}_{k,j} \, X_k + c_j Z_j\right] \\
                                    & = \text{Cov}\left[X_i , \sum_{k \in N^-_j} \vec{\rho}_{k,j} \, X_k\right]           \\
                                    & = \sum_{k \in N^-_j}\vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]                \\
                                    & = \sum_{k \in 1}^{j-1} \vec{\rho}_{k,j} \text{Cov}\left[X_i, X_k\right]             \\
@@ -373,8 +373,8 @@ which we recognize as \autoref{eq:Gobs from Gdir} hence also for a general netwo
 With the above, we then define an example Gaussian network with the following weights and shown in \autoref{fig:Gaussian network example - ground truth} to get a better understanding of this example hopefully should reappear after deconvolution using both correlation and mutual information respectively.
 \begin{equation}\label{eq:example Gaussian network}
     \begin{aligned}
-        \vec{\rho}_{1,2} & = 0.7, & \vec{\rho}_{5,6} & = 0.5, & \vec{\rho}_{2,7} & = 0.3\\
-        \vec{\rho}_{6,7} & = 0.3, & \vec{\rho}_{6,8} & = 0.7, & \vec{\rho}_{4,9} & = 0.3\\
+        \vec{\rho}_{1,2} & = 0.7, & \vec{\rho}_{5,6}  & = 0.5, & \vec{\rho}_{2,7}  & = 0.3 \\
+        \vec{\rho}_{6,7} & = 0.3, & \vec{\rho}_{6,8}  & = 0.7, & \vec{\rho}_{4,9}  & = 0.3 \\
         \vec{\rho}_{8,9} & = 0.3, & \vec{\rho}_{7,10} & = 0.4, & \vec{\rho}_{9,10} & = 0.2
     \end{aligned}
 \end{equation}
@@ -480,7 +480,7 @@ Having discussed the strengths and weaknesses of \autoref{alg:ND}, we now turn o
 
 
 \subsection{Spline and KDE based CE estimation}
-Before discussing the first example, we shall however discuss the problem with the spline based method and using histograms in general. Namely, we shall first see that if one were to just simply us a raw binning approach, the number of bins $N$ influences the estimate a lot and no number of bins seems to perform well on all cases. Namely, let $\boldsymbol X$ be a bivariate Gaussian with correlation $\rho$, then the Copula density looks as in \autoref{fig:gaussian copula truth}. In particular, we notice the peaks at $(0,0)$ and $(1,1)$ which result in a lot of mutual information. Now, simulating $1000$ observations from the joint distribution and transforming to the unit square through the marginal distribution function for varying correlations $\rho$, we can compare the estimated mutual information $I_{estim}$ using the results from \autoref{subsec:limit entropy and MI} to the true mutual information given by $ I_{exact} = - \frac{1}{2} \log \left(1 - \rho^2\right)$. The results are shown in \autoref{fig:raw histogram for MI estimation} where we report the relative size of the estimate and the exact mutual information and in \autoref{fig:raw hsitogram error for MI estimation} where the difference is reported. From \autoref{fig:raw histogram for MI estimation}, we might choose $N \approx 10$ as in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} however for large correlations, we drastically underestimate mutual information. Increasing the number of bins to e.g. $N = 50$ corrects this error for large correlations, but then small correlations have a relatively large error of around $0.5$ which is a relatively large error when comparing to the error the deconvolution step makes as illustrated in \autoref{fig:3 and 4 chain MI error}.
+Before discussing the first example, we shall however discuss the problem with the spline based method and using histograms in general. Namely, we shall first see that if one were to just simply us a raw binning approach, the number of bins $N$ influences the estimate a lot and no number of bins seems to perform well on all cases. Namely, let $\boldsymbol X$ be a bivariate Gaussian with correlation $\rho$, then the Copula density looks as in \autoref{fig:gaussian copula truth}. In particular, we notice the peaks at $(0,0)$ and $(1,1)$ which result in a lot of mutual information. Now, simulating \textcolor{red}{$n = 400$} observations from the joint distribution and transforming to the unit square through the marginal distribution function for varying correlations $\rho$, we can compare the estimated mutual information $I_{estim}$ using the results from \autoref{subsec:limit entropy and MI} to the true mutual information given by $ I_{exact} = - \frac{1}{2} \log \left(1 - \rho^2\right)$. The results are shown in \autoref{fig:raw histogram for MI estimation} where we report the relative size of the estimate and the exact mutual information and in \autoref{fig:raw hsitogram error for MI estimation} where the difference is reported. From \autoref{fig:raw histogram for MI estimation}, we might choose $N \approx 10$ as in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} however for large correlations, we drastically underestimate mutual information. Increasing the number of bins to e.g. $N = 50$ corrects this error for large correlations, but then small correlations have a relatively large error of around $0.5$ which is a relatively large error when comparing to the error the deconvolution step makes as illustrated in \autoref{fig:3 and 4 chain MI error}.
 
 \begin{figure}[H]
     \centering
@@ -571,12 +571,12 @@ We thus proceed with using the B-spline approach. Similar to the above results, 
         \caption{}
         % \label{subfig:new MI method all zoom}
     \end{subfigure}
-    \caption{}
+    \caption{through repeated trials, we see that this method is actually quite robust when varying the number of observations $n$}
     \label{fig:B-spline approach results MI - error}
 \end{figure}
 The results for M-splines are shown in \autoref{fig:M-spline approach results MI - error} and \autoref{fig:M-spline approach results MI - error} and we observe comparable performance except perhaps for a better estimation of mutual information for large correlations which is what we would expect from our discussion in \autoref{subsec:M-plines - method}.
 
-The problem we observe with the above methods is that when mutual information is large, the Copula density is close to a one-dimensional manifold. Hence, to calculate the mutual information well, need many bins. However, with many bins the estimate becomes more noisy as the support of each spline shrinks with $\frac{1}{N}$. However, as seen from \autoref{fig:approximation of mutual information knowing the true distribution}, if we can accurately estimate the Copula density function from observations, we can compute the mutual information perfectly by increasing the fineness of the integral approximation. In particular, the results below where obtained through the theoretical Copula density function evaluated at the bin centers $\left(\frac{2i - 1}{2N}, \frac{2j - 1}{2N}\right)$ for $i,j \in \{1,\dots, N\}$. We see that this simple approximation with $N = 1000$ is good for correlations up to $\rho = 0.99$ and so in the following, we shall use $N = 1000$ to evaluate the performance of the KDE from the previous chapter.
+The problem we observe with the above methods is that when mutual information is large, the Copula density is close to a one-dimensional manifold. Hence, to calculate the mutual information well, need many bins. However, with many bins the estimate becomes more noisy as the support of each spline shrinks with $\frac{1}{N}$. However, as seen from \autoref{fig:approximation of mutual information knowing the true distribution}, if we can accurately estimate the Copula density function from observations, we can compute the mutual information perfectly by increasing the fineness of the integral approximation. In particular, the results below where obtained through the theoretical Copula density function evaluated at the bin centers $\left(\frac{2i - 1}{2N}, \frac{2j - 1}{2N}\right)$ for $i,j \in \{1,\dots, N\}$. We see that this simple approximation with $N = 1000$ is good for correlations up to $\rho = 0.99$. However, due to numerical limitations, we shall use $N = 500$ and only $400$ observations to evaluate the performance of the KDE from the previous chapter. We note that a more efficient implementation is possible splitting up the computation in multiple parts as the problem with many observations and bins is to compute the joint density function which is of $\mathcal{O}\left(N^2n\right)$
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -597,18 +597,45 @@ The problem we observe with the above methods is that when mutual information is
 \end{figure}
 
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c|c}
+        $\rho$ & mean error & variance                          \\\hline
+        $0.1$  & $0.01867$  & $5.3446 \cdot 10^{-5}$ \\
+        $0.3$  & $0.04969$  & $3.7957 \cdot 10^{-4}$           \\
+        $0.4$  & $0.05621$  & $3.2655  \cdot 10^{-4}$            \\
+        $0.6$  & $0.13404$  & $1.0027  \cdot 10^{-3}$            \\
+        $0.9$  & $0.2853$   & $4.4478  \cdot 10^{-4} $            \\
+        $0.99$ & $0.1005$   & $1.6328  \cdot 10^{-4}$
+    \end{tabular}
+    \caption{based on 10 trials}
+    \label{tab:Jones error and variance}
+\end{table}
+
+the chosen $h$ is around $0.085$ every time using Scott's rule. As we see from \autoref{tab:Jones error and variance}, we have relatively low variance and in general, we compute the mutual information to a higher accuracy than either B-splines and M-splines. Thus, in the following example, we will only consider this method for estimating the mutual information between pairs of variables. In \autoref{fig:density estimate for Jones 1993 and theoretical copula rho 0.99} we have shown the estimated density and the theoretical copula. We observe that indeed the method accurately estimates the Copula density, although we note that the concept of a local bandwidth as discussed in \autoref{sec:Boundary corrected KDE} is likely to improve on the results as peaks at $(0,0)$ and $(1,1)$ does not quite resemble those of the theoretical Copula density.
 
 
-% \textcolor{red}{ved høj korrelation i.e. tæt på laver dimensionel manifold, skal der bruges mange, som i rigtig mange samples i mesh. }
-
-
-% \textcolor{red}{Inkluder flere exempler end blot gaussian as done by \cite{Estimating-mutual-information-Kraskov}}
-
-
-
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/regularized Jones - rho 0.99 - comparison of methods.pdf}
+        \caption{}
+        % \label{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/theoretical gaussian copula - rho 0.99 - comparison of methods.pdf}
+        \caption{}
+        % \label{}
+    \end{subfigure}
+    \caption{}
+    \label{fig:density estimate for Jones 1993 and theoretical copula rho 0.99}
+\end{figure}
 
 \subsection{Exponentiated multivariate Gaussian}\label{ex:1}
-    
+
 
 Let us consider a simple case with $\mathbf{Y} = e^{\mathbf{X}}$ (element wise exponentiation) where $X \sim \mathcal{N}\left(\mathbf{0}, \Sigma\right)$ where
 $$\Sigma = \begin{bmatrix}
@@ -616,9 +643,9 @@ $$\Sigma = \begin{bmatrix}
         0.9 \sigma_1\sigma_2 & \sigma_2^2          & 0          \\
         0                    & 0                   & \sigma_3^2
     \end{bmatrix} = \text{diag}\left(\boldsymbol \sigma \right) \begin{bmatrix}
-        1 & 0.9 & 0\\
-        0.9 & 1 & 0\\
-        0 & 0 & 1
+        1   & 0.9 & 0 \\
+        0.9 & 1   & 0 \\
+        0   & 0   & 1
     \end{bmatrix} \text{diag}\left(\boldsymbol \sigma \right)$$
 In particular, in terms of \autoref{eq:Gaussian network in terms of Z}, we have that for $\boldsymbol X$, $\vec{\rho}_{1,2} = 0.9$. It is clear that to \autoref{alg:Gobs1}, the mean of $\boldsymbol X$ is of no importance as it simply corresponds to a scaling of the $Y_i$ variables. Furthermore, because of \autoref{coro: Coordinate transformation}, theoretically, due to the uniqueness of the Copula $C$ (as $\boldsymbol Y$ is continuous) we should expect near equal or very similar results for $\boldsymbol Y$ and $\boldsymbol X$ from \autoref{alg:Gobs1}. Additionally, different $\boldsymbol \sigma$ corresponds to different scaling of $\boldsymbol X$, and thus we should observe equal or near equal $G_{dir}$ for all $\boldsymbol Y$ independently of $\boldsymbol \sigma$. Initially, we shall see how this hypothesis holds up when considering the following three examples
 $$
