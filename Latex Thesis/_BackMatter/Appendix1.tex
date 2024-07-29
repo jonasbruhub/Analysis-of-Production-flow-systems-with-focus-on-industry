@@ -80,6 +80,52 @@ Cut off function has derivative 0 at top and is halfway down at the sides
 \end{figure}
 This example does however not work well for many bins, in particular, due to the splines not overlapping that much i.e. a poor regularization on the smoothness. However, the method used for constructing this set of splines can be extended to bleed into multiple neighboring bins just as for B- and M-splines.
 
+\newpage
+\section{M-spline based MI estimation}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original all - M-spline - relative error.pdf}
+        \caption{}
+        % \label{subfig:d}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original zoom - M-spline - relative error.pdf}
+        \caption{}
+        % \label{subfig:dd}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original high corr - M-spline - relative error.pdf}
+        \caption{}
+        % \label{subfig:ddd}
+    \end{subfigure}
+    \caption{}
+    \label{fig:M-spline approach results MI - relative error}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original zoom - M-spline - error.pdf}
+        \caption{}
+        % \label{subfig:new MI method all}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ND examples/MI calc/gaussian example original all - M-spline - error.pdf}
+        \caption{}
+        % \label{subfig:new MI method all zoom}
+    \end{subfigure}
+    \caption{}
+    \label{fig:M-spline approach results MI - error}
+\end{figure}
 
 
 \newpage

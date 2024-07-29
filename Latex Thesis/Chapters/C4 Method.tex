@@ -591,7 +591,7 @@ $$\mathbb{E}\left[P_i^{(k)}\right] = \frac{1}{d} \sum_{j = 1}^{d}\mathbb{E}\left
 Indeed, we would want this to be $\frac{1}{m}$ but from the Cox-de Boor recursion formula, we see that this is not the case. Namely, by choosing the knots as in \cite{RePEc:plo:pbio00:0050008} we see that the bins close to the boundary have too little probability mass. Thus we turn our head to anouther family of splines called M-splines.
 
 
-\subsection{M-splines}
+\subsection{M-splines}\label{subsec:M-plines - method}
 Another known family of splines called M-splines have exactly the desired property of equal integrals. Namely, the M-splines $M_{i,p}$ all have unit integrals. Thus, rescaling with $\frac{1}{m}$ results in a family of splines $\tilde{M}_{i,p}$ such that on average we have that $P_i = \frac{1}{m}$. The M-splines equivalent to those of \autoref{fig:B-splines} are shown in \autoref{fig:M-splines}. Indeed, we see that the marginals are uniform. M-splines can similarly to B-splines by computed recursively by the following \cite{Monotone-Regression-Splines-in-Action}
 \begin{align}
     M_{i,0}\left(t\right) & = \frac{1}{t_{i+1} - t_i}, \quad t\in [t_i, t_{i+1})                                                                                                                     \\
