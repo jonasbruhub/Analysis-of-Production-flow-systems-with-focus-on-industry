@@ -599,23 +599,52 @@ The problem we observe with the above methods is that when mutual information is
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{c|c|c}
-        $\rho$ & mean error & variance                          \\\hline
-        $0.1$  & $0.01867$  & $5.3446 \cdot 10^{-5}$ \\
-        $0.3$  & $0.04969$  & $3.7957 \cdot 10^{-4}$           \\
-        $0.4$  & $0.05621$  & $3.2655  \cdot 10^{-4}$            \\
-        $0.6$  & $0.13404$  & $1.0027  \cdot 10^{-3}$            \\
-        $0.9$  & $0.2853$   & $4.4478  \cdot 10^{-4} $            \\
-        $0.99$ & $0.1005$   & $1.6328  \cdot 10^{-4}$
+    \begin{tabular}{c|c|c|c}
+        $\rho$ & $h$ & mean error & variance                          \\\hline
+        $0.1$  & $h^{Scott}$ & $ 0.01583$  & $5.3446 \cdot 10^{-5}$ \\
+        $0.3$  & $h^{Scott}$ & $ 0.02302$  & $3.7957 \cdot 10^{-4}$           \\
+        $0.4$  & $h^{Scott}$ & $ 0.006898$  & $3.2655  \cdot 10^{-4}$            \\
+        $0.6$  & $h^{Scott}$ & $ 0.007803$  & $1.0027  \cdot 10^{-3}$            \\
+        $0.9$  & $h^{Scott}$ & $-0.1844$   & $4.4478  \cdot 10^{-4} $            \\
+        $0.99$ & $h^{Scott}$ & $-1.007$   & $1.6328  \cdot 10^{-4}$\\
+        $0.99$ & $0.3\,h^{Scott}$ & $-0.3468$   & $1.0616  \cdot 10^{-3}$
     \end{tabular}
     \caption{based on 10 trials}
     \label{tab:Jones error and variance}
 \end{table}
 
-the chosen $h$ is around $0.085$ every time using Scott's rule. As we see from \autoref{tab:Jones error and variance}, we have relatively low variance and in general, we compute the mutual information to a higher accuracy than either B-splines and M-splines. Thus, in the following example, we will only consider this method for estimating the mutual information between pairs of variables. In \autoref{fig:density estimate for Jones 1993 and theoretical copula rho 0.99} we have shown the estimated density and the theoretical copula. We observe that indeed the method accurately estimates the Copula density, although we note that the concept of a local bandwidth as discussed in \autoref{sec:Boundary corrected KDE} is likely to improve on the results as peaks at $(0,0)$ and $(1,1)$ does not quite resemble those of the theoretical Copula density.
+% rho 0.99 results - 1.9585177736258443 - 0.3 h_scott
+% 1.6116888127939657
+% 0.0010615687107130179
+
+% rho 0.99 results - 1.9585177736258443
+% 0.9510333150369028
+% 0.00016328396291266664
+
+% rho 0.9 results - 0.8303656034108255
+% 0.6459377215632749
+% 0.00044477897152890144
+
+% rho 0.6 results - 0.22314355131420974
+% 0.23094662195367777
+% 0.0010027356448224958
+
+% rho 0.4 results - 0.0871766935723889
+% 0.09407501724301395
+% 0.0003265470902529246
+
+% rho 0.3 results - 0.047155339735620645
+% 0.07017109137146779
+% 0.0003795689303323563
+
+% rho 0.1 results - 0.005025167926750725
+% 0.02085490109213129
+% 5.344562165818043e-05
+
+the chosen $h$ is around $0.085$ every time using Scott's rule. As we see from \autoref{tab:Jones error and variance}, we have relatively low variance and in general, we compute the mutual information to a higher accuracy than either B-splines and M-splines. Thus, in the following example, we will only consider this method for estimating the mutual information between pairs of variables. In \autoref{fig:density estimate for Jones 1993 and theoretical copula rho 0.99} we have shown the estimated density and the theoretical copula. We observe that indeed the method accurately estimates the Copula density, although we note that the concept of a local bandwidth as discussed in \autoref{sec:Boundary corrected KDE} is likely to improve on the results as peaks at $(0,0)$ and $(1,1)$ does not quite resemble those of the theoretical Copula density. In particular, we observe that reducing the bandwidth improves on the estimate and is clearly observe by the improved resemblance with the theoretical Copula density. Although this is at the cost of undersmoothing on the interior. Indeed, a K-means based estimator of the bandwidth $h$ could work well as the mean distance near $(0,0)$ and $(1,1)$ is very small compared to the interior. However, we note that as long as observations are not almost on a line, the KDE performs quite well. This, we shall also see in the next section where we couple the above discussions on mutual information estimation with the deconvolution algorithm.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -626,6 +655,13 @@ the chosen $h$ is around $0.085$ every time using Scott's rule. As we see from \
     \hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
+        \includegraphics[width=\linewidth]{figures/MI estimation/regularized Jones - rho 0.99 - comparison of methods - 0.3 hscott.pdf}
+        \caption{}
+        % \label{}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
         \includegraphics[width=\linewidth]{figures/MI estimation/theoretical gaussian copula - rho 0.99 - comparison of methods.pdf}
         \caption{}
         % \label{}
@@ -634,9 +670,10 @@ the chosen $h$ is around $0.085$ every time using Scott's rule. As we see from \
     \label{fig:density estimate for Jones 1993 and theoretical copula rho 0.99}
 \end{figure}
 
+
+
+\newpage
 \subsection{Exponentiated multivariate Gaussian}\label{ex:1}
-
-
 Let us consider a simple case with $\mathbf{Y} = e^{\mathbf{X}}$ (element wise exponentiation) where $X \sim \mathcal{N}\left(\mathbf{0}, \Sigma\right)$ where
 $$\Sigma = \begin{bmatrix}
         \sigma_1^2           & 0.9\sigma_1\sigma_2 & 0          \\
@@ -660,28 +697,47 @@ In order for the sample size to not influence the results, we simulate a generou
 \begin{equation} \label{eq:s medium G_dir}
     G_{dir} =
     \begin{bmatrix}
-        -0.33396 & 0.6660  & 0.02512    \\
-        0.6660   & -0.3341 & 0.02730    \\
-        0.02512  & 0.02730 & -0.0020583
+        -0.3363 & 0.6552  & 0.08813    \\
+        0.6552   & -0.3328 & 0.06480    \\
+        0.08813  & 0.06480 & -0.01734
     \end{bmatrix}
 \end{equation}
+
+% [-0.33627979,  0.6551842 ,  0.08813005],
+% [ 0.6551842 , -0.33277217,  0.06479545],
+% [ 0.08813005,  0.06479545, -0.01734464]
+
+
+
 Similarly, for $\boldsymbol\sigma = (0.07, 0.3, 0.9)$:
 \begin{equation} \label{eq:s small G_dir}
     G_{dir} =
     \begin{bmatrix}
-        -0.3335 & 0.6665  & 0.01414     \\
-        0.6665  & -0.3335 & 0.01418     \\
-        0.01414 & 0.01418 & -0.00060124
+        -0.3289 & 0.6610  & 0.004827     \\
+        0.6610  & -0.29889 & 0.004977     \\
+        0.004827 & 0.004977 & -0.00007197
     \end{bmatrix}
 \end{equation}
+
+% [-3.28915910e-01,  6.61083348e-01,  4.82740073e-03],
+% [ 6.61083348e-01, -3.28917372e-01,  4.97658834e-03],
+% [ 4.82740073e-03,  4.97658834e-03, -7.19683122e-05]
+
+
 Finally, for $\boldsymbol\sigma = (1,2,3)$:
 $$ G_{dir} =
     \begin{bmatrix}
-        -0.1490 & 0.09535 & 0.3599  \\
-        0.09535 & -0.2989 & 0.5831  \\
-        0.3599  & 0.5831  & -0.4037
+        -0.1836 & 0.3117 & 0.2252  \\
+        0.3117 & -0.4065 & 0.5962  \\
+        0.2252  & 0.5962  & -0.3673
     \end{bmatrix}
 $$
+
+% [-0.1836319 ,  0.31167794,  0.22522189],
+% [ 0.31167794, -0.40649312,  0.59618603],
+% [ 0.22522189,  0.59618603, -0.36727634]
+
+
 For $\boldsymbol\sigma = (1,1,1)$ and $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ we observe the most resemblance to the $\Sigma$, although the resulting $G_{dir}$ deviate in the final column. The difference is likely produced by \autoref{alg:Gobs1} as if the resulting $G_{obs}$ was the same, then so would $G_{dir}$ and from the above argument, we know that theoretically this should be the case. For the final example, $\boldsymbol\sigma = (1,2,3)$, we see a completely different result and immediately suspect that there must be some numerical errors. Investigating the partial results of \autoref{alg:Gobs1} we immediately see a flaw in the supposedly uniform variables $U_i$ as shown in figure \autoref{fig:Gaussian 3x3 large s uniforms}
 \begin{figure}[H]
     \centering
@@ -693,11 +749,27 @@ For $\boldsymbol\sigma = (1,1,1)$ and $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ we 
     \centering
     \begin{tabular}{c|c|c|c}
                 & $U_1$    & $U_2$   & $U_3$   \\\hline
-        $D_n$   & 0.066209 & 0.36014 & 0.46285 \\
+        $D_n$   & 0.16512 & 0.38354 & 0.42764 \\
         p-value & 0        & 0       & 0
     \end{tabular}
     \caption{based on 10,000 samples for $\boldsymbol\sigma = (1, 2, 3)$.}
 \end{table}
+
+
+% Test-stat. :          0.16511676167616762
+% Adjusted test-stat. : 3.3230573871137117
+% p-value :             5.122165579629326e-10
+
+% Test-stat. :          0.38353835383538354
+% Adjusted test-stat. : 7.718901140114013
+% p-value :             3.54203844926643e-52
+
+% Test-stat. :          0.42764276427642767
+% Adjusted test-stat. : 8.606524452445246
+% p-value :             9.176555571039436e-65
+
+
+
 Before handling this, the non-uniformity of $U_1$ in \autoref{fig:Gaussian 3x3 large s uniforms} is likely also present in the case when $\boldsymbol\sigma = (1,1,1)$. Indeed, \autoref{fig:Gaussian 3x3 medium s uniforms} shows that this is indeed the case.
 \begin{figure}[H]
     \centering
@@ -709,11 +781,25 @@ Before handling this, the non-uniformity of $U_1$ in \autoref{fig:Gaussian 3x3 l
     \centering
     \begin{tabular}{c|c|c|c}
                 & $U_1$    & $U_2$    & $U_3$    \\\hline
-        $D_n$   & 0.068408 & 0.066808 & 0.070809 \\
-        p-value & 0        & 0        & 0
+        $D_n$   & 0.16511 & 0.14672 & 0.10561 \\
+        p-value & 0        & 0        & $2.3819975157518748 \cdot 10^{-4}$
     \end{tabular}
-    \caption{based on 10,000 samples for $\boldsymbol\sigma = (1, 1, 1)$.}
+    \caption{based on 400 samples for $\boldsymbol\sigma = (1, 1, 1)$.}
 \end{table}
+
+% Test-stat. :          0.16511676167616762
+% Adjusted test-stat. : 3.3230573871137117
+% p-value :             5.122165579629326e-10
+
+% Test-stat. :          0.14671542154215422
+% Adjusted test-stat. : 2.952721216246625
+% p-value :             5.347893594719433e-08
+
+% Test-stat. :          0.1056125612561256
+% Adjusted test-stat. : 2.125505601560156
+% p-value :             0.00023819975157518748
+
+
 Finally, just to be sure, $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ is also shown in \autoref{fig:Gaussian 3x3 small s uniforms} and seems very reasonable, except for $U_3$.
 \begin{figure}[H]
     \centering
@@ -725,11 +811,25 @@ Finally, just to be sure, $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ is also shown i
     \centering
     \begin{tabular}{c|c|c|c}
                 & $U_1$      & $U_2$     & $U_3$    \\\hline
-        $D_n$   & 0.00581897 & 0.0068066 & 0.050908 \\
-        p-value & 0.88645    & 0.74179   & 0
+        $D_n$   & 0.029036 & 0.029026 & 0.085611 \\
+        p-value & 0.88427    & 0.88454   & 0.0052791
     \end{tabular}
     \caption{based on 10,000 samples for $\boldsymbol\sigma = (0.07, 0.3, 0.9)$.}
 \end{table}
+
+% Test-stat. :          0.029036403640364084
+% Adjusted test-stat. : 0.5843721414641474
+% p-value :             0.8842745431056299
+
+% Test-stat. :          0.029025652565256466
+% Adjusted test-stat. : 0.584155770702069
+% p-value :             0.8845411493088176
+
+% Test-stat. :          0.08561056105610561
+% Adjusted test-stat. : 1.7229553465346537
+% p-value :             0.005279081841001786
+
+
 From the above examples, it seems that the larger the variance, the worse the uniforms turn out. Reasons for this could include numerical issues when trying to calculate $u_i^{(j)}$ form $y_i^{(j)}$ by $u_i^{(j)} = \int_{-\infty}^{y_i^{(j)}} f_i(y) \, dy$ and bad fitting of the kernel density estimate from observations. In particular, for values similar, which happens in the case for large $\sigma$ such that we observe large negative realizations of $X_i$, $y_i^{(j)}$ are almost 0, and when computing the integral could result in identical values. Furthermore, from \autoref{fig:Gaussian 3x3 large s X3 KDE} we see that indeed the fit is quite poor. Note that we have zoomed in on the interval $[-200 , 200]$ which contains $96.2\%$ of observations. The poor fit is primarily due to the use of Scott's Rule \textcolor{red}{as discussed above} which in this case overshoots the optimal bandwidth by a lot.
 \begin{figure}[H]
     \centering
@@ -755,6 +855,19 @@ However, also here \autoref{coro: Coordinate transformation} proves to be useful
     \end{tabular}
     \caption{based on 10,000 samples for $\boldsymbol\sigma = (1, 2, 3)$ with power transform.}
 \end{table}
+
+% Test-stat. :          0.029436443644364485
+% Adjusted test-stat. : 0.5924231465646576
+% p-value :             0.8741535027574947
+
+% Test-stat. :          0.028525602560255936
+% Adjusted test-stat. : 0.5740920143264309
+% p-value :             0.8966183595247508
+
+% Test-stat. :          0.028819631963196313
+% Adjusted test-stat. : 0.5800095030753074
+% p-value :             0.8895941793129514
+
 The resulting $u_i^{(j)}$ now seem to follow a uniform distribution and indeed the KDE fits much better as seen in \autoref{fig:Gaussian 3x3 large s power X3 KDE}.
 \begin{figure}[H]
     \centering
@@ -765,11 +878,16 @@ The resulting $u_i^{(j)}$ now seem to follow a uniform distribution and indeed t
 Turning to \autoref{alg:Gobs1} and \autoref{alg:ND} we now find that $G_{dir}$ is given by
 $$G_{dir} =
     \begin{bmatrix}
-        -0.3290  & 0.6610   & 0.008440   \\
-        0.6610   & -0.3290  & 0.008150   \\
-        0.008440 & 0.008150 & -0.0002061
+        -0.3290  & 0.6610   & 0.01188   \\
+        0.6610   & -0.3289  & 0.004603   \\
+        0.01188 & 0.004603 & -0.0002167
     \end{bmatrix}
 $$
+
+% [-3.29010102e-01,  6.61023097e-01,  118799447e-02],
+% [ 6.61023097e-01, -3.28890183e-01,  4.60309150e-03],
+% [ 1.18799447e-02,  4.60309150e-03, -2.16682793e-04]
+
 Which is indeed much more comparable with the result from before in \autoref{eq:s medium G_dir} and \autoref{eq:s small G_dir}. The difference between $G_{dir}$ from $\boldsymbol Y$ and $\boldsymbol Y^p$ is clearly visible in \autoref{fig:Gaussian 3x3 large s G_dir differences} and also \autoref{fig:Gaussian 3x3 large s power} resembles the original correlation structure.
 \begin{figure}[H]
     \centering
@@ -786,7 +904,7 @@ Which is indeed much more comparable with the result from before in \autoref{eq:
         \caption{}
         \label{fig:Gaussian 3x3 large s power}
     \end{subfigure}
-    \caption{$G_{dir}$ resulting from $10{,}000$ samples from multi variate Gaussian with $\boldsymbol\sigma = (1,2,3)$ in \textbf{(a)} with raw samples from $\boldsymbol Y$ and in \textbf{(b)} the transformed data corresponding to $\boldsymbol Y^p$.}
+    \caption{$G_{dir}$ resulting from $400$ samples from multi variate Gaussian with $\boldsymbol\sigma = (1,2,3)$ in \textbf{(a)} with raw samples from $\boldsymbol Y$ and in \textbf{(b)} the transformed data corresponding to $\boldsymbol Y^p$.}
     \label{fig:Gaussian 3x3 large s G_dir differences}
 \end{figure}
 Finally, to end this example we shall compare with some theoretical results. Namely, the output $G_{obs}$ of \autoref{alg:Gobs1} can also be calculated theoretically. For this, we shall use \autoref{prop:MI bivariate gaussian} which permits a theoretical result, namely
@@ -807,11 +925,12 @@ Finally, to end this example we shall compare with some theoretical results. Nam
 Similarly, prior to deconvolution, using just the sampled $\boldsymbol X$ (i.e. no exponential transform), \autoref{alg:Gobs1} returns
 $$G_{obs} =
     \begin{bmatrix}
-        0.         & 0.71841756 & 0.01781815 \\
-        0.71841756 & 0.         & 0.01769672 \\
-        0.01781815 & 0.01769672 & 0.
+        0.         & 0.64069542 & 0.01824538 \\
+        0.64069542 & 0.         & 0.0135368 \\
+        0.01824538 & 0.0135368 & 0.
     \end{bmatrix}
 $$
+
 \textcolor{red}{Test om denne G er lige den teoretiske. Eller nærmere, argumenter for hvorfor vi ikke laver en test, eller hvad man kunne gøre. Har samplet fra en simultan normalfordeling, så kan lave en til en mellem MI og korrelation. }
 
 From the confidence density for the correlation $\rho$ given the emperical correlation $r$ is given by
@@ -840,13 +959,13 @@ Clearly these are not equal, but in this case, the error is suspected to origina
 The noticeable difference is in the corners $(0,0)$ and $(1,1)$ where the theoretical copula density tends to infinity whereas the estimated density has modes at $(0.1,0.1)$ and $(0.9,0.9)$. In particular, simply rescaling the copula density in \autoref{alg:Gobs1} does not resemble the theoretical boundary which is a known issue \textcolor{red}{reference til artikel om undershoot peaks og boundary conditions for KDE}. A better approach may be to use jackknifing \textcolor{red}{link til afsnit of jackknifing, som også indeholder reference til artikel hvor dette gøres}.
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[t]{0.45\linewidth}
+    \begin{subfigure}[t]{0.49\linewidth}
         \centering
         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula theoretical contour.pdf}
         \caption{}
     \end{subfigure}%
     ~
-    \begin{subfigure}[t]{0.5\linewidth}
+    \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula theoretical pdf.pdf}
         \caption{}
     \end{subfigure}
@@ -866,7 +985,58 @@ We continue with a similar example to the previous one. The key difference is th
 
 
 \subsection{10D gaussian example}
+
+None are significant (marginal distribution).
+
+Also, we expect this to do well, since there are no correlations above 0.7. Thus, from \autoref{tab:Jones error and variance} the errors in the mutual information estimates should be quite small.
+
+the setup is like before that we simulate $400$ observations from the network, defined by \autoref{eq:example Gaussian network}
+
+% For $10$ variables, took around 25 mintues
+
 \textcolor{red}{casuality svarer til at lave nedre/øvre trekant. Er der forskel i at gør edet før og efter for en symmetrisk matrix? - Ja, men begge metoder på 10 eksempel giver gode resultater. Kommenter at det er matematisk meget forskelligt at filtrere først og så ND efter og omvendt}
+
+
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir - symmetric.pdf}
+        \caption{$\hat{G}_{dir}$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir true - symmetric.pdf}
+        \caption{$G_{dir}$}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir as graph - symmetric.pdf}
+        \caption{$\hat{G}_{dir}$ as a graph}
+    \end{subfigure}
+    \caption{Using a symmetric $G_{obs}$}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir - triangular.pdf}
+        \caption{$\hat{G}_{dir}$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir true - triangular.pdf}
+        \caption{$G_{dir}$}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir as graph - triangular.pdf}
+        \caption{$\hat{G}_{dir}$ as a digraph}
+    \end{subfigure}
+    \caption{Using a triangular $G_{obs}$}
+\end{figure}
+
 
 
 
