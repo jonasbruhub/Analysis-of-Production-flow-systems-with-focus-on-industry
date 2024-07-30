@@ -17,7 +17,7 @@ In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and 
 
 
 \newpage
-\section{Gaussian chains}
+\section{Gaussian chains}\label{sec:Gaussian chains general}
 In this section we discuss the errors made from the assumption that indirect effects can be computed as a sum of powers of the direct effects, i.e. $G_{indir} = \sum_{k\geq 1} G_{dir}^k$. In particular, on a theoretical level, we shall observe the error in $G_{obs}$ based on the above assumption of how similarities are \textit{convolved} which we equate with the noise $N$ from \autoref{subseq:Robustness to noise}, although it is a systematic error. To do this, we shall in this section use a multivariate Gaussian to be able to control the correlation and as an extension of this, the mutual information between pairs of random variables. As we already know, correlation and mutual information is independent of the mean and variance of each of the variables however for a bivariate Gaussian the mutual information is given by the correlation as stated in the following proposition.
 \begin{proposition}\label{prop:MI bivariate gaussian}
     Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
@@ -600,13 +600,13 @@ The problem we observe with the above methods is that when mutual information is
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c}
-        $\rho$ & $h$ & mean error & variance                          \\\hline
-        $0.1$  & $h^{Scott}$ & $ 0.01583$  & $5.3446 \cdot 10^{-5}$ \\
-        $0.3$  & $h^{Scott}$ & $ 0.02302$  & $3.7957 \cdot 10^{-4}$           \\
-        $0.4$  & $h^{Scott}$ & $ 0.006898$  & $3.2655  \cdot 10^{-4}$            \\
-        $0.6$  & $h^{Scott}$ & $ 0.007803$  & $1.0027  \cdot 10^{-3}$            \\
-        $0.9$  & $h^{Scott}$ & $-0.1844$   & $4.4478  \cdot 10^{-4} $            \\
-        $0.99$ & $h^{Scott}$ & $-1.007$   & $1.6328  \cdot 10^{-4}$\\
+        $\rho$ & $h$              & mean error  & variance                 \\\hline
+        $0.1$  & $h^{Scott}$      & $ 0.01583$  & $5.3446 \cdot 10^{-5}$   \\
+        $0.3$  & $h^{Scott}$      & $ 0.02302$  & $3.7957 \cdot 10^{-4}$   \\
+        $0.4$  & $h^{Scott}$      & $ 0.006898$ & $3.2655  \cdot 10^{-4}$  \\
+        $0.6$  & $h^{Scott}$      & $ 0.007803$ & $1.0027  \cdot 10^{-3}$  \\
+        $0.9$  & $h^{Scott}$      & $-0.1844$   & $4.4478  \cdot 10^{-4} $ \\
+        $0.99$ & $h^{Scott}$      & $-1.007$    & $1.6328  \cdot 10^{-4}$  \\
         $0.99$ & $0.3\,h^{Scott}$ & $-0.3468$   & $1.0616  \cdot 10^{-3}$
     \end{tabular}
     \caption{based on 10 trials}
@@ -697,9 +697,9 @@ In order for the sample size to not influence the results, we simulate a generou
 \begin{equation} \label{eq:s medium G_dir}
     G_{dir} =
     \begin{bmatrix}
-        -0.3363 & 0.6552  & 0.08813    \\
-        0.6552   & -0.3328 & 0.06480    \\
-        0.08813  & 0.06480 & -0.01734
+        -0.3363 & 0.6552  & 0.08813  \\
+        0.6552  & -0.3328 & 0.06480  \\
+        0.08813 & 0.06480 & -0.01734
     \end{bmatrix}
 \end{equation}
 
@@ -713,8 +713,8 @@ Similarly, for $\boldsymbol\sigma = (0.07, 0.3, 0.9)$:
 \begin{equation} \label{eq:s small G_dir}
     G_{dir} =
     \begin{bmatrix}
-        -0.3289 & 0.6610  & 0.004827     \\
-        0.6610  & -0.29889 & 0.004977     \\
+        -0.3289  & 0.6610   & 0.004827    \\
+        0.6610   & -0.29889 & 0.004977    \\
         0.004827 & 0.004977 & -0.00007197
     \end{bmatrix}
 \end{equation}
@@ -727,8 +727,8 @@ Similarly, for $\boldsymbol\sigma = (0.07, 0.3, 0.9)$:
 Finally, for $\boldsymbol\sigma = (1,2,3)$:
 $$ G_{dir} =
     \begin{bmatrix}
-        -0.1836 & 0.3117 & 0.2252  \\
-        0.3117 & -0.4065 & 0.5962  \\
+        -0.1836 & 0.3117  & 0.2252  \\
+        0.3117  & -0.4065 & 0.5962  \\
         0.2252  & 0.5962  & -0.3673
     \end{bmatrix}
 $$
@@ -748,9 +748,9 @@ For $\boldsymbol\sigma = (1,1,1)$ and $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ we 
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c}
-                & $U_1$    & $U_2$   & $U_3$   \\\hline
+                & $U_1$   & $U_2$   & $U_3$   \\\hline
         $D_n$   & 0.16512 & 0.38354 & 0.42764 \\
-        p-value & 0        & 0       & 0
+        p-value & 0       & 0       & 0
     \end{tabular}
     \caption{based on 10,000 samples for $\boldsymbol\sigma = (1, 2, 3)$.}
 \end{table}
@@ -780,9 +780,9 @@ Before handling this, the non-uniformity of $U_1$ in \autoref{fig:Gaussian 3x3 l
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c}
-                & $U_1$    & $U_2$    & $U_3$    \\\hline
-        $D_n$   & 0.16511 & 0.14672 & 0.10561 \\
-        p-value & 0        & 0        & $2.3819975157518748 \cdot 10^{-4}$
+                & $U_1$   & $U_2$   & $U_3$                              \\\hline
+        $D_n$   & 0.16511 & 0.14672 & 0.10561                            \\
+        p-value & 0       & 0       & $2.3819975157518748 \cdot 10^{-4}$
     \end{tabular}
     \caption{based on 400 samples for $\boldsymbol\sigma = (1, 1, 1)$.}
 \end{table}
@@ -810,9 +810,9 @@ Finally, just to be sure, $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ is also shown i
 \begin{table}[h]
     \centering
     \begin{tabular}{c|c|c|c}
-                & $U_1$      & $U_2$     & $U_3$    \\\hline
-        $D_n$   & 0.029036 & 0.029026 & 0.085611 \\
-        p-value & 0.88427    & 0.88454   & 0.0052791
+                & $U_1$    & $U_2$    & $U_3$     \\\hline
+        $D_n$   & 0.029036 & 0.029026 & 0.085611  \\
+        p-value & 0.88427  & 0.88454  & 0.0052791
     \end{tabular}
     \caption{based on 10,000 samples for $\boldsymbol\sigma = (0.07, 0.3, 0.9)$.}
 \end{table}
@@ -878,8 +878,8 @@ The resulting $u_i^{(j)}$ now seem to follow a uniform distribution and indeed t
 Turning to \autoref{alg:Gobs1} and \autoref{alg:ND} we now find that $G_{dir}$ is given by
 $$G_{dir} =
     \begin{bmatrix}
-        -0.3290  & 0.6610   & 0.01188   \\
-        0.6610   & -0.3289  & 0.004603   \\
+        -0.3290 & 0.6610   & 0.01188    \\
+        0.6610  & -0.3289  & 0.004603   \\
         0.01188 & 0.004603 & -0.0002167
     \end{bmatrix}
 $$
@@ -926,8 +926,8 @@ Similarly, prior to deconvolution, using just the sampled $\boldsymbol X$ (i.e. 
 $$G_{obs} =
     \begin{bmatrix}
         0.         & 0.64069542 & 0.01824538 \\
-        0.64069542 & 0.         & 0.0135368 \\
-        0.01824538 & 0.0135368 & 0.
+        0.64069542 & 0.         & 0.0135368  \\
+        0.01824538 & 0.0135368  & 0.
     \end{bmatrix}
 $$
 
@@ -984,7 +984,7 @@ We continue with a similar example to the previous one. The key difference is th
 \newpage
 
 
-\subsection{10D gaussian example}
+\subsection{10D gaussian example}\label{sec:Gaussian network MI example - computation}
 
 None are significant (marginal distribution).
 
@@ -998,7 +998,7 @@ the setup is like before that we simulate $400$ observations from the network, d
 
 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir - symmetric.pdf}
@@ -1018,7 +1018,7 @@ the setup is like before that we simulate $400$ observations from the network, d
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian network 10 - G_dir - triangular.pdf}
@@ -1038,11 +1038,174 @@ the setup is like before that we simulate $400$ observations from the network, d
 \end{figure}
 
 
+\newpage
 \section{Pharmaceutical data deconvolution}
 We now turn our attention towards the pharmaceutical simulation study
 
 
+\newpage
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .9\linewidth]{figures/Cycle data/G_dir complete - symmetric.pdf}
+    \caption{}
+    \label{fig:Cycle data - G_dir all}
+\end{figure}
 
+We have labeled sections of $G_{dir}$ such that each sections corresponds to and ordered list of variables. The variables in each section are
+\begin{equation}\label{eq:Cycle data sets of variables}
+    \begin{aligned}
+        T_i^D & = \left\{ T^D_1, T^D_2, T^D_3, T^D_4, T^D_5, T^D_6, T^D_7, T^D_8, T^D_9, T^D_{10} \right\}                                 \\
+        T^P_i & = \left\{ T^P_1, T^P_2, T^P_{3.1}, T^P_{3.2}, T^P_{4.2}, T^P_{5}, T^P_{6}, T^P_{7}, T^P_9, T^P_{10}\right\}                \\
+        T_i   & = \left\{T_1, T_2, T_3, T_4, T_5, T_6, T_7, T_9, T_{10}\right\}                                                            \\
+        T     & = \left\{T\right\}                                                                                                         \\
+        M^D_i & = \left\{ M^D_3, M^D_5, M^D_7, M^D_8, M^D_9 \right\}                                                                       \\
+        M^P_i & = \left\{ M^P_1, M^P_2, M^P_{3.1}, M^P_{3.2}, M^P_{4.2}, M^P_{4.3}, M^P_{5}, M^P_6, M^P_7, M^P_8, M^P_9, M^P_{10} \right\} \\
+        M_i   & = \left\{M_1, M_2, M_3, M_4, M_5, M_6, M_7, M_8, M_9, M_{10}\right\}                                                       \\
+        M     & = \left\{M\right\}
+    \end{aligned}
+\end{equation}
+
+I.e. the section labeled $T^D_i$ consists of all the delays after each process and so on for the remaining section labels. Notice that variables such as $T_8$ has been left out. This is because $T^P_8$ was constant. Hence, $T_8$ is equal to a constant added to $T^D_8$, and we therefore only use one of the variables. Here we have chosen $T^D_8$ as it has an exact interpretation.
+
+
+
+From \autoref{fig:Cycle data - G_dir all}, we observe that the accumulated durations of each process $T_i$ is indeed very dependent on both the delay and durations of the process. This is a sign that the algorithm performs well as by definition $T_i = T^D_i + \sum_{k\in \mathcal{P}_i} T^P_i$ (where $\mathcal{P}_i$ is defined as the set of subprocesses that constitute the process $i$). For example, we observe that $T^D_4$ is strongly associated with $T_4$ while $T^P_{4.2}$ is not as strongly associated with $T_4$. However, there is still a connection. If we plot $T_4$ vs. $T^D_4$ and $T^P_{4-2}$ respectively we indeed observe that the information between $T^D_4$ and $T_4$ is much greater than $T^P_{4.2}$ and $T_4$. As we saw in \textcolor{red}{Section with data}, this is because the delays after process $4$ are much larger than the duration to begin with. Thus, even though $T^D_4$ is $0$, $56.25\%$, most of the $T_4$ can be explained from this alone.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir complete - symmetric - TD4 vs T4.pdf}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir complete - symmetric - TP4 vs T4.pdf}
+        \caption{}
+    \end{subfigure}
+    \caption{$T_4$ vs $T^D_4$ and $T^P_{4.2}$ in (a) and (b) respectively. Notice that the continuous part of the variables has been transformed using the empirical distribution function such that the domain is $[0,1]$ for all the variables. The transformation allows for an easier assessment of the mutual information between the pairs of variables.}
+\end{figure}
+
+Furthermore, we observe that the total duration $T$ is mostly explained by $T_7$ which in turn is explained mostly by $T^P_7$. Although there are many other interesting observations such as the most change in levels and masses occurs during process $3$, addition of a material and stirring. The level after process $3$ is in turn mostly influenced by the stirring but also seem to have some unexplained variation. We observe the unexplained variation from the row corresponding to $M_3$ which has relatively small associations with the other delays, durations and levels.
+
+At this point, we have observed that the algorithm rediscovers what we already know to be true. Namely, that the total masses and process durations are well explained by the individual processes. However, a more interesting question is how each of the processes affect each other. More precisely, if we only consider each process without the accumulated random variables $T_i$, $T$, $M_i$ and $M$, we hope to discover more interesting dependencies between the processes. Also, $T_i$ etc. can always be computed from the processes, so we do not really care for these random variables if we want to understand the dynamics of the system.
+
+Initially, we consider the durations and delays only. Namely, we choose the submatrix of $G_{obs}$ corresponding to the sets $T^D_i$ and $T^P_i$ from \autoref{eq:Cycle data sets of variables}. Still using a symmetric $G_{obs}$, $G_{dir}$ is computed as shown in \autoref{subfig:G_dir using only times}. Now, when removing the \textit{trivial} random variables, as they are known to be the sum of others, a clearer image of how the durations and delay of each process depend on each other emerges.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times - symmetric.pdf}
+        \caption{}
+        \label{subfig:G_dir using only times}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width=\linewidth]{figures/Cycle data/G_dir times - symmetric - TP9 vs TD7.pdf}
+        \caption{}
+        \label{subfig:G_dir times - TP9 vs TD7}
+    \end{subfigure}
+    \caption{}
+    \label{fig:G_dir using only times}
+\end{figure}
+A strong association between $T^P_9$ and $T^D_7$ is observed. When plotting the observations of the random variables (again with the continuous part transformed through the empirical density function) in \autoref{subfig:G_dir times - TP9 vs TD7}, we indeed observe that for many batches, if the delay for process $7$ is non-zero, then the duration of process $9$ is greater than if the delay after process $7$ was $0$. Furthermore, as we have removed transitive effects, it seems as if this association is direct. I.e. something happens during the delay after process $7$, the reaction process, which heavily \textit{influences} to the duration of the cooling process $9$. Interestingly, from \autoref{subfig:G_dir using only times} it does not seem like $T^P_7$ is associated with $T^P_9$. In \autoref{fig:G_dir times - TP9 vs TP7} we have shown these two variables plotted against each other and indeed observe that neither is particularly descriptive of the other.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.43\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - symmetric - 0_1.pdf}
+        \caption{$t=0.1$}
+        \label{subfig:G_dir times - graph - t 0.1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.43\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - symmetric - 0_118.pdf}
+        \caption{$t = 0.118$}
+        \label{subfig:G_dir times - graph - t 0.118}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.43\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - symmetric - 0_12.pdf}
+        \caption{$t=0.12$}
+        \label{subfig:G_dir times - graph - t 0.12}
+    \end{subfigure}
+    \caption{}
+    \label{fig:G_dir times - graphs}
+\end{figure}
+
+In figure \autoref{fig:G_dir times - graphs}, we have shown $G_{dir}$ (from \autoref{subfig:G_dir using only times}) as a graph with varying thresholds. It is clear that the durations of each process are dependent on each other and depending on the threshold we conclude anything from a simple network structure (\autoref{subfig:G_dir times - graph - t 0.118} and \autoref{subfig:G_dir times - graph - t 0.12}) to a much more complicated dependency structure (\autoref{subfig:G_dir times - graph - t 0.1}) between the durations of the processes. As is also clear from \autoref{subfig:G_dir using only times}, the delays of the processes are the first random variables we conclude to be independent of both each other and all other process durations except for $T^D_2$ and $T^D_9$ corresponding to the delays when adding material and cooling respectively and the link between $T^D_7$ and $T^P_9$ discussed above.
+
+Like in \autoref{sec:Gaussian network MI example - computation}, we have good understanding of the topological structure of the processes. Namely, as the delay of processes are always \textit{after} the process we have that in terms of a topological structure of the random variables, $T^D_i$ is always after $T^P_i$. For example, $T^D_3$ is always realized \textit{after} $T^P_{3.1}$ and $T^P_{3.2}$ (in that order). Likewise, as shown in \textcolor{red}{ref to figure about simulation process structure}, as the processes are executed one by one, the topological structure is a simple chain. This should not be confused with the actual causal structure being a chain as in \autoref{sec:Gaussian chains general}. As the topological structure is a chain, it is also unique i.e. there is exactly one ordering of the random variables. The topological structure is summarized in the following
+\begin{equation*}
+    \begin{split}
+         & T^P_{1} \longrightarrow
+        T^D_{1} \longrightarrow
+        T^P_{2} \longrightarrow
+        T^D_{2} \longrightarrow
+        T^P_{3.1} \longrightarrow
+        T^P_{3.2} \longrightarrow
+        T^D_{3}                      \\
+        \longrightarrow
+         & T^P_{4.2} \longrightarrow
+        T^D_{4} \longrightarrow
+        T^P_{5} \longrightarrow
+        T^D_{5} \longrightarrow
+        T^P_{6} \longrightarrow
+        T^D_{6} \longrightarrow
+        T^P_{7}                      \\
+        \longrightarrow
+         & T^D_{7} \longrightarrow
+        T^D_{8} \longrightarrow
+        T^P_{9} \longrightarrow
+        T^D_{9} \longrightarrow
+        T^P_{10} \longrightarrow
+        T^D_{10}
+    \end{split}
+\end{equation*}
+
+Using this to order the rows and columns of $G_{obs}$ and finally only keeping the upper triangular part, we can deconvolve the network once again, but this time using the topological structure. The resulting $G_{dir}$ is shown in \autoref{fig:G_dir times - directed}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = .8\linewidth]{figures/Cycle data/G_dir times - directed.pdf}
+    \caption{}
+    \label{fig:G_dir times - directed}
+\end{figure}
+Although it is hard to compare this $G_{dir}$ with the one obtained without the assumption of topological structure in \autoref{subfig:G_dir using only times}, we see some differences. $T^P_1$ and $T^P_{10}$ are not as directly dependent as originally inferred from the symmetric $G_{obs}$. The differences are however more noticeable, when comparing the graphs from before with those in \autoref{fig:G_dir times directed - graphs} where the directed $G_{obs}$ has been used instead.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.43\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - directed - 0_1.pdf}
+        \caption{$t=0.1$}
+        \label{subfig:G_dir times directed - graph - t 0.1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.43\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - directed - 0_15.pdf}
+        \caption{$t = 0.15$}
+        \label{subfig:G_dir times directed - graph - t 0.15}
+    \end{subfigure}
+    \\[\baselineskip]
+    \begin{subfigure}[t]{0.43\linewidth}
+        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - directed - 0_2.pdf}
+        \caption{$t=0.2$}
+        \label{subfig:G_dir times directed - graph - t 0.2}
+    \end{subfigure}
+    \caption{}
+    \label{fig:G_dir times directed - graphs}
+\end{figure}
+
+Depending on the chosen threshold $t$, we observe that still the delays are the least predictable from other observations as they are not connected to other random variables. This was also the conclusion from \autoref{fig:G_dir times - graphs}. The major difference is that now $T^P_1$ influence $T^P_{10}$ indirectly whereas in \autoref{fig:G_dir times - graphs} they were always directly connected. Also, as threshold in $[0.1,\, 0.2]$ seem to result in good balance between connectedness complexity of the graph. In our opinion \autoref{subfig:G_dir times directed - graph - t 0.15} obtains a good balance while also making sense in terms of how processes of a production flow, structured as in \textcolor{red}{ref til data pharmaceutical flow figur}, could influence later processes.
+
+Finally, we shall try once again to use the levels of the tank after each process along with a topological assumption. However, as it is unclear whether it is the duration of a process that influences the change in levels or the other way around, we shall only make $G_{obs}$ almost triangular. In particular, the entries in $G_{obs}$ related to durations and levels of the same process such as $T^P_1$ and $M^P_1$ are symmetric along the diagonal whilst everything else is removed. This makes $G_{obs}$ \textit{almost} triangular in the sense that it is triangular but with entries in the subdiagonal (in case of an upper triangular $G_{obs}$)
+
+% As an example of why we do not place a topological assumption on durations and levels of the same process, consider a process where a reaction takes places. Clearly the amount of produced substance and duration are related, but if the process is only stopped when a certain concentration is obtained it is neither the duration nor the mass alone that ends the process. 
+
+
+
+
+
+
+
+\textcolor{red}{Løs problemet i subgrafer. F.eks. er delays (næsten) helt uafhængigt af duration, så lås duration for sig}
 
 
 
