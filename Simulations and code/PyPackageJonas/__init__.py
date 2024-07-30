@@ -397,7 +397,7 @@ def KernelJones1D(kern_centers, h = None, boundary = "lower-upper", proper = Tru
     
     return lambda x : kern(x) / c
 
-def KernelJones1D_nonnegative(kern_centers, h = None, boundary = "lower-upper", proper = True, lambda_ = 0):
+def KernelJones1D_nonnegative(kern_centers, h = None, boundary = "lower-upper", proper = True, lambda_ = 0.001):
     n = kern_centers.__len__()
     if h == None:
         h = n**(-1/5) * kern_centers.var()**0.5
@@ -628,7 +628,7 @@ def KernelJones2D_nonnegative_version_Jonas(kern_centers, h = None, boundary = "
         return f_hat * np.exp( (f_til - f_hat) / ( f_hat + lambda_) )
     
     
-    print("Computing normalization constants...", end = "")
+    # print("Computing normalization constants...", end = "")
     # i_res = scipy.integrate.dblquad( lambda x,y : kern(np.vstack([x,y])) ,0,1,0,1)
     # c = i_res[0]
     c = 1
