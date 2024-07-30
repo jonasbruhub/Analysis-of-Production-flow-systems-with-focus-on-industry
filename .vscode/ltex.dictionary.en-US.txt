@@ -37,3 +37,4 @@ piecewise
 Kolmogorov
 Smirnov
 subprocesses
+convolve

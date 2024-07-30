@@ -36,24 +36,24 @@ Thus, if we know a correlation structure of a Gaussian random vector, we also kn
 \begin{equation}\label{eq:Gaussian chain def}
     \begin{split}
         X_1 & = Z_1                                                      \\
-        X_2 & = \rho_{1,2} X_1 + \sqrt{1 - \rho_{1,2}^2} Z_2             \\
-        X_3 & = \rho_{2,3} X_2 + \sqrt{1 - \rho_{2,3}^2} Z_3             \\
+        X_2 & = \vec{\rho}_{1,2} X_1 + \sqrt{1 - \vec{\rho}_{1,2}^2} Z_2             \\
+        X_3 & = \vec{\rho}_{2,3} X_2 + \sqrt{1 - \vec{\rho}_{2,3}^2} Z_3             \\
             & \vdots                                                     \\
-        X_d & = \rho_{d-1, d} X_{d-1} + \sqrt{1 - \rho_{d-1, d}^2} Z_{d}
+        X_d & = \vec{\rho}_{d-1, d} X_{d-1} + \sqrt{1 - \vec{\rho}_{d-1, d}^2} Z_{d}
     \end{split}
 \end{equation}
-It follows that the marginals have variance $1$ as clearly $\text{Var} \left[X_1\right] = \text{Var}\left[Z_1\right] = 1$ and for $i > 1$, $\text{Var}\left[X_i\right] = \rho_{i-1,i}^2 \text{Var}\left[X_{i-1}\right] + \left(1 - \rho_{i-1,i}^2\right) \text{Var} \left[Z_i\right] = 1$ by independence of $X_{i-1}$ and $Z_i$. Thus, the above structure also implies the Cholesky factorization of the correlation matrix for $\boldsymbol X$, namely
+It follows that the marginals have variance $1$ as clearly $\text{Var} \left[X_1\right] = \text{Var}\left[Z_1\right] = 1$ and for $i > 1$, $\text{Var}\left[X_i\right] = \vec{\rho}_{i-1,i}^2 \text{Var}\left[X_{i-1}\right] + \left(1 - \vec{\rho}_{i-1,i}^2\right) \text{Var} \left[Z_i\right] = 1$ by independence of $X_{i-1}$ and $Z_i$. Thus, the above structure also implies the Cholesky factorization of the correlation matrix for $\boldsymbol X$, namely
 $$L = \begin{bmatrix}
         1                          &                                   &                                                        &        &                          \\
-        \rho_{1,2}                 & \sqrt{1 - \rho_{1,2}^2}           &                                                        &        &                          \\
-        \rho_{2,3}\rho_{1,2}       & \rho_{2,3}\sqrt{1 - \rho_{1,2}^2} & \sqrt{1 - \rho_{2,3}^2}                                &        &                          \\
+        \vec{\rho}_{1,2}                 & \sqrt{1 - \vec{\rho}_{1,2}^2}           &                                                        &        &                          \\
+        \vec{\rho}_{2,3}\vec{\rho}_{1,2}       & \vec{\rho}_{2,3}\sqrt{1 - \vec{\rho}_{1,2}^2} & \sqrt{1 - \vec{\rho}_{2,3}^2}                                &        &                          \\
         \vdots                     &                                   &                                                        & \ddots &                          \\
-        \prod_{i=2}^d \rho_{i-1,i} & \dots                             & \sqrt{1 - \rho_{j-1,j}^2} \prod_{i=j+1}^d \rho_{i-1,i} & \dots  & \sqrt{1- \rho_{d-1,d}^2}
+        \prod_{i=2}^d \vec{\rho}_{i-1,i} & \dots                             & \sqrt{1 - \vec{\rho}_{j-1,j}^2} \prod_{i=j+1}^d \vec{\rho}_{i-1,i} & \dots  & \sqrt{1- \vec{\rho}_{d-1,d}^2}
     \end{bmatrix}$$
 Which will allow us to both sample from such a chain and calculate $G_{dir}$ and $G_{obs}$ theoretically. However, in this example, it is easier to calculate the correlation between the variable $X_i$ and $X_j$ directly. As the variance of each variable is $1$ we simply calculate the covariance. We assume without loss of generality that $i < j$ whence
-$$\text{Cov}\left[X_i, X_j\right] = \text{Cov}\left[X_i, \rho_{j-1,j} X_{j-1} + \sqrt{1 - \rho_{j-1,j}^2}Z_j\right] = \rho_{j-1,j} \text{Cov}\left[X_i, X_{j-1}\right]$$
-which by induction implies $\rho_{i,j} = \prod_{k=i+1}^{j} \rho_{k-1,k} = \rho_{j,i}$. At this point, we are almost ready to use the algorithms from the previous chapter. First, we will only use \autoref{alg:ND} to deconvolve the network based on theoretical correlations and later mutual information. However, before doing so, we note that from the definition in \autoref{eq:Gaussian chain def} the random variable $\boldsymbol X$ exhibits a Markovian property. Namely, the $X_i$ above can be understood discrete stochastic process as they are successively drawn based only on the previous variable $X_{i-1}$ i.e. $f\left(X_i \mid X_{i-1}, X_{i-1} , \dots , X_{1}\right) = f\left(X_i \mid X_{i-1}\right)$. Thus, if the algorithm works as intended, we should observe that the deconvolved network is a \textit{chain} of variables as shown in the \autoref{fig:gaussian chain expected res}
-\begin{figure}[h]
+$$\text{Cov}\left[X_i, X_j\right] = \text{Cov}\left[X_i, \vec{\rho}_{j-1,j} X_{j-1} + \sqrt{1 - \vec{\rho}_{j-1,j}^2}Z_j\right] = \vec{\rho}_{j-1,j} \text{Cov}\left[X_i, X_{j-1}\right]$$
+which by induction implies $\rho_{i,j} = \prod_{k=i+1}^{j} \vec{\rho}_{k-1,k} = \rho_{j,i}$. At this point, we are almost ready to use the algorithms from the previous chapter. First, we will only use \autoref{alg:ND} to deconvolve the network based on theoretical correlations and later mutual information. However, before doing so, we note that from the definition in \autoref{eq:Gaussian chain def} the random variable $\boldsymbol X$ exhibits a Markovian property. Namely, the $X_i$ above can be understood discrete stochastic process as they are successively drawn based only on the previous variable $X_{i-1}$ i.e. $f\left(x_i \mid X_{i-1}, X_{i-2} , \dots , X_{1}\right) = f\left(x_i \mid X_{i-1}\right)$. Thus, if the algorithm works as intended, we should observe that the deconvolved network is a \textit{chain} of variables as shown in the \autoref{fig:gaussian chain expected res}
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .7\linewidth]{figures/ND examples/Gaussian chain.png}
     \caption{The graphical representation of a Gaussian chain. Arrows signify a possible causal structure. If furthermore, one assumes that $X_1$ is generated first, then $X_2$ and so on, this is the only causal structure that would make sense.}
@@ -62,34 +62,38 @@ which by induction implies $\rho_{i,j} = \prod_{k=i+1}^{j} \rho_{k-1,k} = \rho_{
 Thus, we now have the expected result, and we proceed with using correlation and mutual information to try and rediscover this structure in the following two sections
 
 \subsection{Gaussian chain deconvolution using correlation}
-In this section, we will use the observed correlation i.e. $\rho_{i,j} = \prod_{k=i+1}^{j} \rho_{k-1,k}$ for the elements of $G_{obs}$ with $i< j$. Note that although it makes sense to consider the correlation between a variable and itself, we shall as discussed before set the diagonal to $0$. Furthermore, we have the choice of using either a symmetrical $G_{obs}$ or a (upper or lower) triangular $G_{obs}$. We shall first use an upper triangular $G_{obs}$ but before using deconvolving using \autoref{eq:Gdir from Gobs} we note that we can actually get the result theoretically. Also, as $G_{obs}$ is in this case strictly upper triangular, the spectral radius is $0$ and hence we have no problems with converge of the infinite sum of powers of (the uniquely defined) $G_{dir}$. From the above, it is clear that $G_{obs}$ is given as follows
+In this section, we will use the observed correlations as elements of $G_{obs}$. In particular, the $(i,j)$ entry of $G_{obs}$ is $\rho_{i,j} = \prod_{k=i+1}^{j} \vec{\rho}_{k-1,k}$ when $i< j$ and $0$ otherwise. This makes $G_{obs}$ strictly upper triangular. Note that although it makes sense to consider the correlation between a variable and itself, we shall as discussed before set the diagonal to $0$. The reason for this becomes clear when we try to convolve $G_{dir}$ based on the initial definition of a general Gaussian chain in \autoref{eq:Gaussian chain def}. We note that in \autoref{alg:Gobs1} we usually (without an assumption of the topology of the random variables) use a symmetrical $G_{obs}$. We shall however postpone this discussion a bit and first use an upper triangular $G_{obs}$. In particular, we shall observe that we perfectly recover the \textit{directional} correlations $\vec{\rho}_{k-1,k}$ from \autoref{eq:Gaussian chain def} through \autoref{eq:Gdir from Gobs}.
+
+As $G_{obs}$ is in this case strictly upper triangular, the spectral radius is $0$ and hence we have no problems with convergence of the infinite sum of powers of (the uniquely defined) $G_{dir}$. From the above, it is clear that $G_{obs}$ is given as follows
 \begin{equation}\label{eq:Gaussian chain G_obs triangular form}
     G_{obs} = \begin{bmatrix}
-        0 & \rho_{1,2} & \rho_{1,2}\,\rho_{2,3} & \dots & \prod_{k=2}^{d} \rho_{k-1,k} \\
-          & 0          & \rho_{2,3}             & \dots & \prod_{k=3}^{d} \rho_{k-1,k} \\
+        0 & \vec{\rho}_{1,2} & \vec{\rho}_{1,2}\,\vec{\rho}_{2,3} & \dots & \prod_{k=2}^{d} \vec{\rho}_{k-1,k} \\
+          & 0          & \vec{\rho}_{2,3}             & \dots & \prod_{k=3}^{d} \vec{\rho}_{k-1,k} \\
           &            & \ddots                 &       & \vdots                       \\
-          &            &                        & 0     & \rho_{d-1,d}                 \\
+          &            &                        & 0     & \vec{\rho}_{d-1,d}                 \\
           &            &                        &       & 0
     \end{bmatrix}
 \end{equation}
 Now, let $G_{dir}$ be given as follows
 $$G_{dir} = \begin{bmatrix}
-        0 & \rho_{1,2} &            &        &              \\
-          & 0          & \rho_{2,3} &        &              \\
+        0 & \vec{\rho}_{1,2} &            &        &              \\
+          & 0          & \vec{\rho}_{2,3} &        &              \\
           &            & \ddots     & \ddots &              \\
-          &            &            & 0      & \rho_{d-1,d} \\
+          &            &            & 0      & \vec{\rho}_{d-1,d} \\
           &            &            &        & 0
     \end{bmatrix}$$
 then $G_{dir}^2$ is given by
 $$G_{dir}^2 = \begin{bmatrix}
-        0 & 0 & \rho_{1,2}   \, \rho_{2,3} &                          &        &                               \\
-          & 0 & 0                          & \rho_{2,3} \, \rho_{3,4} &        &                               \\
+        0 & 0 & \vec{\rho}_{1,2}   \, \vec{\rho}_{2,3} &                          &        &                               \\
+          & 0 & 0                          & \vec{\rho}_{2,3} \, \vec{\rho}_{3,4} &        &                               \\
           &   & \ddots                     & \ddots                   & \ddots &                               \\
-          &   &                            & 0                        & 0      & \rho_{d-2,d-1}\, \rho_{d-1,d} \\
+          &   &                            & 0                        & 0      & \vec{\rho}_{d-2,d-1}\, \vec{\rho}_{d-1,d} \\
           &   &                            &                          & 0      & 0
     \end{bmatrix}$$
-It is not hard to show that in fact $\sum_{k\geq 1} G_{dir}^k = \sum_{k=1}^d G_{dir}^k = G_{obs}$. Thus, if we know a graph topological ordering of the variables corresponding to the structural causal model, we completely recover (without any error) the direct dependencies/correlation from to the initial definition in \autoref{eq:Gaussian chain def}. This actually holds for a general \textit{chain} where $Z_i$ can follow any distribution as long as they are independent as the above computations did not use the fact that $Z_i$ follows a standard Gaussian. From this, we might think that if we have a topological ordering of the variables this is the preferred method, and it is as long as correlation is a good enough measure of similarity/codependency. Albeit this is only shown for the special case of a chain, in \autoref{sec:General Gaussian graph} we consider the more general case and conclude that this indeed holds. Regarding the comment on correlation being a good enough measure of similarity, a prototypical case is when joint probability density function of two variables resemble a parabola. Namely, let $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ i.e. the joint distribution function is a parabola with a Gaussian noise added along the second dimension. In \autoref{fig:MI parabola example}, $1000$ samples from this distribution is shown for $\sigma = 1/10$ along with the expectation $\mathbb{E}\left[X_2 | X_1\right]$. It is not hard to show that the covariance between $X_1$ and $X_2$ is $0$ however we clearly see a relationship between the two variables. In fact, computing the mutual information results in $I\left(X_1,X_2\right) \approx 1.030$ implying $X_1 \not\perp X_2$ i.e. there exists a higher order (non-linear) dependency. Thus, if the algorithm permits, we would prefer mutual information to correlation as we can then use observed higher order relationships to infer a causal structure.
-\begin{figure}[h]
+It is not hard to show that in fact $\sum_{k\geq 1} G_{dir}^k = \sum_{k=1}^d G_{dir}^k = G_{obs}$. Thus, if we know a graph topological ordering of the random variables corresponding to the structural causal model, we completely recover (without any error) the direct dependencies/correlation from to the initial definition in \autoref{eq:Gaussian chain def}. This result holds for a general \textit{chain} where $Z_i$ can follow any distribution as long as they are uncorrelated. This follows from the above computation of $\text{Cov}\left[X_i,X_j\right]$, where no assumption of $Z_j$ was needed except for correlation $0$.
+
+From the above, we might think that if we have a topological ordering of the random variables this is the preferred method, and it is as long as correlation is a good enough measure of similarity/codependency. Albeit this is only shown for the special case of a chain, in \autoref{sec:General Gaussian graph} we consider the more general case and conclude that this indeed holds. Regarding the comment on correlation being a good enough measure of similarity, a prototypical case is when joint probability density function of two variables resemble a parabola. Namely, let $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ i.e. $X_2 = 1 - 4 \left(X_1 - 1/2\right)^2 + \epsilon$ where $\epsilon \sim \mathcal{N}\left(0,\sigma^2\right)$. In \autoref{fig:MI parabola example}, $1000$ samples from this distribution is shown for $\sigma = 1/10$ along with the expectation $\mathbb{E}\left[X_2 | X_1\right]$. It is not hard to show that the covariance between $X_1$ and $X_2$ is $0$ however we clearly see a relationship between the two variables. In fact, computing the mutual information results in $I\left(X_1,X_2\right) \approx 1.030$ implying $X_1 \not\perp X_2$ i.e. there exists a higher order (non-linear) dependency. Thus, if the algorithm permits, we would prefer mutual information to correlation as we can then use observed higher order relationships to infer a causal structure.
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.55\linewidth]{figures/Mutual information figures/parabola example.pdf}
     \caption{1000 samples generated from $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ with $\sigma = 1/10$. The mutual information is calculated theoretically to be $I\left(X_1,X_2\right) \approx 1.030$ and repeated simulations show that the empirical correlation is symmetric around $0$ supporting the claim that the underlying correlation is in fact $0$} % 1.0296516475133333
@@ -106,7 +110,7 @@ We proceed with a $10$-Gaussian chain defined by the following correlations:
     \end{aligned}
 \end{equation}
 We have chosen correlations of different sizes to check if the deconvolution is robust in presence of both strong and weak links. In particular, $X_5$ is only $\rho_{4,5}^2 = 4\%$ of $X_4$ and the remaining $96\%$ is noise/indescribable variance i.e. a very weak link between the first part of the chain up to and including $X_4$ and the rest. However, as discussed above, if let $G_{obs}$ be upper triangular, we should completely rediscover these direct relations which is indeed also the case. In particular, from \autoref{fig:Gaussian chain triangular G_obs using correlation} we observe that the inferred network, represented by $G_{dir}$, is indeed a chain of variables and is exactly equal to the theoretical $G_{dir}$ as we would expect (up to very small rounding errors of the size $10^{-16}$). The \textit{estimated} $G_{dir}$ is also shown as a directed graph which the initial topological assumption implies, with edges wherever $G_{dir}$ is non-zero.
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -133,7 +137,7 @@ We have chosen correlations of different sizes to check if the deconvolution is 
 \end{figure}
 We now proceed to investigate what happens when we remove the prior information of the topological ordering. Namely, if $G_{obs}$ is no longer triangular but symmetric. In particular, let $T_{dir}$ be given as $G_{dir}$ above. We then have that $G_{dir}$ in the symmetric case is $T_{dir} + T_{dir}^T$ and similarly for $G_{obs}$, $G_{obs} = T_{obs} + T_{obs}^T$. Clearly, $I + G_{obs}$ is positive definite as it is a proper correlation matrix. However, that also implies that we might have eigenvalues of $G_{obs}$ less than or equal to $-1/2$ which we know from \autoref{subsec:Setup and assumptions} is not the result of a $G_{dir}$ such that \autoref{eq:Gobs from Gdir} holds as then the infinite sum diverges. However, as $-1$ is not an eigenvalue of $G_{obs}$, we will investigate what happens if one tries to use \autoref{eq:Gdir from Gobs} anyway.
 
-First, we shall however discuss the errors being made using the symmetric $G_{obs}$ and $G_{dir}$. Namely, we investigate the powers of $G_{dir}$:
+But first, we shall discuss the errors being made using the symmetric $G_{obs}$ and $G_{dir}$ instead of triangular. Namely, we investigate the powers of $G_{dir}$:
 $$G_{dir}^2 = \left(T_{dir} + T_{dir}^T\right)^2 = T_{dir}^2 + \left(T_{dir}^T\right)^2 + T_{dir} T_{dir}^T + T_{dir}^T T_{dir}$$
 Higher power can be calculated similarly, but for the second power we already observe an error. The first two terms corresponds to a reflection of the second order effects that we saw above and know to be true, whence the final two terms, that add to a diagonal matrix, is an error and will propagate with higher order powers of $G_{dir}$. Through simple calculation the resulting error is
 $$T_{dir} T_{dir}^T + T_{dir}^T T_{dir} = \begin{bmatrix}
@@ -146,7 +150,7 @@ Thus, for chains, we expect larger errors for sub-chains with strong links i.e. 
 
 From \autoref{fig:Gaussian chain symmetric G_obs using correlation} conclude that we are somewhat able to rediscover the causal structure. Not surprisingly, we observe that the weak link between $X_4$ and $X_5$ is one of the first to break and that we observe some extra edges between the later more strongly linked sub-chain as by the above discussion. Finally, before presenting the results for the unscaled $G_{obs}$ (where the smallest eigenvalue is smaller than $-1/2$) we note that changing the parameter $\alpha$ in \autoref{alg:ND} did not have much of an effect indicating that the network is quite sparse (as we also know it to be) as even removing $65\%$ of the smallest correlations from $G_{obs}$ did not have any effect. The chosen threshold of $t=0.2$ on $G_{dir}$ seemed to be the best compromise of a connected graph and the density of the edges (although this is somewhat biased from prior knowledge of the true graphical structure).
 % Also, trying to have $1$ in the diagonal instead of $0$ worsened the result
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -173,7 +177,7 @@ From \autoref{fig:Gaussian chain symmetric G_obs using correlation} conclude tha
 \end{figure}
 % minimize error in g_dir from equation on error?
 Finally, we try using the unscaled $G_{obs}$ in \autoref{eq:Gdir from Gobs}. Interestingly, we find that the true structure emerges as can be seen from \autoref{fig:Gaussian chain symmetric G_obs using correlation - unscaled}. Although the \textit{correlations} in \autoref{subfig:Gaussian chain symmetric G_obs using correlation - G_dir - unscaled} are not really correlations they do resemble those discovered in \autoref{subfig:Gaussian chain triangular G_obs using correlation - G_dir}. On closer inspection, it is not apparent how they are related except that it is a non-linear relationship. Although in this case it seemed to work not rescaling $G_{obs}$ in order to discover the causal structure we will in general not apply this to real world scenarios as the method is not well-defined in terms of assumptions and what the resulting $G_{dir}$ should be interpreted as.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -217,8 +221,8 @@ I.e. we make an error (which we could take to be the noise $N$ from \autoref{sub
 $$-\frac{1}{2} \log \left(1 - \rho_{i,i+1}^2 \rho_{i+1,i+2}^2\right) - \frac{1}{4} \log\left(1 - \rho_{i,i+1}^2\right)\,\log\left(1 - \rho_{i+1,i+2}^2\right)$$
 In general, for a Gaussian chain, we have that
 $$N_{i,j} = -\frac{1}{2} \log\left( 1 - \prod_{k=i+1}^{j} \rho_{k-1,k}^2\right) - \left(-\frac{1}{2}\right)^{j-i}\prod_{k=i+1}^{j} \log\left(1 - \rho_{k-1,k}^2\right)$$
-As we will see in \autoref{fig:2 chain MI error} and \autoref{fig:3 and 4 chain MI error}, for Gaussian chains we can expect some of the same bleeding behavior as observed in \autoref{fig:Gaussian chain symmetric G_obs using correlation} where we did not use the topological ordering but based the deconvolution on correlation. In particular, from the figures below, we see that for $3$-chains, the error is in many cases close to $0$ and for most combinations of $\rho_{1,2}$ and $\rho_{2,3}$ less than $0.1$. Furthermore, we note that the errors are the largest when it is a strongly connected $3$-chain i.e. if both $\rho_{1,2}$ and $\rho_{2,3}$ are close to $1$ which again resemble the behavior seen in the case of a symmetrical $G_{obs}$ using correlation as the measure of association although in this case, the error does not propagate to the same extend which we shall also see shortly, when applying the deconvolution algorithm. Notice that as as only the absolute value of the correlation matters, we only show the error for $\rho_{1,2}, \rho_{2,3} \geq 0$.
-\begin{figure}[h]
+As we will see in \autoref{fig:2 chain MI error} and \autoref{fig:3 and 4 chain MI error}, for Gaussian chains we can expect some of the same bleeding behavior as observed in \autoref{fig:Gaussian chain symmetric G_obs using correlation} where we did not use the topological ordering but based the deconvolution on correlation. In particular, from the figures below, we see that for $3$-chains, the error is in many cases close to $0$ and for most combinations of $\rho_{1,2}$ and $\rho_{2,3}$ less than $0.1$. Furthermore, we note that the errors are the largest when it is a strongly connected $3$-chain i.e. if both $\rho_{1,2}$ and $\rho_{2,3}$ are close to $1$ which again resemble the behavior seen in the case of a symmetrical $G_{obs}$ using correlation as the measure of association although in this case, the error does not propagate to the same extent which we shall also see shortly, when applying the deconvolution algorithm. Notice that as only the absolute value of the correlation matters, we only show the error for $\rho_{1,2}, \rho_{2,3} \geq 0$.
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.7\linewidth]{figures/Gaussian Chain Theoretical/2 chain error - MI.pdf}
     \caption{The error made by the assumption of $G_{obs}$ and $G_{dir}$ for second order observed effect. Although mutual information does not comply with the underlying assumptions, we observe that in the case of a Gaussian $2$-chain, we can expect the error to be relatively small.}
@@ -289,7 +293,7 @@ the same tendency to miss weak connections as was also observed in \autoref{fig:
     \label{fig:Gaussian chain triangular G_obs using mutual information}
 \end{figure}
 Finally, we use the corresponding symmetric $G_{obs}$ (rescaled such that the largest absolute eigenvalue of $G_{dir}$ is $0.99$) which results in $G_{dir}$ and the graph using a threshold $t=4.88\cdot 10^{-2}$ shown in \autoref{fig:Gaussian chain symmetric G_obs using mutual information}. Again, we observe some bleeding on the more strongly connected sub-chain as with the symmetric $G_{obs}$ using correlation in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. Again, we observe comparable results and note that increasing the threshold would disconnect $X_3$ and $X_4$ before removing the higher order effects.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -320,7 +324,7 @@ In conclusion, we have seen what errors can arise in the discovered network usin
 \newpage
 \section{Directed acyclic Gaussian graphs}\label{sec:General Gaussian graph}
 In this section, we will expand on the results from the previous section by considering a more general structure. In particular, let $\mathcal{G}$ be a directed acyclic graph with nodes corresponding to variables from a random vector $\boldsymbol X$ with directed edges indicating direct dependencies. Clearly, such a DAG has a topological ordering and as such we shall index the variables $1$ through $d$ such that if the index of a variable is $i$, and $j$ is the index of another element of the random vector $\boldsymbol X$, then $i < j$ implies there is no (directed) path from $j$ to $i$. Note that since a topological ordering is not necessarily unique, we can not infer that there is a (directed) path from $i$ to $j$ or even if $k$ is reachable form $j$ (i.e. there exists a path from $j$ to $k$) it does not follow that $k$ is reachable from $i$. In \autoref{fig:General gaussian graph illustration} a subset of such a DAG is shown with a possible labelling where $i < j$ and $k_m < k_n$ when $m < n$. It is then the weights along these directed edges which we will once again call $G_{dir}$ that we wish to infer based on the transitive closure. As an example, from \autoref{fig:General gaussian graph illustration}, the transitive closure would result in an observed similarity between $i$ and $j$ although no $1$ path i.e. single direct edge connects the two variables.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .7\linewidth]{figures/ND examples/Gaussian graph illustration.png}
     \caption{A general (linear) network represented as a DAG. The directed edge weights $\vec{\rho}_{k,l}$ specify how much the variable index $k$ make up of variable $l$. Although $i$ and $j$ are not directly connected, multiple paths may exist between the two nodes, making the propagation of similarity more complex from that of a chain.}
@@ -338,7 +342,7 @@ Similarly to the definition of (Gaussian) chains, based on $d$ independent (or e
         X_d & = \sum_{k < d} \vec{\rho}_{k,d} X_k + c_d Z_d
     \end{split}
 \end{equation}
-where $c_i$ is chosen such that $\text{Var}\left(X_i\right) = 1$ to make the analysis later on carries out simpler as then $\vec{\rho}_{i,j}$ is actually the \textit{direct} correlation between the variables indexed $i$ and $j$ as shown in \autoref{fig:General gaussian graph illustration}. Of course, for the variance of each random variable to be $1$ there must be some constraints on the chosen $\vec{\rho}_{i,j}$ such as neither one of them can exceed $1$ in absolute value. Furthermore, consider the following bound on the variance of $X_i$ assuming $c_k$ for $k < i$ have been chosen such that $\text{Var}\left(X_k\right) = 1$.
+where $c_i$ is chosen such that $\text{Var}\left(X_i\right) = 1$. This is done to make the analysis later on simpler as then covariance and correlation are equal and $\vec{\rho}_{i,j}$ becomes the \textit{direct} correlation between the variables indexed $i$ and $j$ as shown in \autoref{fig:General gaussian graph illustration}. Of course, for the variance of each random variable to be $1$ there must be some constraints on the chosen $\vec{\rho}_{i,j}$ such as neither one of them can exceed $1$ in absolute value. Furthermore, consider the following bound on the variance of $X_i$ assuming $c_k$ for $k < i$ have been chosen such that $\text{Var}\left(X_k\right) = 1$.
 \begin{equation}\label{eq:bound on variance for network variable from the sum of ingoing weights}
     \begin{aligned}
         \text{Var}\left[X_i\right] & = \sum_{k < i} \vec{\rho}_{k,i}^2 + 2\sum_{k < l < i} \vec{\rho}_{k,i} \vec{\rho}_{l,i} \text{Cov} \left[X_k,X_l\right] + c_i^2 \\
@@ -349,7 +353,7 @@ where $c_i$ is chosen such that $\text{Var}\left(X_i\right) = 1$ to make the ana
 where we have used that $Z_i$ is uncorrelated with $X_k$ for $k < i$ and that the covariance between variables with variance $1$ is at most $1$ to obtain the inequality. Hence, choosing the sum of the ingoing edges to be at most $1$ for every node ensures that the constants $c_i$ for $i\in\left\{2,\dots, d\right\}$ exist in order to make the variance of each $X_i$ $1$. This, we will use in the following example to easily build a network such that $\vec{\rho}_{i,j}$ is the pure correlation.
 
 However, before constructing an example and using bot correlation and mutual information we must determine the theoretical $G_{obs}$ for both cases. To do this, we shall consider the $(i,j)$ element of $G_{obs}$ when using correlation as a measure of similarity and later use mutual information based on these correlations and \autoref{prop:MI bivariate gaussian} in the case of $\boldsymbol Z$ being a Gaussian random vector. To calculate $\left[G_{obs}\right]_{i,j}$ we shall consider the immediate predecessors to node $j$ in the graph $\mathcal{G}$ corresponding to \autoref{eq:Gaussian network in terms of Z}. The immediate predecessors or \textit{in-neighbors} of a node $j$ is denoted $N^-\left(X_j\right)$ or in shorthand notation $N^-_j$. An example of this is shown in \autoref{fig:Gaussian graph illustration - immediate predecessor} where the in-neighbors of $j$ has been marked in red. With this notation, we proceed with the computation of the $(i,j)$ entry of $G_{obs}$ which is the covariance between $X_i$ and $X_j$ when $i < j$ and $0$ elsewhere.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .7\linewidth]{figures/ND examples/Gaussian graph illustration - immediate predecessor.png}
     \caption{For node $j$, the set $N^-_j$ is illustrated with red borders. It is exactly the set of nodes going directly into $j$. We note that an in-neighbor $l$ of in-neighbor $k$ of node $j$ can also be an in-neighbor of $j$ i.e. $l$ can influence both $k$ and $j$ whilst $k$ also directly influenced $j$. It is in particular these direct dependencies we want to be sure of as their existence makes the network more complex but failing to discover these can lead to a significant reduction in prediction accuracy.}
@@ -379,7 +383,7 @@ With the above, we then define an example Gaussian network with the following we
     \end{aligned}
 \end{equation}
 In particular, from \autoref{eq:bound on variance for network variable from the sum of ingoing weights} and \autoref{fig:2 chain MI error} and \autoref{fig:3 and 4 chain MI error}, we suspect that the bleeding effects observed for the Gaussian chain won't appear to the same extent in this case.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .6\linewidth]{figures/Gaussian Network Theoretical/Network graph - ground truth.pdf}
     \caption{The graph defined in \autoref{eq:example Gaussian network}. Note that $X_3$ is neither influenced nor influences any other variable. It is of course in our interest to accurately tell if $X_3$ should be considered if we try to infer a probability distribution on e.g. $X_{10}$ given observations of the other variables.}
@@ -387,7 +391,7 @@ In particular, from \autoref{eq:bound on variance for network variable from the 
 \end{figure}
 
 Applying the deconvolution algorithm, we obtain the results in \autoref{fig:Gaussian network triangular G_obs using correlation} which trivially, from the above analysis on $G_{obs}$, results in a perfect reconstruction of the network. If instead, we do not assume a topological structure, we can also recover the structure, although we need to tune the threshold as can be seen from \autoref{fig:Gaussian network symmetric G_obs using correlation}. Tuning the $\alpha$ and $\beta$ did not have much of an effect. Actually, decreasing $\beta$ seemed to worsen the results which is also in line with our expectations as choosing smaller $\beta$ skews the effects of higher order interactions. Thus, it is primarily the threshold that we want to tune in this case and choosing $t = 1.18 \cdot 10^{-1}$ we accurately infer the network structure contrary to the results from the Gaussian chain. However, we still observe second order effects i.e. the edge between $X_5$ and $X_8$ which was also the case in \autoref{fig:Gaussian chain symmetric G_obs using correlation}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -416,7 +420,7 @@ Applying the deconvolution algorithm, we obtain the results in \autoref{fig:Gaus
     \label{fig:Gaussian network symmetric G_obs using correlation}
 \end{figure}
 Finally, before continuing with results regarding the different methods for estimating mutual information, we present the results from above using mutual information instead of correlation as the measure of similarity. Namely, once again assuming the topological order such that $G_{obs}$ is strictly upper triangular and hence no need for rescaling we get the results shown in \autoref{fig:Gaussian network tringular G_obs using mutual information}. As expected, we observe on par performance to using correlation. Only the edge from $5$ to $8$ being almost as strong as $9$ to $10$ could be a problem i.e. choosing a threshold a little larger than $t = 1.7 \cdot 10^{-2}$ (which is quite small and has been used for \autoref{subfig:Gaussian network tringular G_obs using mutual information - t 1_7e-2}) would have resulted in an edge from $X_5$ to $X_8$. Hence, in a real world example we might have chosen to either leave out both edges which depending on the scenario may or may not be an acceptable error or include the both of them.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -441,7 +445,7 @@ Finally, before continuing with results regarding the different methods for esti
 \end{figure}
 
 Furthermore, using a symmetric $G_{obs}$ instead i.e. no assumption on topology, does not seem to have much of an effect as seen from \autoref{fig:Gaussian network symmetric G_obs using mutual information}. Although there still is a small weight on the edge from $X_5$ to $X_8$, by choosing the threshold $t = 1.96 \cdot 10^{-2}$ we can accurately construct the true network structure.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -597,7 +601,7 @@ The problem we observe with the above methods is that when mutual information is
 \end{figure}
 
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c}
         $\rho$ & $h$              & mean error  & variance                 \\\hline
@@ -745,7 +749,7 @@ For $\boldsymbol\sigma = (1,1,1)$ and $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ we 
     \caption{The samples transformed using $U_i = F_i(X_i)$ for $\boldsymbol\sigma = (1,2,3)$. These should be uniformly distributed, but clearly this is not the case for $U_2$ and $U_3$. Even $U_1$ does not quite resemble $10{,}000$ samples from a uniform distribution.}
     \label{fig:Gaussian 3x3 large s uniforms}
 \end{figure}
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c}
                 & $U_1$   & $U_2$   & $U_3$   \\\hline
@@ -777,7 +781,7 @@ Before handling this, the non-uniformity of $U_1$ in \autoref{fig:Gaussian 3x3 l
     \caption{The samples transformed using $U_i = F_i(X_i)$ for $\boldsymbol\sigma = (1,1,1)$.}
     \label{fig:Gaussian 3x3 medium s uniforms}
 \end{figure}
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c}
                 & $U_1$   & $U_2$   & $U_3$                              \\\hline
@@ -807,7 +811,7 @@ Finally, just to be sure, $\boldsymbol\sigma = (0.07, 0.3, 0.9)$ is also shown i
     \caption{\raggedright The samples transformed using $U_i = F_i(X_i)$ for $\boldsymbol\sigma = (0.07, 0.3, 0.9)$.\hfill}
     \label{fig:Gaussian 3x3 small s uniforms}
 \end{figure}
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c}
                 & $U_1$    & $U_2$    & $U_3$     \\\hline
@@ -846,7 +850,7 @@ However, also here \autoref{coro: Coordinate transformation} proves to be useful
     \caption{}
     \label{fig:Gaussian 3x3 large s power uniforms}
 \end{figure}
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c}
                 & $U_1$     & $U_2$     & $U_3$     \\\hline
@@ -994,8 +998,6 @@ the setup is like before that we simulate $400$ observations from the network, d
 
 % For $10$ variables, took around 25 mintues
 
-\textcolor{red}{casuality svarer til at lave nedre/øvre trekant. Er der forskel i at gør edet før og efter for en symmetrisk matrix? - Ja, men begge metoder på 10 eksempel giver gode resultater. Kommenter at det er matematisk meget forskelligt at filtrere først og så ND efter og omvendt}
-
 
 
 \begin{figure}[H]
@@ -1037,14 +1039,37 @@ the setup is like before that we simulate $400$ observations from the network, d
     \caption{Using a triangular $G_{obs}$}
 \end{figure}
 
+\textcolor{red}{casuality svarer til at lave nedre/øvre trekant. Er der forskel i at gør edet før og efter for en symmetrisk matrix? - Ja, men begge metoder på 10 eksempel giver gode resultater. Kommenter at det er matematisk meget forskelligt at filtrere først og så ND efter og omvendt}
+
+
 
 \newpage
 \section{Pharmaceutical data deconvolution}
-We now turn our attention towards the pharmaceutical simulation study
+Finally, we turn our attention to the pharmaceutical production data introduced in \autoref{chap:data}. Namely, we have at this point used the methodology discussed in \autoref{chap:results} both to estimate mutual information, to deconvolve Gaussian networks and chains based on analytical expressions for the correlation between variables and finally in \autoref{sec:Gaussian network MI example - computation} where we have combined \autoref{alg:Gobs1} and \autoref{alg:ND} to infer the causal structure of a $10$-dimensional Gaussian network.
+
+In particular, we saw that the methodology combined produced very accurate results when the mutual information between pairs of random variables were not too large as these proved difficult to estimate to high accuracy without turning to a manual tuning of the bandwidths. We especially want to avoid the manual tuning of the bandwidth in this section, as we shall compute mutual information between $1539$ pairs of random variables.
+
+The random variables are the duration and delays of each process as well as the change in level of the tank during these operations. Recall that e.g. $T^P_{4.1}$ is the duration of process $4.1$ while $T^D_{4}$ is the delay after all subprocesses of process $4$ are completed. Also, for each \textit{temporal} variable $T^P_i$ and $T^D_i$, we have a corresponding change of level $M^P_i$ and $M^D_i$. Initially, we also add the accumulated random variables. Namely, for process $1$, we add the random variable $T_1 = T^P_1 + T^D_1$ and likewise for the level changes for all processes. Also, the total duration $T = \sum_{i=1}^{10} T_i$ and change in level $M = \sum_{i=1}^{10} M_i$ are added as random variables. The accumulated random variables are initially added to see if our method can \textit{rediscover} these simple causal relations. We will later remove these from our discussion as we try to gain a deeper understanding of the production system.
+
+Hence, from the above, we initially have $68$ variables. However, some of them are constant and thus out of interest. The constant \textit{random} variables are
+$$M^D_1,\quad  M^D_2,\quad T^P_{4.1},\quad  M^P_{4.1},\quad T^P_{4.3},\quad  M^D_4,\quad  M^D_6,\quad  T^P_8,\quad  M^D_{10}$$
+However, as $T_8 = T^P_8 + T^D_8$ we shall also exclude either $T_8$ or $T^D_8$ due to $T^P_8$ being constant. In particular, $T_8$ and $T^D_8$ can be interchanged at will when computing mutual information according to \autoref{coro: Coordinate transformation}. Here, we have chosen to keep $T^D_8$ as it is easier to relate to the other processes. Thus, we are only considering $58$ random variables and hence $58 \cdot 57 / 2 = 1539$ pairs of variables as stated above.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = 1\linewidth]{figures/Cycle data/G_obs complete - symmetric.pdf}
+    \caption{}
+    \label{fig:Cycle data - G_obs all}
+\end{figure}
+
+
+% Before computing the mutual information between every pair of random variable
+
+
 
 
 \newpage
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .9\linewidth]{figures/Cycle data/G_dir complete - symmetric.pdf}
     \caption{}
@@ -1065,12 +1090,12 @@ We have labeled sections of $G_{dir}$ such that each sections corresponds to and
     \end{aligned}
 \end{equation}
 
-I.e. the section labeled $T^D_i$ consists of all the delays after each process and so on for the remaining section labels. Notice that variables such as $T_8$ has been left out. This is because $T^P_8$ was constant. Hence, $T_8$ is equal to a constant added to $T^D_8$, and we therefore only use one of the variables. Here we have chosen $T^D_8$ as it has an exact interpretation.
+I.e. the section labeled $T^D_i$ consists of all the delays after each process and so on for the remaining section labels.
 
 
 
 From \autoref{fig:Cycle data - G_dir all}, we observe that the accumulated durations of each process $T_i$ is indeed very dependent on both the delay and durations of the process. This is a sign that the algorithm performs well as by definition $T_i = T^D_i + \sum_{k\in \mathcal{P}_i} T^P_i$ (where $\mathcal{P}_i$ is defined as the set of subprocesses that constitute the process $i$). For example, we observe that $T^D_4$ is strongly associated with $T_4$ while $T^P_{4.2}$ is not as strongly associated with $T_4$. However, there is still a connection. If we plot $T_4$ vs. $T^D_4$ and $T^P_{4-2}$ respectively we indeed observe that the information between $T^D_4$ and $T_4$ is much greater than $T^P_{4.2}$ and $T_4$. As we saw in \textcolor{red}{Section with data}, this is because the delays after process $4$ are much larger than the duration to begin with. Thus, even though $T^D_4$ is $0$, $56.25\%$, most of the $T_4$ can be explained from this alone.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir complete - symmetric - TD4 vs T4.pdf}
@@ -1089,7 +1114,7 @@ Furthermore, we observe that the total duration $T$ is mostly explained by $T_7$
 At this point, we have observed that the algorithm rediscovers what we already know to be true. Namely, that the total masses and process durations are well explained by the individual processes. However, a more interesting question is how each of the processes affect each other. More precisely, if we only consider each process without the accumulated random variables $T_i$, $T$, $M_i$ and $M$, we hope to discover more interesting dependencies between the processes. Also, $T_i$ etc. can always be computed from the processes, so we do not really care for these random variables if we want to understand the dynamics of the system.
 
 Initially, we consider the durations and delays only. Namely, we choose the submatrix of $G_{obs}$ corresponding to the sets $T^D_i$ and $T^P_i$ from \autoref{eq:Cycle data sets of variables}. Still using a symmetric $G_{obs}$, $G_{dir}$ is computed as shown in \autoref{subfig:G_dir using only times}. Now, when removing the \textit{trivial} random variables, as they are known to be the sum of others, a clearer image of how the durations and delay of each process depend on each other emerges.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times - symmetric.pdf}
@@ -1107,7 +1132,7 @@ Initially, we consider the durations and delays only. Namely, we choose the subm
 \end{figure}
 A strong association between $T^P_9$ and $T^D_7$ is observed. When plotting the observations of the random variables (again with the continuous part transformed through the empirical density function) in \autoref{subfig:G_dir times - TP9 vs TD7}, we indeed observe that for many batches, if the delay for process $7$ is non-zero, then the duration of process $9$ is greater than if the delay after process $7$ was $0$. Furthermore, as we have removed transitive effects, it seems as if this association is direct. I.e. something happens during the delay after process $7$, the reaction process, which heavily \textit{influences} to the duration of the cooling process $9$. Interestingly, from \autoref{subfig:G_dir using only times} it does not seem like $T^P_7$ is associated with $T^P_9$. In \autoref{fig:G_dir times - TP9 vs TP7} we have shown these two variables plotted against each other and indeed observe that neither is particularly descriptive of the other.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.43\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - symmetric - 0_1.pdf}
@@ -1162,7 +1187,7 @@ Like in \autoref{sec:Gaussian network MI example - computation}, we have good un
 
 Using this to order the rows and columns of $G_{obs}$ and finally only keeping the upper triangular part, we can deconvolve the network once again, but this time using the topological structure. The resulting $G_{dir}$ is shown in \autoref{fig:G_dir times - directed}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .8\linewidth]{figures/Cycle data/G_dir times - directed.pdf}
     \caption{}
@@ -1170,7 +1195,7 @@ Using this to order the rows and columns of $G_{obs}$ and finally only keeping t
 \end{figure}
 Although it is hard to compare this $G_{dir}$ with the one obtained without the assumption of topological structure in \autoref{subfig:G_dir using only times}, we see some differences. $T^P_1$ and $T^P_{10}$ are not as directly dependent as originally inferred from the symmetric $G_{obs}$. The differences are however more noticeable, when comparing the graphs from before with those in \autoref{fig:G_dir times directed - graphs} where the directed $G_{obs}$ has been used instead.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.43\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - directed - 0_1.pdf}
@@ -1195,31 +1220,42 @@ Although it is hard to compare this $G_{dir}$ with the one obtained without the 
 
 Depending on the chosen threshold $t$, we observe that still the delays are the least predictable from other observations as they are not connected to other random variables. This was also the conclusion from \autoref{fig:G_dir times - graphs}. The major difference is that now $T^P_1$ influence $T^P_{10}$ indirectly whereas in \autoref{fig:G_dir times - graphs} they were always directly connected. Also, as threshold in $[0.1,\, 0.2]$ seem to result in good balance between connectedness complexity of the graph. In our opinion \autoref{subfig:G_dir times directed - graph - t 0.15} obtains a good balance while also making sense in terms of how processes of a production flow, structured as in \textcolor{red}{ref til data pharmaceutical flow figur}, could influence later processes.
 
-Finally, we shall try once again to use the levels of the tank after each process along with a topological assumption. However, as it is unclear whether it is the duration of a process that influences the change in levels or the other way around, we shall only make $G_{obs}$ almost triangular. In particular, the entries in $G_{obs}$ related to durations and levels of the same process such as $T^P_1$ and $M^P_1$ are symmetric along the diagonal whilst everything else is removed. This makes $G_{obs}$ \textit{almost} triangular in the sense that it is triangular but with entries in the subdiagonal (in case of an upper triangular $G_{obs}$)
+Finally, we shall try once again to use the levels of the tank after each process along with a topological assumption. However, as it is unclear whether it is the duration of a process that influences the change in levels or the other way around, we shall only make $G_{obs}$ almost triangular. In particular, the entries in $G_{obs}$ related to durations and levels of the same process such as $T^P_1$ and $M^P_1$ are symmetric along the diagonal whilst everything else is removed. This makes $G_{obs}$ \textit{almost} triangular in the sense that it is triangular but with entries in the subdiagonal (in case of an upper triangular $G_{obs}$). The resulting $G_{obs}$ can be seen in the appendix, \autoref{fig:G_obs times and levelchanges - semi-directed}. As we would expect, level changes and durations for the same process are often very related and share much information. Unsurprisingly, $M^P_{4.3}$ does not seem to be related to any other process. This is likely because the process consists of waiting for a control operator. This also holds when deconvolving the network as seen in \autoref{fig:G_dir times and levelchanges - semidirected} and from the original result in \autoref{fig:Cycle data - G_dir all} where all the random variables where used (although it is harder to see). 
 
-M4.3 er alene, hvilket vi også kan se fra den originale figur
+When comparing $G_{dir}$ in \autoref{fig:G_dir times and levelchanges - semidirected} to $G_{obs}$ in \autoref{fig:G_obs times and levelchanges - semi-directed}, we observe that much of the association between processes originate from indirect effects (as expected) either $1$, $2$ or $3$ processes ago. In particular, the delays, durations and level changes of process $9$ (cooling) appear to caused or at least explained well by what takes places during process $7$ (reaction) which is not unlikely from a chemical point of view. Process $7$, in turn, appear to be influenced mostly by process $6$ (product transfer).
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times and levelchanges - semi-directed.pdf}
+    \caption{}
+    \label{fig:G_dir times and levelchanges - semidirected}
+\end{figure}
 
-\begin{figure}
+In \autoref{fig:G_dir times and levelchanges - semidirected - as graph}, we have shown $G_{dir}$ represented as a graph with a threshold $t = 0.09$ as this filtered out most small values in $G_{dir}$ while keeping a reasonable structure with only the edges with the most information carried along. As mentioned above $M^P_{4.3}$ is alone. Furthermore, we observe that the delays related to process $3$ (after adding the final solids) and $8$ (post reaction process) are by themselves. The duration of the delay and the change in level are however connected although weakly as per \autoref{fig:G_dir times and levelchanges - semidirected}. This also agrees with \autoref{subfig:G_dir times directed - graph - t 0.15} and \autoref{subfig:G_dir times directed - graph - t 0.2} where when we only used the durations and delays of the processes, we observed that $T^D_3$ and $T^D_8$ where unconnected nodes. As another example, $M^P_8$ is not connected to any of the other variables invariant to the choice of threshold $t$. This also makes sense when comparing to \textcolor{red}{REF TIL FIGUR MED TIDER VS MASSER OG MASSER VS TIDER} where the change in level during the post reaction (process $8$) does not seem to be related to any of the other random variables.
+
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .75\linewidth]{figures/Cycle data/G_dir times and levelchanges as graph - directed - 0_09.pdf}
+    \caption{}
+    \label{fig:G_dir times and levelchanges - semidirected - as graph}
 \end{figure}
-% As an example of why we do not place a topological assumption on durations and levels of the same process, consider a process where a reaction takes places. Clearly the amount of produced substance and duration are related, but if the process is only stopped when a certain concentration is obtained it is neither the duration nor the mass alone that ends the process. 
-
-
-\textcolor{red}{ved at sammenligned med figur for e.g. M8 kan ma nse der ikke erså meget at sige på baggrund af denne. Ser også i grapf at den en alene}
-
-
-
-\textcolor{red}{M er changes i level}
+Other interesting observations can be made from the graph depending on the interests of the reader. However, we round of our discussion of the pharmaceutical data by noting that we have obtained a causal structure for the random variables that in many ways reflect both our understanding of the production layout from \autoref{chap:data} and our observations of data. In particular, we observe a relatively simple structure, where many of the processes are only affected by the previous process. Notable deviations of this are the initial processes $1$, $2$ and $3.1$ where raw materials are added. Each of these processes seem to have an influence on the duration of process $3.2$ (the stirring). This also makes sense as the more material is added to the tank, the longer it probably needs to agitated to ensure a consistent mixture of materials to allow for chemical reactions. Finally, the change in level for process $10$ (the transfer of material), appear to be influenced primarily by processes $7$ (the chemical reaction) and $9$ (cooling) while the duration of process $10$ only seems to be related to change in level and no other process directly. This would make sense practically, as we would think that it is the amount of material that is really influenced by the other processes and the duration of transferring the material is only as need to be in order to remove all of the material produced.
 
 
 
 
-\textcolor{red}{Løs problemet i subgrafer. F.eks. er delays (næsten) helt uafhængigt af duration, så lås duration for sig}
+
+
+
+
 
 
 
 \end{document}
+
+
+\textcolor{red}{Løs problemet i subgrafer. F.eks. er delays (næsten) helt uafhængigt af duration, så lås duration for sig}
+
+\textcolor{red}{M er changes i level}
 
 
 % from chain example, we actually would want to overestimate the MI for large rho (i.e. when rho is large, we would want estim. MI to be larger) and for small MI, we would want estimated MI to be less (not the case with 2D kernel methods)
