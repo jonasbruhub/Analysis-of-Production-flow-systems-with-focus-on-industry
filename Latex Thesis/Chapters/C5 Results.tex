@@ -1047,34 +1047,25 @@ the setup is like before that we simulate $400$ observations from the network, d
 \section{Pharmaceutical data deconvolution}
 Finally, we turn our attention to the pharmaceutical production data introduced in \autoref{chap:data}. Namely, we have at this point used the methodology discussed in \autoref{chap:results} both to estimate mutual information, to deconvolve Gaussian networks and chains based on analytical expressions for the correlation between variables and finally in \autoref{sec:Gaussian network MI example - computation} where we have combined \autoref{alg:Gobs1} and \autoref{alg:ND} to infer the causal structure of a $10$-dimensional Gaussian network.
 
-In particular, we saw that the methodology combined produced very accurate results when the mutual information between pairs of random variables were not too large as these proved difficult to estimate to high accuracy without turning to a manual tuning of the bandwidths. We especially want to avoid the manual tuning of the bandwidth in this section, as we shall compute mutual information between $1539$ pairs of random variables.
+In particular, we saw that the methodology combined produced very accurate results when the mutual information between pairs of random variables were not too large as these proved difficult to estimate to high accuracy without turning to a manual tuning of the bandwidths. We especially want to avoid the manual tuning of the bandwidth in this section, as we shall compute mutual information between $1653$ pairs of random variables.
 
 The random variables are the duration and delays of each process as well as the change in level of the tank during these operations. Recall that e.g. $T^P_{4.1}$ is the duration of process $4.1$ while $T^D_{4}$ is the delay after all subprocesses of process $4$ are completed. Also, for each \textit{temporal} variable $T^P_i$ and $T^D_i$, we have a corresponding change of level $M^P_i$ and $M^D_i$. Initially, we also add the accumulated random variables. Namely, for process $1$, we add the random variable $T_1 = T^P_1 + T^D_1$ and likewise for the level changes for all processes. Also, the total duration $T = \sum_{i=1}^{10} T_i$ and change in level $M = \sum_{i=1}^{10} M_i$ are added as random variables. The accumulated random variables are initially added to see if our method can \textit{rediscover} these simple causal relations. We will later remove these from our discussion as we try to gain a deeper understanding of the production system.
 
 Hence, from the above, we initially have $68$ variables. However, some of them are constant and thus out of interest. The constant \textit{random} variables are
 $$M^D_1,\quad  M^D_2,\quad T^P_{4.1},\quad  M^P_{4.1},\quad T^P_{4.3},\quad  M^D_4,\quad  M^D_6,\quad  T^P_8,\quad  M^D_{10}$$
-However, as $T_8 = T^P_8 + T^D_8$ we shall also exclude either $T_8$ or $T^D_8$ due to $T^P_8$ being constant. In particular, $T_8$ and $T^D_8$ can be interchanged at will when computing mutual information according to \autoref{coro: Coordinate transformation}. Here, we have chosen to keep $T^D_8$ as it is easier to relate to the other processes. Thus, we are only considering $58$ random variables and hence $58 \cdot 57 / 2 = 1539$ pairs of variables as stated above.
+However, as $T_8 = T^P_8 + T^D_8$ we shall also exclude either $T_8$ or $T^D_8$ due to $T^P_8$ being constant. In particular, $T_8$ and $T^D_8$ can be interchanged at will when computing mutual information according to \autoref{coro: Coordinate transformation}. Here, we have chosen to keep $T^D_8$ as it is easier to relate to the other processes. Thus, we are only considering $58$ random variables and hence $58 \cdot 57 / 2 = 1653$ pairs of variables as stated above.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width = 1\linewidth]{figures/Cycle data/G_obs complete - symmetric.pdf}
-    \caption{}
-    \label{fig:Cycle data - G_obs all}
-\end{figure}
+We note that as the resolution in time is $0.001$ we add uniform distributed noise from $[0,0.001]$ to the durations and delays. In particular, we observe that in some cases equal durations are observed. These would result in non-uniform marginals like in \autoref{ex:1} hence making the algorithm fail at computing the mutual information accurately. We note that the experiments to follow have been carried out multiple times to assess the influence of this perturbation to the durations and delays. However, as this did not influence our results in the slightest we will not discuss this further. Furthermore, instead of using a KDE as in \autoref{ex:1} to transform the (continuous) observations to lie on the unit interval through the distribution function, we have used the empirical distribution function. This was done to ensure that all $58$ random variables were transformed appropriately without having to consider transformations (like in \autoref{ex:1}).
 
-
-% Before computing the mutual information between every pair of random variable
-
-
-
-
-\newpage
 \begin{figure}[ht]
     \centering
     \includegraphics[width = .9\linewidth]{figures/Cycle data/G_dir complete - symmetric.pdf}
-    \caption{}
+    \caption{$G_{dir}$ from a symmetric $G_{obs}$. Other than the accumulated variables, we observe strong dependencies between the duration of a process and the change in level during the process by comparing the columns and rows labeled $T^P_i$ and $M^P_i$.}
     \label{fig:Cycle data - G_dir all}
 \end{figure}
+
+The resulting $G_{obs}$ is shown in the appendix, \autoref{fig:Cycle data - G_obs all}. We observe that there indeed is a strong dependence between the accumulated variables and their summands such as $T_1$ and $T^D_1$ as well as $T^P_1$. We immediately use the deconvolution algorithm resulting in the $G_{dir}$ seen in \autoref{fig:Cycle data - G_dir all}
+
 
 We have labeled sections of $G_{dir}$ such that each sections corresponds to and ordered list of variables. The variables in each section are
 \begin{equation}\label{eq:Cycle data sets of variables}
@@ -1093,9 +1084,8 @@ We have labeled sections of $G_{dir}$ such that each sections corresponds to and
 I.e. the section labeled $T^D_i$ consists of all the delays after each process and so on for the remaining section labels.
 
 
-
-From \autoref{fig:Cycle data - G_dir all}, we observe that the accumulated durations of each process $T_i$ is indeed very dependent on both the delay and durations of the process. This is a sign that the algorithm performs well as by definition $T_i = T^D_i + \sum_{k\in \mathcal{P}_i} T^P_i$ (where $\mathcal{P}_i$ is defined as the set of subprocesses that constitute the process $i$). For example, we observe that $T^D_4$ is strongly associated with $T_4$ while $T^P_{4.2}$ is not as strongly associated with $T_4$. However, there is still a connection. If we plot $T_4$ vs. $T^D_4$ and $T^P_{4-2}$ respectively we indeed observe that the information between $T^D_4$ and $T_4$ is much greater than $T^P_{4.2}$ and $T_4$. As we saw in \textcolor{red}{Section with data}, this is because the delays after process $4$ are much larger than the duration to begin with. Thus, even though $T^D_4$ is $0$, $56.25\%$, most of the $T_4$ can be explained from this alone.
-\begin{figure}[ht]
+From \autoref{fig:Cycle data - G_dir all}, we observe that the accumulated durations of each process $T_i$ is indeed very dependent on both the delay and durations of the process. This is a sign that the algorithm performs well as by definition $T_i = T^D_i + \sum_{k\in \mathcal{P}_i} T^P_i$ (where $\mathcal{P}_i$ is defined as the set of subprocesses that constitute the process $i$).
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir complete - symmetric - TD4 vs T4.pdf}
@@ -1107,32 +1097,41 @@ From \autoref{fig:Cycle data - G_dir all}, we observe that the accumulated durat
         \caption{}
     \end{subfigure}
     \caption{$T_4$ vs $T^D_4$ and $T^P_{4.2}$ in (a) and (b) respectively. Notice that the continuous part of the variables has been transformed using the empirical distribution function such that the domain is $[0,1]$ for all the variables. The transformation allows for an easier assessment of the mutual information between the pairs of variables.}
+    \label{fig:T4 vs TD4 and TP4.2}
 \end{figure}
+
+For example, we observe that $T^D_4$ is strongly associated with $T_4$ while $T^P_{4.2}$ is not as strongly associated with $T_4$. However, there is still a connection. If we plot $T_4$ vs. $T^D_4$ and $T^P_{4.2}$ respectively (\autoref{fig:T4 vs TD4 and TP4.2}) we indeed observe that the information between $T^D_4$ and $T_4$ is much greater than $T^P_{4.2}$ and $T_4$. As we saw in \textcolor{red}{Section with data}, this is because the delays after process $4$ are much larger than the duration to begin with. Thus, even though $T^D_4$ is $0$, $56.25\%$ of times, most of $T_4$ can be explained from this alone, when comparing to the scores between $T_4$ and the other random variables.
 
 Furthermore, we observe that the total duration $T$ is mostly explained by $T_7$ which in turn is explained mostly by $T^P_7$. Although there are many other interesting observations such as the most change in levels and masses occurs during process $3$, addition of a material and stirring. The level after process $3$ is in turn mostly influenced by the stirring but also seem to have some unexplained variation. We observe the unexplained variation from the row corresponding to $M_3$ which has relatively small associations with the other delays, durations and levels.
 
 At this point, we have observed that the algorithm rediscovers what we already know to be true. Namely, that the total masses and process durations are well explained by the individual processes. However, a more interesting question is how each of the processes affect each other. More precisely, if we only consider each process without the accumulated random variables $T_i$, $T$, $M_i$ and $M$, we hope to discover more interesting dependencies between the processes. Also, $T_i$ etc. can always be computed from the processes, so we do not really care for these random variables if we want to understand the dynamics of the system.
 
-Initially, we consider the durations and delays only. Namely, we choose the submatrix of $G_{obs}$ corresponding to the sets $T^D_i$ and $T^P_i$ from \autoref{eq:Cycle data sets of variables}. Still using a symmetric $G_{obs}$, $G_{dir}$ is computed as shown in \autoref{subfig:G_dir using only times}. Now, when removing the \textit{trivial} random variables, as they are known to be the sum of others, a clearer image of how the durations and delay of each process depend on each other emerges.
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times - symmetric.pdf}
-        \caption{}
+        \caption{$G_{dir}$}
         \label{subfig:G_dir using only times}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\linewidth}
         \includegraphics[width=\linewidth]{figures/Cycle data/G_dir times - symmetric - TP9 vs TD7.pdf}
-        \caption{}
+        \caption{$T^P_9$ vs $T^D_7$}
         \label{subfig:G_dir times - TP9 vs TD7}
     \end{subfigure}
-    \caption{}
+    \caption{When only using the durations and delays, we observe $G_{dir}$ as in (a). A very strong similarity is calculated between $T^P_9$ and $T^D_7$, which when plotted in (b) is not an unreasonable finding. Namely, if the delay after process $7$ is $0$, $T^P_9$ is primarily below the $0.6$-quantile and otherwise appear to be linearly related to $T^D_7$.}
     \label{fig:G_dir using only times}
 \end{figure}
-A strong association between $T^P_9$ and $T^D_7$ is observed. When plotting the observations of the random variables (again with the continuous part transformed through the empirical density function) in \autoref{subfig:G_dir times - TP9 vs TD7}, we indeed observe that for many batches, if the delay for process $7$ is non-zero, then the duration of process $9$ is greater than if the delay after process $7$ was $0$. Furthermore, as we have removed transitive effects, it seems as if this association is direct. I.e. something happens during the delay after process $7$, the reaction process, which heavily \textit{influences} to the duration of the cooling process $9$. Interestingly, from \autoref{subfig:G_dir using only times} it does not seem like $T^P_7$ is associated with $T^P_9$. In \autoref{fig:G_dir times - TP9 vs TP7} we have shown these two variables plotted against each other and indeed observe that neither is particularly descriptive of the other.
 
-\begin{figure}[ht]
+Initially, we consider the durations and delays only. Namely, we choose the submatrix of $G_{obs}$ corresponding to the sets $T^D_i$ and $T^P_i$ from \autoref{eq:Cycle data sets of variables}. Still using a symmetric $G_{obs}$, $G_{dir}$ is computed as shown in \autoref{subfig:G_dir using only times}. Now, when removing the \textit{trivial} random variables, as they are known to be the sum of others, a clearer image of how the durations and delay of each process depend on each other emerges. A strong association between $T^P_9$ and $T^D_7$ is observed. When plotting the observations of the random variables (again with the continuous part transformed through the empirical density function) in \autoref{subfig:G_dir times - TP9 vs TD7}, we indeed observe that for many batches, if the delay for process $7$ is non-zero, then the duration of process $9$ is greater than if the delay after process $7$ was $0$. Furthermore, as we have removed transitive effects, it seems as if this association is direct. I.e. something happens during the delay after process $7$, the reaction process, which heavily \textit{influences} to the duration of the cooling process $9$. Interestingly, from \autoref{subfig:G_dir using only times} it does not seem like $T^P_7$ is associated with $T^P_9$. In \autoref{fig:G_dir times - TP9 vs TP7} we have shown these two variables plotted against each other and indeed observe that neither is particularly descriptive of the other.
+
+
+In figure \autoref{fig:G_dir times - graphs}, we have shown $G_{dir}$ (from \autoref{subfig:G_dir using only times}) as a graph with varying thresholds. It is clear that the durations of each process are dependent on each other and depending on the threshold we conclude anything from a simple network structure (\autoref{subfig:G_dir times - graph - t 0.118} and \autoref{subfig:G_dir times - graph - t 0.12}) to a much more complicated dependency structure (\autoref{subfig:G_dir times - graph - t 0.1}) between the durations of the processes. As is also clear from \autoref{subfig:G_dir using only times}, the delays of the processes are the first random variables we conclude to be independent of both each other and all other process durations except for $T^D_2$ and $T^D_9$ corresponding to the delays when adding material and cooling respectively and the link between $T^D_7$ and $T^P_9$ discussed above.
+
+
+Like in \autoref{sec:Gaussian network MI example - computation}, we have good understanding of the topological structure of the processes. Namely, as the delay of processes are always \textit{after} the process we have that in terms of a topological structure of the random variables, $T^D_i$ is always after $T^P_i$. For example, $T^D_3$ is always realized \textit{after} $T^P_{3.1}$ and $T^P_{3.2}$ (in that order). Likewise, as shown in \textcolor{red}{ref to figure about simulation process structure}, as the processes are executed one by one, the topological structure is a simple chain. This should not be confused with the actual causal structure being a chain as in \autoref{sec:Gaussian chains general}. As the topological structure is a chain, it is also unique i.e. there is exactly one ordering of the random variables. The topological structure is summarized in \autoref{eq:times topological order}
+\newpage
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.43\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - symmetric - 0_1.pdf}
@@ -1151,14 +1150,11 @@ A strong association between $T^P_9$ and $T^D_7$ is observed. When plotting the 
         \caption{$t=0.12$}
         \label{subfig:G_dir times - graph - t 0.12}
     \end{subfigure}
-    \caption{}
+    \caption{$G_{dir}$ from \autoref{fig:G_dir using only times} represented as a graph for different thresholds $t$. In general, we observe that the delays appear to be indescribable from the other variables and vice versa. As for the actual durations of the processes, depending on the threshold, we observe a more or less complicated relational structure. Varying the threshold $t$ outside the considered range $[0.1,\,0.12]$ does not change the graph noticeably.}
     \label{fig:G_dir times - graphs}
 \end{figure}
 
-In figure \autoref{fig:G_dir times - graphs}, we have shown $G_{dir}$ (from \autoref{subfig:G_dir using only times}) as a graph with varying thresholds. It is clear that the durations of each process are dependent on each other and depending on the threshold we conclude anything from a simple network structure (\autoref{subfig:G_dir times - graph - t 0.118} and \autoref{subfig:G_dir times - graph - t 0.12}) to a much more complicated dependency structure (\autoref{subfig:G_dir times - graph - t 0.1}) between the durations of the processes. As is also clear from \autoref{subfig:G_dir using only times}, the delays of the processes are the first random variables we conclude to be independent of both each other and all other process durations except for $T^D_2$ and $T^D_9$ corresponding to the delays when adding material and cooling respectively and the link between $T^D_7$ and $T^P_9$ discussed above.
-
-Like in \autoref{sec:Gaussian network MI example - computation}, we have good understanding of the topological structure of the processes. Namely, as the delay of processes are always \textit{after} the process we have that in terms of a topological structure of the random variables, $T^D_i$ is always after $T^P_i$. For example, $T^D_3$ is always realized \textit{after} $T^P_{3.1}$ and $T^P_{3.2}$ (in that order). Likewise, as shown in \textcolor{red}{ref to figure about simulation process structure}, as the processes are executed one by one, the topological structure is a simple chain. This should not be confused with the actual causal structure being a chain as in \autoref{sec:Gaussian chains general}. As the topological structure is a chain, it is also unique i.e. there is exactly one ordering of the random variables. The topological structure is summarized in the following
-\begin{equation*}
+\begin{equation}\label{eq:times topological order}
     \begin{split}
          & T^P_{1} \longrightarrow
         T^D_{1} \longrightarrow
@@ -1183,19 +1179,21 @@ Like in \autoref{sec:Gaussian network MI example - computation}, we have good un
         T^P_{10} \longrightarrow
         T^D_{10}
     \end{split}
-\end{equation*}
+\end{equation}\label{eq:times topological order}
 
 Using this to order the rows and columns of $G_{obs}$ and finally only keeping the upper triangular part, we can deconvolve the network once again, but this time using the topological structure. The resulting $G_{dir}$ is shown in \autoref{fig:G_dir times - directed}.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width = .8\linewidth]{figures/Cycle data/G_dir times - directed.pdf}
-    \caption{}
+    \caption{$G_{dir}$ based on durations and delays but now with the added assumption of the topological order of the variables. Notice that the order of the variables is different from that of \autoref{subfig:G_dir using only times} and hence not easily comparable. We refer to the graphical representations in \autoref{fig:G_dir times - graphs} and \autoref{fig:G_dir times directed - graphs} for comparison of dependence and causal structure.}
     \label{fig:G_dir times - directed}
 \end{figure}
 Although it is hard to compare this $G_{dir}$ with the one obtained without the assumption of topological structure in \autoref{subfig:G_dir using only times}, we see some differences. $T^P_1$ and $T^P_{10}$ are not as directly dependent as originally inferred from the symmetric $G_{obs}$. The differences are however more noticeable, when comparing the graphs from before with those in \autoref{fig:G_dir times directed - graphs} where the directed $G_{obs}$ has been used instead.
 
-\begin{figure}[ht]
+Depending on the chosen threshold $t$, we observe that still the delays are the least predictable from other observations as they are not connected to other random variables. This was also the conclusion from \autoref{fig:G_dir times - graphs}. The major difference is that now $T^P_1$ influence $T^P_{10}$ indirectly whereas in \autoref{fig:G_dir times - graphs} they were always directly connected. Also, as threshold in $[0.1,\, 0.2]$ seem to result in good balance between connectedness complexity of the graph. In our opinion \autoref{subfig:G_dir times directed - graph - t 0.15} obtains a good balance while also making sense in terms of how processes of a production flow, structured as in \textcolor{red}{ref til data pharmaceutical flow figure}, could influence later processes.
+
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.43\linewidth}
         \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times as graph - directed - 0_1.pdf}
@@ -1214,31 +1212,36 @@ Although it is hard to compare this $G_{dir}$ with the one obtained without the 
         \caption{$t=0.2$}
         \label{subfig:G_dir times directed - graph - t 0.2}
     \end{subfigure}
-    \caption{}
+    \caption{Using a triangular $G_{obs}$ resulting in a directed graph, we observe once again that the delays are largely unrelated. This hints to most delays should be treated separately when we only concern ourselves with durations of processes. An important difference from these graphs to the previous where no topological order was assumed, is that now $T^P_1$ only influences $T^P_{10}$ indirectly where it was a direct link before. In general, we observe that durations only have a direct influence on the next process or the ones after that again. I.e. a more chain-like structure emerges compared to the previous results.}
     \label{fig:G_dir times directed - graphs}
 \end{figure}
 
-Depending on the chosen threshold $t$, we observe that still the delays are the least predictable from other observations as they are not connected to other random variables. This was also the conclusion from \autoref{fig:G_dir times - graphs}. The major difference is that now $T^P_1$ influence $T^P_{10}$ indirectly whereas in \autoref{fig:G_dir times - graphs} they were always directly connected. Also, as threshold in $[0.1,\, 0.2]$ seem to result in good balance between connectedness complexity of the graph. In our opinion \autoref{subfig:G_dir times directed - graph - t 0.15} obtains a good balance while also making sense in terms of how processes of a production flow, structured as in \textcolor{red}{ref til data pharmaceutical flow figur}, could influence later processes.
+\newpage
 
-Finally, we shall try once again to use the levels of the tank after each process along with a topological assumption. However, as it is unclear whether it is the duration of a process that influences the change in levels or the other way around, we shall only make $G_{obs}$ almost triangular. In particular, the entries in $G_{obs}$ related to durations and levels of the same process such as $T^P_1$ and $M^P_1$ are symmetric along the diagonal whilst everything else is removed. This makes $G_{obs}$ \textit{almost} triangular in the sense that it is triangular but with entries in the subdiagonal (in case of an upper triangular $G_{obs}$). The resulting $G_{obs}$ can be seen in the appendix, \autoref{fig:G_obs times and levelchanges - semi-directed}. As we would expect, level changes and durations for the same process are often very related and share much information. Unsurprisingly, $M^P_{4.3}$ does not seem to be related to any other process. This is likely because the process consists of waiting for a control operator. This also holds when deconvolving the network as seen in \autoref{fig:G_dir times and levelchanges - semidirected} and from the original result in \autoref{fig:Cycle data - G_dir all} where all the random variables where used (although it is harder to see). 
 
-When comparing $G_{dir}$ in \autoref{fig:G_dir times and levelchanges - semidirected} to $G_{obs}$ in \autoref{fig:G_obs times and levelchanges - semi-directed}, we observe that much of the association between processes originate from indirect effects (as expected) either $1$, $2$ or $3$ processes ago. In particular, the delays, durations and level changes of process $9$ (cooling) appear to caused or at least explained well by what takes places during process $7$ (reaction) which is not unlikely from a chemical point of view. Process $7$, in turn, appear to be influenced mostly by process $6$ (product transfer).
+
+Finally, we shall try once again to use the levels of the tank after each process along with a topological assumption. However, as it is unclear whether it is the duration of a process that influences the change in levels or the other way around, we shall only make $G_{obs}$ almost triangular. In particular, the entries in $G_{obs}$ related to durations and levels of the same process such as $T^P_1$ and $M^P_1$ are symmetric along the diagonal whilst everything else is removed. This makes $G_{obs}$ \textit{almost} triangular in the sense that it is triangular but with entries in the subdiagonal (in case of an upper triangular $G_{obs}$). 
 \begin{figure}[ht]
     \centering
     \includegraphics[width = \linewidth]{figures/Cycle data/G_dir times and levelchanges - semi-directed.pdf}
-    \caption{}
+    \caption{$G_{dir}$ from an \textit{almost} upper triangular $G_{obs}$. Like before, we observe a chain like structure. However, with the added random variables of changes in levels during a process, the most significant dependencies are between these and the corresponding duration.}
     \label{fig:G_dir times and levelchanges - semidirected}
 \end{figure}
+The resulting $G_{obs}$ can be seen in the appendix, \autoref{fig:G_obs times and levelchanges - semi-directed}. As we would expect, level changes and durations for the same process are often very related and share much information. Unsurprisingly, $M^P_{4.3}$ does not seem to be related to any other process. This is likely because the process consists of waiting for a control operator. This also holds when deconvolving the network as seen in \autoref{fig:G_dir times and levelchanges - semidirected} and from the original result in \autoref{fig:Cycle data - G_dir all} where all the random variables where used (although it is harder to see). 
 
-In \autoref{fig:G_dir times and levelchanges - semidirected - as graph}, we have shown $G_{dir}$ represented as a graph with a threshold $t = 0.09$ as this filtered out most small values in $G_{dir}$ while keeping a reasonable structure with only the edges with the most information carried along. As mentioned above $M^P_{4.3}$ is alone. Furthermore, we observe that the delays related to process $3$ (after adding the final solids) and $8$ (post reaction process) are by themselves. The duration of the delay and the change in level are however connected although weakly as per \autoref{fig:G_dir times and levelchanges - semidirected}. This also agrees with \autoref{subfig:G_dir times directed - graph - t 0.15} and \autoref{subfig:G_dir times directed - graph - t 0.2} where when we only used the durations and delays of the processes, we observed that $T^D_3$ and $T^D_8$ where unconnected nodes. As another example, $M^P_8$ is not connected to any of the other variables invariant to the choice of threshold $t$. This also makes sense when comparing to \textcolor{red}{REF TIL FIGUR MED TIDER VS MASSER OG MASSER VS TIDER} where the change in level during the post reaction (process $8$) does not seem to be related to any of the other random variables.
+
+
+When comparing $G_{dir}$ in \autoref{fig:G_dir times and levelchanges - semidirected} to $G_{obs}$ in \autoref{fig:G_obs times and levelchanges - semi-directed}, we observe that much of the association between processes originate from indirect effects (as expected) either $1$, $2$ or $3$ processes ago. In particular, the delays, durations and level changes of process $9$ (cooling) appear to caused or at least explained well by what takes places during process $7$ (reaction) which is not unlikely from a chemical point of view. Process $7$, in turn, appear to be influenced mostly by process $6$ (product transfer).
+
+In \autoref{fig:G_dir times and levelchanges - semidirected - as graph}, we have shown $G_{dir}$ represented as a graph with a threshold $t = 0.09$ as this filtered out most small values in $G_{dir}$ while keeping a reasonable structure with only the edges with the most information carried along. As mentioned above $M^P_{4.3}$ is alone. Furthermore, we observe that the delays related to process $3$ (after adding the final solids) and $8$ (post reaction process) are by themselves. The duration of the delay and the change in level are however connected although weakly as per \autoref{fig:G_dir times and levelchanges - semidirected}. This also agrees with \autoref{subfig:G_dir times directed - graph - t 0.15} and \autoref{subfig:G_dir times directed - graph - t 0.2} where when we only used the durations and delays of the processes, we observed that $T^D_3$ and $T^D_8$ where unconnected nodes. As another example, $M^P_8$ is not connected to any of the other variables invariant to the choice of threshold $t$. This also makes sense when comparing to \textcolor{red}{REF TIL FIGURE MED DURATIONS VS MASSES OG MASSES VS MASSES} where the change in level during the post reaction (process $8$) does not seem to be related to any of the other random variables.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width = .75\linewidth]{figures/Cycle data/G_dir times and levelchanges as graph - directed - 0_09.pdf}
-    \caption{}
+    \caption{$G_{dir}$ represented as a graph using a threshold $t = 0.09$. Once again, we observe a chain like structure, but the added random variables corresponding to changes in levels, $T^P_{3.2}$ becomes a bottleneck, in the sense most of the behavior of the production system after process $3.2$ is irrelevant when knowing the duration of process $3.2$. This could also make sense from a practical point of view as the duration of the stirring contains much combined information of the initial processes and hence is a good descriptor of the behavior of the processes later on.}
     \label{fig:G_dir times and levelchanges - semidirected - as graph}
 \end{figure}
-Other interesting observations can be made from the graph depending on the interests of the reader. However, we round of our discussion of the pharmaceutical data by noting that we have obtained a causal structure for the random variables that in many ways reflect both our understanding of the production layout from \autoref{chap:data} and our observations of data. In particular, we observe a relatively simple structure, where many of the processes are only affected by the previous process. Notable deviations of this are the initial processes $1$, $2$ and $3.1$ where raw materials are added. Each of these processes seem to have an influence on the duration of process $3.2$ (the stirring). This also makes sense as the more material is added to the tank, the longer it probably needs to agitated to ensure a consistent mixture of materials to allow for chemical reactions. Finally, the change in level for process $10$ (the transfer of material), appear to be influenced primarily by processes $7$ (the chemical reaction) and $9$ (cooling) while the duration of process $10$ only seems to be related to change in level and no other process directly. This would make sense practically, as we would think that it is the amount of material that is really influenced by the other processes and the duration of transferring the material is only as need to be in order to remove all of the material produced.
+Other interesting observations can be made from the graph depending on the interests of the reader. However, we round of our discussion of the pharmaceutical data by noting that we have obtained a causal structure for the random variables that in many ways reflect both our understanding of the production layout from \autoref{chap:data} and our observations of data. In particular, we observe a relatively simple structure, where many of the processes are only affected by the previous process. Notable deviations of this are the initial processes $1$, $2$ and $3.1$ where raw materials are added. Each of these processes seem to have an influence on the duration of process $3.2$ (the stirring). This also makes sense as the more material is added to the tank, the longer it probably needs to agitated to ensure a consistent mixture of materials to allow for chemical reactions. Finally, the change in level for process $10$ (the transfer of material), appear to be influenced primarily by processes $7$ (the chemical reaction) and $9$ (cooling) while the duration of process $10$ only seems to be related to change in level and no other process directly. This would make sense practically, as we would think that it is the amount of material that is really influenced by the other processes and the duration of transferring the material is only as need to be in order to remove all the material produced.
 
 
 
@@ -1253,9 +1256,9 @@ Other interesting observations can be made from the graph depending on the inter
 \end{document}
 
 
-\textcolor{red}{Løs problemet i subgrafer. F.eks. er delays (næsten) helt uafhængigt af duration, så lås duration for sig}
+% \textcolor{red}{Løs problemet i subgrafer. F.eks. er delays (næsten) helt uafhængigt af duration, så lås duration for sig}
 
-\textcolor{red}{M er changes i level}
+% \textcolor{red}{M er changes i level}
 
 
 % from chain example, we actually would want to overestimate the MI for large rho (i.e. when rho is large, we would want estim. MI to be larger) and for small MI, we would want estimated MI to be less (not the case with 2D kernel methods)
