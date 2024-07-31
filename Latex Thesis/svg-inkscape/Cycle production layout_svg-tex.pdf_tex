@@ -1,0 +1,164 @@
+%% Creator: Inkscape 1.3.2 (091e20e, 2023-11-25, custom), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'Cycle production layout_svg-tex.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{2822.15625bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.53625884)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.06591409,0.48657941){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Batch 1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.28616882,0.48657941){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Batch 2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.61762283,0.48631366){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Batch \end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.67771783,0.4875829){\color[rgb]{0,0,0}\transparent{0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}𝑛\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.69110922,0.48283308){\color[rgb]{0,0,0}\transparent{0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}𝑐\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.70605524,0.49219267){\color[rgb]{0,0,0}\transparent{0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}−\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.72768495,0.4882829){\color[rgb]{0,0,0}\transparent{0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.85706209,0.48631366){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Batch \end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.91715708,0.4875829){\color[rgb]{0,0,0}\transparent{0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}𝑛\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.93054848,0.48283308){\color[rgb]{0,0,0}\transparent{0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}𝑐\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.48597348,0.49055775){\color[rgb]{0,0,0}\transparent{0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}⋯\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.03618204,0.36752151){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Add_Educt1\end{tabular}}}}%
+    \put(0.07074391,0.34413514){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.09312547,0.34413514){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=13]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.03618204,0.27371026){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Add_Educt2\end{tabular}}}}%
+    \put(0.07074391,0.25032389){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.09312547,0.25032389){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=14]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.03618204,0.17272365){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Add_Educt3\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=15]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.03167246,0.13844135){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Add_Material\end{tabular}}}}%
+    \put(0.06275056,0.11505498){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.08513211,0.11505498){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}3.1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=16]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.04967199,0.07625486){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Agitation\end{tabular}}}}%
+    \put(0.06275375,0.05286848){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.08513504,0.05286848){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}3.2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=17]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.30497891,0.35901737){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Add_Solids\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=18]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.29111451,0.32606385){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Wait_Operator\end{tabular}}}}%
+    \put(0.32774076,0.30267747){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.35012258,0.30267747){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}4.\end{tabular}}}}%
+    \put(0.36611035,0.30267747){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=19]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.30574162,0.26387735){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Add_solids\end{tabular}}}}%
+    \put(0.3277381,0.24049098){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.35011992,0.24049098){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}4.2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=20]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.29691592,0.20169086){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Wait_Control\end{tabular}}}}%
+    \put(0.3277381,0.17830449){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.35011992,0.17830449){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}4.3\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=21]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.29158489,0.09910972){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Centrifugatio\end{tabular}}}}%
+    \put(0.40181178,0.09910972){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}n\end{tabular}}}}%
+    \put(0.33573199,0.07572335){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.35811381,0.07572335){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}5\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=22]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.54724047,0.36752151){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Product_Transfer\end{tabular}}}}%
+    \put(0.60234462,0.34413514){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.62472644,0.34413514){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}6\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=23]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.58110288,0.28407468){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Reaction\end{tabular}}}}%
+    \put(0.60234462,0.2606883){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.62472644,0.2606883){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}7\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=24]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.558155,0.2008936){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Post_Reaction\end{tabular}}}}%
+    \put(0.60234462,0.17750723){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.62472644,0.17750723){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}8\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=25]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.58612564,0.11771252){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Coolin\end{tabular}}}}%
+    \put(0.64185164,0.11771252){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}g\end{tabular}}}}%
+    \put(0.60234462,0.09432615){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.62472644,0.09432615){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}9\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=26]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.54623327,0.03453144){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Material_Transfer\end{tabular}}}}%
+    \put(0.59716507,0.01114507){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.61954689,0.01114507){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
+    \put(0.62990067,0.01114507){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=27]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.83822277,0.35822011){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Cleanin\end{tabular}}}}%
+    \put(0.90369133,0.35822011){\color[rgb]{1,1,1}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}g\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=28]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.81080225,0.32606385){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Spay_CLeanin\end{tabular}}}}%
+    \put(0.93111451,0.32606385){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}g\end{tabular}}}}%
+    \put(0.84613693,0.30267747){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.86851875,0.30267747){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}11.\end{tabular}}}}%
+    \put(0.89485766,0.30267747){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=29]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.81956151,0.26387735){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Recirculation\end{tabular}}}}%
+    \put(0.84613959,0.24049098){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.86852141,0.24049098){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}11.\end{tabular}}}}%
+    \put(0.89486297,0.24049098){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}2\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=30]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.8287566,0.20169086){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Flush_Tank\end{tabular}}}}%
+    \put(0.84613693,0.17830449){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID\end{tabular}}}}%
+    \put(0.86851875,0.17830449){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}11.3\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=31]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.80267814,0.13950437){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Secondary_Rinse\end{tabular}}}}%
+    \put(0.84613693,0.11611799){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID 11.4\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=32]{Cycle production layout_svg-tex.pdf}}%
+    \put(0.8287566,0.07731788){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Flush_Tank\end{tabular}}}}%
+    \put(0.84613693,0.0539315){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ID 11.5\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=33]{Cycle production layout_svg-tex.pdf}}%
+  \end{picture}%
+\endgroup%

@@ -6,3 +6,4 @@
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QParticularly, the framework and general algorithm proposed by Feizi et al. stems from a graph-theoretic approach to the problem of inferring direct dependencies.\\E$"}
 {"rule":"SUBJECT_VERB_AGREEMENT_PLURAL","sentence":"^\\QThen, for each node \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, the predecessors is a subset of the nodes with \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q and furthermore, the set immediate predecessors is a subset of these\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QNonparametric-copula-entropy and network deconvolution method for causal discovery in complex manufacturing systems\\E$"}
+{"rule":"SOME_OF_THE","sentence":"^\\QIn the following section, we discuss a problem with some of the batches.\\E$"}

@@ -40,3 +40,4 @@ subprocesses
 convolve
 summands
 submatrix
+subprocess
