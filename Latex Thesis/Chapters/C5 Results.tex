@@ -980,15 +980,13 @@ We note however, that the underlying structure is still captured i.e. that $Y_1$
 
 
 We continue with a similar example to the previous one. The key difference is the number of variables and a more complicated correlation structure to test the algorithms further.
-\begin{example}
-    From \autoref{ex:1} we saw how one could handle some numerical issues. Thus, in this example we shall not bother ourselves with such computations and merely focus on the correlation structure. In particular, we shall sample $\boldsymbol X$ from a 10 dimensional
-\end{example}
+
 
 
 \newpage
 
 
-\subsection{10D gaussian example}\label{sec:Gaussian network MI example - computation}
+\subsection{Gaussian network revisited - Application of complete framework}\label{sec:Gaussian network MI example - computation}
 
 None are significant (marginal distribution).
 
@@ -1088,12 +1086,12 @@ From \autoref{fig:Cycle data - G_dir all}, we observe that the accumulated durat
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
-        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir complete - symmetric - TD4 vs T4.pdf}
+        \includegraphics[width = .9\linewidth]{figures/Cycle data/G_dir complete - symmetric - TD4 vs T4.pdf}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\linewidth}
-        \includegraphics[width = \linewidth]{figures/Cycle data/G_dir complete - symmetric - TP4 vs T4.pdf}
+        \includegraphics[width = .9\linewidth]{figures/Cycle data/G_dir complete - symmetric - TP4 vs T4.pdf}
         \caption{}
     \end{subfigure}
     \caption{$T_4$ vs $T^D_4$ and $T^P_{4.2}$ in (a) and (b) respectively. Notice that the continuous part of the variables has been transformed using the empirical distribution function such that the domain is $[0,1]$ for all the variables. The transformation allows for an easier assessment of the mutual information between the pairs of variables.}
