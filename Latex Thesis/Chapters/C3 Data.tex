@@ -67,7 +67,7 @@ At this point, we have a rudimentary understanding of how the system is simulate
 % Initially, we present some basic statistics in  for batches and proceed to discuss the nature of the batches, removing outliers and faulty observations etc.
 Before analyzing the time series in more depth and filter out (or correct) troublesome data points, we present some initial statistics on the duration of batches for each cycle. The statistics are summarized in \autoref{tab:cycle basic stats} below. We note that some difference is observed from cycle to cycle, but we choose to assume that these differences are simply a feature of the production system, such that later on, we can combine all observations across all cycles into a single dataset to be used for causal discovery.
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c|c|c}
         Cycle & \makecell{number of                                    \\ batches} & \makecell{mean} & \makecell{variance} & \makecell{standard\\ deviation} & \makecell{coefficient \\ of variation} \\ \hline
@@ -127,7 +127,7 @@ Note that we have not included labels pertaining the cleaning operation as these
 
 Interestingly, the \textit{unrecognized} process labels $3$ and $4$ only occur for processes with subprocesses. We shall later observe that these labels all originate from negative process labels and that they actually correspond to delays between processes as portrayed in \autoref{fig:variable description}. For now, we however concentrate on the last four process labels $7$, $8$, $9$ and $10$. In particular, as all the other process labels (excluding $3$ and $4$) appear exactly $374$ (the number of batches in total) times, we suspect that something weird is going on with these \textit{missing} observations. As hinted to before, it turns out that the simulations have been cut off after $1100$ hours. Therefore, the trailing batch of each cycle does not complete all processes. For example, in \autoref{fig:last batch example}, we have shown the first batch of cycle A as well as the trailing batch and how the over time switch between process labels (not that for this plot, we have not negated the negative process labels)
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.75\linewidth]{figures/Multiple cycles data/tailing batch short.pdf}
     \caption{The first and last batch from cycle A. The horizontal colored bars corresponds to the different process labels such that time stamps labeled e.g. $3.1$ and $3.2$ fall in the same colored region. It is clear that the final batch is cut-off before finishing the last process. Furthermore, we observe that the negative process labels for these two batches only occur before the process label enters a new colored region. This hints to the negative process labels are actually delays between processes.}
@@ -146,7 +146,7 @@ We now focus on the processes labelled $1$ through $10$ from \autoref{fig:Cycle 
 
 In \autoref{fig:B_22 phase 1-4}, we have shown the \nth{22} batch of cycle B. Once again, we observe the negative process label. We notice that it is only visited once, and only at the of the process which its label corresponds to.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.83\linewidth]{figures/Multiple cycles data/Adding of solids/B_22 long waiting.pdf}
     \caption{The temporal evolution of process labels for batch 22 from cycle B. Only the processes pertaining to the first boxes of \autoref{fig:Cycle and process structure} are shown to easier tell what is happening.}
@@ -157,7 +157,7 @@ In \autoref{fig:B_22 phase 1-4}, we have shown the \nth{22} batch of cycle B. On
 
 Continuing the investigating, we see that negative process labels occur throughout all the six cycles. Furthermore, by saving what negative process labels have occurred for each cycle, we obtain \autoref{tab:phase negative observations} where we observe a clear tendency regarding the process labels $-4.1$, $-4.2$ and $-4.3$. Namely, they only occur in cycle F. From \cite{benchmark-model-to-generate-batch-process-data}, we note that cycle F is the only phase containing wrongly labeled time points. In particular, we can conclude that the negative process labels apart from $-4.1$, $-4.2$ and $-4.3$ are not an error in the data set.
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c}
         \diagbox{Event}{Cycle} & A                    & B                    & C                    & D                    & E                    & F                    \\\hline
@@ -347,7 +347,7 @@ Furthermore, histograms of the durations of cleaning processes for each cycle in
 
 In the appendix, \autoref{fig:cycle cleaning time series single} and \autoref{fig:cycle cleaning time series}, we have shown how a cleaning operation goes through each of the subprocesses. Indeed, for cycles $C-F$ the cleaning process is only carried out every so often as summarized in \autoref{tab:cycle cleaning prob}. From \autoref{fig:cycle cleaning time series}, the cleaning processes appear to be carried out between a random number of batches. In the remaining part of this section, we shall investigate this observation for the latter four cycles with some simple tests.
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c}
         Cycle & \makecell{Percentage cleaning processes\\ after batches} \\ \hline
@@ -386,7 +386,7 @@ In the appendix, \autoref{fig:cycle cleaning time series single} and \autoref{fi
 % From a modelling point of view, the cycles C through F can be thought of as the cleansing operation having a probability of not happening or equivalently as having a duration of 0. It is thus of interest to observe what the probability of cleaning after an operation is. From \autoref{tab:cycle basic stats} and \autoref{tab:cycle cleansing stats stats}, we that indeed for cycles A and B, the probability is 100 \% when disregarding the possibility of cleaning after the final batch. Hence, we see that for the remaining cycles, the probabilities of cleaning the tank after an operation are as in \autoref {tab:cycle cleaning prob}
 
 
-In particular, let $C_i$ denote the indicator of whether the $i$th batch is followed by a cleaning of the tank or not. We shall then investigate whether the next batch is also cleaned or not. I.e. at a lag $1$, if the variables $C_i$ are associated. In particular, we shall use Fisher's exact test with the alternative hypothesis being two-sided. We use the \texttt{scipy} implementation \texttt{stats.fisher_exact}. The results are summarized in \autoref{tab:Contingency table for Cycle C-F}. Indeed, we observe that the results are non-significant on a $5\%$ significance level. Repeating the tests for lags up to and including $10$ we observe no significant results either. More sophisticated tests could be carried out to test if using e.g. the previous $5$ $C_i$ is predictive of whether the next batch is followed by a cleaning process. However, as we shall not use this later, we end our discussion of the cleaning processes and note that in the remaining of the thesis, they have been excluded from the dataset.
+In particular, let $C_i$ denote the indicator of whether the $i$th batch is followed by a cleaning of the tank or not. We shall then investigate whether the next batch is also cleaned or not. I.e. at a lag $1$, if the variables $C_i$ are associated. In particular, we shall use Fisher's exact test with the alternative hypothesis being two-sided. We use the \texttt{SciPy} implementation \texttt{stats.fisher_exact}. The results are summarized in \autoref{tab:Contingency table for Cycle C-F}. Indeed, we observe that the results are non-significant on a $5\%$ significance level. Repeating the tests for lags up to and including $10$ we observe no significant results either. More sophisticated tests could be carried out to test if using e.g. the previous $5$ $C_i$ is predictive of whether the next batch is followed by a cleaning process. However, as we shall not use this later, we end our discussion of the cleaning processes and note that in the remaining of the thesis, they have been excluded from the dataset.
 
 % It is then of interest if the next batch is followed by a cleaning given whether the current batch is followed by a cleaning. In particular, we count for each of the cycles the transitions which are shown in the following tables. Notice that the number of observations is two less than the total number of batches within each specific cycle. This is due to the last batch is never followed by a cleaning (nor is the first batch superseded by a cleaning procedure) which results in one less observation and also due to the fact that we are logging transitions and hence lose another observation.
 
@@ -441,7 +441,7 @@ In particular, let $C_i$ denote the indicator of whether the $i$th batch is foll
 
 % Finally, we show the autocorrelation function for each the four cycles C-F in \autoref{fig:cycle cleaning ACF} and note that all the ACF stay within the 95\% confidence interval.
 
-% \begin{figure}[h]
+% \begin{figure}[ht]
 %     \centering
 %     \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/Cleaning Autocorrelation.png}
 %     \caption{Autocorrelation function for each of the final 4 cycles. As can also be seen from this there seem to be no information to be gained of $C_i$ from $C_{i-1}$.}
