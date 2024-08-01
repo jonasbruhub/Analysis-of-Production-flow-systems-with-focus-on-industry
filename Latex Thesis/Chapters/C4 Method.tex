@@ -24,14 +24,15 @@
 
 % Correlation overholder faktisk antagelserne, men det gør MI ikke. Dog er correlation ikke altid et godt mål for forklaringsgrad, e.g. halvcirkel af perfekt forklaret punkter.
 
+
 \chapter{Method}\label{chap:method}
-\textcolor{red}{General introduction to metodeafsnittet og causalitet}
+\textcolor{red}{General introduction to method and causality}
 
 \section{Causal discovery}
 In this section, we shall discuss the method for network deconvolution, originally proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}. The underlying problem is inferring direct effects and dependencies. From this, using prior information on the production setup, we shall be able to infer causal dependencies by directing the resulting edges from the network deconvolution (ND) algorithm. Particularly, the framework and general algorithm proposed by Feizi et al. stems from a graph-theoretic approach to the problem of inferring direct dependencies. \textcolor{blue}{Namely, suppose that observations are made of some properties such as levels and sojourn times of in this case a chemical process}. We shall represent these properties as vertices (nodes) $V$ and dependencies between properties as edges. Initially, when observing the vertices, we observe both direct and indirect effects. Particularly, a vertex $v_1$ might influence some other vertex $v_3$ through another vertex $v_2$ if $v_2$ depends on $v_1$ and $v_3$ of $v_2$. In this case, we will observe that $v_1$ influences $v_3$, but actually it is $v_2$ that has a direct influence on $v_3$. In graph-theoretical terms, we thus observe the transitive closure of the information that flows between vertices but want to infer the underlying network structure.
 
 An important note on the algorithm to come is that we only use vertices that we have observed. Namely, the underlying structure might be as in \autoref{subfig:hidden nodes example unobserved} with an unobserved node/variable (named $U$ in this case). However, without any more assumptions or modelling choices we would (ideally) infer the network structure depicted in \autoref{subfig:hidden nodes example resulting graph}.
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -56,7 +57,7 @@ Suppose a set of $N$ random variables $(X_i)$ is given. The method presented in 
 
 The method proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} then works as follows. Given an observed matrix $G_{obs} \in \mathbb{R}^{N \times N}$ of similarities between each pair of variables, we shall deduce a matrix $G_{dir} \in \mathbb{R}^{N \times N}$ of direct similarities between each pair of random variables $X_i$ and $X_j$. \textcolor{blue}{In particular, we wish to filter out indirect effects which we will denote by $G_{dir}$ defined as effects between pairs of variables that is the result of effects propagating through other variables}. The measure of similarity, can in practice be any desired measure such as correlation or mutual information which we will focus on in this thesis. See \autoref{seq:Information measures and computation} for a further discussion on these two measures and \autoref{sec:Copula based network discovery} for how to obtain such a matrix. Note that the algorithm presented will in theory work for non-symmetric measures as well such as \textit{Interaction information}, \textit{Directed information} and \textit{Normalized information}.
 
-\textcolor{red}{illustration af hvordan algoritmen fungerer/formål}
+\textcolor{red}{Illustration of how the algorithm works and purpose}
 
 The (direct) network is then presented by the discovered $G_{dir}$ containing only the direct effects i.e. interaction between pairs of variables which can be viewed as weights on the edges of the complete graph with nodes representing the random variables. As we shall see in \autoref{subseq:Robustness to noise}, the algorithm is somewhat robust to noise in the sense that we can ensure accuracy depending on the level of noise observed present in $G_{obs}$ and on the norm chosen (from a certain, although rather general, set of norms). \textcolor{blue}{Namely, if $G_{obs}$ is subject to noise, we find a bound on how different the inferred directed effects can be to the true direct effects using different matrix norms to measure this difference}. \textcolor{blue}{This hints to that a threshold on the inferred weights on the edges of the network might be a good idea to remove small inferred effects}. This is further supported by the facts that often only the most influential variables are of importance when trying to control the process.
 
@@ -96,7 +97,7 @@ We note that from the above one needs $\left( I + G_{obs}\right)^{-1}$ to be wel
                 & = \left(I-G_{dir}\right)\left(I-G_{dir}\right)^{-1} + G_{dir}\left(I-G_{dir}\right)^{-1} \\
                 & = \left(I-G_{dir}\right)^{-1}
 \end{align*}
-which is clearly invertible. Furthermore, we note that under the assumption $\rho\left(G_{dir}\right) < 1$ we can not place any bound on the spectral radius of $G_{obs}$. Namely, if $v$ is a eigenvector of $G_{dir}$ with eigenvalue $\lambda$ such that $|\lambda|<1$, then $v$ is also an eigenvector of $G_{obs}$ as
+which is clearly invertible. Furthermore, we note that under the assumption $\rho\left(G_{dir}\right) < 1$ we can not place any bound on the spectral radius of $G_{obs}$. Namely, if $v$ is an eigenvector of $G_{dir}$ with eigenvalue $\lambda$ such that $|\lambda|<1$, then $v$ is also an eigenvector of $G_{obs}$ as
 $$G_{obs} v = \sum_{k=1}^\infty G_{dir}^k v = \sum_{k=1}^\infty \lambda^k v = \frac{\lambda}{1-\lambda} v$$
 i.e. $\left(\frac{\lambda}{1-\lambda},v\right)$ is an eigenpair of $G_{obs}$ and since $\frac{\lambda}{1-\lambda} \in (-1/2, \infty)$ for $\lambda\in (-1,1)$ we can in general not bound the spectral radius of $G_{obs}$, although we should never observe an eigenvalue equal to or below $-1/2$ (which again proves that $-1$ is not an eigenvalue of $G_{obs}$).
 
@@ -342,7 +343,7 @@ By \autoref{thm:copula entropy equals mutual information} we can compute the mut
         -CE_{n1} & -CE_{n2}  & \dots  & 0
     \end{bmatrix}
 \end{equation}
-where $n$ is the number of nodes in the graph i.e. random variables that we have observed. Notice that we have chosen the diagonal elements as $0$ since information between a random variable $X$ and itself is not really well-defined and when trying to compute this numerically, we observe diverging results as also discussed in the previous section. Furthermore, only the information that propagates through the network is of interest and so setting $0$ in the diagonal avoids a bias when (de)convolving the information or any similarity in general. Especially for mutual information where the information between a variable and itself diverges to $\infty$ thus in the limit, from \autoref{eq:Gdir from Gobs}, we would get the identity matrix which does not tell us much about the direct dependencies.
+where $n$ is the number of nodes in the graph i.e. random variables that we have observed. Notice that we have chosen the diagonal elements as $0$ since information between a random variable $X$ and itself is not really well-defined and when trying to compute this numerically, we observe diverging results as also discussed in the previous section. Furthermore, only the information that propagates through the network is of interest and so setting $0$ in the diagonal avoids a bias when deconvolving the information or any similarity in general. Especially for mutual information where the information between a variable and itself diverges to $\infty$ thus in the limit, from \autoref{eq:Gdir from Gobs}, we would get the identity matrix which does not tell us much about the direct dependencies.
 
 \autoref{alg:Gobs1} then follows immediately from \autoref{eq:Gobs matrix}
 \begin{algorithm}[H]
@@ -450,7 +451,7 @@ Finally, before discussing how to compute and estimate the mutual information be
 
 The original result states that $\left|\left| G_{dir} - \tilde{G}_{dir} \right|\right|_2 \leq \gamma + \mathcal{O}\left( \delta^2 + \gamma^2 + \delta \gamma\right)$ where $\left|\left| \cdot \right|\right|_2$ is the Euclidean norm also known as the spectral norm as this is equal to the largest singular value of the input matrix. However, they note that the Euclidean norm of a matrix $M$ is equal to $\sqrt{\sum_{i,j} m_{ij}^2}$ which is incorrect. This is the Frobenius norm, and instead it should have been defined as
 $$\left|\left| M \right|\right|_2 = \sup_{\left|\left| x \right|\right|_2 = 1} \left|\left| Mx \right|\right|_2 = \sigma_{\max}\left(M\right)$$
-They then proceed to let $\gamma$ be the largest absolute eigenvalue of $N$ and $\delta$ the largest absolute eigenvalue of $\tilde{G}_{obs} = G_{obs} + N$ however as the noise may be both positive and negative, it is easier to define $\delta$ as the largest absolute eigenvalue of $G_{obs}$ instead which we will do in the following. We note that $\gamma$ and $\delta$ are not the spectral/Euclidian norm of $N$ and $G_{obs}$ respectively as in general, we only have $\rho\left(M\right) \leq \left|\left| M \right|\right|_2$. However, if $G_{obs}$ and $N$ are both (real) symmetric matrices, then the spectral norms are equal to the largest absolute eigenvalues of $G_{obs}$ and $N$ respectively. Thus, if instead one wanted to measure the difference in the direct dependency matrices in terms of e.g. the Frobenius norm, it is important to differentiate between the spectral radius and the norm that is actually being used. Finally, before constructing the actual upper bound on the error instead of quantizing the asymptotic behavior for small $\gamma$, we note that $\left|\left| \cdot \right|\right|_2$ is a sub-multiplicative matrix norm defined as bellow (\cite{MATRIX_ANALYSIS-Horn_Johnson_2012}), and that we shall assume that $\rho\left(G_{obs}\right), \rho\left(\tilde{G}_{obs}\right) < 1$.
+They then proceed to let $\gamma$ be the largest absolute eigenvalue of $N$ and $\delta$ the largest absolute eigenvalue of $\tilde{G}_{obs} = G_{obs} + N$ however as the noise may be both positive and negative, it is easier to define $\delta$ as the largest absolute eigenvalue of $G_{obs}$ instead which we will do in the following. We note that $\gamma$ and $\delta$ are not the spectral/Euclidean norm of $N$ and $G_{obs}$ respectively as in general, we only have $\rho\left(M\right) \leq \left|\left| M \right|\right|_2$. However, if $G_{obs}$ and $N$ are both (real) symmetric matrices, then the spectral norms are equal to the largest absolute eigenvalues of $G_{obs}$ and $N$ respectively. Thus, if instead one wanted to measure the difference in the direct dependency matrices in terms of e.g. the Frobenius norm, it is important to differentiate between the spectral radius and the norm that is actually being used. Finally, before constructing the actual upper bound on the error instead of quantizing the asymptotic behavior for small $\gamma$, we note that $\left|\left| \cdot \right|\right|_2$ is a sub-multiplicative matrix norm defined as bellow (\cite{MATRIX_ANALYSIS-Horn_Johnson_2012}), and that we shall assume that $\rho\left(G_{obs}\right), \rho\left(\tilde{G}_{obs}\right) < 1$.
 \begin{definition}[Sub-multiplicative Matrix norm]\label{def:sub-multiplicative matrix norm}
     A matrix norm $\left|\left|\left| \; \cdot \; \right|\right|\right|$ is said to be sub-multiplicative, if for every $A,B \in \mathbb{F}^{n\times n}$ where $\mathbb{F}$ is either the real or complex field:
     $$\left|\left|\left| AB\right|\right|\right| \leq \left|\left|\left| A \right|\right|\right|\cdot \left|\left|\left| B \right|\right|\right|$$
@@ -468,7 +469,7 @@ As we do not use any property of the spectral norm except that it is sub-multipl
                                                             & = \frac{\gamma}{(1-\gamma - \delta)(1-\delta)}
     \end{split}
 \end{equation}
-where in the second to last inequality, we assume that $\gamma + \delta < 1$ as then both $\sum \left(\gamma + \delta\right)^k$ and $\sum \delta^k$ converges as $\gamma + \delta \geq \delta \geq 0$ and hence also the difference of the sums converges. Also, the second equality uses that the spectral norm of $G_{obs}$ and $\tilde{G}_{obs}$ is less than $1$ in order to express the inverses as infinite series. Thus, the above bound on the difference $G_{dir} - \tilde{G}_{dir}$ does not hold in every case and we observe for fixed $\gamma$, the bound tends to $\infty$ as $\delta \to 1$. Furthermore, we note that the final infinite sum diverges whenever $\gamma + \delta > 1$ through the following argument using the ratio test for infinite sums which is needed because we can not conclude on the convergence of a difference of diverging sums solely from the fact that the individual sums diverge:
+where in the second to last inequality, we assume that $\gamma + \delta < 1$ as then both $\sum \left(\gamma + \delta\right)^k$ and $\sum \delta^k$ converges as $\gamma + \delta \geq \delta \geq 0$ and hence also the difference of the sums converges. Also, the second equality uses that the spectral norm of $G_{obs}$ and $\tilde{G}_{obs}$ is less than $1$ in order to express the inverses as infinite series. Thus, the above bound on the difference $G_{dir} - \tilde{G}_{dir}$ does not hold in every case. Namely, for fixed $\gamma$, the bound tends to $\infty$ as $\delta \to 1$. Furthermore, we note that the final infinite sum diverges whenever $\gamma + \delta > 1$ through the following argument using the ratio test for infinite sums which is needed because we can not conclude on the convergence of a difference of diverging sums solely from the fact that the individual sums diverge:
 \begin{align*}
     \lim_{n\to \infty} \left|\frac{ \left(\gamma + \delta\right)^{n+1} - \delta^{n+1}}{\left(\gamma + \delta\right)^n - \delta^n}\right| & = \lim_{n\to \infty}\left|\frac{ \left(\gamma + \delta\right) \left(1 + \frac{\gamma}{\delta}\right)^n - \delta}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right| \\
                                                                                                                                          & = \lim_{n\to \infty}\left|\delta + \gamma \frac{\left(1 + \frac{\gamma}{\delta} \right)^n}{\left(1 + \frac{\gamma}{\delta} \right)^n - 1}\right|                       \\
@@ -551,14 +552,14 @@ $$B_{i,p} \left(t\right) = \begin{cases}
         \text{non-zero}, & t\in [t_i, t_{i+p+1}) \\
         0,               & \text{otherwise}
     \end{cases}$$
-uniquely defines $m$ splines on $[t_{p+1}, t_{m}]$ if we further constraint the splines such that
+uniquely defines $m$ splines on $[t_{p+1}, t_{m}]$. If we furthermore constrain the splines such that
 $$\sum_{i=1}^{m} B_{i,p} \left(t\right) = 1$$
-The B-splines $B_{i,p}$ can then be evaluated at some $t$ through recursion by the Cox-de Boor recursion formula:
+The B-splines $B_{i,p}$ can then be evaluated at some $t$ through recursion by the Cox-deBoor recursion formula:
 \begin{align}
     B_{i,0}\left(t\right) & = 1, \quad t\in [t_i, T_{i+1})                                                                                                \\
     B_{i,k}\left(t\right) & = \frac{t-t_i}{t_{i+k} - t_{i}} B_{i,k-1}\left(t\right) + \frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} B_{i+1,k-1}\left(t\right)
 \end{align}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -576,7 +577,7 @@ The B-splines $B_{i,p}$ can then be evaluated at some $t$ through recursion by t
     \caption{}
     \label{fig:B-splines}
 \end{figure}
-The fact that the B-splines sum to $1$ and that we have $m$ splines of degree $p$ is what we will use to estimate the density and in return the mutual information between two random variables based on observations. Namely, suppose we want to compute the mutual information, this can then be done by discretizing the random variables by binning. Namely, we assign the probability mass $P_{i,j}$ to bin $(i,j)\in \{1,\dots, m\} \times \{1,\dots, m\}$ as the fraction of observations in the domain corresponding to that bin. In particular, using Copula entropy, we would divide the unit interval into $m^2$ equal bins. As we saw earlier, in theory, increasing the number of bins will result in a more and more exact estimate of the mutual information. However, with limited observations, this is not the case as in the limit, the bins would not represent the true underlying distribution due to the finite number of observations. Namely, we would observe a few bins with $1$ observation and many with none. As an example, suppose we have $n$ observations and $m$ bins in both dimensions. Then, for $m$ large enough, $P_{i,j} = \frac{1}{n}$ for a hundred distinct bins as well as the marginal probability masses $P_i = \frac{1}{n}$ and $P_j = \frac{1}{n}$. But then,
+The fact that the B-splines sum to $1$ and that we have $m$ splines of degree $p$ is what we will use to estimate the density and in return the mutual information between two random variables based on observations. Namely, suppose we want to compute the mutual information, this can then be done by discretizing the random variables by binning. We assign the probability mass $P_{i,j}$ to bin $(i,j)\in \{1,\dots, m\} \times \{1,\dots, m\}$ as the fraction of observations in the domain corresponding to that bin. In particular, using Copula entropy, we would divide the unit interval into $m^2$ equal bins. As we saw earlier, in theory, increasing the number of bins will result in a more and more exact estimate of the mutual information. However, with limited observations, this is not the case as in the limit, the bins would not represent the true underlying distribution due to the finite number of observations. Namely, we would observe a few bins with $1$ observation and many with none. As an example, suppose we have $n$ observations and $m$ bins in both dimensions. Then, for $m$ large enough, $P_{i,j} = \frac{1}{n}$ for a hundred distinct bins as well as the marginal probability masses $P_i = \frac{1}{n}$ and $P_j = \frac{1}{n}$. But then,
 \begin{align*}
     I\left(X_1^\Delta,X_2^\Delta\right) & = - \sum_{i=1}^{m} P_i \log P_i - \sum_{j=1}^{m} P_j \log P_j + \sum_{i,j = 1}^{m} P_{i,j} \log P_{i,j} \\
                                         & = - n \left(\frac{1}{n} \log \frac{1}{n}\right)                                                         \\
@@ -590,7 +591,7 @@ i.e. a product of the probability masses such that $\sum_{i,j = 1}^d P_{i,j} = 1
 
 However, there is still one problem. Namely, the marginals are not uniform when $p > 0$ when $\boldsymbol X^{(k)}$ is. This can also be seen from \autoref{subfig:B-spline marginals}. This is especially bad when computing Copula entropy as for e.g. a Gaussian random vector we would dramatically underestimate the mutual information as we shall also see in the next chapter. To see that this is the case, consider the expectation of $P_i^{(k)}$ for $k\in \{1,2\}$:
 $$\mathbb{E}\left[P_i^{(k)}\right] = \frac{1}{d} \sum_{j = 1}^{d}\mathbb{E}\left[B_{i,p}\left(X_j^{(k)}\right)\right] = \int_{0}^{1} B_{i,p}\left(x\right)\, dx$$
-Indeed, we would want this to be $\frac{1}{m}$ but from the Cox-de Boor recursion formula, we see that this is not the case. Namely, by choosing the knots as in \cite{RePEc:plo:pbio00:0050008} we see that the bins close to the boundary have too little probability mass. Thus we turn our head to anouther family of splines called M-splines.
+Indeed, we would want this to be $\frac{1}{m}$ but from the Cox-deBoor recursion formula, we see that this is not the case. Namely, by choosing the knots as in \cite{RePEc:plo:pbio00:0050008} we see that the bins close to the boundary have too little probability mass. Thus, we turn our head to another family of splines called M-splines.
 
 
 \subsection{M-splines}\label{subsec:M-plines - method}
@@ -600,7 +601,7 @@ Another known family of splines called M-splines have exactly the desired proper
     M_{i,k}\left(t\right) & = \frac{k\left( \left(t - t_i\right) M_{i,k-1}\left(t\right) + \left(t_{i+k} - t\right) M_{i+1,k-1}\left(t\right)\right)}{\left(k-1\right) \left(t_{i+k} - t_{i}\right)}
 \end{align}
 However, now the problem is that the splines no longer sum to $1$ (after rescaling with $\frac{1}{n}$). Namely, we can no longer guarantee that the probability masses $P_{i,j}^M$ based on the M-spline sum to $1$. Thus, a renormalization is needed to ensure a proper probability mass function. From \autoref{fig:M-spline functions sum} we see that the effect of $\sum_{i = 1}^{m}\tilde{M}_{i,p}\left(x\right) \neq 1$ in this case is that observations on the interior are smoothed more than those near the boundary.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -622,7 +623,7 @@ This can however be a useful property especially for a bivariate Gaussian for wh
 
 We note that through construction, one can create a family of splines that both sum to 1 have integrals $\frac{1}{m}$. However, as these spline-based smoothing methods does not perform well in general perform very differently for different $m$ with the lack of continuously varying this parameter that acts as a regularizing parameter, as we shall see in \autoref{chap:results}, we only present the method for constructing such splines in \autoref{sec:A family of better splines for Copula entropy estimation} and instead consider a more general way of estimating the Copula density, namely kernel density estimators.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .55\linewidth]{figures/MI estimation/M-spline coefficient sum - degree 3.pdf}
     \caption{}
@@ -650,7 +651,7 @@ In one dimension, a particular useful kernel is the Gaussian kernel given by $K(
 \begin{equation}\label{eq:product kernel}
     K\left(\boldsymbol x\right) = \prod_{i = 1}^{d} K_i\left(x_i\right)
 \end{equation}
-I.e. just a product of kernels. In particular, we choose $K_i = \phi$ again due to the numerical properties. Thus, initially, we have a KDE $\hat{f}$ of the following form where we once again note that $\boldsymbol h_i = \boldsymbol h$ for all $i\in \{1,\dots, n\}$ such that $h_j$ denotes the bandwidth associated with the $j$'th dimensino.
+I.e. just a product of kernels. In particular, we choose $K_i = \phi$ again due to the numerical properties. Thus, initially, we have a KDE $\hat{f}$ of the following form where we once again note that $\boldsymbol h_i = \boldsymbol h$ for all $i\in \{1,\dots, n\}$ such that $h_j$ denotes the bandwidth associated with the $j$th dimension.
 $$\hat{f}\left(\boldsymbol x\right) = \frac{1}{n\prod_{j = 1}^{d}h_j} \sum_{i=1}^n \prod_{j = 1}^{d} \phi \left(\frac{x_j - x_{i,j}}{h_j}\right)$$
 
 
@@ -662,7 +663,7 @@ $$\text{MISE} \left(\hat{f}\right) =  \int_{\mathbb{R}^d} \left| \mathbb{E}_{f}\
 It is however quite complicated to optimize the above, and we shall thus often use a simple rule of thumb known as Scott's rule \cite{Scott1992MultivariateDE} for choosing $\boldsymbol h$. Namely, for product kernels, we let the bandwidths of each dimension $j$ equal the following where $\hat{\sigma}_j$ is the standard deviation estimated from the observations of $X_j$
 $$h_{j}^{Scott} = \hat{\sigma}_j n^{-1/(d+4)}, \quad j \in \{1,\dots, d\}$$
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .6\linewidth]{figures/MI estimation/suicide data example.pdf}
     \caption{The suicide data from MHE. The $86$ observations are shown as a histogram of densities along with Gaussian KDEs with bandwidth $h=5$ and $h=100$ and $h$ chosen from Scott's rule $h = \hat{\sigma} n^{-1/5} \approx 59.86$.}
@@ -671,7 +672,7 @@ $$h_{j}^{Scott} = \hat{\sigma}_j n^{-1/(d+4)}, \quad j \in \{1,\dots, d\}$$
 
 In \autoref{fig:suicide KDE example}, we have shown a basic example in one dimension with two different manual choices of the bandwidth $h$ and $h$ chosen by Scott's rule. We have used data from \cite{Density-Estimation-and-Suicide-Risks-in-Psychiatric-Treatment}, tabulated in \cite{Silverman86} which has been used in \cite{Jones1993SimpleBC} which propose a method for correcting the KDE near a boundary which we shall discuss in the following section. The data consists of $86$ observations regarding suicide and is known to be non-negative. In consideration of the reader, we have included the observations in \autoref{tab:suicide data}. It is clear that using $h^{Scott}$ results in what we qualitatively would deem a good estimate for the probability density function as $h = 100$ seen to be overly smoothed whereas $h = 100$ too under-smoothed. In particular, from repeated samples we would expect the estimator using $h= 100$ would have large bias but small variance whereas for $h = 5$ would have much larger variance but smaller bias. However, a problem the estimators, $h = 100$ and $h = h^{Scott}$ especially, have is that they have probability mass below $0$ which in this case is unwanted. I.e. when restricting $\hat{f}$ to $[0,\infty)$ they are no longer proper probability distribution functions as they do not integrate to $1$. A Simple fix could be to simply rescale $\hat{f}$ such that this is the case, but as seen from the example in \autoref{fig:suicide KDE example - rescaled} where this method is applied to the same example as above, this tends to underestimate the peaks especially near the boundary.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width = .6\linewidth]{figures/MI estimation/suicide data example - rescaled.pdf}
     \caption{Using a rescaled version of $\hat{f}$ on the interval $[0,\infty)$ and disregarding any probability mass below $x=0$ we obtain proper probability distributions once again. However, neither of the methods capture the peak near the boundary $x=0$. In particular, although $h^{Scott}$ still seem to be a good choice for $h$, the KDE does not capture the tendency observed in the data.}
@@ -690,7 +691,7 @@ $$\int_{0}^{\infty} \hat{f}_R \left(x\right) \, dx = \int_{0}^{\infty} \hat{f} \
 Also, the above is easily extended to two boundaries. Namely, if the domain is $[a,b]$, the reflection boundary corrected KDE is given by
 $$\hat{f}_R\left(x\right) = \hat{f}\left(x\right) + \hat{f}\left(2a-x\right) + \hat{f}\left(2b-x\right),\quad x \in [a,b]$$
 If we once again apply this to the suicide data, comparing to \autoref{fig:suicide KDE example - rescaled} we see a big improvement near the boundary as shown in \autoref{fig:suicide KDE example - reflected}. However, we still proceed with the method originally presented in \cite{Jones1993SimpleBC}. The reason for this is that when testing for distribution type using the Kolmogorov Smirnov test (on a $5\%$ significance level) we reject that the observations originate from $\hat{f}_R$ with $h = 100$.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \centering
@@ -708,7 +709,7 @@ If we once again apply this to the suicide data, comparing to \autoref{fig:suici
     \caption{}
 \end{figure}
 For $h=5$ we do not but due to the above considerations regarding the integrated point wise variance of the estimator, this choice of $h$ is undesired in either case. For $h = h^{Scott}$ we do not reject the distribution but as the shape of the error resembles the error for $h=100$ we suspect that there is some systematic error which we also see from \autoref{fig:Kolmogorov Smirnov DN}. Furthermore, the largest deviation from the empirical distribution to $\hat{f}_R$ is close to the boundary (as expected). The test statistics (the largest absolute difference $D$ between the distribution functions and the adjusted statistic) is shown in \autoref{tab:relfection Kolmogorov Smirnov} where the adjusted test statistic should be compared to the critical value $1.358$ on a $5\%$ significance level. Furthermore, to really test the kernel density estimators, one should compute the MISE based on bootstrap and/or cross-validation. In particular, this way larger $h$ i.e. more smoothing would be more favorable compared to the Kolmogorov Smirnov test results which shows small $h$ best represent the empirical distribution.
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{l|rr}
         $h$         & $D$        & Adjusted $D$ \\\hline
@@ -731,7 +732,7 @@ where we have used that $K$ assumed to be symmetric. Indeed, the above is as des
 \cite{Simple_and_eff_boundary_correction_for_kern_densities}
 turns out to be the correct adjustment. Thus, $a_m$ can be understood as part of the moments which we shall then use as normalizing functions. Thus, for an upper bound $x_u$ we find that instead $a_m$ is defined as
 $$a_m\left(x\right) = \int_{\frac{x-x_u}{h}}^{\frac{x}{h}} u^m K\left(u\right)\, du, \quad x\in [0,x_u]$$
-The boundary adjusted KDE which we shall denote $K^L$ and index depending on the $i$'th kernel center is then given by
+The boundary adjusted KDE which we shall denote $K^L$ and index depending on the $i$th kernel center is then given by
 \begin{equation}\label{eq:jones bc corrected kernel}
     K_i^{L} \left(x\right) = \frac{1}{h}\frac{a_2\left(x\right) - a_1\left(x\right) \frac{x - x_i}{h}}{a_0 \left(x\right) a_2\left(x\right) - a_1^2 \left(x\right) } \, K\left(\frac{x - x_i}{h}\right)
 \end{equation}
@@ -765,7 +766,7 @@ $$\hat{f}_P\left(x\right) = \bar{f}\left(x\right) \, e^{\frac{\tilde{f}\left(x\r
 then, we introduce the regularizing parameters $\lambda \geq 0$ such that
 $$\hat{f}_{regP}\left(x\right) = \bar{f}\left(x\right) \, e^{\frac{\tilde{f}\left(x\right) - \hat{f}\left(x\right)}{\hat{f}\left(x\right) + \lambda} }$$
 In practice, we have found that $\lambda = 0.001$ is a sufficient regularization whilst preserving the shape. A small $\lambda$ is preferred as then we are ensured $\mathcal{O}\left(h^2\right)$ behavior of the bias. In \autoref{fig:suicide KDE example - jones1993 - total figure} we have also shown this regularized version with $\lambda = 0.001$ and observe that it is basically identical to $\hat{f}_P$ on the domain while also behaving well numerically for large $x$, where the issue discussed above arise for $\hat{f}_P$.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\linewidth}
         \centering
@@ -787,9 +788,9 @@ Before continuing with a few more interesting methods of density estimation and 
 $$K^{GC}_i \left(x\right) = \frac{1}{h \sqrt{2-h^2}} e^{-\frac{\left(1 - h^2\right)}{2 h^2 \left(2-h^2\right)} \left( \left(1 - h^2\right) \left(\left(\Phi^{-1} \left(x\right)\right)^2 + \left(\Phi^{-1} \left(x_i\right)\right)^2 \right) - 2 \Phi^{-1} \left(x\right) \, \phi^{-1}\left(x_i\right) \right) }$$
 which is obtained by letting $h^2 = 1-\rho$ in the original expression for the Gaussian Copula density. However, in practice, we shall see that this choice of kernel has some numerical instabilities especially for large correlations i.e. small $h$ and does not perform as well as $\hat{f}_{regP}$ even when using their optimal bandwidth.
 
-FUrthermore, we note that as observations are initially transformed such that they are approximately uniform on $[0,1]$, the variance of these uniform observations $u_i = \hat{F}\left(x_i\right)$ will also be approximately $1/12$ and hence the Scott rule of thumb will give a near constant bandwidth. However, as we shall see later, the performance is drastically improved by choosing smaller bandwidth for subdomains with high density. We thus note that a local bandwidth should be considered in the future. This could e.g. by using $k$-nearest neighbor and the distances of these which is the basic idea of \cite{Estimating-mutual-information-Kraskov}. Although we will not be using this method as it is out of scope for this paper, we note that their estimator seem to result in good estimates when $n \geq 300$. Using the core ideas of this paper, one could perhaps deduce a better algorithm for choosing $h$ globally or locally.
+Furthermore, we note that as observations are initially transformed such that they are approximately uniform on $[0,1]$, the variance of these uniform observations $u_i = \hat{F}\left(x_i\right)$ will also be approximately $1/12$ and hence the Scott rule of thumb will give a near constant bandwidth. However, as we shall see later, the performance is drastically improved by choosing smaller bandwidth for subdomains with high density. We thus note that a local bandwidth should be considered in the future. This could e.g. by using $k$-nearest neighbor and the distances of these which is the basic idea of \cite{Estimating-mutual-information-Kraskov}. Although we will not be using this method as it is out of scope for this paper, we note that their estimator seem to result in good estimates when $n \geq 300$. Using the core ideas of this paper, one could perhaps deduce a better algorithm for choosing $h$ globally or locally.
 
-Finally, we note that a recent method based on diffusion \cite{A-Novel-Nonparametric-Density-Estimator} \cite{Kernel-density-estimation-via-diffusion} which shows great potential. Without going into too much detail, it works by considering the PDE
+Finally, we note that a recent method based on diffusion \cite{A-Novel-Nonparametric-Density-Estimator} \cite{Kernel-density-estimation-via-diffusion} which shows great potential. Without going into too much detail, it works by considering the following PDE
 $$\frac{\partial}{\partial t} \hat{f}\left(x;t\right) = \frac{1}{2} \frac{\partial^2}{\partial x^2} \hat{f}\left(x;t\right)$$
 where $t = h^2$. The Gaussian kernel is then the unique solution when the domain is $\mathbb{R}$ with condition $\hat{f}\left[x;0\right] = \frac{1}{n} \sum_{i=1}^{n} \delta \left(x-x_i\right)$ i.e. the observations is the boundary condition at $h=0$. If instead we add that the support should be e.g. $[0,1]$ the Neumann boundary conditions on the boundary results in an analytical solution. Namely, from the boundary conditions
 $$\frac{\partial}{\partial x} \hat{f}\left(x;t\right) \bigg\rvert_{x = 0} = \frac{\partial}{\partial x} \hat{f}\left(x;t\right) \bigg\rvert_{x = 1} = 0$$
@@ -802,7 +803,7 @@ which is similar to the reflection method from above. They even give an algorith
 \begin{example}[Diffusion based KDE]
     Let $X\sim \text{Beta} \left(1,4\right)$ such that $f(x) = 4 \left(1- x\right)^3$ for $x\in \left[0,1\right]$ and thus $F\left(x\right) = 1 - (1-x)^4$. Generating $1000$ samples from the distribution and using the algorithm in \cite{Kernel-density-estimation-via-diffusion} to estimate the bandwidth, we get a bandwidth $h^D = 0.05461$ whereas with Scott's rule we get $h ^{Scott} = 0.04145$. From \autoref{fig:beta dsitribution example} we see that diffusion and the regularized boundary corrected KDE $\hat{f}_{regP}$ from above agree almost everywhere. Only near the lower boundary at $x=0$ there is a significant difference and here $\hat{f}_{regP}$ seem to fit the true distribution better. This is due to the Neumann boundary condition which enforce $\hat{f}_D$ to have horizontal derivative at both boundaries. Note that we have used both the $h^D$ and $h^{Scott}$ bandwidth for the regularized boundary corrected KDE resulting in basically no difference.
 
-    \begin{figure}[h]
+    \begin{figure}[ht]
         \centering
         \includegraphics[width = .7\linewidth]{figures/MI estimation/beta dist example - comparison with diffusion and jones.pdf}
         \caption{Using the diffusion based KDE on $1000$ samples from a $\text{Beta}\left(1,4\right)$ distribution, we see that in general it fits very well. Only at the boundary $x=0$ there seems to be a problem which on the other hand, $\hat{f}_{regP}$ does not seem to suffer from to the same extend. In particular, repeating the experiment, $\hat{f}_{regP}$ is on average $4$ at $x = 0$ while $\hat{f}_{D}$ constantly seem to undershoot.}

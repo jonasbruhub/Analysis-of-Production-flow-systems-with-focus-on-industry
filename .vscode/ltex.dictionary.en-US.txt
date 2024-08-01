@@ -45,3 +45,10 @@ covariances
 Bonferroni
 homeomorphism
 undersmoothing
+Cox-deBoor
+Geenens
+MHE
+KDEs
+MISE
+evmix
+PDE
