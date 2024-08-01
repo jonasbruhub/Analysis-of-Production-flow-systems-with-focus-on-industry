@@ -99,9 +99,7 @@ From the above, we might think that if we have a topological ordering of the ran
     \caption{1000 samples generated from $X_1\sim \mathcal{U}\left(0,1\right)$ and $X_2 \mid X_1 \sim \mathcal{N}\left(1 - 4\left(x_1 - 1/2\right)^2 , \sigma^2\right)$ with $\sigma = 1/10$. The mutual information is calculated theoretically to be $I\left(X_1,X_2\right) \approx 1.030$ and repeated simulations show that the empirical correlation is symmetric around $0$ supporting the claim that the underlying correlation is in fact $0$} % 1.0296516475133333
     \label{fig:MI parabola example}
 \end{figure}
-On a more technical point of view, we note that mutual information is a measure of how dense the joint distribution is, invariant to scale. In a way, it is a measure of how close the joint distribution is to a lower dimensional manifold.
-
-We proceed with a $10$-Gaussian chain defined by the following correlations:
+On a more technical point of view, we note that mutual information is a more general measure of correlation i.e. not just linear correlation. We proceed with a $10$-Gaussian chain defined by the following correlations:
 \begin{equation}\label{eq:Example Gaussian chain}
     \begin{aligned}
         \rho_{1,2} & = 0.6, & \rho_{2,3} & = 0.5, & \rho_{3,4}  & = 0.4 \\
@@ -109,8 +107,8 @@ We proceed with a $10$-Gaussian chain defined by the following correlations:
         \rho_{7,8} & = 0.9, & \rho_{8,9} & = 0.8, & \rho_{9,10} & = 0.7
     \end{aligned}
 \end{equation}
-We have chosen correlations of different sizes to check if the deconvolution is robust in presence of both strong and weak links. In particular, $X_5$ is only $\rho_{4,5}^2 = 4\%$ of $X_4$ and the remaining $96\%$ is noise/indescribable variance i.e. a very weak link between the first part of the chain up to and including $X_4$ and the rest. However, as discussed above, if let $G_{obs}$ be upper triangular, we should completely rediscover these direct relations which is indeed also the case. In particular, from \autoref{fig:Gaussian chain triangular G_obs using correlation} we observe that the inferred network, represented by $G_{dir}$, is indeed a chain of variables and is exactly equal to the theoretical $G_{dir}$ as we would expect (up to very small rounding errors of the size $10^{-16}$). The \textit{estimated} $G_{dir}$ is also shown as a directed graph which the initial topological assumption implies, with edges wherever $G_{dir}$ is non-zero.
-\begin{figure}[H]
+We have chosen correlations of different sizes to check if the deconvolution is robust in presence of both strong and weak links. In particular, $X_5$ is only $\rho_{4,5}^2 = 4\%$ of $X_4$ and the remaining $96\%$ is noise/indescribable variance i.e. a very weak link between the first part of the chain up to and including $X_4$ and the rest. However, as discussed above, if let $G_{obs}$ be upper triangular, we should completely rediscover these direct relations which is indeed also the case.
+\begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -135,6 +133,8 @@ We have chosen correlations of different sizes to check if the deconvolution is 
     \caption{Results from using an upper triangular $G_{obs}$ and correlation to infer the causal network structure. (a) shows the upper triangular $G_{obs}$ with the correlation between every pair of variables. (b) shows the deconvolved $G_{obs}$ and as we expect, the superdiagonal contains the original correlations given in \autoref{eq:Example Gaussian chain}. (c) shows $G_{dir}$ represented as a digraph and matches the expected result.}
     \label{fig:Gaussian chain triangular G_obs using correlation}
 \end{figure}
+In particular, from \autoref{fig:Gaussian chain triangular G_obs using correlation} we observe that the inferred network, represented by $G_{dir}$, is indeed a chain of variables and is exactly equal to the theoretical $G_{dir}$ as we would expect (up to very small rounding errors of the size $10^{-16}$). The \textit{estimated} $G_{dir}$ is also shown as a directed graph which the initial topological assumption implies, with edges wherever $G_{dir}$ is non-zero.
+
 We now proceed to investigate what happens when we remove the prior information of the topological ordering. Namely, if $G_{obs}$ is no longer triangular but symmetric. In particular, let $T_{dir}$ be given as $G_{dir}$ above. We then have that $G_{dir}$ in the symmetric case is $T_{dir} + T_{dir}^T$ and similarly for $G_{obs}$, $G_{obs} = T_{obs} + T_{obs}^T$. Clearly, $I + G_{obs}$ is positive definite as it is a proper correlation matrix. However, that also implies that we might have eigenvalues of $G_{obs}$ less than or equal to $-1/2$ which we know from \autoref{subsec:Setup and assumptions} is not the result of a $G_{dir}$ such that \autoref{eq:Gobs from Gdir} holds as then the infinite sum diverges. However, as $-1$ is not an eigenvalue of $G_{obs}$, we will investigate what happens if one tries to use \autoref{eq:Gdir from Gobs} anyway.
 
 But first, we shall discuss the errors being made using the symmetric $G_{obs}$ and $G_{dir}$ instead of triangular. Namely, we investigate the powers of $G_{dir}$:
@@ -691,7 +691,8 @@ From \autoref{tab:Jones error and variance}, we observe relatively low variance 
 \newpage
 \subsection{Exponentiated multivariate Gaussian}\label{ex:1}
 In this section, we will consider a small example, testing out the combined algorithm. In particular, we shall see what to be aware of when data is not easily transformed by the inverse distribution function. Let us consider a simple case with $\mathbf{Y} = e^{\mathbf{X}}$ (element wise exponentiation) where $X \sim \mathcal{N}\left(\mathbf{0}, \Sigma\right)$ where
-$$\Sigma = \begin{bmatrix}
+\begin{equation}\label{eq:Results - 3x3 example - Sigma structure}
+    \Sigma = \begin{bmatrix}
         \sigma_1^2           & 0.9\sigma_1\sigma_2 & 0          \\
         0.9 \sigma_1\sigma_2 & \sigma_2^2          & 0          \\
         0                    & 0                   & \sigma_3^2
@@ -699,7 +700,8 @@ $$\Sigma = \begin{bmatrix}
         1   & 0.9 & 0 \\
         0.9 & 1   & 0 \\
         0   & 0   & 1
-    \end{bmatrix} \text{diag}\left(\boldsymbol \sigma \right)$$
+    \end{bmatrix} \text{diag}\left(\boldsymbol \sigma \right)
+\end{equation}
 In particular, in terms of \autoref{eq:Gaussian network in terms of Z}, we have that for $\boldsymbol X$, $\vec{\rho}_{1,2} = 0.9$. From \autoref{coro: Coordinate transformation}, it is clear that the (symmetric) mutual information matrix $G_{obs}$ is the same as of $boldsymbol X$ and hence by \autoref{prop:MI bivariate gaussian} is as follows
 $$G_{obs} = \begin{bmatrix}
         0                                        & -\frac{1}{2} \log \left(1 - \vec{\rho}_{1,2}^2\right) & 0 \\
@@ -763,13 +765,14 @@ Similarly, for $\boldsymbol\sigma = (1,1,1)$:
 
 
 Finally, for $\boldsymbol\sigma = (1,2,3)$:
-$$ \hat{G}_{obs} =
+\begin{equation}\label{eq:Results - G_obs 3x3 - large s}
+    \hat{G}_{obs} =
     \begin{bmatrix}
         0      & 1.797 & 1.549 \\
         1.797  & 0     & 2.145 \\
         1.5492 & 2.145 & 0
     \end{bmatrix}
-$$
+\end{equation}
 % obs
 % [[0.        , 1.79681262, 1.54927848],
 % [1.79681262, 0.        , 2.14483483],
@@ -952,9 +955,7 @@ The resulting $u_i^{(j)}$ are now no longer significant and indeed the KDE fits 
 % [ 6.61023097e-01, -3.28890183e-01,  4.60309150e-03],
 % [ 1.18799447e-02,  4.60309150e-03, -2.16682793e-04]
 
-
-
-Which is indeed much more comparable with the result from before in \autoref{eq:s medium G_dir} and \autoref{eq:s small G_dir}. The difference between $G_{dir}$ from $\boldsymbol Y$ and $\boldsymbol Y^p$ is clearly visible in \autoref{fig:Gaussian 3x3 large s G_dir differences} and also \autoref{fig:Gaussian 3x3 large s power} resembles the original correlation structure.
+To illustrate the importance of the above discussion, although it should already be quite clear from the differences in $\hat{G}_{obs}$, we have in \autoref{fig:Gaussian 3x3 large s G_dir differences}, shown the resulting $\hat{G}_{dir}$ after using \autoref{alg:ND}. Namely, we infer a relation between $Y_2$ and $Y_3$ especially, which we know to independent of each other from \autoref{eq:Results - 3x3 example - Sigma structure}.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -973,31 +974,70 @@ Which is indeed much more comparable with the result from before in \autoref{eq:
     \caption{$G_{dir}$ resulting from $400$ samples from multi variate Gaussian with $\boldsymbol\sigma = (1,2,3)$ in \textbf{(a)} with raw samples from $\boldsymbol Y$ and in \textbf{(b)} the transformed data corresponding to $\boldsymbol Y^p$.}
     \label{fig:Gaussian 3x3 large s G_dir differences}
 \end{figure}
-Finally, to end this example we shall compare with some theoretical results. Namely, the output $G_{obs}$ of \autoref{alg:Gobs1} can also be calculated theoretically. For this, we shall use \autoref{prop:MI bivariate gaussian} which permits a theoretical result, namely
-\begin{align*}
-    G_{obs} & =
-    \begin{bmatrix}
-        0                                              & -\frac{1}{2} \ln \left( 1 - \rho_{12}^2\right) & -\frac{1}{2} \ln \left( 1 - \rho_{13}^2\right) \\
-        -\frac{1}{2} \ln \left( 1 - \rho_{21}^2\right) & 0                                              & -\frac{1}{2} \ln \left( 1 - \rho_{23}^2\right) \\
-        -\frac{1}{2} \ln \left( 1 - \rho_{31}^2\right) & -\frac{1}{2} \ln \left( 1 - \rho_{32}^2\right) & 0
-    \end{bmatrix} \\
-            & \cong
-    \begin{bmatrix}
-        0       & 0.83037 & 0 \\
-        0.83037 & 0       & 0 \\
-        0       & 0       & 0
-    \end{bmatrix}
-\end{align*}
-Similarly, prior to deconvolution, using just the sampled $\boldsymbol X$ (i.e. no exponential transform), \autoref{alg:Gobs1} returns
-$$G_{obs} =
-    \begin{bmatrix}
-        0.         & 0.64069542 & 0.01824538 \\
-        0.64069542 & 0.         & 0.0135368  \\
-        0.01824538 & 0.0135368  & 0.
-    \end{bmatrix}
-$$
 
-If we adjust the algorithm to account for the non-unifority, it works well even with sigma 3
+We note that from \autoref{sec:bivar gauss abs correlation CI}, we can compute a CI of the absolute value of the correlation (under the assumption the mutual information was computed from a bivariate Gaussian or a strictly increasing transform of such variables) based on \cite{Confidence_in_Correlation}. In particular, computing confidence intervals for the absolute correlation from each mutual information from $\hat{G}_{0bs}$ in \autoref{eq:G_obs hat power transformed Y - 3x3}, we see that the estimated $\widehat{I\left(Y_1,Y_2\right)}$ is not significantly different from the theoretical mutual information while the remaining are (i.e. between $(Y_1,Y_3)$ and $(Y_2,Y_3)$ respectively).
+
+Thus, in the above, we have showed that the assumption of uniform marginals does not always hold when the data has heavy tails. Namely, the key assumption for \autoref{alg:Gobs1} is that we are doing computations on a Copula density such that the entropy of the marginals $h\left(Y_i\right)$ and $h\left(Y_j\right)$ is $0$. Thus, when this assumption does not hold, the algorithm does estimate the mutual information correctly. However, we can fix this by adding the marginal entropies to the algorithm using \autoref{lemma:mutual information and entropy relation}. However, for the KDE to estimate the marginal entropies well, we still would not want a too heavy tail. What a too heavy tail is, is a bit ambiguous, but using the modified algorithm on $\boldsymbol \sigma = \left(1,\, 2,\, 3\right)$ without the power transformation we obtain the following $\hat{G}_{obs}$, which is of course not as good as the above $\hat{G}_{obs}$, but still closer than the original in \autoref{eq:Results - G_obs 3x3 - large s}
+$$\hat{G}_{obs} = \begin{bmatrix}
+    0 & 0.6263 & 0.02288\\
+    0.6263 & 0 & 0.01688\\
+    0.02288 & 0.01688 & 0
+\end{bmatrix}$$
+In the following section, we shall apply our learning from this section on the more complicated yet fully controlled example, introduced in \autoref{sec:General Gaussian graph}. In particular, we shall observe that without any manual tuning of the bandwidths $h$, we are able accurately infer the causal structure.
+
+% [0.        , 0.62631943, 0.02288399],
+% [0.62631943, 0.        , 0.01687898],
+% [0.02288399, 0.01687898, 0.        ]
+
+% If we adjust the algorithm to account for the non-uniformity, it works well even with sigma 3
+
+\newpage
+
+
+% Which is indeed much more comparable with the result from before in \autoref{eq:s medium G_dir} and \autoref{eq:s small G_dir}. The difference between $G_{dir}$ from $\boldsymbol Y$ and $\boldsymbol Y^p$ is clearly visible in \autoref{fig:Gaussian 3x3 large s G_dir differences} and also \autoref{fig:Gaussian 3x3 large s power} resembles the original correlation structure.
+% \begin{figure}[H]
+%     \centering
+%     \begin{subfigure}[t]{0.49\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{figures/ND examples/Gaussian 3x3 large s.pdf}
+%         \caption{}
+%         \label{fig:Gaussian 3x3 large s}
+%     \end{subfigure}%
+%     ~
+%     \begin{subfigure}[t]{0.49\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{figures/ND examples/Gaussian 3x3 large s power.pdf}
+%         \caption{}
+%         \label{fig:Gaussian 3x3 large s power}
+%     \end{subfigure}
+%     \caption{$G_{dir}$ resulting from $400$ samples from multi variate Gaussian with $\boldsymbol\sigma = (1,2,3)$ in \textbf{(a)} with raw samples from $\boldsymbol Y$ and in \textbf{(b)} the transformed data corresponding to $\boldsymbol Y^p$.}
+%     \label{fig:Gaussian 3x3 large s G_dir differences}
+% \end{figure}
+% Finally, to end this example we shall compare with some theoretical results. Namely, the output $G_{obs}$ of \autoref{alg:Gobs1} can also be calculated theoretically. For this, we shall use \autoref{prop:MI bivariate gaussian} which permits a theoretical result, namely
+% \begin{align*}
+%     G_{obs} & =
+%     \begin{bmatrix}
+%         0                                              & -\frac{1}{2} \ln \left( 1 - \rho_{12}^2\right) & -\frac{1}{2} \ln \left( 1 - \rho_{13}^2\right) \\
+%         -\frac{1}{2} \ln \left( 1 - \rho_{21}^2\right) & 0                                              & -\frac{1}{2} \ln \left( 1 - \rho_{23}^2\right) \\
+%         -\frac{1}{2} \ln \left( 1 - \rho_{31}^2\right) & -\frac{1}{2} \ln \left( 1 - \rho_{32}^2\right) & 0
+%     \end{bmatrix} \\
+%             & \cong
+%     \begin{bmatrix}
+%         0       & 0.83037 & 0 \\
+%         0.83037 & 0       & 0 \\
+%         0       & 0       & 0
+%     \end{bmatrix}
+% \end{align*}
+% Similarly, prior to deconvolution, using just the sampled $\boldsymbol X$ (i.e. no exponential transform), \autoref{alg:Gobs1} returns
+% $$G_{obs} =
+%     \begin{bmatrix}
+%         0.         & 0.64069542 & 0.01824538 \\
+%         0.64069542 & 0.         & 0.0135368  \\
+%         0.01824538 & 0.0135368  & 0.
+%     \end{bmatrix}
+% $$
+
+
 
 
 % \textcolor{red}{Test om denne G er lige den teoretiske. Eller nærmere, argumenter for hvorfor vi ikke laver en test, eller hvad man kunne gøre. Har samplet fra en simultan normalfordeling, så kan lave en til en mellem MI og korrelation. }
@@ -1006,45 +1046,45 @@ If we adjust the algorithm to account for the non-unifority, it works well even 
 % $$f\left(\rho \mid r,\nu\right) = \frac{\nu (\nu-1) \Gamma(\nu-1)}{\sqrt{2\pi} \Gamma(\nu + \frac{1}{2})} \frac{\left(1-r^2\right)^{\frac{\nu-1}{2}} \left(1-\rho^2\right)^{\frac{\nu-2}{2}} }{\left(1-r\rho\right)^{\frac{2\nu-1}{2}}} F\left(\frac{3}{2}, -\frac{1}{2}, \nu+\frac{1}{2}, \frac{1+r\rho}{2}\right)$$
 % from the mutual information, we can calculate the absolute correlation. Notice that the density does not change when reversing both $r$ and $\rho$ simultaneously, thus, without loss of generality, assume $r\geq 0$, then we can calculate a CI for $\rho$ (which will be negated if we had used $-r$ instead and thus would be identical when taking the absolute value). If the original CI $[a,b]$ contains $0$ i.e. $a<0$, we shall write the CI for the absolute correlation as $[0,b]$ instead. This way, we can compare the absolute correlations and see if they are the same (by checking if the CI contains the theoretical correlation) by \cite{Confidence_in_Correlation}. Using numerical integration (fast enough with high numerical accuracy from many bins, 1 mil bins, yielding probability mass 1.0000000000008133), can compute CI for absolute correlation
 
-\autoref{sec:bivar gauss abs correlation CI}
 
 
-Clearly these are not equal, but in this case, the error is suspected to originate from the estimated joint density. For example, considering $X_1$ and $X_2$, we compare the estimated joint copula density and compare to the theoretical \textcolor{red}{reference til et sted hvor gausisk copula står} shown in \autoref{fig:gaussian copula estimate} and \autoref{fig:gaussian copula truth} respectively.
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[t]{0.45\linewidth}
-        \centering
-        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula sample contour.pdf}
-        \caption{}
-    \end{subfigure}%
-    ~
-    \begin{subfigure}[t]{0.5\linewidth}
-        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula sample pdf.pdf}
-        \caption{}
-    \end{subfigure}
-    \caption{Estimated copula density $c$ with $\rho = 0.9$ corresponding to $X_1$ and $X_2$.}
-    \label{fig:gaussian copula estimate}
-\end{figure}
-The noticeable difference is in the corners $(0,0)$ and $(1,1)$ where the theoretical copula density tends to infinity whereas the estimated density has modes at $(0.1,0.1)$ and $(0.9,0.9)$. In particular, simply rescaling the copula density in \autoref{alg:Gobs1} does not resemble the theoretical boundary which is a known issue \textcolor{red}{reference til artikel om undershoot peaks og boundary conditions for KDE}. A better approach may be to use jackknifing \textcolor{red}{link til afsnit of jackknifing, som også indeholder reference til artikel hvor dette gøres}.
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[t]{0.49\linewidth}
-        \centering
-        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula theoretical contour.pdf}
-        \caption{}
-    \end{subfigure}%
-    ~
-    \begin{subfigure}[t]{0.49\linewidth}
-        \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula theoretical pdf.pdf}
-        \caption{}
-    \end{subfigure}
-    \caption{Theoretical copula density $c$ with $\rho = 0.9$ corresponding to $X_1$ and $X_2$.}
-    \label{fig:gaussian copula truth}
-\end{figure}
-We note however, that the underlying structure is still captured i.e. that $Y_1$ and $Y_2$ covary while $Y_3$ does not inform $Y_1$ or $Y_2$ and vice versa.
+
+% Clearly these are not equal, but in this case, the error is suspected to originate from the estimated joint density. For example, considering $X_1$ and $X_2$, we compare the estimated joint copula density and compare to the theoretical \textcolor{red}{reference til et sted hvor gausisk copula står} shown in \autoref{fig:gaussian copula estimate} and \autoref{fig:gaussian copula truth} respectively.
+% \begin{figure}[H]
+%     \centering
+%     \begin{subfigure}[t]{0.45\linewidth}
+%         \centering
+%         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula sample contour.pdf}
+%         \caption{}
+%     \end{subfigure}%
+%     ~
+%     \begin{subfigure}[t]{0.5\linewidth}
+%         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula sample pdf.pdf}
+%         \caption{}
+%     \end{subfigure}
+%     \caption{Estimated copula density $c$ with $\rho = 0.9$ corresponding to $X_1$ and $X_2$.}
+%     \label{fig:gaussian copula estimate}
+% \end{figure}
+% The noticeable difference is in the corners $(0,0)$ and $(1,1)$ where the theoretical copula density tends to infinity whereas the estimated density has modes at $(0.1,0.1)$ and $(0.9,0.9)$. In particular, simply rescaling the copula density in \autoref{alg:Gobs1} does not resemble the theoretical boundary which is a known issue \textcolor{red}{reference til artikel om undershoot peaks og boundary conditions for KDE}. A better approach may be to use jackknifing \textcolor{red}{link til afsnit of jackknifing, som også indeholder reference til artikel hvor dette gøres}.
+% \begin{figure}[H]
+%     \centering
+%     \begin{subfigure}[t]{0.49\linewidth}
+%         \centering
+%         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula theoretical contour.pdf}
+%         \caption{}
+%     \end{subfigure}%
+%     ~
+%     \begin{subfigure}[t]{0.49\linewidth}
+%         \includegraphics[width = \linewidth]{figures/ND examples/Gaussian copula theoretical pdf.pdf}
+%         \caption{}
+%     \end{subfigure}
+%     \caption{Theoretical copula density $c$ with $\rho = 0.9$ corresponding to $X_1$ and $X_2$.}
+%     \label{fig:gaussian copula truth}
+% \end{figure}
+% We note however, that the underlying structure is still captured i.e. that $Y_1$ and $Y_2$ covary while $Y_3$ does not inform $Y_1$ or $Y_2$ and vice versa.
 
 
-We continue with a similar example to the previous one. The key difference is the number of variables and a more complicated correlation structure to test the algorithms further.
+% We continue with a similar example to the previous one. The key difference is the number of variables and a more complicated correlation structure to test the algorithms further.
 
 
 
