@@ -43,3 +43,4 @@ submatrix
 subprocess
 covariances
 Bonferroni
+homeomorphism
