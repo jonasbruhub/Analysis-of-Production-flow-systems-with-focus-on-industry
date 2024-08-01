@@ -233,7 +233,7 @@ We extend the above discussion to $4$- and $5$-chains (i.e. $j = i + 3$ and $j =
 
 % Ud fra plots, kan vi konkludere at fejlene ved at bruge den transformere G_obs ud fra correlation ikke er så lang væk fra det man ville få ud fra convolution af G_dir (under antagelse af at summen convergerer -> det gør den altid, fordi G_dir er strengt øvre trekant, så "inf" sum er faktisk begrænset/endelig)
 
-Having obtained a good understanding of how shifting to mutual information instead of correlation in the case of Gaussian chains, we continue with the above example now using mutual information as the elements of $G_{obs}$ based on the correlation matrix from the previous section. Using a triangular $G_{obs}$ we observe similar behavior to that of original example using a triangular $G_{obs}$ but with correlation as can be seen from \autoref{fig:Gaussian chain triangular G_obs using mutual information}. In particular, we do not observe the same magnitude of bleeding effects as in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. However, we observe
+Having obtained a good understanding of how shifting to mutual information instead of correlation in the case of Gaussian chains, we continue with the above example now using mutual information as the elements of $G_{obs}$ based on the correlation matrix from the previous section. Using a triangular $G_{obs}$ we observe similar behavior to that of original example using a triangular $G_{obs}$ but with correlation as can be seen from \autoref{fig:Gaussian chain triangular G_obs using mutual information}. In particular, we do not observe the same magnitude of bleeding effects as in \autoref{fig:Gaussian chain symmetric G_obs using correlation}.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -263,7 +263,8 @@ Having obtained a good understanding of how shifting to mutual information inste
     \caption{Errors of convolving mutual information along a $4$-chain (a), (b), (c) and a $5$-chain (d). Due to symmetry in the expression of the error, only the first $2$ links i.e. $\rho_{1,2}$ and $\rho_{2,3}$ are varied on $[0,1]$ respectively. Only positive correlations are shown as the sign of the correlation cancels in the expression for the error. We note that large correlations and hence large mutual information on each edge results in larger error. In particular, when not too many of the links are strong, we have almost $0$ error.}
     \label{fig:3 and 4 chain MI error}
 \end{figure}
-the same tendency to miss weak connections as was also observed in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. All in all, we get very good results using a triangular $G_{obs}$ even though mutual information does not have the same properties as correlation. In particular, this is what we expected as we have only used $\rho_{i,i+1} \leq 0.9$, from the above investigation of the error.
+However, we observe the same tendency to miss weak connections as was also observed in \autoref{fig:Gaussian chain symmetric G_obs using correlation}. All in all, we get very good results using a triangular $G_{obs}$ even though mutual information does not have the same properties as correlation. In particular, this is what we expected as we have only used $\rho_{i,i+1} \leq 0.9$, from the above investigation of the error.
+\newpage
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -529,7 +530,7 @@ Before the first example, we shall discuss the problem with the spline based met
         \caption{}
         % \label{subfig:new MI method all zoom}
     \end{subfigure}
-    \caption{Error for mutual information estimation for varying correlations. Contrary to the relative error, we see that it is the mutual information from larg ecorrlations that is the most error prone for small bin counts.}
+    \caption{Error for mutual information estimation for varying correlations. Contrary to the relative error, we see that it is the mutual information from large corrlations that is the most error-prone for small bin counts.}
     \label{fig:raw hsitogram error for MI estimation}
 \end{figure}
 We thus proceed with using the B-spline approach. Similar to the above results, in \autoref{fig:B-spline approach results MI - relative error} and \autoref{fig:B-spline approach results MI - error}, we observe that B-spline approach is prone to the same errors as the raw binning approach. However, from \autoref{fig:B-spline approach results MI - error} we see that the error are smaller for the B-spline based approach for large $N$ but also that a better choice for the number of bins is around $N = 50$ contrary to the results of \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}.
@@ -580,7 +581,7 @@ We thus proceed with using the B-spline approach. Similar to the above results, 
     \caption{The actual error for mutual information estimation using the B-splines approach. For $n=400$ observations, performance is comparable to that of the raw histogram based approach although a larger bin count is preferred.}
     \label{fig:B-spline approach results MI - error}
 \end{figure}
-The results for M-splines are shown in \autoref{fig:M-spline approach results MI - error} and \autoref{fig:M-spline approach results MI - error} and we observe comparable performance except perhaps for a better estimation of mutual information for large correlations which is what we would expect from our discussion in \autoref{subsec:M-plines - method}.
+The results for M-splines are shown in \autoref{fig:M-spline approach results MI - error} and \autoref{fig:M-spline approach results MI - error} we observe comparable performance except perhaps for a better estimation of mutual information for large correlations which is what we would expect from our discussion in \autoref{subsec:M-plines - method}.
 
 The problem we observe with the above methods is that when mutual information is large, most of the mutual information comes from small domains at $(0,0)$ and $(1,1)$. Hence, to calculate the mutual information to a high precision, we need many bins. However, with many bins the estimate becomes more noisy as the support of each spline shrinks with $\frac{1}{N}$. However, as seen from \autoref{fig:approximation of mutual information knowing the true distribution}, if we can accurately estimate the Copula density function from observations, we can compute the mutual information perfectly by increasing the fineness of the integral approximation. In particular, the results below where obtained through the theoretical Copula density function evaluated at the bin centers $\left(\frac{2i - 1}{2N}, \frac{2j - 1}{2N}\right)$ for $i,j \in \{1,\dots, N\}$. We see that this simple approximation with $N = 1000$ is good for correlations up to $\rho = 0.99$. However, due to numerical limitations, we shall use $N = 500$ and only $n = 400$ observations to evaluate the performance of the KDE from the previous chapter. We note that a more memory efficient implementation is possible splitting up the computation in multiple parts as the problem with many observations and bins is that the computation is $\mathcal{O}\left(N^2n\right)$ time and memory if done all at once.
 \begin{figure}[H]
@@ -835,7 +836,7 @@ Before handling this, the non-uniformity of $U_1$, $U_2$ and $U_3$ in \autoref{f
         $D_n$   & 0.16511 & 0.14672 & 0.10561               \\
         p-value & 0       & 0       & $2.382 \cdot 10^{-4}$
     \end{tabular}
-    \caption{Kolmogorov Smirnov test result based on 400 samples for $\boldsymbol\sigma = (1, 1, 1)$. Once again, all of the transformed samples are shown shown statistically significant.}
+    \caption{Kolmogorov Smirnov test result based on 400 samples for $\boldsymbol\sigma = (1, 1, 1)$. Once again, all the transformed samples are shown statistically significant.}
     \label{tab:Results - 3x3 case - meadium s KS test}
 \end{table}
 
@@ -1107,7 +1108,7 @@ In this section, we will redo the example from \autoref{sec:General Gaussian gra
 
 
 
-In \autoref{fig:estimated MI 10 Gaussian results}, we have summarized the results using a symmetric $G_{obs}$. In particular, we observe that the estimated $\hat{G}_{dir}$ is nearly identical to the true $G_{dir}$ (from \autoref{eq:example Gaussian network}). In particular, choosing the relatively small threshold $t = 0.06$ we recover the true causal structure although the entries of $\hat{G}_{dir}$ appear to be a factor $2$ as large as the true $G_{dir}$. If we instead assume a topological structure, resulting in a triangular $\hat{G}_{obs}$, this deviation is alleviated as seen in \autoref{fig:estimated MI 10 Gaussian results - triangular}.
+In \autoref{fig:estimated MI 10 Gaussian results}, we have summarized the results using a symmetric $G_{obs}$. In particular, we observe that the estimated $\hat{G}_{dir}$ is nearly identical to the true $G_{dir}$ (from \autoref{eq:example Gaussian network}). Furthremore, choosing the relatively small threshold $t = 0.06$ we recover the true causal structure although the entries of $\hat{G}_{dir}$ appear to be a factor $2$ as large as the true $G_{dir}$. If we instead assume a topological structure, resulting in a triangular $\hat{G}_{obs}$, this deviation is alleviated as seen in \autoref{fig:estimated MI 10 Gaussian results - triangular}.
 
 From this short example on combining \autoref{alg:Gobs1} and \autoref{alg:ND}, we observe that indeed the methodology proposed can at least for networks as defined in \autoref{sec:General Gaussian graph} recover the causal structure. Furthermore, from \autoref{coro: Coordinate transformation}, we note that the same structure would be inferred if instead the variables had been transformed by a strictly increasing function. This is particularly important in the following section where we shall use the framework on the data introduced in \autoref{chap:data}.
 
@@ -1295,7 +1296,7 @@ Like in \autoref{sec:Gaussian network MI example - computation}, we have good un
         T^P_{10} \longrightarrow
         T^D_{10}
     \end{split}
-\end{equation}\label{eq:times topological order}
+\end{equation}
 
 Using this to order the rows and columns of $G_{obs}$ and finally only keeping the upper triangular part, we can deconvolve the network once again, but this time using the topological structure. The resulting $G_{dir}$ is shown in \autoref{fig:G_dir times - directed}.
 
