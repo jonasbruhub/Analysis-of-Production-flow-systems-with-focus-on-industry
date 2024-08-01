@@ -41,3 +41,5 @@ convolve
 summands
 submatrix
 subprocess
+covariances
+Bonferroni

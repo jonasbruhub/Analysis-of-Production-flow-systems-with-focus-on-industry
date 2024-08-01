@@ -77,7 +77,7 @@ Before analyzing the time series in more depth and filter out (or correct) troub
         D     & 60                  & 18.069 & 6.922 & 2.631 & 0.1456  \\
         E     & 60                  & 18.088 & 9.613 & 3.100 & 0.1714  \\
         F     & 63                  & 17.227 & 7.766 & 2.787 & 0.1618  \\\hline
-        \makecell{Combined \\ cycles} & 374               & 16.876        & 7.218                & 2.687                          & 0.1592
+        \makecell{Combined                                             \\ cycles} & 374               & 16.876        & 7.218                & 2.687                          & 0.1592
     \end{tabular}
     \caption{Basic batch statistics for each cycle and by combining all cycles into a single data set. The average duration of batches across cycles appear similar when taking the variance of the durations into account. We note that later, we wish to estimate the dependency between pairs of random variables whence more observations is better, as always in data science. We do however note that there appears to be a difference between especially the first three cycles and the latter ones. In particular, the variance is larger for cycles named $D$, $E$ and $F$. The source of this variation is at this point unknown however it could be seen as a feature of the dataset. Namely, if the observations are truly from the same production system, this variation could be an inherent feature of the production system which we should not remove. }
     \label{tab:cycle basic stats}
@@ -210,77 +210,95 @@ From \autoref{tab:phase negative observations mod}, we see that cycles $D$, $E$ 
 
 Furthermore, by plotting the different batches from different cycles, it is apparent that the negative process labels always occur after each process (including subprocesses) and before the next process. I.e. we only observe the label $-1$ after $1$ and before $2$. Likewise, $-3$ only occurs after both $3.1$ and $3.2$ but before $4.1$. As hinted to before, we shall thus assume that these negative process labels corresponds to delays between processes. This does make sense from a production point, but they also note in \cite{benchmark-model-to-generate-batch-process-data} that delays between operations have been implemented.
 
-
-
-\newpage
-
-At this point, it would seem that the labels of the processes are understood for phases 1 through 10 corresponding to the actual production in each batch. Thus, we proceed by searching relationships and otherwise quantifying the durations of each phase, both delays and duration for each of the phases. As a beginning, histograms for each of the phases and delays are plotted in \autoref{fig:histogram production durations}. Notice that phases 4.1, 4.3 and 8 are not shown, this is because they always last 15 min, 5 min and 2 hours respectively with the only derivation being in machine precision either when loaded or during calculations. Furthermore, notice that for the negative IDs i.e. the delays, the orange bar. This bar represents the cases where no delay was observed which is thus modelled as an atom at 1.
+At this point, we finally have a sufficient understanding of the simulation to define a few random variables. For each main process $u\in \{1,\dots, 10\}$, we define the \textit{delay} after the process as $T^D_u$ and the associated change in level $M^D_u$. Similarly, for the actual processes $u \in \{1,\,2,\,3.1,\,3.2,\,4.1,\,\dots,\,10\}$ we have \textit{process} duration $T^P_u$ and likewise $M^P_u$. Converting the time series data to realizations of the random variables, we find that $T^P_{4.1}$, $T^P_{4.3}$ and $T^P_8$ are always constant. Referring once again to \cite{benchmark-model-to-generate-batch-process-data}, we see that indeed these processes are controlled such that the duration is 15 min, 5 min and 2 hours respectively. As these random variables are then not really random but constant, we exclude them from our analysis from this point onward. Note that the delays $T^D_u$ have an atom at $0$ since there is a possibility that there is no delay between processes.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/Multiple cycles data/Adding of solids/hisstograms w atoms.png}
-    \caption{Histograms of all phases and delays which are non-constant.}
+    \caption{Histograms of all random variables $T^D_u$ and $T^P_u$ that are non-constant i.e. not controlled to be a fixed amount of time. The orange bars for $T^D_u$ signify the occasions where no delay after process $u$ took place. We observe that depending on the process, a delay is more or less common. In particular after process $5$, there seem to a delay often whereas a delay of process $10$ is very rare.}
     \label{fig:histogram production durations}
 \end{figure}
 
-Apart from the above comments, not much catches the eye when looking at \autoref{fig:histogram production durations}, and we thus proceed by checking if any correlation is immediately present.
+In \autoref{fig:histogram production durations}, we have shown histograms of frequencies for each of these random variables. We note that for the distribution of observations appear to be unimodal i.e. it does not appear as if they are a mixture of distributions. This is important, as it further strengthens our assumption that the hyperparameters of the simulation where the same for all cycles. In particular, the delays (when disregarding the atom at $0$) do not appear as if they originated from different distributions as then we would likely have observed clusters for each of the cycles.
 
-\begin{table}[h]
+In the next section, we shall further examine the random variables in terms of the correlation structure of the observations. However, we first present some basic statistics of the random variables in \autoref{tab:data variation and covariance} for each cycle.
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|cccccc}
-        Cycle                                                 & A       & B       & C       & D      & E      & F      \\\hline
-        $\widehat{\mathbb{E}\left[\sum X_u\right]}$           & 13.993  & 13.898  & 15.343  & 14.471 & 14.589 & 14.418 \\\hline
-        $\widehat{\text{Var}\left(\sum X_u\right)}$           & 0.95636 & 0.46587 & 0.76111 & 4.9589 & 4.2678 & 5.3545 \\\hline
-        $\sum \widehat{\text{Var}\left(X_u\right)}$           & 0.50590 & 0.31182 & 0.36667 & 1.8322 & 1.5788 & 1.9696 \\\hline
-        $\widehat{\mathbb{E} \left[\sum X^D_u\right]}$        & 0.96398 & 1.9402  & 2.4503  & 3.6050 & 3.7390 & 3.0041 \\\hline
-        $\widehat{ \text{Var} \left(\sum X^D_u\right)}$       & 0.31843 & 0.39117 & 0.90187 & 1.2468 & 1.2787 & 1.0462 \\\hline
-        $\sum \widehat{\text{Var}\left(X^D_u\right)}$         & 0.34921 & 0.53198 & 0.74914 & 1.4357 & 1.2454 & 1.3099 \\\hline
-        $\widehat{\mathbb{E} \left[\sum X_u \, X^D_u\right]}$ & 1.9321  & 1.5001  & 4.8191  & 6.4225 & 6.0405 & 6.3343 \\\hline
-        $\widehat{\text{Var} \left(\sum X_u \, X^D_u\right)}$ & 3.7798  & 0.89920 & 16.870  & 22.133 & 12.660 & 16.194
+        Cycle                                                  & A       & B       & C       & D      & E      & F      \\\hline
+        $\widehat{\mathbb{E}\left[\sum T^P_u\right]}$          & 13.993  & 13.898  & 15.343  & 14.471 & 14.589 & 14.418 \\\hline
+        $\widehat{\text{Var}\left(\sum T^P_u\right)}$          & 0.95636 & 0.46587 & 0.76111 & 4.9589 & 4.2678 & 5.3545 \\\hline
+        $\sum \widehat{\text{Var}\left(T^P_u\right)}$          & 0.50590 & 0.31182 & 0.36667 & 1.8322 & 1.5788 & 1.9696 \\\hline
+        $\widehat{\mathbb{E} \left[\sum T^D_u\right]}$         & 0.96398 & 1.9402  & 2.4503  & 3.6050 & 3.7390 & 3.0041 \\\hline
+        $\widehat{ \text{Var} \left(\sum T^D_u\right)}$        & 0.31843 & 0.39117 & 0.90187 & 1.2468 & 1.2787 & 1.0462 \\\hline
+        $\sum \widehat{\text{Var}\left(T^D_u\right)}$          & 0.34921 & 0.53198 & 0.74914 & 1.4357 & 1.2454 & 1.3099 \\\hline
+        $\widehat{\mathbb{E} \left[\sum T^P_u + T^D_u\right]}$ & 14.957  & 15.838  & 17.793  & 18.076 & 18.328 & 17.422 \\\hline
+        $\widehat{\text{Var} \left(\sum T^P_u + T^D_u\right)}$ & 1.1500  & 1.1352  & 1.7983  & 7.0000 & 5.7086 & 5.0103
     \end{tabular}
-    \caption{Each of the time related variables $X_i$ and $D_i$ and variance description.}
+    \caption{Mean and variance overview of each of the time related variables $T^P_u$ and $T^D_u$. A clear difference of variance is observed between cycles $A-C$ and $D-F$. Furthermore, the durations $T^D_u$ clearly show that the total variation is accounted for by the variance of the individual durations. The contrary holds true for the delays $T^D_u$.}
     \label{tab:data variation and covariance}
 \end{table}
+From the table, we observe that the average total durations (excluding delays) of batches are approximately the same. However, the variance of the sum of durations is significantly larger for the cycles $D$, $E$ and $F$. What causes this difference in variation is however unknown. Ideally, in a real world application, one should investigate this further. On could argue that cycles $A-C$ and $D-F$ should then be treated separately and indeed the variance for the accumulated delay during a batch exhibit the same behavior. Namely, the delays also seem to have a larger variance in the later three cycles. We shall however treat all the batches simultaneously in this thesis by arguing that although there is a clear difference in variation, the underlying causal structure of the processes is assumed to be the same. In particular, we could not infer from the simulation study \cite{benchmark-model-to-generate-batch-process-data} that the cycles should have been based on different hyperparameters resulting in the below difference of variances. Furthermore, we note that the difference between the variation in the accumulated duration and the sum of process durations i.e. $\widehat{\text{Var}\left(\sum T^P_u\right)} - \sum \widehat{\text{Var}\left(T^P_u\right)}$ indicate that the durations of the processes are not unrelated. Thus, in the next section we shall investigate the correlation structure of the variables. Finally, we note that the same difference for durations does not indicate a relationship. However, the missing covariances might just cancel each other out. Hence, we do not yet conclude anything regarding their causal structure.
 
 
-\subsection{Correlations}
 
-Lige en korrelationsmatrix
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Correlation structure of durations and delays}
+In this section, we proceed with investigating the correlation between pairs of the random variables. Based on the observations, we quickly compute a correlation matrix as observed in \autoref{fig:Data - correlation matrix all times}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.9\linewidth]{figures/Multiple cycles data/Correlation matrix production and delays.png}
-    \caption{Correlation matrix for all phases with non-constant duration.}
+    \caption{Estimated correlation matrix of the random variables $T^P_u$ and $T^D_u$.}
+    \label{fig:Data - correlation matrix all times}
 \end{figure}
+We immediately notice that the durations of the processes appear to be positively correlated. The fact that there exists strong correlations is not surprising when considering \autoref{tab:data variation and covariance} where we observed that the variation of the sum of durations was much larger than the sum of individual variances. The only other immediately interesting observation that we make from the above figure is the large correlation between $T^D_7$ and $T^P_9$. This means that there is a positive linear relationship between the delay after the reaction process $7$ and the time it takes to cool the tank (process $9$).
 
-9 og 10 er ikke specielt korreleret med noget (afkøling og materiale overførsel). Ellers er 2 fremt il og med reaktionen alle korrelerede med hinanden. Eftersom rent fysisk det udvikles i tid, må handlingen i 2 påvirke de næste osv.
-
-\begin{figure}
+To assess the significance of these correlations, we performed a permutation test. Namely, by randomly permuting the observations of each random variable and recomputing the correlation matrix, we see if the new correlation coefficient is numerically larger than the one we computed from the original data. Repeating this multiple times (e.g. 10,000 times), we obtain an estimate of the probability of observing a correlation coefficient, numerically larger than the one we computed in \autoref{fig:Data - correlation matrix all times}.
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.9\linewidth]{figures/Multiple cycles data/Permutation test rho 10 mil.png}
-    \caption{Permuteringstest med $\alpha = 0.05$. Also run with less simulations but same result at 1 mil and 10k sims. The Benjamin-Hochberg procedure on the upper (or lower) triangle reveals that none of the correlations are significant.}
+    \caption{Permutation test with significance level $\alpha = 0.05$ based on 10,000 permutations. The diagonal elements have been set to $0$ as it does not make sense to test the correlation between a random variable and itself.}
+    \label{fig:Data - perm test result}
+\end{figure}
+In particular, the null hypothesis is that there is no correlation between a pair of random variables. This is because when the samples are reshuffled independently of each other, the underlying assumption is that the random variables are independent of each other and hence has correlation $0$. In \autoref{fig:Data - perm test result} we have shown a binary matrix for when the p-value was observed to be less than $0.05$ i.e. significant results on a $5\%$ significance level. We observe that many of the correlations appear to significant which is somewhat contradictory to what we would expect from such a production system. However, as we are performing multiple test, we really should correct for this in some way. Choosing a conservative approach through the Bonferroni correction, we get far fewer significant results as observed in \autoref{fig:Data - perm test result - Bonferroni}. Once again, we have removed the diagonal elements.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.9\linewidth]{figures/Multiple cycles data/Permutation test rho 10 mil - bonferoni.pdf}
+    \caption{The permutation test with Bonferroni corrected significance level. Many of the significant correlations disappear however when plotting e.g. $T^D_1$ vs $T^D_2$ we see that the correlation does not stem from a linear relationship. In particular, from \autoref{fig:time vs time all}, we observe that the joint distribution is more of an \textit{L}-shape. We shall thus later investigate other measures of similarity than correlation to capture such non-linear tendencies}
+    \label{fig:Data - perm test result - Bonferroni}
 \end{figure}
 
-Umiddelbart lidt spøjst hvis delay på 7 (reaktion) skulle have noget med tiden for afkøling at gøre, især at den skulle være positiv (ville man ikke tro delay efter produktion ville afkøle mere og dermed reducere behov for afkøling, medmindre varmt steam bliver tilføjet også under delay på 7)
-
-
-
-
-Herunder er samme korrelationsmatrix, dog hvor delay og phasens varighed lagt sammen (også med sub phases såsom 3.1, 3.2 og -3 tilsammen bliver 3)
+Suppose now that we instead did not know what part of a process what the duration and what was a delay. In particular, we define the total duration of a process as $T_u = T^P_u + T^D_u$. Note that for $T_3$ and $T_4$, we extend this definition slightly such that $T_3 = T^P_{3.1} + T^P_{3.2} + T^D_{3}$ and $T_4 = T^P_{4.1} + T^P_{4.2} + T^P_{4.3} + T^D_{4}$ (although $T^P_{4.1}$ and $T^P_{4.3}$ can be disregarded as they are constant and hence irrelevant when computing the correlation). Using only the cumulated random variables, we observe a much simpler correlation structure as shown in \autoref{fig:Data - combined duration and delay}. However, we also seem to lose much of the information that was otherwise visible in \autoref{fig:Data - correlation matrix all times}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\linewidth]{figures/Multiple cycles data/Correlation matrix collapsed phases.png}
-    \caption{Correlation matrix for all phases collapsed}
+    \includegraphics[width=.7\linewidth]{figures/Multiple cycles data/Correlation matrix collapsed phases.pdf}
+    \caption{Correlation matrix for combined process durations $T_u$. The strong correlations that we observed previously appear to be lost. In particular, it is no longer clear what durations influence each other if any. Thus, we conclude that at least in the case of linear relations between durations, the extra information regarding when the system is idle due to a delay, is very important if we want to have any change of inferring anything useful about the causal structure of the production system.}
+    \label{fig:Data - combined duration and delay}
 \end{figure}
 
+As a final remark, we have shown in \autoref{fig:Data - process and the next process scatter} the duration of a process $T_u$ and the process that follows immediately after $T_{u+1}$. Although the correlations in \autoref{fig:Data - combined duration and delay} did not appear as informative as in \autoref{fig:Data - correlation matrix all times}, there might still be some useful observations to be made from the joint raw observations. Note that Cycle $1$ corresponds to Cycle A and so on. From the below figure, it is clear that the duration of a process is not well-described based solely on the previous process. However, we do observe an interesting behavior in $T_2$ vs $T_1$ and $T_{10}$ vs $T_9$. Namely, for $T_2$ and $T_1$, $T_1$ appear to be larger in the first $3$ cycles while $T_2$ appears to be larger in the final three cycles. This results in the \textit{L}-shape observed. A similar observation is made between $T_{10}$ and $T_9$. From \autoref{tab:phase negative observations mod}, we see that this coincides with the existence of delays in the cycles respectively. Furthermore, from \autoref{fig:histogram production durations}, the durations often last much longer than the actual duration of the process, such that the delay dominates the total duration of the process.
 
-Ligeledes scatter plots for superdiagonalen i ovenstående matrix. Altså phase 1 overfor phase 2, phase 2 overfor phase 3 osv. Er farvelagt efter hvilken cycle de kommer fra. \autoref{tab:phase negative observations mod} forklarer hvorfor nogle af de horisontale fremkommer sammen med \autoref{fig:histogram production durations} (selve produktionstiden er ret kort sammenlignet med delay.)
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/Multiple cycles data/phase scatter vs next phase.png}
-    \caption{Phases vs their next phase when collecting everything regarding a single phase into a total time duration}
+    \caption{Total process durations $T_u$ plotted against the next process $T_{u+1}$. In some cases, there seem to be a difference from cycle to cycle. Especially in $T_2$ vs $T_1$ and $T_{10}$ vs $T_9$.}
+    \label{fig:Data - process and the next process scatter}
 \end{figure}
 
+For the sake of completeness, we have in the appendix, \autoref{fig:time vs time all}, \autoref{fig:time vs level all} and \autoref{fig:level vs level all} plotted all variables against each other. Although clear relations can be observed between some pairs of random variables it is unclear how e.g. durations and delays (and the related level changes) propagate through the system if they even do so. In \autoref{chap:method}, we will discuss a method for discovering such relations, but first, we comment on the cleaning operations that until this point has been left out.
 
 
 % Check at eventID altid er kronologisk stigende, absolut værdi (med undtagelse for 3 og 4, der gør lidt tilbage grundet waiting time)
@@ -296,75 +314,43 @@ Ligeledes scatter plots for superdiagonalen i ovenstående matrix. Altså phase 
 % Skal man måske prøve at modellere sig ud af korrelationen? Måske ved at kigge på fyldningsniveauet, da det nok beskriver en del
 
 
-\newpage
+
 \section{Cleaning operations}\label{sec:Data - Cleaning operations}
-Sometimes, the vessel is cleansed. This is however not every time after a batch so might be interesting to investigate further. Initially, per cycle, the cleanings are summarized in the following table with basic statistics. As can be seen, there is quite some differences.
+As per \autoref{fig:Cycle and process structure}, after each batch, the tank in which the process has taken place is to be cleaned. However, from inspection of the data, we observe that only for cycles $A$ and $B$ is this true. Namely, for cycles $C$ through $F$, the tank is not cleaned after each batch. This, along with some basic statistics regarding the duration of the cleaning operation is summarized in \autoref{tab:cycle cleansing stats stats}.
 
-The most notifiable differences per batch are the number of cleanses especially when comparing to \autoref{tab:cycle basic stats}. For the first two cycles, the cleanses seem to be in between every batch, which is indeed also the while the later four are only sometimes. Furthermore, although the cleanses are between every batch for cycles A and B, the variances are extremely different. For the last four cycles, they seem to be grouped further, E and F are very alike while cleanses in C and D are generally longer although D has a substantially smaller variance than C.
-
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c|c}
-        Cycle & \#ops & min   & max   & $\mu$ & $\sigma^2$ & $\sigma$ & $\sigma / \mu$ \\ \hline
-        A     & 65    & 1.113 & 3.067 & 1.917 & 0.269      & 0.518    & 0.270          \\
-        B     & 63    & 1.324 & 1.751 & 1.566 & 0.00883    & 0.0939   & 0.0600         \\
-        C     & 9     & 1.544 & 3.306 & 2.153 & 0.277      & 0.526    & 0.245          \\
-        D     & 10    & 1.474 & 2.009 & 1.581 & 0.0212     & 0.146    & 0.0922         \\
-        E     & 10    & 0.827 & 1.584 & 1.465 & 0.0462     & 0.215    & 0.147          \\
-        F     & 10    & 0.748 & 1.610 & 1.466 & 0.0595     & 0.244    & 0.166
+        Cycle & \makecell{number of                                                     \\cleanses} & \makecell{min}   & \makecell{max}   & \makecell{sample\\mean} & \makecell{sample\\variance} & \makecell{sample\\standard\\deviation} & CV \\ \hline
+        A     & 65                  & 1.113 & 3.067 & 1.917 & 0.269   & 0.518  & 0.270  \\
+        B     & 63                  & 1.324 & 1.751 & 1.566 & 0.00883 & 0.0939 & 0.0600 \\
+        C     & 9                   & 1.544 & 3.306 & 2.153 & 0.277   & 0.526  & 0.245  \\
+        D     & 10                  & 1.474 & 2.009 & 1.581 & 0.0212  & 0.146  & 0.0922 \\
+        E     & 10                  & 0.827 & 1.584 & 1.465 & 0.0462  & 0.215  & 0.147  \\
+        F     & 10                  & 0.748 & 1.610 & 1.466 & 0.0595  & 0.244  & 0.166
     \end{tabular}
-    \caption{Per cycle cleansing statistics}
+    \caption{Per cycle cleansing statistics. We observe that cycles $A$ and $B$ have many more cleaning processes taking place than cycles $C-F$. Also, the variation in cycles $A$ and $C$ is much larger than for the other cycles. These observations indicate that the cleaning operations from the different cycles have not been simulated from the same hyperparameters. This apparent inequality between the cycles is the primary reason for why we have not chosen to use them in our further analysis of the production system.}
     \label{tab:cycle cleansing stats stats}
 \end{table}
 
 
+The most notable differences from cycle to cycle are the number of cleanses as each cycle have approximately the same number of batches as seen in \autoref{tab:cycle basic stats}. For the first two cycles, the cleanses seem to be in between every batch, which is indeed the case. Furthermore, although the cleanses are between every batch for cycles A and B, the variances are extremely different. Also, we observe that cycles $A$ and $C$ have much larger variation than the remaining cycles. With these observations, we hypothesize that the cleaning operations have not been simulated based on the same settings whence we will not consider these processes in our further analysis.
 
-To verify these observations and potentially discovering more important facts of their probability distributions, histograms are plotted in the following \autoref{fig:cycle cleaning histograms}. We indeed again observe the likeliness between the cycles A and B, C and D, E and F respectively. Also, for the first two cycles and more so cycle B, the cleaning times are somewhat normally distributed although cycle A has a very heavy right tail in that case. The later four cycles only have 10 observations but the mode (i.e. peak) seem to be about the same.
+Furthermore, histograms of the durations of cleaning processes for each cycle in \autoref{fig:cycle cleaning histograms} show that although cycle $B$ has many more cleanses, the distribution is somewhat comparable to those of cycles $D-F$ as the durations are approximately centered around $1.55$ with similar interquartile range.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/Cleaning batches histograms.png}
     \caption{Each of the 6 cycles, cleaning operations histograms.}
     \label{fig:cycle cleaning histograms}
 \end{figure}
 
-From the above observation of like modes one may want to observe the histogram of the combined set of cleaning times. In particular, under the hypothesis that the durations are actually from the same probability distributions and realized independently within each cycle a histogram of all the observations are of interest and is shown in \autoref{fig:cycle cleaning histograms combined} below.
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/Cleaning batches histograms combined.png}
-    \caption{Combined cleaning operations histograms.}
-    \label{fig:cycle cleaning histograms combined}
-\end{figure}
-
-
-Finally, to get a better overview of the irregularities is the number of cleaning periods (mostly concerning cycles C through F), each cleaning operation is shown in the following \autoref{fig:cycle cleaning time series}. The vertical shaded rectangles signify the period in which a cleaning operation is taking place. Furthermore, the event IDs are shown but to get a clearer view on what is going on, a single rectangle (zoomed in) is shown in \autoref{fig:cycle cleaning time series single}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/Multiple cycles data/Cleaning batches.png}
-    \caption{Each of the 6 cycles, cleaning (corresponding to \texttt{BatchID = 0}). Each \textit(Cleaning Procedure), CIP, is highlighted with an opaque interval (the blue rectangles). The dots marked with red (only ID 11.5, but not all of these are red), is if the Cleaning ID is 0.}
-    \label{fig:cycle cleaning time series}
-\end{figure}
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/Multiple cycles data/Cleaning batches timeseries single.png}
-    \caption{A single blue rectangle zoomed in}
-    \label{fig:cycle cleaning time series single}
-\end{figure}
-
-It is observed that the observations marked with red in figure \ref{fig:cycle cleaning time series} occur exactly when that specific cleaning operation does not go to the state 11.0 after the flush of the tank (event ID 11.5) and vice versa. It is hard to conclude what this may mean, but the cleaning being in state 11.0 may indicate that the system is idle before continuing the next batch like what is observed from the other steps of the process flow. Also, it is noted that while the red dots occur nothing else is happening according to the dataset.
-
-
-From a modelling point of view, the cycles C through F can be thought of as the cleansing operation having a probability of not happening or equivalently as having a duration of 0. It is thus of interest to observe what the probability of cleaning after an operation is. From \autoref{tab:cycle basic stats} and \autoref{tab:cycle cleansing stats stats}, we that indeed for cycles A and B, the probability is 100 \% when disregarding the possibility of cleaning after the final batch. Hence, we see that for the remaining cycles, the probabilities of cleaning the tank after an operation are as in \autoref {tab:cycle cleaning prob}
+In the appendix, \autoref{fig:cycle cleaning time series single} and \autoref{fig:cycle cleaning time series}, we have shown how a cleaning operation goes through each of the subprocesses. Indeed, for cycles $C-F$ the cleaning process is only carried out every so often as summarized in \autoref{tab:cycle cleaning prob}. From \autoref{fig:cycle cleaning time series}, the cleaning processes appear to be carried out between a random number of batches. In the remaining part of this section, we shall investigate this observation for the latter four cycles with some simple tests.
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{c|r}
-        Cycle & \% cleaning \\ \hline
+    \begin{tabular}{c|c}
+        Cycle & \makecell{Percentage cleaning processes\\ after batches} \\ \hline
         A     & 100.00      \\
         B     & 100.00      \\
         C     & 15.00       \\
@@ -372,14 +358,41 @@ From a modelling point of view, the cycles C through F can be thought of as the 
         E     & 16.95       \\
         F     & 16.13
     \end{tabular}
-    \caption{Per cycle probability of cleaning}
+    \caption{Per cycle, how often a batch is followed by a cleaning process.}
     \label{tab:cycle cleaning prob}
 \end{table}
 
 
-Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning of the tank or not. It is then of interest if the next batch is followed by a cleaning given whether the current batch is followed by a cleaning. In particular, we count for each of the cycles the transitions which are shown in the following tables. Notice that the number of observations is two less than the total number of batches within each specific cycle. This is due to the last batch is never followed by a cleaning (nor is the first batch superseded by a cleaning procedure) which results in one less observation and also due to the fact that we are logging transitions and hence lose another observation. To test for randomness, a Chi-squared test is carried out on each of the cycles to check for independence. It is observed all the cycles exhibit independence between the groups i.e. there is no statistical evidence for information is gained about if the next batch is followed by a cleaning operation given whether the current batch is followed by a cleaning operation.
 
-\begin{table}[h]
+% From the above observation of like modes one may want to observe the histogram of the combined set of cleaning times. In particular, under the hypothesis that the durations are actually from the same probability distributions and realized independently within each cycle a histogram of all the observations are of interest and is shown in \autoref{fig:cycle cleaning histograms combined} below.
+
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/Cleaning batches histograms combined.png}
+%     \caption{Combined cleaning operations histograms.}
+%     \label{fig:cycle cleaning histograms combined}
+% \end{figure}
+
+
+% Finally, to get a better overview of the irregularities is the number of cleaning periods (mostly concerning cycles C through F), each cleaning operation is shown in the following \autoref{fig:cycle cleaning time series}. The vertical shaded rectangles signify the period in which a cleaning operation is taking place. Furthermore, the event IDs are shown but to get a clearer view on what is going on, a single rectangle (zoomed in) is shown in \autoref{fig:cycle cleaning time series single}.
+
+
+
+
+% It is observed that the observations marked with red in figure \ref{fig:cycle cleaning time series} occur exactly when that specific cleaning operation does not go to the state 11.0 after the flush of the tank (event ID 11.5) and vice versa. It is hard to conclude what this may mean, but the cleaning being in state 11.0 may indicate that the system is idle before continuing the next batch like what is observed from the other steps of the process flow. Also, it is noted that while the red dots occur nothing else is happening according to the dataset.
+
+
+% From a modelling point of view, the cycles C through F can be thought of as the cleansing operation having a probability of not happening or equivalently as having a duration of 0. It is thus of interest to observe what the probability of cleaning after an operation is. From \autoref{tab:cycle basic stats} and \autoref{tab:cycle cleansing stats stats}, we that indeed for cycles A and B, the probability is 100 \% when disregarding the possibility of cleaning after the final batch. Hence, we see that for the remaining cycles, the probabilities of cleaning the tank after an operation are as in \autoref {tab:cycle cleaning prob}
+
+
+In particular, let $C_i$ denote the indicator of whether the $i$th batch is followed by a cleaning of the tank or not. We shall then investigate whether the next batch is also cleaned or not. I.e. at a lag $1$, if the variables $C_i$ are associated. In particular, we shall use Fisher's exact test with the alternative hypothesis being two-sided. We use the \texttt{scipy} implementation \texttt{stats.fisher_exact}. The results are summarized in \autoref{tab:Contingency table for Cycle C-F}. Indeed, we observe that the results are non-significant on a $5\%$ significance level. Repeating the tests for lags up to and including $10$ we observe no significant results either. More sophisticated tests could be carried out to test if using e.g. the previous $5$ $C_i$ is predictive of whether the next batch is followed by a cleaning process. However, as we shall not use this later, we end our discussion of the cleaning processes and note that in the remaining of the thesis, they have been excluded from the dataset.
+
+% It is then of interest if the next batch is followed by a cleaning given whether the current batch is followed by a cleaning. In particular, we count for each of the cycles the transitions which are shown in the following tables. Notice that the number of observations is two less than the total number of batches within each specific cycle. This is due to the last batch is never followed by a cleaning (nor is the first batch superseded by a cleaning procedure) which results in one less observation and also due to the fact that we are logging transitions and hence lose another observation.
+
+% To test for randomness, a Chi-squared test is carried out on each of the cycles to check for independence. It is observed all the cycles exhibit independence between the groups i.e. there is no statistical evidence for information is gained about if the next batch is followed by a cleaning operation given whether the current batch is followed by a cleaning operation.
+
+\begin{table}[ht]
     \begin{subtable}{.5\linewidth}
         \centering
         \begin{tabular}{c|c c}
@@ -387,7 +400,7 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
             No                         & 41 & 9   \\
             Yes                        & 9  & 0
         \end{tabular}
-        \caption{C, $p=0.3293$}
+        \caption{Cycle C, $p=0.3293$}
         \label{tab:cycle C Contingency table}
     \end{subtable}%
     \begin{subtable}{.5\linewidth}
@@ -397,7 +410,7 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
             No                         & 41 & 8   \\
             Yes                        & 7  & 2
         \end{tabular}
-        \caption{D, $p=0.6456$}
+        \caption{Cycle D, $p=0.6456$}
         \label{tab:cycle D Contingency table}
     \end{subtable}
     \begin{subtable}{.5\linewidth}
@@ -407,7 +420,7 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
             No                         & 41 & 7   \\
             Yes                        & 7  & 3
         \end{tabular}
-        \caption{E, $p=0.3532$}
+        \caption{Cycle E, $p=0.3532$}
         \label{tab:cycle E Contingency table}
     \end{subtable}%
     \begin{subtable}{.5\linewidth}
@@ -417,24 +430,23 @@ Furthermore, let $C_i$ denote whether the $i$th batch is followed by a cleaning 
             No                         & 41 & 9   \\
             Yes                        & 9  & 1
         \end{tabular}
-        \caption{F, $p=1.0000$}
+        \caption{Cycle F, $p=1.0000$}
         \label{tab:cycle F Contingency table}
     \end{subtable}
-
-    \caption{Contingency table for Cycle C-F}
-    % \label{tab:}
+    \caption{Contingency table for Cycle C-F at lag 1. No significant results are observed and repeating for lags larger than $1$ we do not conclude otherwise.}
+    \label{tab:Contingency table for Cycle C-F}
 \end{table}
 
-Thus collecting the observations from all the last four cycles, we may want to model the atom of the cleaning procedure independently of the previous batch and with a probability of $0.8375$ corresponding to the cleaning procedure only being carried out $16,25$\% of cases.
+% Thus collecting the observations from all the last four cycles, we may want to model the atom of the cleaning procedure independently of the previous batch and with a probability of $0.8375$ corresponding to the cleaning procedure only being carried out $16,25$\% of cases.
 
-Finally, we show the autocorrelation function for each the four cycles C-F in \autoref{fig:cycle cleaning ACF} and note that all the ACF stay within the 95\% confidence interval.
+% Finally, we show the autocorrelation function for each the four cycles C-F in \autoref{fig:cycle cleaning ACF} and note that all the ACF stay within the 95\% confidence interval.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/Cleaning Autocorrelation.png}
-    \caption{Autocorrelation function for each of the final 4 cycles. As can also be seen from this there seem to be no information to be gained of $C_i$ from $C_{i-1}$.}
-    \label{fig:cycle cleaning ACF}
-\end{figure}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.8\linewidth]{figures/Multiple cycles data/Cleaning Autocorrelation.png}
+%     \caption{Autocorrelation function for each of the final 4 cycles. As can also be seen from this there seem to be no information to be gained of $C_i$ from $C_{i-1}$.}
+%     \label{fig:cycle cleaning ACF}
+% \end{figure}
 
 \end{document}
 

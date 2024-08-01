@@ -484,7 +484,9 @@ Having discussed the strengths and weaknesses of \autoref{alg:ND}, we now turn o
 
 
 \subsection{Spline and KDE based CE estimation}
-Before discussing the first example, we shall however discuss the problem with the spline based method and using histograms in general. Namely, we shall first see that if one were to just simply us a raw binning approach, the number of bins $N$ influences the estimate a lot and no number of bins seems to perform well on all cases. Namely, let $\boldsymbol X$ be a bivariate Gaussian with correlation $\rho$, then the Copula density looks as in \autoref{fig:gaussian copula truth}. In particular, we notice the peaks at $(0,0)$ and $(1,1)$ which result in a lot of mutual information. Now, simulating \textcolor{red}{$n = 400$} observations from the joint distribution and transforming to the unit square through the marginal distribution function for varying correlations $\rho$, we can compare the estimated mutual information $I_{estim}$ using the results from \autoref{subsec:limit entropy and MI} to the true mutual information given by $ I_{exact} = - \frac{1}{2} \log \left(1 - \rho^2\right)$. The results are shown in \autoref{fig:raw histogram for MI estimation} where we report the relative size of the estimate and the exact mutual information and in \autoref{fig:raw hsitogram error for MI estimation} where the difference is reported. From \autoref{fig:raw histogram for MI estimation}, we might choose $N \approx 10$ as in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} however for large correlations, we drastically underestimate mutual information. Increasing the number of bins to e.g. $N = 50$ corrects this error for large correlations, but then small correlations have a relatively large error of around $0.5$ which is a relatively large error when comparing to the error the deconvolution step makes as illustrated in \autoref{fig:3 and 4 chain MI error}.
+Before the first example, we shall discuss the problem with the spline based method and using histograms in general. Namely, we shall first see that if one were to just simply use a raw binning approach, the number of bins $N$ influences the estimate a lot and no number of bins seems to perform well on all cases. Namely, let $\boldsymbol X$ be a bivariate Gaussian with correlation $\rho$, then the Copula density looks as in \autoref{subfig:Gaussian copula density example}. In particular, we notice the peaks at $(0,0)$ and $(1,1)$ from which most of the mutual information originates. Now, simulating $n = 400$ observations from the joint distribution and transforming to the unit square through the marginal distribution function for varying correlations $\rho$, we can compare the estimated mutual information $I_{estim}$ using the results from \autoref{subsec:limit entropy and MI} to the true mutual information given by $ I_{exact} = - \frac{1}{2} \log \left(1 - \rho^2\right)$. The results are shown in \autoref{fig:raw histogram for MI estimation} where we report the relative size of the estimate and the exact mutual information and in \autoref{fig:raw hsitogram error for MI estimation} where the difference is reported. From \autoref{fig:raw histogram for MI estimation}, we might choose $N \approx 10$ as in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} however for large correlations, we drastically underestimate mutual information. Increasing the number of bins to e.g. $N = 25$ corrects this error for large correlations, while small mutual information for small correlations remains relatively small. However, when deconvolving we would preferably want a more precise way of estimating the mutual information.
+
+% but then small correlations have a relatively large error of around $0.5$ which is a relatively large error when comparing to the error the deconvolution step makes as illustrated in \autoref{fig:3 and 4 chain MI error}.
 
 \begin{figure}[H]
     \centering
@@ -508,7 +510,7 @@ Before discussing the first example, we shall however discuss the problem with t
         \caption{}
         \label{subfig:ddd}
     \end{subfigure}
-    \caption{}
+    \caption{Relative error when estimating mutual information for different bivariate Gaussian distributions with varying bin counts $N$. Information originating from small correlations are vastly overestimated.}
     \label{fig:raw histogram for MI estimation}
 \end{figure}
 
@@ -527,10 +529,10 @@ Before discussing the first example, we shall however discuss the problem with t
         \caption{}
         % \label{subfig:new MI method all zoom}
     \end{subfigure}
-    \caption{}
+    \caption{Error for mutual information estimation for varying correlations. Contrary to the relative error, we see that it is the mutual information from larg ecorrlations that is the most error prone for small bin counts.}
     \label{fig:raw hsitogram error for MI estimation}
 \end{figure}
-We thus proceed with using the B-spline approach. Similar to the above results, in \autoref{fig:B-spline approach results MI - relative error} and \autoref{fig:B-spline approach results MI - error}, we observe that B-spline approach is prone to the same errors as the raw binning approach. However, from \autoref{fig:B-spline approach results MI - error} we see that the error are smaller for the B-spline based approach but also that a better choice for the number of bins is around $N = 60$ contrary to the results of \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}.
+We thus proceed with using the B-spline approach. Similar to the above results, in \autoref{fig:B-spline approach results MI - relative error} and \autoref{fig:B-spline approach results MI - error}, we observe that B-spline approach is prone to the same errors as the raw binning approach. However, from \autoref{fig:B-spline approach results MI - error} we see that the error are smaller for the B-spline based approach for large $N$ but also that a better choice for the number of bins is around $N = 50$ contrary to the results of \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}.
 
 
 % med B-splines
@@ -556,7 +558,7 @@ We thus proceed with using the B-spline approach. Similar to the above results, 
         \caption{}
         % \label{subfig:ddd}
     \end{subfigure}
-    \caption{Evaluation of MI for old method for different N. Ligner der er knæk ved fporhold lig 1. Men ved næremere undersøgelse blev det fundet ud af at det ikke helt er tilfældet, og derudover vil der skulle laves en algoritmisk måde at finde dette knæk på. Savitzky–Golay filter kunne være en mulighed, eller gruppere e.g. 5 forskellige bins og tag gennemsnit. Efter smoothing kan anden afledte tæt på 0 bruges, til at finde hvornår stykket bliver fladt (tilnærmelses vist)}
+    \caption{Relative error of mutual information estimates using B-splines. Comparing to the relative error of the raw histogram based approach, we obtain relative error much smaller.}
     \label{fig:B-spline approach results MI - relative error}
 \end{figure}
 
@@ -575,12 +577,12 @@ We thus proceed with using the B-spline approach. Similar to the above results, 
         \caption{}
         % \label{subfig:new MI method all zoom}
     \end{subfigure}
-    \caption{through repeated trials, we see that this method is actually quite robust when varying the number of observations $n$}
+    \caption{The actual error for mutual information estimation using the B-splines approach. For $n=400$ observations, performance is comparable to that of the raw histogram based approach although a larger bin count is preferred.}
     \label{fig:B-spline approach results MI - error}
 \end{figure}
 The results for M-splines are shown in \autoref{fig:M-spline approach results MI - error} and \autoref{fig:M-spline approach results MI - error} and we observe comparable performance except perhaps for a better estimation of mutual information for large correlations which is what we would expect from our discussion in \autoref{subsec:M-plines - method}.
 
-The problem we observe with the above methods is that when mutual information is large, the Copula density is close to a one-dimensional manifold. Hence, to calculate the mutual information well, need many bins. However, with many bins the estimate becomes more noisy as the support of each spline shrinks with $\frac{1}{N}$. However, as seen from \autoref{fig:approximation of mutual information knowing the true distribution}, if we can accurately estimate the Copula density function from observations, we can compute the mutual information perfectly by increasing the fineness of the integral approximation. In particular, the results below where obtained through the theoretical Copula density function evaluated at the bin centers $\left(\frac{2i - 1}{2N}, \frac{2j - 1}{2N}\right)$ for $i,j \in \{1,\dots, N\}$. We see that this simple approximation with $N = 1000$ is good for correlations up to $\rho = 0.99$. However, due to numerical limitations, we shall use $N = 500$ and only $400$ observations to evaluate the performance of the KDE from the previous chapter. We note that a more efficient implementation is possible splitting up the computation in multiple parts as the problem with many observations and bins is to compute the joint density function which is of $\mathcal{O}\left(N^2n\right)$
+The problem we observe with the above methods is that when mutual information is large, most of the mutual information comes from small domains at $(0,0)$ and $(1,1)$. Hence, to calculate the mutual information to a high precision, we need many bins. However, with many bins the estimate becomes more noisy as the support of each spline shrinks with $\frac{1}{N}$. However, as seen from \autoref{fig:approximation of mutual information knowing the true distribution}, if we can accurately estimate the Copula density function from observations, we can compute the mutual information perfectly by increasing the fineness of the integral approximation. In particular, the results below where obtained through the theoretical Copula density function evaluated at the bin centers $\left(\frac{2i - 1}{2N}, \frac{2j - 1}{2N}\right)$ for $i,j \in \{1,\dots, N\}$. We see that this simple approximation with $N = 1000$ is good for correlations up to $\rho = 0.99$. However, due to numerical limitations, we shall use $N = 500$ and only $n = 400$ observations to evaluate the performance of the KDE from the previous chapter. We note that a more memory efficient implementation is possible splitting up the computation in multiple parts as the problem with many observations and bins is that the computation is $\mathcal{O}\left(N^2n\right)$ time and memory if done all at once.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
@@ -596,26 +598,12 @@ The problem we observe with the above methods is that when mutual information is
         \caption{}
         \label{subfig:new MI method all zoom}
     \end{subfigure}
-    \caption{Evaluation of MI for new method for different N. \textcolor{red}{Bør sammenlignes med artiekl fundet (har sat i bibtex) og original papers (ikke Kina)}}
+    \caption{Relative error of mutual information based on the true Copula density. We observe that for $N\geq 300$ the relative error is almost negligible.}
     \label{fig:approximation of mutual information knowing the true distribution}
 \end{figure}
 
 
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{c|c|c|c}
-        $\rho$ & $h$              & mean error  & variance                 \\\hline
-        $0.1$  & $h^{Scott}$      & $ 0.01583$  & $5.3446 \cdot 10^{-5}$   \\
-        $0.3$  & $h^{Scott}$      & $ 0.02302$  & $3.7957 \cdot 10^{-4}$   \\
-        $0.4$  & $h^{Scott}$      & $ 0.006898$ & $3.2655  \cdot 10^{-4}$  \\
-        $0.6$  & $h^{Scott}$      & $ 0.007803$ & $1.0027  \cdot 10^{-3}$  \\
-        $0.9$  & $h^{Scott}$      & $-0.1844$   & $4.4478  \cdot 10^{-4} $ \\
-        $0.99$ & $h^{Scott}$      & $-1.007$    & $1.6328  \cdot 10^{-4}$  \\
-        $0.99$ & $0.3\,h^{Scott}$ & $-0.3468$   & $1.0616  \cdot 10^{-3}$
-    \end{tabular}
-    \caption{based on 10 trials}
-    \label{tab:Jones error and variance}
-\end{table}
+
 
 % rho 0.99 results - 1.9585177736258443 - 0.3 h_scott
 % 1.6116888127939657
@@ -645,10 +633,28 @@ The problem we observe with the above methods is that when mutual information is
 % 0.02085490109213129
 % 5.344562165818043e-05
 
-the chosen $h$ is around $0.085$ every time using Scott's rule. As we see from \autoref{tab:Jones error and variance}, we have relatively low variance and in general, we compute the mutual information to a higher accuracy than either B-splines and M-splines. Thus, in the following example, we will only consider this method for estimating the mutual information between pairs of variables. In \autoref{fig:density estimate for Jones 1993 and theoretical copula rho 0.99} we have shown the estimated density and the theoretical copula. We observe that indeed the method accurately estimates the Copula density, although we note that the concept of a local bandwidth as discussed in \autoref{sec:Boundary corrected KDE} is likely to improve on the results as peaks at $(0,0)$ and $(1,1)$ does not quite resemble those of the theoretical Copula density. In particular, we observe that reducing the bandwidth improves on the estimate and is clearly observe by the improved resemblance with the theoretical Copula density. Although this is at the cost of undersmoothing on the interior. Indeed, a K-means based estimator of the bandwidth $h$ could work well as the mean distance near $(0,0)$ and $(1,1)$ is very small compared to the interior. However, we note that as long as observations are not almost on a line, the KDE performs quite well. This, we shall also see in the next section where we couple the above discussions on mutual information estimation with the deconvolution algorithm.
 
 
-\begin{figure}[ht]
+In \autoref{tab:Jones error and variance}, we have used the boundary corrected KDE from \autoref{sec:Boundary corrected KDE} to first estimate the Copula density function and then estimate the mutual information from this. We note that by default, the bandwidth is chosen to be $h = h^{Scott} = 0.085$ as the marginals are approximately uniform and hence the variance is constant.
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c|c|c|c}
+        $\rho$ & $h$              & mean error  & variance                 \\\hline
+        $0.1$  & $h^{Scott}$      & $ 0.01583$  & $5.3446 \cdot 10^{-5}$   \\
+        $0.3$  & $h^{Scott}$      & $ 0.02302$  & $3.7957 \cdot 10^{-4}$   \\
+        $0.4$  & $h^{Scott}$      & $ 0.006898$ & $3.2655  \cdot 10^{-4}$  \\
+        $0.6$  & $h^{Scott}$      & $ 0.007803$ & $1.0027  \cdot 10^{-3}$  \\
+        $0.9$  & $h^{Scott}$      & $-0.1844$   & $4.4478  \cdot 10^{-4} $ \\
+        $0.99$ & $h^{Scott}$      & $-1.007$    & $1.6328  \cdot 10^{-4}$  \\
+        $0.99$ & $0.3\,h^{Scott}$ & $-0.3468$   & $1.0616  \cdot 10^{-3}$
+    \end{tabular}
+    \caption{Estimating mutual information based on $n=400$ samples from different bivariate Gaussians using the boundary corrected KDE. Repeating the simulations $10$ times, we obtain average errors and variance of the estimate. In particular, the estimates are very certain for $n=400$. However, as for the spline based methods, large correlations result in underestimating the mutual information. This can however be corrected by tuning the bandwidth as is also observed in the above.}
+    \label{tab:Jones error and variance}
+\end{table}
+
+From \autoref{tab:Jones error and variance}, we observe relatively low variance and in general, we compute the mutual information to a higher accuracy than either B-splines and M-splines. Thus, in the following example, we will only consider this method for estimating the mutual information between pairs of variables. In \autoref{fig:density estimate for Jones 1993 and theoretical copula rho 0.99} we have shown the estimated density and the theoretical copula. We observe that indeed the method accurately estimates the Copula density, although we note that the concept of a local bandwidth as discussed in \autoref{sec:Boundary corrected KDE} is likely to improve on the results as the peaks at $(0,0)$ and $(1,1)$ does not quite resemble those of the theoretical Copula density. In particular, we observe that reducing the bandwidth improves on the estimate. It is clearly observed by the improved resemblance with the theoretical Copula density. Although this is at the cost of undersmoothing on the interior. Indeed, a K-means based estimator of the bandwidth $h$ (as discussed in \autoref{sec:Boundary corrected KDE}) could work well as the mean distance near $(0,0)$ and $(1,1)$ is very small compared to the interior. However, we note that as long as observations are not close to perfectly correlated, the KDE based method performs quite well. This, we shall also see in the following section where we couple the above discussions on mutual information estimation with the deconvolution algorithm.
+\newpage
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
@@ -668,11 +674,17 @@ the chosen $h$ is around $0.085$ every time using Scott's rule. As we see from \
         \centering
         \includegraphics[width=\linewidth]{figures/MI estimation/theoretical gaussian copula - rho 0.99 - comparison of methods.pdf}
         \caption{}
-        % \label{}
+        \label{subfig:Gaussian copula density example}
     \end{subfigure}
-    \caption{}
+    \caption{Estimated Copula densities (a) and (b) compared to the theoretical Copula density (c) for $\rho = 0.99$. Using a smaller bandwidth we are able to capture the peaks at $(0,0)$ and $(1,1)$ more accurately but at the cost of undersmoothing the interior.}
     \label{fig:density estimate for Jones 1993 and theoretical copula rho 0.99}
 \end{figure}
+
+
+
+
+
+
 
 
 
@@ -1098,7 +1110,7 @@ From \autoref{fig:Cycle data - G_dir all}, we observe that the accumulated durat
     \label{fig:T4 vs TD4 and TP4.2}
 \end{figure}
 
-For example, we observe that $T^D_4$ is strongly associated with $T_4$ while $T^P_{4.2}$ is not as strongly associated with $T_4$. However, there is still a connection. If we plot $T_4$ vs. $T^D_4$ and $T^P_{4.2}$ respectively (\autoref{fig:T4 vs TD4 and TP4.2}) we indeed observe that the information between $T^D_4$ and $T_4$ is much greater than $T^P_{4.2}$ and $T_4$. As we saw in \textcolor{red}{Section with data}, this is because the delays after process $4$ are much larger than the duration to begin with. Thus, even though $T^D_4$ is $0$, $56.25\%$ of times, most of $T_4$ can be explained from this alone, when comparing to the scores between $T_4$ and the other random variables.
+For example, we observe that $T^D_4$ is strongly associated with $T_4$ while $T^P_{4.2}$ is not as strongly associated with $T_4$. However, there is still a connection. If we plot $T_4$ vs. $T^D_4$ and $T^P_{4.2}$ respectively (\autoref{fig:T4 vs TD4 and TP4.2}) we indeed observe that the information between $T^D_4$ and $T_4$ is much greater than $T^P_{4.2}$ and $T_4$. As we saw in \autoref{chap:data}, this is because the delays after process $4$ are much larger than the duration to begin with. Thus, even though $T^D_4$ is $0$, $56.25\%$ of times, most of $T_4$ can be explained from this alone, when comparing to the scores between $T_4$ and the other random variables.
 
 Furthermore, we observe that the total duration $T$ is mostly explained by $T_7$ which in turn is explained mostly by $T^P_7$. Although there are many other interesting observations such as the most change in levels and masses occurs during process $3$, addition of a material and stirring. The level after process $3$ is in turn mostly influenced by the stirring but also seem to have some unexplained variation. We observe the unexplained variation from the row corresponding to $M_3$ which has relatively small associations with the other delays, durations and levels.
 
@@ -1127,7 +1139,7 @@ Initially, we consider the durations and delays only. Namely, we choose the subm
 In figure \autoref{fig:G_dir times - graphs}, we have shown $G_{dir}$ (from \autoref{subfig:G_dir using only times}) as a graph with varying thresholds. It is clear that the durations of each process are dependent on each other and depending on the threshold we conclude anything from a simple network structure (\autoref{subfig:G_dir times - graph - t 0.118} and \autoref{subfig:G_dir times - graph - t 0.12}) to a much more complicated dependency structure (\autoref{subfig:G_dir times - graph - t 0.1}) between the durations of the processes. As is also clear from \autoref{subfig:G_dir using only times}, the delays of the processes are the first random variables we conclude to be independent of both each other and all other process durations except for $T^D_2$ and $T^D_9$ corresponding to the delays when adding material and cooling respectively and the link between $T^D_7$ and $T^P_9$ discussed above.
 
 
-Like in \autoref{sec:Gaussian network MI example - computation}, we have good understanding of the topological structure of the processes. Namely, as the delay of processes are always \textit{after} the process we have that in terms of a topological structure of the random variables, $T^D_i$ is always after $T^P_i$. For example, $T^D_3$ is always realized \textit{after} $T^P_{3.1}$ and $T^P_{3.2}$ (in that order). Likewise, as shown in \textcolor{red}{ref to figure about simulation process structure}, as the processes are executed one by one, the topological structure is a simple chain. This should not be confused with the actual causal structure being a chain as in \autoref{sec:Gaussian chains general}. As the topological structure is a chain, it is also unique i.e. there is exactly one ordering of the random variables. The topological structure is summarized in \autoref{eq:times topological order}
+Like in \autoref{sec:Gaussian network MI example - computation}, we have good understanding of the topological structure of the processes. Namely, as the delay of processes are always \textit{after} the process we have that in terms of a topological structure of the random variables, $T^D_i$ is always after $T^P_i$. For example, $T^D_3$ is always realized \textit{after} $T^P_{3.1}$ and $T^P_{3.2}$ (in that order). Likewise, as shown in \autoref{fig:Cycle and process structure}, as the processes are executed one by one, the topological structure is a simple chain. This should not be confused with the actual causal structure being a chain as in \autoref{sec:Gaussian chains general}. As the topological structure is a chain, it is also unique i.e. there is exactly one ordering of the random variables. The topological structure is summarized in \autoref{eq:times topological order}
 \newpage
 \begin{figure}[H]
     \centering
@@ -1189,7 +1201,7 @@ Using this to order the rows and columns of $G_{obs}$ and finally only keeping t
 \end{figure}
 Although it is hard to compare this $G_{dir}$ with the one obtained without the assumption of topological structure in \autoref{subfig:G_dir using only times}, we see some differences. $T^P_1$ and $T^P_{10}$ are not as directly dependent as originally inferred from the symmetric $G_{obs}$. The differences are however more noticeable, when comparing the graphs from before with those in \autoref{fig:G_dir times directed - graphs} where the directed $G_{obs}$ has been used instead.
 
-Depending on the chosen threshold $t$, we observe that still the delays are the least predictable from other observations as they are not connected to other random variables. This was also the conclusion from \autoref{fig:G_dir times - graphs}. The major difference is that now $T^P_1$ influence $T^P_{10}$ indirectly whereas in \autoref{fig:G_dir times - graphs} they were always directly connected. Also, as threshold in $[0.1,\, 0.2]$ seem to result in good balance between connectedness complexity of the graph. In our opinion \autoref{subfig:G_dir times directed - graph - t 0.15} obtains a good balance while also making sense in terms of how processes of a production flow, structured as in \textcolor{red}{ref til data pharmaceutical flow figure}, could influence later processes.
+Depending on the chosen threshold $t$, we observe that still the delays are the least predictable from other observations as they are not connected to other random variables. This was also the conclusion from \autoref{fig:G_dir times - graphs}. The major difference is that now $T^P_1$ influence $T^P_{10}$ indirectly whereas in \autoref{fig:G_dir times - graphs} they were always directly connected. Also, as threshold in $[0.1,\, 0.2]$ seem to result in good balance between connectedness complexity of the graph. In our opinion \autoref{subfig:G_dir times directed - graph - t 0.15} obtains a good balance while also making sense in terms of how processes of a production flow, structured as in \autoref{fig:Cycle and process structure}, could influence later processes.
 
 \begin{figure}[H]
     \centering
@@ -1231,7 +1243,7 @@ The resulting $G_{obs}$ can be seen in the appendix, \autoref{fig:G_obs times an
 
 When comparing $G_{dir}$ in \autoref{fig:G_dir times and levelchanges - semidirected} to $G_{obs}$ in \autoref{fig:G_obs times and levelchanges - semi-directed}, we observe that much of the association between processes originate from indirect effects (as expected) either $1$, $2$ or $3$ processes ago. In particular, the delays, durations and level changes of process $9$ (cooling) appear to caused or at least explained well by what takes places during process $7$ (reaction) which is not unlikely from a chemical point of view. Process $7$, in turn, appear to be influenced mostly by process $6$ (product transfer).
 
-In \autoref{fig:G_dir times and levelchanges - semidirected - as graph}, we have shown $G_{dir}$ represented as a graph with a threshold $t = 0.09$ as this filtered out most small values in $G_{dir}$ while keeping a reasonable structure with only the edges with the most information carried along. As mentioned above $M^P_{4.3}$ is alone. Furthermore, we observe that the delays related to process $3$ (after adding the final solids) and $8$ (post reaction process) are by themselves. The duration of the delay and the change in level are however connected although weakly as per \autoref{fig:G_dir times and levelchanges - semidirected}. This also agrees with \autoref{subfig:G_dir times directed - graph - t 0.15} and \autoref{subfig:G_dir times directed - graph - t 0.2} where when we only used the durations and delays of the processes, we observed that $T^D_3$ and $T^D_8$ where unconnected nodes. As another example, $M^P_8$ is not connected to any of the other variables invariant to the choice of threshold $t$. This also makes sense when comparing to \textcolor{red}{REF TIL FIGURE MED DURATIONS VS MASSES OG MASSES VS MASSES} where the change in level during the post reaction (process $8$) does not seem to be related to any of the other random variables.
+In \autoref{fig:G_dir times and levelchanges - semidirected - as graph}, we have shown $G_{dir}$ represented as a graph with a threshold $t = 0.09$ as this filtered out most small values in $G_{dir}$ while keeping a reasonable structure with only the edges with the most information carried along. As mentioned above $M^P_{4.3}$ is alone. Furthermore, we observe that the delays related to process $3$ (after adding the final solids) and $8$ (post reaction process) are by themselves. The duration of the delay and the change in level are however connected although weakly as per \autoref{fig:G_dir times and levelchanges - semidirected}. This also agrees with \autoref{subfig:G_dir times directed - graph - t 0.15} and \autoref{subfig:G_dir times directed - graph - t 0.2} where when we only used the durations and delays of the processes, we observed that $T^D_3$ and $T^D_8$ where unconnected nodes. As another example, $M^P_8$ is not connected to any of the other variables invariant to the choice of threshold $t$. This also makes sense when comparing to \autoref{fig:time vs time all}, \autoref{fig:time vs level all} and \autoref{fig:level vs level all} where the change in level during the post reaction (process $8$) does not seem to be related to any of the other random variables.
 
 \begin{figure}[ht]
     \centering
@@ -1239,7 +1251,7 @@ In \autoref{fig:G_dir times and levelchanges - semidirected - as graph}, we have
     \caption{$G_{dir}$ represented as a graph using a threshold $t = 0.09$. Once again, we observe a chain like structure, but the added random variables corresponding to changes in levels, $T^P_{3.2}$ becomes a bottleneck, in the sense most of the behavior of the production system after process $3.2$ is irrelevant when knowing the duration of process $3.2$. This could also make sense from a practical point of view as the duration of the stirring contains much combined information of the initial processes and hence is a good descriptor of the behavior of the processes later on.}
     \label{fig:G_dir times and levelchanges - semidirected - as graph}
 \end{figure}
-Other interesting observations can be made from the graph depending on the interests of the reader. However, we round of our discussion of the pharmaceutical data by noting that we have obtained a causal structure for the random variables that in many ways reflect both our understanding of the production layout from \autoref{chap:data} and our observations of data. In particular, we observe a relatively simple structure, where many of the processes are only affected by the previous process. Notable deviations of this are the initial processes $1$, $2$ and $3.1$ where raw materials are added. Each of these processes seem to have an influence on the duration of process $3.2$ (the stirring). This also makes sense as the more material is added to the tank, the longer it probably needs to agitated to ensure a consistent mixture of materials to allow for chemical reactions. Finally, the change in level for process $10$ (the transfer of material), appear to be influenced primarily by processes $7$ (the chemical reaction) and $9$ (cooling) while the duration of process $10$ only seems to be related to change in level and no other process directly. This would make sense practically, as we would think that it is the amount of material that is really influenced by the other processes and the duration of transferring the material is only as need to be in order to remove all the material produced.
+Other interesting observations can be made from the graph depending on the interests of the reader. However, we round of our discussion of the pharmaceutical data by noting that we have obtained a causal structure for the random variables that in many ways reflect both our understanding of the production layout from \autoref{chap:data} and our observations of data. In particular, we observe a relatively simple structure, where many of the processes are only affected by the previous process. Notable deviations of this are the initial processes $1$, $2$ and $3.1$ where raw materials are added. Each of these processes seem to have an influence on the duration of process $3.2$ (the stirring). This also makes sense as the more material is added to the tank, the longer it probably needs to agitated to ensure a consistent mixture of materials to allow for chemical reactions. Finally, the change in level for process $10$ (the transfer of material), appear to be influenced primarily by processes $7$ (the chemical reaction) and $9$ (cooling) while the duration of process $10$ only seems to be related to change in level and no other process directly. This would make sense practically, as we would think that it is the amount of material that is really influenced by the other processes and the duration of transferring the material is only as need to be in order to remove the material produced.
 
 
 
