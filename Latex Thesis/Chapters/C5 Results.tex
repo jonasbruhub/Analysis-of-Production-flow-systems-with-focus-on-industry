@@ -7,18 +7,20 @@
 \begin{document}
 
 \chapter{Results and Discussion}\label{chap:results}
-\textcolor{red}{An introduction to what is going to be included in this section. What results etc.}
+In this section, we will apply \autoref{alg:Gobs1} and \autoref{alg:ND} on different examples to assess capabilities and pain points of the framework. In particular, we shall initially consider a simple network whose causal structure is a simple chain and where only linear correlation exists between the random variables constituting the chain. We shall see that using correlations and an assumption of the topological structure, we are able to perfectly reconstruct the causal structure from $G_{obs}$. Furthermore, we shall see that using mutual information as the measure of association instead, we are still able to reconstruct the causal structure. We also argue why mutual information is preferable in a general setting and quantify the resulting errors.
 
-In this section, we will investigate how the algorithms \autoref{alg:Gobs1} and \autoref{alg:ND} works in junction and individually. We shall observe how the algorithms can fail and what may be done to correct such cases.
+After having considered a simple causal structure, we extend to a general network, with variables still only linearly correlated. Once again, using correlation and an assumption of the topological order of the random variables, we are able to perfectly reconstruct the causal structure. We shall however also use mutual information and observe that once again, we infer the true causal structure.
 
-\textcolor{red}{Overordnet pointe er at genere forskellige mulige graphisce modeller, som senere ville kunne bruges til at lave PGM el.l. Er nok bedst som et ekspolartivt værktøj, og vi undersøger her forskellige situationer, og hvornår der kan ske fejl ud fra om det er lange kæder af kausalitet eller mere komplekse strukturer}
+After the above results concerning \autoref{alg:ND}, we shall compare the different methods from \autoref{subsec:Mutual information estimation and KDE methods} for estimating mutual information. In particular, we shall see how the estimator used in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} performs on a few samples and compare this to the KDE-based method.
 
-% Initially, a few simple examples involving exponentiated multivariate Gaussians $\boldsymbol Y $.
+From this, we shall investigate how the algorithms work in junction. Specifically, we shall observe that preconditioning of the variables is important for accurate estimates of mutual information. Furthermore, we shall see that based on only a few hundred samples from the above network, we are able to recover the causal structure.
+
+Finally, we shall use the combined learnings from the above on the pharmaceutical dataset, described in \autoref{chap:data}. In particular, depending on the included variables and assumptions of topological structure, we shall infer a few possible causal structures and comment on these.
 
 
 \newpage
 \section{Gaussian chains}\label{sec:Gaussian chains general}
-In this section we discuss the errors made from the assumption that indirect effects can be computed as a sum of powers of the direct effects, i.e. $G_{indir} = \sum_{k\geq 1} G_{dir}^k$. In particular, on a theoretical level, we shall observe the error in $G_{obs}$ based on the above assumption of how similarities are \textit{convolved} which we equate with the noise $N$ from \autoref{subseq:Robustness to noise}, although it is a systematic error. To do this, we shall in this section use a multivariate Gaussian to be able to control the correlation and as an extension of this, the mutual information between pairs of random variables. As we already know, correlation and mutual information is independent of the mean and variance of each of the variables however for a bivariate Gaussian the mutual information is given by the correlation as stated in the following proposition.
+In this section we discuss the errors made from the assumption that indirect effects can be computed as a sum of powers of the direct effects, i.e. $G_{indir} = \sum_{k\geq 1} G_{dir}^k$. In particular, on a theoretical level, we shall observe the error in $G_{obs}$ based on the above assumption of how similarities are \textit{convolved} which we equate with the noise $N$ from \autoref{subseq:Robustness to noise}, although it is a systematic error. To do this, we shall in this section use a multivariate Gaussian to be able to control the correlation and as an extension of this, the mutual information between pairs of random variables. As we already know, correlation and mutual information are independent of the mean and variance of each of the variables however for a bivariate Gaussian the mutual information can be computed directly from the correlation as stated in the following proposition.
 \begin{proposition}\label{prop:MI bivariate gaussian}
     Given a bivariate normal distribution $\boldsymbol X \sim \mathcal{N}\left(\boldsymbol \mu,  \Sigma\right)$ where
     $$\Sigma =

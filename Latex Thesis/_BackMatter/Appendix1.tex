@@ -4,6 +4,71 @@
 \begin{document}
 \chapter{Appendix}
 
+\section{Jordan normal form of infinite matrix sum}\label{app:Jordan normal form of infinite matrix sum}
+In this section, we show that for a matrix A with spectral radius less than one, the eigenvalues of $B = \sum_{k=1}^{\infty} A^k$ are exactly $\frac{\lambda_i}{1- \lambda_i}$ for $\lambda_i \in \sigma \left(A\right)$. It is easy to show that if $\left(\lambda, \, v\right)$ is an eigenpair of $B$, then $\left(\frac{\lambda}{1 - \lambda}, v\right)$ is an eigenpair of $B$. However, it is not immediately clear if these are all the eigenpairs of $B$ and hence the eigenvalues. Namely, if the algebraic and geometric multiplicities of the eigenvalues are not the same. To show this, let $J$ be the Jordan normal form of $A$ such that $A$ is similar to $J$ by some invertible matrix $P$. In particular, the Jordan normal form consists of Jordan blocks $J_i$ such that
+$$J = \begin{bmatrix}
+        J_1 &     &        &     \\
+            & J_2 &        &     \\
+            &     & \ddots &     \\
+            &     &        & J_p
+    \end{bmatrix}$$
+Hence, $B$ can be written as
+\begin{align*}
+    B & = \sum_{k=1}^{\infty} A^k  = \sum_{k=1}^{\infty} P^{-1} J^k P  = P^{-1} \sum_{k=1}^{\infty} J^k P
+\end{align*}
+Note that $J^k$ is given by
+$$J^k = \begin{bmatrix}
+        J_1^k &       &        &       \\
+              & J_2^k &        &       \\
+              &       & \ddots &       \\
+              &       &        & J_p^k
+    \end{bmatrix}$$
+Focusing on a single Jordan block $J_i$ given by
+$$J_i = \begin{bmatrix}
+        \lambda_i & 1         &        &           \\
+                  & \lambda_i & 1      &           \\
+                  &           & \ddots &           \\
+                  &           &        & \lambda_i
+    \end{bmatrix},$$
+we see that $J_i^k = \lambda_i^k I + T$ where $T$ is a strictly upper-triangular matrix. From this, we see that $\sum_{k = 1}^{\infty} J_i^k = \frac{\lambda_i}{1 - \lambda_i} I + T'$ where $T'$ is another strictly upper-triangular matrix. Thus, $\sum_{k = 1}^{\infty} J_i^k$ has $\frac{\lambda_i}{1 - \lambda_i}$ as diagonal elements, hence there exists some invertible matrix $P_i$ such that $ \sum_{k = 1}^{\infty} J_i^k = \left(P_i\right)^{-1} J_i'  P_i$ where $J_i'$ is a Jordan normal form (with $\frac{\lambda_i}{1 - \lambda_i}$ as diagonal elements) of $\sum_{k = 1}^{\infty} J_i^k$. Combining the above, we have that
+\begin{align*}
+    \sum_{k=1}^{\infty} J^k &= \begin{bmatrix}
+        \sum_{k = 1}^{\infty} J_1^k & & & \\
+        & \sum_{k = 1}^{\infty} J_2^k & & \\
+        & & \ddots & \\
+        & & & \sum_{k= 1}^{\infty} J_p^k
+    \end{bmatrix}\\
+    & =  \begin{bmatrix}
+        P_1^{-1} J_1' P_1 & & & \\
+        & P_2^{-1} J_2' P_2 & & \\
+        & & \ddots & \\
+        & & & P_p^{-1} J_p' P_p
+    \end{bmatrix}\\
+    & = \begin{bmatrix}
+        P_1 & & & \\
+        & P_2 & & \\
+        & & \ddots & \\
+        & & & P_p
+    \end{bmatrix}^{-1}
+    \begin{bmatrix}
+        J_1' & & & \\
+        & J_2' & & \\
+        & & \ddots & \\
+        & & & J_p'
+    \end{bmatrix}
+    \begin{bmatrix}
+        P_1 & & & \\
+        & P_2 & & \\
+        & & \ddots & \\
+        & & & P_p
+    \end{bmatrix}
+\end{align*}
+Let $P'$ be the above block diagonal matrix, consisting of $P_i$s and $J'$ be the block diagonal matrix consisting of $J_i'$s and hence also a Jordan normal form. Then, we can finally write $B$ as
+$$B = \left(P' P\right)^{-1} J' P' P$$
+In particular, $B$ is similar to the Jordan normal form $J'$ with diagonal elements $\frac{\lambda_i}{1-\lambda_i}$. In particular, the spectrum of $B$ is exactly the elements of the spectrum of $A$ mapped by $\lambda \mapsto \frac{\lambda}{1 - \lambda}$.
+
+\newpage
+
 \section{Pharmaceutical duration and level changes plots}
 \begin{figure}[H]
     \centering
@@ -40,7 +105,7 @@
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/Multiple cycles data/Cleaning batches.png}
-    \caption{Each of the 6 cycles, cleaning (corresponding to \texttt{BatchID = 0}). Each \textit(Cleaning Procedure), CIP, is highlighted with an opaque interval (the blue rectangles). The dots marked with red (only ID 11.5, but not all of these are red), is if the Cleaning ID is 0.}
+    \caption{Each of the 6 cycles, cleaning (corresponding to \texttt{BatchID = 0} in the time series dataset). Each \textit(Cleaning Procedure), CIP, is highlighted with an opaque interval (the blue rectangles). The dots marked with red (only ID 11.5, but not all of these are red), is if the Cleaning ID is 0.}
     \label{fig:cycle cleaning time series}
 \end{figure}
 
@@ -49,21 +114,21 @@
 \begin{table}[H]
     \centering
     \begin{tabular}{cccccc}
-1 & 25 & 40 & 83 & 123 & 256 \\
-1 & 27 & 49 & 84 & 126 & 257 \\
-1 & 27 & 49 & 84 & 129 & 311 \\
-5 & 30 & 54 & 84 & 134 & 314 \\
-7 & 30 & 56 & 90 & 144 & 322 \\
-8 & 31 & 56 & 91 & 147 & 369 \\
-8 & 31 & 62 & 92 & 153 & 415 \\
-13 & 32 & 63 & 93 & 163 & 573 \\
-14 & 34 & 65 & 93 & 167 & 609 \\
-14 & 35 & 65 & 103 & 175 & 640 \\
-17 & 36 & 67 & 103 & 228 & 737 \\
-18 & 37 & 75 & 111 & 231 \\
-21 & 38 & 76 & 112 & 235 \\
-21 & 39 & 79 & 119 & 242 \\
-22 & 39 & 82 & 122 & 256
+        1  & 25 & 40 & 83  & 123 & 256 \\
+        1  & 27 & 49 & 84  & 126 & 257 \\
+        1  & 27 & 49 & 84  & 129 & 311 \\
+        5  & 30 & 54 & 84  & 134 & 314 \\
+        7  & 30 & 56 & 90  & 144 & 322 \\
+        8  & 31 & 56 & 91  & 147 & 369 \\
+        8  & 31 & 62 & 92  & 153 & 415 \\
+        13 & 32 & 63 & 93  & 163 & 573 \\
+        14 & 34 & 65 & 93  & 167 & 609 \\
+        14 & 35 & 65 & 103 & 175 & 640 \\
+        17 & 36 & 67 & 103 & 228 & 737 \\
+        18 & 37 & 75 & 111 & 231       \\
+        21 & 38 & 76 & 112 & 235       \\
+        21 & 39 & 79 & 119 & 242       \\
+        22 & 39 & 82 & 122 & 256
     \end{tabular}
     \caption{The length of treatment of control patients in suicide study. The data originates from the Mental Health Enquiry (MHE) of England of Wales and was published in 1967.}
     \label{tab:suicide data}
@@ -193,7 +258,7 @@ where $F\left(a,b,c,z\right)$ is the Gaussian hypergeometric function and $\nu =
 \end{figure}
 A key property is that $f$ is \textit{even symmetric} in $\rho,\, r$. That is $f(\rho \mid r) = f(-\rho \mid -r)$. Thus, a confidence interval for $\rho$ given $r$ is the negative of the confidence interval given $-r$. In particular, if we only observe $|r|$, we can calculate a confidence interval for $\rho$ up to the sign of the bounds of the interval. Furthermore, as we want a CI for $|\rho|$, it does not matter if $r$ is negative or positive. Hence, without loss of generality, we assume that $r \geq 0$. At this point, to construct a confidence interval for $|\rho|$ we list the following desired properties. Firstly, it should be an exact confidence interval, meaning that for a given significance level $\alpha$, the CI includes the true value exactly $1-\alpha$ fraction of the times. Secondly, if for a given $r$, it can not be rejected that $\rho$ is 0, 0 should also be contained in the interval. Finally, if we reject that $\rho = 0$, we shall have $\alpha/2$ probability mass above and below the bounds of the interval. The above is enough to uniquely define a confidence interval in all cases. Before continuing with how this CI is calculated, we mention that as $r$ is an unbiased estimator of $\rho$, we would preferably want $|r| \in CI_{1-\alpha}\left(|\rho|\right)$ (where $CI_{1-\alpha}\left(|\rho|\right)$ denotes the $1-\alpha$ confidence interval for $|\rho|$). However, although this will in almost every scenario be the case, we can not be sure of this from the above properties and in fact examples with large $\alpha$ can be constructed such that $|r|$ lies just outside the constructed CI.
 
-First, to conform with the second desired property, if it can not be rejected that $\rho = 0$ on a significance level $\alpha$, we will initially compute a CI for $\rho$ (not $|\rho|$) based on $r$ (wlog chosen to be non-negative). This CI will just be a symmetric CI in the sense that $\alpha/2$ of the probability mass will lie below the lower bound of the CI and above the upper bound of the CI respectively. If $0$ is contained in this CI, we can not reject that $\rho=0$ and vice versa on an $\alpha$ significance level. Thus, if $0$ is contained in this initial CI for $\rho$, we will start the CI for $|\rho|$ at $0$ and determine and upper bound $b$ such that $\alpha$ probability mass is above this $b$. Otherwise, we shall find $a$ and $b$ such that $\alpha/2$ probability mass is below $a$ and above $b$ respectively. Choosing $a$ and $b$ this way also conforms with the third property. Finally, to ensure that the CI contains exactly $1-\alpha$, we define $\tilde{f}$ as the reflected $f$ in $\rho$ such that
+First, to conform with the second desired property, if it can not be rejected that $\rho = 0$ on a significance level $\alpha$, we will initially compute a CI for $\rho$ (not $|\rho|$) based on $r$ (WLOG chosen to be non-negative). This CI will just be a symmetric CI in the sense that $\alpha/2$ of the probability mass will lie below the lower bound of the CI and above the upper bound of the CI respectively. If $0$ is contained in this CI, we can not reject that $\rho=0$ and vice versa on an $\alpha$ significance level. Thus, if $0$ is contained in this initial CI for $\rho$, we will start the CI for $|\rho|$ at $0$ and determine and upper bound $b$ such that $\alpha$ probability mass is above this $b$. Otherwise, we shall find $a$ and $b$ such that $\alpha/2$ probability mass is below $a$ and above $b$ respectively. Choosing $a$ and $b$ this way also conforms with the third property. Finally, to ensure that the CI contains exactly $1-\alpha$, we define $\tilde{f}$ as the reflected $f$ in $\rho$ such that
 $$\tilde{f}\left(\rho_a \mid r_a, \nu\right) = f(\rho_a \mid r_a, \nu) + f(-\rho_a \mid r_a, \nu),\quad \rho_a,r \in [0,1]$$
 where $\rho_a$ and $r_a$ is the absolute correlation and empirical correlation respectively. With this $\tilde{f}$, the density at $\rho_a$ is both the density for the negative and positive correlation ensuring that the $\tilde{f}$ has probability mass $1$. Thus, if $a=0$ (i.e. the CI must contain $0$), we find $b$ as the $1-\alpha$ percentile of $\tilde{f}$ and if $a\neq 0$, we take $a$ as the $\alpha/2$ percentile and $b$ as the $1-\alpha/2$ percentile of $\tilde{f}$.
 

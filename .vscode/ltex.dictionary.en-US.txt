@@ -53,3 +53,7 @@ MISE
 evmix
 PDE
 Stateflow
+eigenpairs
+blockdiagonal
+nilpotent
+WLOG

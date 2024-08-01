@@ -29,7 +29,7 @@
 \textcolor{red}{General introduction to method and causality}
 
 \section{Causal discovery}
-In this section, we shall discuss the method for network deconvolution, originally proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}. The underlying problem is inferring direct effects and dependencies. From this, using prior information on the production setup, we shall be able to infer causal dependencies by directing the resulting edges from the network deconvolution (ND) algorithm. Particularly, the framework and general algorithm proposed by Feizi et al. stems from a graph-theoretic approach to the problem of inferring direct dependencies. \textcolor{blue}{Namely, suppose that observations are made of some properties such as levels and sojourn times of in this case a chemical process}. We shall represent these properties as vertices (nodes) $V$ and dependencies between properties as edges. Initially, when observing the vertices, we observe both direct and indirect effects. Particularly, a vertex $v_1$ might influence some other vertex $v_3$ through another vertex $v_2$ if $v_2$ depends on $v_1$ and $v_3$ of $v_2$. In this case, we will observe that $v_1$ influences $v_3$, but actually it is $v_2$ that has a direct influence on $v_3$. In graph-theoretical terms, we thus observe the transitive closure of the information that flows between vertices but want to infer the underlying network structure.
+In this section, we shall discuss the method for network deconvolution, originally proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}. The underlying problem is inferring direct effects and dependencies. From this, using prior information on the production setup, we shall be able to infer causal dependencies by directing the resulting edges from the network deconvolution (ND) algorithm. Particularly, the framework and general algorithm proposed by Feizi et al. stems from a graph-theoretic approach to the problem of inferring direct dependencies. Namely, suppose that observations depend on quantities such as levels and sojourn times of in this case a chemical process. We shall represent these properties as vertices (nodes) $V$ and dependencies between properties as edges. Initially, when observing the vertices, we observe both direct and indirect effects. Particularly, a vertex $v_1$ might influence some other vertex $v_3$ through another vertex $v_2$ if $v_2$ depends on $v_1$ and $v_3$ of $v_2$. In this case, we will observe that $v_1$ influences $v_3$, but actually it is $v_2$ that has a direct influence on $v_3$. In graph-theoretical terms, we thus observe the transitive closure of the information that flows between vertices but want to infer the underlying network structure.
 
 An important note on the algorithm to come is that we only use vertices that we have observed. Namely, the underlying structure might be as in \autoref{subfig:hidden nodes example unobserved} with an unobserved node/variable (named $U$ in this case). However, without any more assumptions or modelling choices we would (ideally) infer the network structure depicted in \autoref{subfig:hidden nodes example resulting graph}.
 \begin{figure}[t]
@@ -53,9 +53,9 @@ An important note on the algorithm to come is that we only use vertices that we 
 With these initial comments, we proceed with the general setup and assumptions for network deconvolution based on observations.
 
 \subsection{Setup and assumptions}\label{subsec:Setup and assumptions}
-Suppose a set of $N$ random variables $(X_i)$ is given. The method presented in this section aims to discover direct relationships between pairs $X_i$ and $X_j$ for $i\neq j$. \textcolor{blue}{These relationships will be presented by a directed graph as in the previous section or an undirected graph in case the causal direction is either unknown or such an assumption on direction is not plausible}. In particular, we shall let each random variable $X_i$ be represented by a vertex in a graph. We will later discuss a way of directing edges such that a causal network may be discovered i.e. a directed acyclic graph that may be used for inference.
+Suppose a set of $d$ random variables $(X_i)$ is given i.e. a $d$-dimensional random vector $\boldsymbol X$. The method presented in this section aims to discover direct relationships between pairs $X_i$ and $X_j$ for $i\neq j$. \textcolor{blue}{These relationships will be presented by a directed graph as in the previous section or an undirected graph in case the causal direction is either unknown or such an assumption on direction is not plausible}. In particular, we shall let each random variable $X_i$ be represented by a vertex in a graph. We will later discuss a way of directing edges such that a causal network may be discovered i.e. a directed acyclic graph that may be used for inference.
 
-The method proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} then works as follows. Given an observed matrix $G_{obs} \in \mathbb{R}^{N \times N}$ of similarities between each pair of variables, we shall deduce a matrix $G_{dir} \in \mathbb{R}^{N \times N}$ of direct similarities between each pair of random variables $X_i$ and $X_j$. \textcolor{blue}{In particular, we wish to filter out indirect effects which we will denote by $G_{dir}$ defined as effects between pairs of variables that is the result of effects propagating through other variables}. The measure of similarity, can in practice be any desired measure such as correlation or mutual information which we will focus on in this thesis. See \autoref{seq:Information measures and computation} for a further discussion on these two measures and \autoref{sec:Copula based network discovery} for how to obtain such a matrix. Note that the algorithm presented will in theory work for non-symmetric measures as well such as \textit{Interaction information}, \textit{Directed information} and \textit{Normalized information}.
+The method proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} then works as follows. Given an observed matrix $G_{obs} \in \mathbb{R}^{d \times d}$ of similarities between each pair of variables, we shall deduce a matrix $G_{dir} \in \mathbb{R}^{d \times d}$ of direct similarities between each pair of random variables $X_i$ and $X_j$. \textcolor{blue}{In particular, we wish to filter out indirect effects which we will denote by $G_{dir}$ defined as effects between pairs of variables that is the result of effects propagating through other variables}. The measure of similarity, can in practice be any desired measure such as correlation or mutual information which we will focus on in this thesis. See \autoref{seq:Information measures and computation} for a further discussion on these two measures and \autoref{sec:Copula based network discovery} for how to obtain such a matrix. Note that the algorithm presented will in theory work for non-symmetric measures as well such as \textit{Interaction information}, \textit{Directed information} and \textit{Normalized information}.
 
 \textcolor{red}{Illustration of how the algorithm works and purpose}
 
@@ -69,46 +69,56 @@ Namely, that the direct and indirect effects can be added together to get the to
 
 The second and final assumption is that the indirect effects $G_{indir}$ can be computed in terms of $G_{dir}$. Namely, that
 \begin{equation}
-    G_{indir} = G_{dir}^2 + G_{dir}^3 + \dots
+    G_{indir} = G_{dir}^2 + G_{dir}^3 + \dots = \sum_{k = 2}^{\infty} G_{dir}^k
 \end{equation}
 i.e. that the observed \textit{information} exchanged on an edge $e_{ij}$ between nodes $X_i$ and $X_j$ is the sum of the second, third etc. order effects, each given by the information on the $n$-path (where $n$ is the order of the (diminishing) indirect effect) again assumed to be a sum of products. In other terms, the second order indirect effect between $X_i$ and $X_j$ (given as the $(i,j)$ element of $G_{dir}^2$) is the sum of products on edges $e_{ik}$ and $e_{kj}$ for all $k$
-$$\left[G_{dir}^2\right]_{ij} = \sum_{k=1}^N e_{ik}\,e_{kj}$$
-where $e_{ij}$ is the $(i,j)$ element of $G_{dir}$. \textcolor{blue}{This is of course not true in general, but through the error analysis in \autoref{subseq:Robustness to noise} and the examples in \autoref{chap:results} this is not necessarily a problem}. Immediately, we observe that $e_{ii}$ is of interest in terms of its physical meaning. The co-dependence between a random variable and itself might be somewhat ambiguous or even undefined depending on the measure. Thus, the notion of (non-existing) edges $e_{ii}$ will be of interest later on when using the method on controlled cases. We note that in $G_{obs}$ we shall in general set these elements to $0$.
+$$\left[G_{dir}^2\right]_{ij} = \sum_{k=1}^d e_{ik}\,e_{kj}$$
+where $e_{ij}$ is the $(i,j)$ element of $G_{dir}$. This is of course not true in general. However, through error analysis in \autoref{subseq:Robustness to noise} and controlled examples in \autoref{chap:results} we shall see that this assumption is either true under some additional assumptions or only results in small numerical errors. Immediately, we observe that $e_{ii}$ is of interest in terms of its physical meaning. The co-dependence between a random variable and itself might be somewhat ambiguous or even undefined depending on the measure. Thus, the notion of (non-existing) edges $e_{ii}$ will be of interest later on when using the method on controlled cases. We note that in $G_{obs}$ we shall in general set these elements to $0$.
 
 Thus, from the above assumptions, it follows that we can express $G_{obs}$ as
 \begin{equation}\label{eq:Network Informaiton Convolution}
     G_{obs} = G_{dir} + G_{dir}^2 + G_{dir}^3 + \dots = G_{dir} + G_{dir} \, G_{obs}
 \end{equation}
-Clearly, such a $G_{dir}$ must have spectral radius at most $1$ as otherwise, the above sum diverges and thus $G_{obs}$ will not exist. I.e. $\rho\left(G_{dir}\right) < 1$. Thus, assuming convergence we can rewrite the infinite series as
+Clearly, such a $G_{dir}$ must have spectral radius at most $1$ as otherwise, the above sum diverges and thus $G_{obs}$ will not exist. I.e. $\rho\left(G_{dir}\right) < 1$, where $\rho\left(\cdot\right)$ denotes the spectral radius. Thus, assuming convergence we can rewrite the infinite series as
 \begin{equation}\label{eq:Gobs from Gdir}
     G_{obs} = G_{dir} \left(I - G_{dir}\right)^{-1}
 \end{equation}
-It immediately follows that $G_{dir}$ is given by (can be proved by directly inserting the above expression for $G_{obs}$)
+Multiplying the above by $\left(I - G_{dir}\right)$ from the right and moving around terms, it immediately follows that
+\begin{equation}\label{eq:partial result on relation G_obs and G_dir}
+    G_{obs} = G_{dir}\left(I + G_{obs}\right)
+\end{equation}
+Thus, if we can show that $-1 \not\in \sigma\left(G_{obs}\right)$ (where $\sigma \left(\cdot\right)$ denotes the spectrum of an operator), we can isolate $G_{dir}$. Namely, we need $-1$ to not be an eigenvalue of $G_{obs}$. This is indeed true under the assumption that $\rho\left(G_{dir}\right) < 1$. In particular, assume that $(\lambda, v)$ is an eigenpair of $G_{dir}$. Then, by assumption $\left|\lambda\right| < 1$ and by \autoref{eq:Network Informaiton Convolution}:
+$$G_{obs}\, v = \sum_{k=1}^\infty G_{dir}^k v = \sum_{k=1}^\infty \lambda^k v = \frac{\lambda}{1-\lambda} v$$
+where we used that $v$ is an eigenvector of $G_{dir}$ and the geometric series converges as $\left|\lambda\right| < 1$. In particular, $\left(\frac{\lambda}{ 1 - \lambda},\, v\right)$ is an eigenpair of $G_{obs}$. In \autoref{app:Jordan normal form of infinite matrix sum}, we show that $\lambda$ is an eigenvalue of $G_{dir}$ if and only if $\frac{\lambda}{1 - \lambda}$ is an eigenvalue of $G_{obs}$ i.e. there is a bijection between the eigenvalues of $G_{dir}$ and $G_{obs}$. Thus, as the spectral radius of $G_{dir}$ is less than one such that $\lambda \in (-1,1)$, we conclude that $\sigma\left(G_{obs}\right) \subset \left(-\frac{1}{2},\, \infty\right)$. Hence, $-1 \not\in \sigma \left(G_{obs}\right)$ and $G_{dir}$ can easily be isolated in \autoref{eq:partial result on relation G_obs and G_dir} as 
 \begin{equation}\label{eq:Gdir from Gobs}
     G_{dir} = G_{obs} \left(I + G_{obs}\right)^{-1}
 \end{equation}
-Furthermore, if the measure of dependence between pairs of variables is symmetric, then so is $G_{obs}$ and hence diagonalizable by some orthogonal matrix $U$ and diagonal matrix $\Lambda_{obs}$ such that $G_{obs} = U \Lambda_{obs} U^T$ (with the columns of $U$ being right eigenvectors of $G_{obs}$). It follows that $G_{dir}$ can be expressed in a simple (and later computationally efficient) way
-$$G_{dir} = U \Lambda_{dir} U^T$$
-where $\Lambda_{dir} = \Lambda_{obs} \left(I + \Lambda_{obs}\right)^{-1}$ which is also a diagonal matrix.
+We note that from the above, we have that $G_{obs}$ is a result of a $G_{dir}$ only if the smallest eigenvalue of $G_{obs}$ is larger than $-1/2$.
 
-We note that from the above one needs $\left( I + G_{obs}\right)^{-1}$ to be well-defined which is equivalent to $-1 \not\in \sigma_{G_{obs}}$ i.e. $-1$ is not an eigenvalue of $G_{obs}$. To see that this is indeed the case whenever $\rho\left(G_{dir}\right) < 1$, and that $I + G_{obs}$ is thus invertible we use \autoref{eq:Gobs from Gdir} and simplify
+Furthermore, if the measure of dependence between pairs of variables is symmetric, then so is $G_{obs}$ and hence diagonalizable by some orthogonal matrix $U$ (such that $U^T = U^{-1}$) and diagonal matrix $\Lambda_{obs}$ such that $G_{obs} = U \Lambda_{obs} U^T$ (with the columns of $U$ being right eigenvectors of $G_{obs}$). This follows from the fact that any real symmetric matrix is diagonalizable. It follows that $G_{dir}$ can be expressed in the following simple way (which is useful for computational efficiency)
 \begin{align*}
-    I + G_{obs} & = I + G_{dir} \left(I-G_{dir}\right)^{-1}                                                \\
-                & = \left(I-G_{dir}\right)\left(I-G_{dir}\right)^{-1} + G_{dir}\left(I-G_{dir}\right)^{-1} \\
-                & = \left(I-G_{dir}\right)^{-1}
+    G_{dir} &= U \Lambda_{obs} U^T \left(I + U \Lambda_{obs} U^T\right)^{-1}\\
+    & = U \Lambda_{obs} U^T \left(U U^T + U \Lambda_{obs} U^T\right)^{-1}\\
+    & = U \Lambda_{obs} U^T \left(U \left(I + \Lambda_{obs}\right) U^T\right)^{-1}\\
+    & = U \Lambda_{obs} U^T U \left(I + \Lambda_{obs}\right)^{-1} U^T\\
+    & = U \Lambda_{obs} \left(I + \Lambda_{obs}\right)^{-1} U^T\\
+    & = U \Lambda_{dir} U^T
 \end{align*}
-which is clearly invertible. Furthermore, we note that under the assumption $\rho\left(G_{dir}\right) < 1$ we can not place any bound on the spectral radius of $G_{obs}$. Namely, if $v$ is an eigenvector of $G_{dir}$ with eigenvalue $\lambda$ such that $|\lambda|<1$, then $v$ is also an eigenvector of $G_{obs}$ as
-$$G_{obs} v = \sum_{k=1}^\infty G_{dir}^k v = \sum_{k=1}^\infty \lambda^k v = \frac{\lambda}{1-\lambda} v$$
-i.e. $\left(\frac{\lambda}{1-\lambda},v\right)$ is an eigenpair of $G_{obs}$ and since $\frac{\lambda}{1-\lambda} \in (-1/2, \infty)$ for $\lambda\in (-1,1)$ we can in general not bound the spectral radius of $G_{obs}$, although we should never observe an eigenvalue equal to or below $-1/2$ (which again proves that $-1$ is not an eigenvalue of $G_{obs}$).
+where $\Lambda_{dir} = \Lambda_{obs} \left(I + \Lambda_{obs}\right)^{-1}$ is also a diagonal matrix, with elements corresponding to the inverse of the mapping $\lambda \mapsto \frac{\lambda}{1 - \lambda}$.
 
-As we shall later use some assumptions regarding causality i.e. directing the edges in the graph, we shall investigate the effect of letting $G_{obs}$ be a triangular matrix which corresponds to a directed acyclic graph. Namely, in the following, we show that given the existence of $G_{dir}$ (with necessary and sufficient conditions on $G_{obs}$ as given above), $G_{obs}$ is triangular if and only if $G_{dir}$ is triangular. Thus, by directing the observed similarity (by removing half the edge weights in $G_{obs}$), we also infer a directed graph $G_{dir}$.
+As we shall later use some assumptions regarding causality leading $G_{obs}$ to be a triangular matrix, we shall investigate the properties of the resulting $G_{dir}$. Namely, in the following, we show that given the existence of $G_{dir}$ (with necessary and sufficient conditions on $G_{obs}$ as given above), $G_{obs}$ is triangular if and only if $G_{dir}$ is triangular. Thus, by directing the observed similarity (by removing half the edge weights in $G_{obs}$), we also infer a directed graph $G_{dir}$.
 
-Clearly, if $G_{dir}$ is triangular, so are the powers $G_{dir}^i$ for all $i\in\mathbb{N}$ and hence if the infinite sum $\sum_{i=1}^{\infty} G_{dir}^{i}$ converges, $G_{obs}$ is triangular as well. To show the other way, assume that $G_{obs}$ is triangular and is the result of a $G_{dir}$ with spectral radius smaller than $1$. By \autoref{eq:Gdir from Gobs}, $G_{dir}$ is triangular if the inverse of $I + G_{obs}$ is triangular (upper triangular if $G_{obs}$ is also upper triangular and similarly for lower triangular). This is indeed the case as in general, the inverse of a triangular matrix is also triangular provided that the diagonal elements are non-zero which is true as $ I + G_{obs}$ has only ones in the diagonal as we will later assume in \autoref{eq:Gobs matrix}. A simple proof of this is as follows. Without loss of generality, we assume that a matrix $T$ is upper triangular. Let $D$ be the diagonal elements of $T$ and $T_u$ be the remaining strictly upper triangular part of $T$ such that $T = D + T_{u}$. Then, assuming that $D$ has non-zero diagonal elements, $T = D \left(I + D^{-1}T_u\right)$ and hence, we have that
+Clearly, if $G_{dir}$ is triangular, so are the powers $G_{dir}^i$ for all $i\in\mathbb{N}$ and hence if the infinite sum $\sum_{i=1}^{\infty} G_{dir}^{i}$ converges, $G_{obs}$ is triangular as well.
+
+To show the other way, assume that $G_{obs}$ is triangular and is the result of a $G_{dir}$ with spectral radius smaller than $1$. By \autoref{eq:Gdir from Gobs}, $G_{dir}$ is triangular if the inverse of $I + G_{obs}$ is triangular (upper triangular if $G_{obs}$ is also upper triangular and similarly for lower triangular). This is indeed the case as in general, the inverse of a triangular matrix is also triangular provided that the diagonal elements are non-zero.
+% Later, we will set the diagonal of $G_{obs}$ to be $0$ (\autoref{eq:Gobs matrix}).
+Note that  $ I + G_{obs}$ is never $0$ in the diagonal, as $-1/2$ is the smallest possible eigenvalue of $G_{obs}$ and hence smallest diagonal element. A simple proof is as follows. Assume without loss of generality, that a matrix $T$ is upper triangular. Let $D$ be the diagonal elements of $T$ and $T_u$ be the remaining strictly upper triangular part of $T$ such that $T = D + T_{u}$. Then, assuming that $D$ has non-zero diagonal elements, $T = D \left(I + D^{-1}T_u\right)$. Therefore,
 \begin{align*}
     T^{-1} & = \left(I + D^{-1}T_u\right)^{-1} D^{-1}               \\
-           & = \sum_{i=0}^\infty \left(- D^{-1} T_u\right)^i D^{-1}
+           & = \sum_{i=0}^\infty \left(- D^{-1} T_u\right)^i D^{-1}\\
+           & = \sum_{i=0}^{d-1} \left(- D^{-1} T_u\right)^i D^{-1}
 \end{align*}
-which is clearly also upper triangular. Thus, we conclude that $G_{obs}$ is triangular if and only if $G_{dir}$ is (under the assumption $G_{dir}$ exists).
+which is clearly also upper triangular. The second and final equality follows from $T_u$ being strictly upper triangular and thus nilpotent such that $\sigma\left(-D^{-1} T_u\right) = \{0\}$ and $T_u^d = 0$. We conclude that $G_{obs}$ is triangular if and only if $G_{dir}$ is (under the assumption $G_{dir}$ exists and $G_{obs}$).
 
 Finally, before discussing the implementation and analyzing the algorithm both analytically and through examples, we will take a closer look at the similarity measures that are to be used with this method and that in the end will make up the matrix $G_{obs}$. Namely, \textit{mutual information} and \textit{correlation}.
 
@@ -117,11 +127,11 @@ Finally, before discussing the implementation and analyzing the algorithm both a
 In this section we discuss two measures that can be used to construct the matrices of codependency from the previous section. Namely, we shall touch on correlation and discuss what one might choose to call Copula-based entropy. However, before discussing Copula entropy (CE) we first need to define what a copula is.
 
 \subsection{Copula}
-Given a set of $N$ random variables $X_1,\dots, X_d$, a copula is loosely speaking a distribution function with support $[0,1]^d$ incorporating the dependence structure between the random variables. Given a joint distribution function $F$ and (invertible) marginals $F_1,\dots,F_N$ we define a copula $C$ as
+Given a set of $d$ random variables $X_1,\dots, X_d$, a copula is loosely speaking a distribution function with domain $[0,1]^d$ incorporating the dependence structure between the random variables. Given a joint distribution function $F$ for $\left(X_1,\dots, X_d\right)$ and (invertible) marginals $F_1,\dots,F_d$ we define a copula $C$ as
 \begin{align*}
-    F(x_1,\dots,x_N) & = \mathbb{P}\left(X_1\leq x_1,\dots, X_N\leq x_N\right)                                                                 \\
+    F(x_1,\dots,x_d) & = \mathbb{P}\left(X_1\leq x_1,\dots, X_d\leq x_d\right)                                                                 \\
                      & = \mathbb{P}\left(F_1\left(X_1\right)\leq F_1\left(x_1\right),\dots, F_d\left(X_d\right)\leq F_d\left(x_d\right)\right) \\
-                     & = C\left(F_1\left(x_1\right),\dots,F_N\left(x_N\right)\right)
+                     & = C\left(F_1\left(x_1\right),\dots,F_d\left(x_d\right)\right)
 \end{align*}
 Letting $u_i = F_i\left(x_i\right) \in [0,1]$ it is clear that $C$ is a distribution function as described above \cite{Copula-handbook}. Furthermore, it follows that the marginals of $C$ are uniform as $F_i\left(X_i\right)$ is uniformly distributed. We thus define a copula in probabilistic terms as
 \begin{definition}[Copula]\label{def:copula}
@@ -151,13 +161,13 @@ From \autoref{eq:sklar} we see that a copula is thus simply just a function that
                      & = \mathbb{P}\left(X_i \leq T_i^{-1}\left(y_i\right)\right) \\
                      & = F_{X_i}\left(T_i^{-1}\left(y_i\right)\right)
     \end{align*}
-    The above is easily generalized for a joint distribution as well. Thus, by the existence of a Copula $C$ for $\boldsymbol{X}$
+    The above is easily generalized for a joint distribution as well. Thus, by the existence of a copula $C$ for $\boldsymbol{X}$
     \begin{align*}
         F_{\boldsymbol Y}(y_1, \dots, y_d) & = F_{\boldsymbol X} \left(T_1^{-1}\left(y_1\right),\dots , T_d^{-1}\left(y_d\right)\right)   \\
                                            & = C\left( F_{X_1}(T_1^{-1}\left(y_1\right)), \dots, F_{X_d}(T_d^{-1}\left(y_d\right))\right) \\
                                            & = C\left( F_{Y_1}(y_1), \dots, F_{Y_d}(y_d)\right)
     \end{align*}
-    where Sklar's theorem have been used for the second equality. The above shows that $C$ is indeed also a Copula for $\boldsymbol Y = \left(T_1(X_1), \dots, T_d(X_d)\right)$.
+    where Sklar's theorem have been used for the second equality. The above shows that $C$ is indeed also a copula for $\boldsymbol Y = \left(T_1(X_1), \dots, T_d(X_d)\right)$.
 \end{proof}
 The above corollary is actually equivalent with a seemingly stronger statement and follows easily
 \begin{proposition}
@@ -175,8 +185,8 @@ The above corollary is actually equivalent with a seemingly stronger statement a
 
 
 
-\subsection{Mutual information and Copula entropy}
-In this section we introduce Copula entropy as done in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} and see how it actually is equal to the well known mutual information (multiplied by $-1$) and hence as a corollary that mutual information is independent of marginals. The name comes from the general definition of (differential) entropy as we shall see shortly. However, first we define mutual information between a set of random variables
+\subsection{Mutual Information and Copula Entropy}
+In this section we introduce copula entropy as done in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} and see how it actually is equal to the well known mutual information (multiplied by $-1$) and hence as a corollary that mutual information is independent of marginals. The name comes from the general definition of (differential) entropy as we shall see shortly. However, first we define mutual information between a set of random variables
 \textcolor{blue}{
     \begin{definition}[Mutual information]\label{def:mutual information}
         For a random vector $\boldsymbol{X} = \{X_i\}$, we define the mutual information as
@@ -207,7 +217,7 @@ An important property of mutual information is that the continuous version is th
 We note the need for two separate notations of entropy as differential entropy is not the limit of Shannon entropy in the way mutual information is. Again, this is further discussed in \autoref{subsec:limit entropy and MI}.
 % However, they are both equal to the expectation $\mathbb{E}\left(\log f\left(\boldsymbol X\right)\right)$.
 
-Before discussing Copula entropy (CE), we note a very useful relation between entropy and mutual information. Indeed, we shall later use this to show that mutual information in the continuous version is the limit of the discretization.
+Before discussing opula entropy (CE), we note a very useful relation between entropy and mutual information. Indeed, we shall later use this to show that mutual information in the continuous version is the limit of the discretization.
 \begin{lemma}[Mutual information and entropy relation]\label{lemma:mutual information and entropy relation}
     For a continuous random vector $\boldsymbol{X}$, the (joint) mutual information $I\left(\boldsymbol{X}\right)$ can be decomposed into a sum of differential entropies as
     $$I\left(\boldsymbol{X}\right) = \sum_{i=1}^{d} h(X_i) - h\left(\boldsymbol{X}\right)$$
@@ -223,17 +233,17 @@ Before discussing Copula entropy (CE), we note a very useful relation between en
         %                                  & = \sum_{i=1}^{d} h\left(X_i\right) - h\left(\boldsymbol{X}\right)
         % \end{align*}
     \end{proof}}
-With the definitions of mutual information and entropy we are finally ready to introduce Copula entropy.
+With the definitions of mutual information and entropy we are finally ready to introduce copula entropy.
 \begin{definition}[Copula entropy]\label{def:copula entropy}
-    For a continuous random vector $\boldsymbol{X}$ with a uniquely defined Copula $C$, and Copula density $c$, we define the Copula entropy $CE$ of $\boldsymbol{X}$ as
+    For a continuous random vector $\boldsymbol{X}$ with a uniquely defined copula $C$, and copula density $c$, we define the copula entropy $CE$ of $\boldsymbol{X}$ as
     $$CE\left(\boldsymbol{X}\right) = h\left(\boldsymbol U\right)$$
     where $\boldsymbol U$ has density $c$. In particular,
     $$CE\left(\boldsymbol{X}\right) = - \mathbb{E}\left[\log_b c \left(\boldsymbol U\right)\right]$$
     % $$CE\left(\boldsymbol{X}\right) = - \int_{[0,1]^d} c\left(\mathbf{u}\right) \, \log_b c\left(\mathbf{u}\right) \, d\mathbf{u}$$
 \end{definition}
-As stated above, Copula entropy is actually equal to the negative mutual information which we state as a theorem
+As stated above, copula entropy is actually equal to the negative mutual information which we state as a theorem
 \begin{theorem}[Equality of Copula entropy]\label{thm:copula entropy equals mutual information}
-    For a continuous random vector $\boldsymbol{X}$, the Copula entropy $CE$ is equal to the negative joint mutual information of $\boldsymbol{X}$
+    For a continuous random vector $\boldsymbol{X}$, the copula entropy $CE$ is equal to the negative joint mutual information of $\boldsymbol{X}$
     $$CE\left(\boldsymbol{X}\right) = - I\left(\boldsymbol{X}\right)$$
 \end{theorem}
 \begin{proof}
@@ -304,14 +314,14 @@ Thus, when calculating $I^{\Delta}$ for two identical variables, we obtain
                & \quad + \sum_{i\in\mathbb{Z}} f\left(\tilde{x}_1^{(i)}\right) \log{f\left(\tilde{x}_1^{(i)}\right)}\Delta - \log \Delta                                                                                   \\
                & \to \infty \;\text{as}\; \Delta \to 0
 \end{align*}
-Thus in practice, it would not make much sense to compare equal variables or even a random vector only defined on a lower dimensional manifold as we would get an infinite Copula entropy.
+Thus in practice, it would not make much sense to compare equal variables or even a random vector only defined on a lower dimensional manifold as we would get an infinite copula entropy.
 
 
 
 
 
 \subsection{Correlation}
-At this point, we have a good understanding of Copula entropy/mutual information for calculations later on. However, another typical measure of similarity is correlation which is easily estimated from sample data. However, in this section we show that in general, we can not compute the correlation coefficient from a Copula which we saw above is the case for mutual information. Namely, given a copula $C$ for some set of random variables $\{X_i\}_{i\in I}$ indexed by finite $I$, one can not calculate $\rho$ between any pair $(X_i ,X_j)$, $i\neq j$ from the copula. This is easily shown by the following argument.
+At this point, we have a good understanding of copula entropy/mutual information for calculations later on. However, another typical measure of similarity is correlation which is easily estimated from sample data. However, in this section we show that in general, we can not compute the correlation coefficient from a copula which we saw above is the case for mutual information. Namely, given a copula $C$ for some set of random variables $\{X_i\}_{i\in I}$ indexed by finite $I$, one can not calculate $\rho$ between any pair $(X_i ,X_j)$, $i\neq j$ from the copula. This is easily shown by the following argument.
 
 First, note that from \autoref{coro: Coordinate transformation}, $C$ is also a copula for $Z_i \coloneq \left( X_i - \mu_i\right) / \sigma_i$ for $i \in I$ where $\mu_i = \mathbb{E}[X_i]$ and $\sigma_i = \sqrt{\text{Var} \, X_i}$ (assuming that these exist). Clearly, the correlation coefficient for $Z_i$ and $Z_j$ is the same as between $X_i$ and $X_j$. We thus proceed trying to calculate the correlation between any pair $Z_i$ and $Z_j$.
 \begin{equation}\label{eq:corr from copula}
@@ -324,7 +334,7 @@ where $c_{ij}$ density version of the copula defined for $X_i$ and $X_j$ and $F_
 $$\int_0^1 F^{-1}(u) \, du = \int_{\mathbb{R}} z f(z) \, dz = 0$$
 where the final equality follows from the construction of $Z_i$.
 
-Thus, we conclude that indeed mutual information and correlation are very different measures of codependency. Namely, mutual information does not depend on the marginal distributions whereas from \autoref{eq:corr from copula} we see that correlation does. Thus, it does not make much sense to introduce copulas in the setting of correlation albeit at this point we do not favor one measure above the other except if marginals should be insignificant to the network, Copula entropy is preferred.
+Thus, we conclude that indeed mutual information and correlation are very different measures of codependency. Namely, mutual information does not depend on the marginal distributions whereas from \autoref{eq:corr from copula} we see that correlation does. Thus, it does not make much sense to introduce copulas in the setting of correlation albeit at this point we do not favor one measure above the other except if marginals should be insignificant to the network, copula entropy is preferred.
 
 
 
@@ -332,9 +342,9 @@ Thus, we conclude that indeed mutual information and correlation are very differ
 
 
 \section{Copula based network discovery}\label{sec:Copula based network discovery}
-In this section, we will present the general algorithm and discuss some of its properties regarding uncertainty and convergence. We will focus on using mutual information i.e. Copula entropy as the measure of similarity but other measures such as correlation can be interchanged at will in the general algorithm.
+In this section, we will present the general algorithm and discuss some of its properties regarding uncertainty and convergence. We will focus on using mutual information i.e. opula entropy as the measure of similarity but other measures such as correlation can be interchanged at will in the general algorithm.
 
-By \autoref{thm:copula entropy equals mutual information} we can compute the mutual information from observed data from the copula. Namely, let $CE_{ij}$ denote the (pairwise) Copula entropy of variables $X_i$ and $X_j$. We shall then set
+By \autoref{thm:copula entropy equals mutual information} we can compute the mutual information from observed data from the copula. Namely, let $CE_{ij}$ denote the (pairwise) opula entropy of variables $X_i$ and $X_j$. We shall then set
 \begin{equation}\label{eq:Gobs matrix}
     G_{obs} = \begin{bmatrix}
         0        & - CE_{12} & \dots  & - CE_{1n} \\
@@ -362,9 +372,9 @@ where $n$ is the number of nodes in the graph i.e. random variables that we have
         \State \Return $G_{obs}$
     \end{algorithmic}
 \end{algorithm}
-Namely, for each entry in $G_{obs}$, except for the diagonal elements, first estimate the cumulative distributions of $X_i$ and $X_j$ based on samples $x_i^{\mathcal{D}}$. Then, transform the samples by the estimated distribution function to obtain corresponding uniform samples. This may be done outside the loop to increase computational efficiency. From the paired samples $(x_i^{\mathcal{D}},x_j^{\mathcal{D}})$, estimate the Copula density $c_{ij}$ and finally use this to compute the mutual information/Copula entropy. Methods for estimating the densities and in continuation hereof the distribution functions are presented in \autoref{subsec:Mutual information estimation and KDE methods}. The negative Copula entropy is then recorded in $(i,j)$ entry of $G_{obs}$. We note that the algorithm can be optimized for symmetric measures such as Copula entropy itself, to only loop through $i<j$ and saving the computed entropy in the $(j,i)$ entry as well. Also, as Copula entropy diverges as $X_i$ and $X_j$ are jointly distributed closer to a one-dimensional manifold, ideally there should be a check for such or the user should check the paired observations to exclude such variable combinations.
+Namely, for each entry in $G_{obs}$, except for the diagonal elements, first estimate the cumulative distributions of $X_i$ and $X_j$ based on samples $x_i^{\mathcal{D}}$. Then, transform the samples by the estimated distribution function to obtain corresponding uniform samples. This may be done outside the loop to increase computational efficiency. From the paired samples $(x_i^{\mathcal{D}},x_j^{\mathcal{D}})$, estimate the copula density $c_{ij}$ and finally use this to compute the mutual information/copula entropy. Methods for estimating the densities and in continuation hereof the distribution functions are presented in \autoref{subsec:Mutual information estimation and KDE methods}. The negative copula entropy is then recorded in $(i,j)$ entry of $G_{obs}$. We note that the algorithm can be optimized for symmetric measures such as copula entropy itself, to only loop through $i<j$ and saving the computed entropy in the $(j,i)$ entry as well. Also, as copula entropy diverges as $X_i$ and $X_j$ are jointly distributed closer to a one-dimensional manifold, ideally there should be a check for such or the user should check the paired observations to exclude such variable combinations.
 
-From \autoref{subsec:limit entropy and MI}, to calculate the (joint) copula entropy of a continuous random vector, we simply discretize the domain of each random variable and use the estimated copula density evaluated at these points to estimate the total Copula entropy. Furthermore, if one or more elements of the random vector are mixed random variables, we choose the discrete events to be their own bins and discretize the rest or in the context of \autoref{alg:Gobs1} only estimate the distribution functions for the continuous component of the random variable. This works due to the Copula entropy for continuous random variables being the limit of the discretization and as such, the Copula entropy is well-defined for mixed random variables as well.
+From \autoref{subsec:limit entropy and MI}, to calculate the (joint) copula entropy of a continuous random vector, we simply discretize the domain of each random variable and use the estimated copula density evaluated at these points to estimate the total copula entropy. Furthermore, if one or more elements of the random vector are mixed random variables, we choose the discrete events to be their own bins and discretize the rest or in the context of \autoref{alg:Gobs1} only estimate the distribution functions for the continuous component of the random variable. This works due to the copula entropy for continuous random variables being the limit of the discretization and as such, the copula entropy is well-defined for mixed random variables as well.
 
 We continue with an example of how this discretization of a mixed random variable would work. Notice that we only have a discrete event (an atom) at $0$ as this resembles the observed behavior of the delays, although the example could be extended to more complex discrete distributions.
 
@@ -396,7 +406,7 @@ At this point, we have obtained a convolved matrix of information $G_{obs}$ and 
     \begin{algorithmic}
         \Require $G_{obs}$, $\alpha$, $\beta$             %\Comment{Input observational matrix}
         % \For{$0\leq i < j < N$}
-        \State $\left[G_{obs}\right]_{ii} \gets 0, \; \forall i\in \{1,\dots, N\}$                    \Comment{ensure zero-diagonal}
+        \State $\left[G_{obs}\right]_{ii} \gets 0, \; \forall i\in \{1,\dots, d\}$                    \Comment{ensure zero-diagonal}
         % \State $Q_p \gets G_{[1-\alpha]}$
         \State $\left[G_{obs}\right]_{ij} \gets 0$, when $\left[G_{obs}\right]_{ij} < Q_{\alpha}\left(G_{obs}\right)$
         \State Compute eigendecomposition $U,\Lambda$ of $G_{obs}$
