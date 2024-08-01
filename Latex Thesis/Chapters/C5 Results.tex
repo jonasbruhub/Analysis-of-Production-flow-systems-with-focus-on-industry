@@ -483,7 +483,7 @@ Having discussed the strengths and weaknesses of \autoref{alg:ND}, we now turn o
 
 
 
-\subsection{Spline and KDE based CE estimation}
+\subsection{Spline and KDE based CE estimation}\label{subsec:Spline and KDE based CE estimation}
 Before the first example, we shall discuss the problem with the spline based method and using histograms in general. Namely, we shall first see that if one were to just simply use a raw binning approach, the number of bins $N$ influences the estimate a lot and no number of bins seems to perform well on all cases. Namely, let $\boldsymbol X$ be a bivariate Gaussian with correlation $\rho$, then the Copula density looks as in \autoref{subfig:Gaussian copula density example}. In particular, we notice the peaks at $(0,0)$ and $(1,1)$ from which most of the mutual information originates. Now, simulating $n = 400$ observations from the joint distribution and transforming to the unit square through the marginal distribution function for varying correlations $\rho$, we can compare the estimated mutual information $I_{estim}$ using the results from \autoref{subsec:limit entropy and MI} to the true mutual information given by $ I_{exact} = - \frac{1}{2} \log \left(1 - \rho^2\right)$. The results are shown in \autoref{fig:raw histogram for MI estimation} where we report the relative size of the estimate and the exact mutual information and in \autoref{fig:raw hsitogram error for MI estimation} where the difference is reported. From \autoref{fig:raw histogram for MI estimation}, we might choose $N \approx 10$ as in \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} however for large correlations, we drastically underestimate mutual information. Increasing the number of bins to e.g. $N = 25$ corrects this error for large correlations, while small mutual information for small correlations remains relatively small. However, when deconvolving we would preferably want a more precise way of estimating the mutual information.
 
 % but then small correlations have a relatively large error of around $0.5$ which is a relatively large error when comparing to the error the deconvolution step makes as illustrated in \autoref{fig:3 and 4 chain MI error}.
@@ -1160,7 +1160,7 @@ As an example, suppose that a network is defined as in \autoref{sec:General Gaus
 
 
 \newpage
-\section{Pharmaceutical data deconvolution}\autoref{sec:Results - pharmaceutical data}
+\section{Pharmaceutical data deconvolution}\label{sec:Results - pharmaceutical data}
 Finally, we turn our attention to the pharmaceutical production data introduced in \autoref{chap:data}. Namely, we have at this point used the methodology discussed in \autoref{chap:results} both to estimate mutual information, to deconvolve Gaussian networks and chains based on analytical expressions for the correlation between variables and finally in \autoref{sec:Gaussian network MI example - computation} where we have combined \autoref{alg:Gobs1} and \autoref{alg:ND} to infer the causal structure of a $10$-dimensional Gaussian network.
 
 In particular, we saw that the methodology combined produced very accurate results when the mutual information between pairs of random variables were not too large as these proved difficult to estimate to high accuracy without turning to a manual tuning of the bandwidths. We especially want to avoid the manual tuning of the bandwidth in this section, as we shall compute mutual information between $1653$ pairs of random variables.
