@@ -26,9 +26,18 @@
 
 
 \chapter{Method}\label{chap:method}
+The following chapter is structured as follows. Initially, we shall introduce the basic concept of causality and \textit{structural causal models} (SCMs) based on \cite{Elements_of_Causal_Inference:_Foundations_and_Learning_Algorithms}. From that, we shall discuss the method proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} to infer such SCMs. In particular, we shall state the underlying assumptions of the method and discuss the implication of these. Furthermore, we shall see how based on observed similarities between pairs of random variables, the proposed method deconvolves a matrix of similarities and result in a set of proposed structures for the underlying SCM. Namely, how we from data can make predictions of which variables influence each other directly or through mediators - also known as in-between variable.
+
+From the basic assumptions, we shall then discuss correlation and mutual information as similarity measures and how they differ. In particular, we shall see that mutual information and copulas, a statistical tool for isolating the joint behavior of random variables, are very related topics. In particular, mutual information can be computed from only the copula. Furthermore, we shall extend on the original methodology by considering mixed random variables as well. This is important, such that the delays $T^D_u$ from \autoref{chap:data} can be included later on in \autoref{chap:results}, where we shall use the methods obtained here to infer possible causal structures.
+
+In \autoref{sec:Copula based network discovery}, we will discuss the algorithms to be used later in detail. In particular, we shall clarify a few results from the original paper \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} and extend on their results on robustness of the deconvolution algorithm. A major assumption regarding the \textit{size} of the observed matrix of associations ($G_{obs}$) is removed, obtaining a more general and useful result. The Frobenius and maximum matrix norms are especially considered.
+
+Finally, in \autoref{subsec:Mutual information estimation and KDE methods}, we shall discuss different methods for estimating mutual information as well as their drawbacks. Especially kernel based density estimators are considered discussed in terms of a simple dataset from \cite{Density-Estimation-and-Suicide-Risks-in-Psychiatric-Treatment} with observations related to suicide risk.
+
+
 \textcolor{red}{General introduction to method and causality}
 
-\section{Causal discovery}
+\section{Causality and Causal Discovery}
 In this section, we shall discuss the method for network deconvolution, originally proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}. The underlying problem is inferring direct effects and dependencies. From this, using prior information on the production setup, we shall be able to infer causal dependencies by directing the resulting edges from the network deconvolution (ND) algorithm. Particularly, the framework and general algorithm proposed by Feizi et al. stems from a graph-theoretic approach to the problem of inferring direct dependencies. Namely, suppose that observations depend on quantities such as levels and sojourn times of in this case a chemical process. We shall represent these properties as vertices (nodes) $V$ and dependencies between properties as edges. Initially, when observing the vertices, we observe both direct and indirect effects. Particularly, a vertex $v_1$ might influence some other vertex $v_3$ through another vertex $v_2$ if $v_2$ depends on $v_1$ and $v_3$ of $v_2$. In this case, we will observe that $v_1$ influences $v_3$, but actually it is $v_2$ that has a direct influence on $v_3$. In graph-theoretical terms, we thus observe the transitive closure of the information that flows between vertices but want to infer the underlying network structure.
 
 An important note on the algorithm to come is that we only use vertices that we have observed. Namely, the underlying structure might be as in \autoref{subfig:hidden nodes example unobserved} with an unobserved node/variable (named $U$ in this case). However, without any more assumptions or modelling choices we would (ideally) infer the network structure depicted in \autoref{subfig:hidden nodes example resulting graph}.
@@ -52,12 +61,19 @@ An important note on the algorithm to come is that we only use vertices that we 
 \end{figure}
 With these initial comments, we proceed with the general setup and assumptions for network deconvolution based on observations.
 
-\subsection{Setup and assumptions}\label{subsec:Setup and assumptions}
+\subsection{Setup and Assumptions}\label{subsec:Setup and assumptions}
 Suppose a set of $d$ random variables $(X_i)$ is given i.e. a $d$-dimensional random vector $\boldsymbol X$. The method presented in this section aims to discover direct relationships between pairs $X_i$ and $X_j$ for $i\neq j$. \textcolor{blue}{These relationships will be presented by a directed graph as in the previous section or an undirected graph in case the causal direction is either unknown or such an assumption on direction is not plausible}. In particular, we shall let each random variable $X_i$ be represented by a vertex in a graph. We will later discuss a way of directing edges such that a causal network may be discovered i.e. a directed acyclic graph that may be used for inference.
 
 The method proposed by \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} then works as follows. Given an observed matrix $G_{obs} \in \mathbb{R}^{d \times d}$ of similarities between each pair of variables, we shall deduce a matrix $G_{dir} \in \mathbb{R}^{d \times d}$ of direct similarities between each pair of random variables $X_i$ and $X_j$. \textcolor{blue}{In particular, we wish to filter out indirect effects which we will denote by $G_{dir}$ defined as effects between pairs of variables that is the result of effects propagating through other variables}. The measure of similarity, can in practice be any desired measure such as correlation or mutual information which we will focus on in this thesis. See \autoref{seq:Information measures and computation} for a further discussion on these two measures and \autoref{sec:Copula based network discovery} for how to obtain such a matrix. Note that the algorithm presented will in theory work for non-symmetric measures as well such as \textit{Interaction information}, \textit{Directed information} and \textit{Normalized information}.
 
-\textcolor{red}{Illustration of how the algorithm works and purpose}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = \linewidth]{figures/Framework overview.png}
+    \caption{On overview of the methodology that we shall develop in this thesis. In particular, the estimation of mutual information - a possible measure of similarity - and deconvolution will be discussed in this section.}
+    \label{fig:Framework overview}
+\end{figure}
+
+% \textcolor{red}{Illustration of how the algorithm works and purpose}
 
 The (direct) network is then presented by the discovered $G_{dir}$ containing only the direct effects i.e. interaction between pairs of variables which can be viewed as weights on the edges of the complete graph with nodes representing the random variables. As we shall see in \autoref{subseq:Robustness to noise}, the algorithm is somewhat robust to noise in the sense that we can ensure accuracy depending on the level of noise observed present in $G_{obs}$ and on the norm chosen (from a certain, although rather general, set of norms). \textcolor{blue}{Namely, if $G_{obs}$ is subject to noise, we find a bound on how different the inferred directed effects can be to the true direct effects using different matrix norms to measure this difference}. \textcolor{blue}{This hints to that a threshold on the inferred weights on the edges of the network might be a good idea to remove small inferred effects}. This is further supported by the facts that often only the most influential variables are of importance when trying to control the process.
 
@@ -123,7 +139,7 @@ which is clearly also upper triangular. The second and final equality follows fr
 Finally, before discussing the implementation and analyzing the algorithm both analytically and through examples, we will take a closer look at the similarity measures that are to be used with this method and that in the end will make up the matrix $G_{obs}$. Namely, \textit{mutual information} and \textit{correlation}.
 
 
-\section{Information measures and computation}\label{seq:Information measures and computation}
+\section{Information Measures and Computation}\label{seq:Information measures and computation}
 In this section we discuss two measures that can be used to construct the matrices of codependency from the previous section. Namely, we shall touch on correlation and discuss what one might choose to call Copula-based entropy. However, before discussing Copula entropy (CE) we first need to define what a copula is.
 
 \subsection{Copula}
@@ -265,7 +281,7 @@ As stated above, copula entropy is actually equal to the negative mutual informa
 Finally, before moving on to correlation as a measure of similarity, we discuss what happens in the limit of mutual information and entropy as we shall later need this as arguments for numerical stability.
 
 
-\subsection{Entropy and mutual information in the limit}\label{subsec:limit entropy and MI}
+\subsection{Entropy and Mutual Information in the Limit}\label{subsec:limit entropy and MI}
 In this section, we shall discuss the differences between entropy and differential entropy and observe how this difference cancels when computing mutual information. In fact, we shall see that mutual information defined for continuous random vectors is the limit of the discrete version which will be useful later when implementing the algorithm.
 
 First, although one may think differential entropy is the limit of (discrete) entropy, this is not the case. Namely, consider the support of $f(x)$ (here assumed to be the entire real line) binned into intervals i.e. a discretization of the continuous random variable $X$, which we shall denote $X^{\Delta}$. To make notation simpler, we shall bin into equal-sized intervals of width $\Delta$. Then, for each interval $[i\Delta, (i+1)\Delta)$ for $i \in \mathbb{Z}$, there exists an $x_i$ such that the probability mass on this interval is represented by this $x_i$:
@@ -298,7 +314,8 @@ Note that clearly $\left(x_1^{(i)},x_2^{(j)}\right)$ exists for all $i,j\in \mat
                     & \quad +\sum_{i,j\in\mathbb{Z}} f\left(x_1^{(i)},x_2^{(j)}\right) \log{f\left(x_1^{(i)},x_2^{(j)}\right)} \Delta_1 \Delta_2                                                                                           \\
                     & \to h(X_1) + h(X_2) - h(X_1,X_2)\; \text{as}\; \Delta_1,\Delta_2 \to 0
 \end{align*}
-Thus, the limit of the mutual information for discrete random variables is indeed the mutual information defined for continuous random variables and can be computed either as the limit of discretizing the probability density function and then computing entropies or just using the initial definition for (discrete) mutual information in \autoref{def:mutual information}.
+Thus, the limit of the mutual information for discrete random variables is indeed the mutual information defined for continuous random variables and can be computed either as the limit of discretizing the probability density function and then computing entropies or just using the initial definition for (discrete) mutual information in \autoref{def:mutual information}. In particular, mutual information for discrete and random variables are comparable such that it makes sense define mutual information between mixed random variables. For a more rigorous treatment of this, we refer to \cite{Estimating_Mutual_Information_for_Discrete-Continuous_Mixtures} where they define mutual information between discrete and continuous random variables from a measure theoretical point of view.
+
 
 Before continuing, we discuss the case where $X_1$ is equal to $X_2$. In this case, discretizing with a common $\Delta$ we have that
 $$f\left(x_1^{(i)}, x_2^{(j)}\right)\Delta^2 = \int_{j\Delta}^{(j+1)\Delta}\int_{i\Delta}^{(i+1)\Delta} f(x_1,x_2) \, dx_1 dx_2,\quad \forall i,j\in\mathbb{Z}$$
@@ -341,7 +358,7 @@ Thus, we conclude that indeed mutual information and correlation are very differ
 
 
 
-\section{Copula based network discovery}\label{sec:Copula based network discovery}
+\section{Copula Based Network Discovery}\label{sec:Copula based network discovery}
 In this section, we will present the general algorithm and discuss some of its properties regarding uncertainty and convergence. We will focus on using mutual information i.e. opula entropy as the measure of similarity but other measures such as correlation can be interchanged at will in the general algorithm.
 
 By \autoref{thm:copula entropy equals mutual information} we can compute the mutual information from observed data from the copula. Namely, let $CE_{ij}$ denote the (pairwise) opula entropy of variables $X_i$ and $X_j$. We shall then set
@@ -378,7 +395,7 @@ From \autoref{subsec:limit entropy and MI}, to calculate the (joint) copula entr
 
 We continue with an example of how this discretization of a mixed random variable would work. Notice that we only have a discrete event (an atom) at $0$ as this resembles the observed behavior of the delays, although the example could be extended to more complex discrete distributions.
 
-\textcolor{red}{\cite{Estimating_Mutual_Information_for_Discrete-Continuous_Mixtures}}
+
 
 \begin{example}[Discrization of mixed random variable]\label{ex:discrization of mixed random variable}
     Let $X$ be a mixture of an atom in e.g. $0$ and an exponential with parameter $\lambda$ with proportions $p$ and $1-p$. Then, a discretization of $X$ is $0$ with probability mass $p$ and the remaining support $(0,\infty)$ discretized in some way with total probability mass $1-p$ and each bin having probability according to \autoref{eq:one dim discretization} scaled with $1-p$. If the bin size is a constant $\Delta$, then for the discretized variable $X^{\Delta}$, we have $\mathbb{P}\left(X^{\Delta} = 0\right) = p$ and $\mathbb{P}\left(X^{\Delta} = x_i\right) = (1-p) \exp{(-\lambda i \Delta)}\left(1- \exp(-\lambda \Delta)\right)$, where $x_i$ is given by
@@ -399,7 +416,7 @@ We continue with an example of how this discretization of a mixed random variabl
 
 
 
-\subsection{Network deconvolution}
+\subsection{Network Deconvolution}
 At this point, we have obtained a convolved matrix of information $G_{obs}$ and are ready to use \autoref{eq:Gdir from Gobs}. We present the original algorithm from \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} in the case $G_{obs}$ is symmetric and hence diagonalizable by an orthogonal matrix $U$. The original \texttt{Matlab} implementation was translated to \texttt{Python} and is summarized in the following pseudocode.
 \begin{algorithm}[H]
     \caption{(ND) Network Deconvolution}\label{alg:ND}
@@ -431,7 +448,7 @@ Finally, we note that the $\beta \in (0,1)$ parameter corresponds to a scaling o
 
 
 
-\subsection{Ensuring convergence and the effect of \texorpdfstring{$\beta$}{beta}}
+\subsection{Ensuring Convergence and the Effect of \texorpdfstring{$\beta$}{beta}}
 In this section we will further discuss the effect of $\beta$ and how the steps for rescaling the observed similarity matrix $G_{obs}$ are derived. In particular, we will reformulate the original derivation from \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} as there is a discrepancy between their code\footnote{https://compbio.mit.edu/nd/} and their proof of choosing a scaling parameter $c_s$ of $G_{obs}$. Namely, denote $\tilde{G}_{obs}$ as the rescaled $G_{obs}$ such that $\tilde{G}_{obs} = c_s G_{obs}$. Choosing $c_s$ as in \autoref{alg:ND} i.e. $c_s^{-1} = \max \left( \frac{1-\beta}{\beta} \lambda^+,  -\frac{1+\beta}{\beta} \lambda^- \right)$ where $\lambda^+$ is the largest positive eigenvalue of $G_{obs}$ (and $0$ if no eigenvalue is positive) and $\lambda^-$ is the most negative eigenvalue of $G_{obs}$ (and $0$ if no eigenvalue is negative) then implies $\tilde{G}_{dir}$ obtained from the new $\tilde{G}_{obs}$ has spectral radius $\beta < 1$ i.e. a proper $G_{dir}$ with the largest numerical eigenvalue equal to $\beta$. This holds in general and not only for symmetric $G_{obs}$ as we will see in the following. However, when $G_{obs}$ is symmetric the resulting $\tilde{G}_{dir}$ can easily be expressed through the eigendecomposition of $G_{obs}$, $U$, $\Lambda$ as
 \begin{align*}
     \tilde{G}_{dir} & = \tilde{G}_{obs} \left( I + \tilde{G}_{obs}\right)^{-1}         \\
@@ -453,7 +470,7 @@ for $\lambda < -c_s^{-1}$ we obtain that the resulting eigenvalue is larger than
 
 
 
-\subsection{Robustness to noise}\label{subseq:Robustness to noise}
+\subsection{Robustness to Noise}\label{subseq:Robustness to noise}
 Finally, before discussing how to compute and estimate the mutual information between two random variables based on observations, we turn our heads to error analysis of the deconvolution algorithm. It is important to understand how well the algorithm performs subject to noise and errors. Namely, in the case of mutual information, the assumption that higher order effects can be calculated as a sum of matrix powers of the direct effects does not hold. Thus, if we can quantify the error in $G_{obs}$, we can from the following analysis quantify the resulting error in $G_{dir}$. We shall first discuss the original result from \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}, correcting some errors in terms of definitions and see how their result can also be expressed as an absolute upper bound on the error instead of only how this error behaves for small perturbations. Furthermore, we shall extend their result to not only hold when $\rho\left(G_{obs}\right) < 1$ and $\rho\left(G_{obs} + N\right) < 1$ where $N$ is some noise e.g. from computation or assumptions that does not completely hold.
 
 % \left|\left|  \right|\right|
@@ -552,7 +569,7 @@ Finally, if $G_{obs}$ and $N$ are symmetric, the singular values are equal to th
 This clearly shows us that for small networks (thus small $d$) we risk smaller errors in terms of the Frobenius and max norm (which is not surprising) which are clearly interpreted through the difference of individual element of $G_{dir}$ and $\tilde{G}_{dir}$ and that the max norm scales linearly with the number of nodes while the Frobenius difference only scales with the square root of the number of nodes.
 % Finally, before continuing with how to estimate the mutual information in practice, we note that $\beta$ has an effect on the above results also, namely, it is easy to show by extending the above argumentation a little, that as 
 
-\section{Estimating mutual information}\label{subsec:Mutual information estimation and KDE methods}
+\section{Estimating Mutual Information}\label{subsec:Mutual information estimation and KDE methods}
 For \autoref{alg:Gobs1} to work, we need a good and preferably fast estimator of mutual information. \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks} proposes to use B-splines for this based on \cite{RePEc:plo:pbio00:0050008} which we shall describe in the following section. It is however quickly apparent that this estimator has some problems when computing mutual information based on the Copula representation. We extend the method to other splines but end up using kernel density estimators (KDE) as they can be regularized in a continuous manner and as a result of this in general show great performance.
 
 
@@ -693,7 +710,7 @@ We note that using a non-constant $h$ would improve on this behavior, but simple
 
 
 \newpage
-\subsection{Boundary corrected KDE}\label{sec:Boundary corrected KDE}
+\subsection{Boundary Corrected KDE}\label{sec:Boundary corrected KDE}
 Before introducing the boundary corrected kernels presented by \cite{Jones1993SimpleBC}, we mention another simple method of boundary correction called reflection. Namely, suppose without loss of generality $x = 0$ is the lower boundary of the domain of $\boldsymbol X$ and let $\hat{f}$ be KDE as from the previous section. Then, the reflection boundary corrected KDE denoted $\hat{f}_R$ is defined as
 $$\hat{f}_R(x) = \hat{f}(x) + \hat{f}(-x)$$
 Clearly, $\hat{f}_R$ is non-negative, and it follows from the below that it is also a proper density function as the probability mass is $1$

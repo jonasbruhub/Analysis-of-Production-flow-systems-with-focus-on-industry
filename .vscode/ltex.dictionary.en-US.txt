@@ -57,3 +57,5 @@ eigenpairs
 blockdiagonal
 nilpotent
 WLOG
+SCMs
+deconvolves
