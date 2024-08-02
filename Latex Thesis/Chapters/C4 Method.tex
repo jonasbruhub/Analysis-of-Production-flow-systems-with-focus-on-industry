@@ -170,7 +170,7 @@ From \autoref{eq:sklar} we see that a copula is thus simply just a function that
     Under the assumptions of \autoref{thm: Sklar}, given any set $(T_1, \dots, T_d)$ of strictly increasing functions, if $C$ is a copula of $(X_1,\dots, X_d)$ then it is also a copula of $(T_1(X_1), \dots, T_d(X_d))$.
 \end{corollary}
 \begin{proof}
-    Suppose $(X_1 , \dots , X_d)$ permits a copula $C$ and let $T_i$ be given as stated. Consider coordinate wise the result of the transformation $Y_i = T_i(X_i)$ and consider the CDF $F_{Y_i}(y_i)$
+    Suppose $(X_1 , \dots , X_d)$ admits a copula $C$ and let $T_i$ be given as stated. Consider coordinate wise the result of the transformation $Y_i = T_i(X_i)$ and consider the CDF $F_{Y_i}(y_i)$
     \begin{align*}
         F_{Y_i}(y_i) & = \mathbb{P}\left(Y_i \leq y_i\right)                      \\
                      & = \mathbb{P}\left(T_i^{-1}(Y_i) \leq T_i^{-1}(y_i)\right)  \\
@@ -202,7 +202,7 @@ The above corollary is actually equivalent with a seemingly stronger statement a
 
 
 \subsection{Mutual Information and Copula Entropy}
-In this section we introduce copula entropy as done in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} and see how it actually is equal to the well known mutual information (multiplied by $-1$) and hence as a corollary that mutual information is independent of marginals. The name comes from the general definition of (differential) entropy as we shall see shortly. However, first we define mutual information between a set of random variables
+In this section we introduce copula entropy as done in \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems} and see how it actually is equal to the well known mutual information (multiplied by $-1$) and hence as a corollary that mutual information is independent of marginals. Namely, under a coordinate transformation as in \autoref{coro: Coordinate transformation}, the mutual information is constant. The name comes from the general definition of (differential) entropy as we shall see shortly. However, first we define mutual information between a set of random variables
 \textcolor{blue}{
     \begin{definition}[Mutual information]\label{def:mutual information}
         For a random vector $\boldsymbol{X} = \{X_i\}$, we define the mutual information as
@@ -211,7 +211,7 @@ In this section we introduce copula entropy as done in \cite{Nonparametric-copul
         where $f$ is the joint density function with marginals $f_i$ of the random vector $\boldsymbol{X}$.
         % If $\boldsymbol X$ is discrete and $f$ is the joint probability mass function with marginals $f_i$. Similarly, for continuous random vectors with $f$ the joint probability density function we define
         % $$I(\boldsymbol{X}) = \int_{\mathcal{X}} f(\boldsymbol{x}) \, \log_b\left(\frac{f(\boldsymbol{x})}{\prod_{i} f_i\left(x_i\right)}\right)\, d\boldsymbol{x}$$
-        The base of the logarithm $b$ is often chosen to be $2$, $e$ or $10$ although the choice is unimportant as all logarithms are equivalent up to a scaling factor.
+        The base of the logarithm $b$ is often chosen to be $2$, $e$ or $10$ although the choice is unimportant as all logarithms are equivalent up to a scaling factor. We shall in general choose $b = e$ and drop the base $b$ from this point on.
     \end{definition}
 }
 We note that later on, as the choice of $b$ will result in a scaling of $G_{obs}$, but we will also introduce a scaling parameter $\alpha$ for $G_{obs}$ to both ensure the convergence of the algorithm and to control higher order effects, we shall in general choose $b = e$.
@@ -221,7 +221,7 @@ An important property of mutual information is that the continuous version is th
     \begin{definition}[Entropy]\label{def:entropy}
         The (joint) entropy of a random vector $\boldsymbol{X}$ is defined as
         % $$H\left(\boldsymbol{X}\right) = - \sum_{\boldsymbol{x}\in \mathcal{X}} f(\boldsymbol{x}) \, \log_b f(\boldsymbol{x})$$
-        $$H\left(\boldsymbol{X}\right) = - \mathbb{E}\left[\log_b f(\boldsymbol X)\right]$$
+        $$H\left(\boldsymbol{X}\right) = - \mathbb{E}\left[\log f(\boldsymbol X)\right]$$
         In case of a discrete random vector, this is called the Shannon entropy while for continuous random vectors, this is called differential entropy and is often denoted as $h\left(\boldsymbol X\right)$ instead of $H\left(\boldsymbol X\right)$.
     \end{definition}
 }
@@ -236,12 +236,12 @@ We note the need for two separate notations of entropy as differential entropy i
 Before discussing copula entropy (CE), we note a very useful relation between entropy and mutual information. Indeed, we shall later use this to show that mutual information in the continuous version is the limit of the discretization.
 \begin{lemma}[Mutual information and entropy relation]\label{lemma:mutual information and entropy relation}
     For a continuous random vector $\boldsymbol{X}$, the (joint) mutual information $I\left(\boldsymbol{X}\right)$ can be decomposed into a sum of differential entropies as
-    $$I\left(\boldsymbol{X}\right) = \sum_{i=1}^{d} h(X_i) - h\left(\boldsymbol{X}\right)$$
+    $$I\left(\boldsymbol{X}\right) = \sum_{i=1}^{d} h_i(X_i) - h\left(\boldsymbol{X}\right)$$
     where $d$ is the dimension of $\boldsymbol{X}$. The same is true for discrete variables but with entropy $H$ instead of differential entropy $h$.
 \end{lemma}
 \textcolor{blue}{\begin{proof}
         This follows immediately from the definition of mutual information and entropy:
-        $$\mathbb{E}\left[\log_b \frac{f\left(\boldsymbol X\right)}{\prod_i f_i\left(X_i\right)}\right] = \mathbb{E}\left[\log_b f\left(\boldsymbol X\right) \right] - \sum_i \mathbb{E}\left[\log_b f_i \left(X_i\right)\right]$$
+        $$\mathbb{E}\left[\log \frac{f\left(\boldsymbol X\right)}{\prod_{i=1}^d f_i\left(X_i\right)}\right] = - \sum_{i = 1}^d \mathbb{E}\left[\log f_i \left(X_i\right)\right] + \mathbb{E}\left[\log f\left(\boldsymbol X\right) \right] $$
         % The proof is identical for discrete and continuous random vectors. Hence, we only show the proof in the continuous case. By direct computation
         % \begin{align*}
         %     I\left(\boldsymbol{X}\right) & = \int_{\mathcal{X}} f\left(\boldsymbol{x}\right) \, \log_b f\left(\boldsymbol{x}\right) \, d\boldsymbol{x} - \sum_{i = 1}^{d} \int_{\mathcal{X}} f\left(\boldsymbol{x}\right) \, \log_b f_i\left(x_i\right) \, d\boldsymbol{x} \\
@@ -254,7 +254,7 @@ With the definitions of mutual information and entropy we are finally ready to i
     For a continuous random vector $\boldsymbol{X}$ with a uniquely defined copula $C$, and copula density $c$, we define the copula entropy $CE$ of $\boldsymbol{X}$ as
     $$CE\left(\boldsymbol{X}\right) = h\left(\boldsymbol U\right)$$
     where $\boldsymbol U$ has density $c$. In particular,
-    $$CE\left(\boldsymbol{X}\right) = - \mathbb{E}\left[\log_b c \left(\boldsymbol U\right)\right]$$
+    $$CE\left(\boldsymbol{X}\right) = - \mathbb{E}\left[\log c \left(\boldsymbol U\right)\right]$$
     % $$CE\left(\boldsymbol{X}\right) = - \int_{[0,1]^d} c\left(\mathbf{u}\right) \, \log_b c\left(\mathbf{u}\right) \, d\mathbf{u}$$
 \end{definition}
 As stated above, copula entropy is actually equal to the negative mutual information which we state as a theorem
@@ -265,18 +265,22 @@ As stated above, copula entropy is actually equal to the negative mutual informa
 \begin{proof}
     By \autoref{thm: Sklar}, letting $x_i = F_i^{-1}\left(u_i\right)$, we can relate the copula density to the joint density of $\boldsymbol{X}$ and its marginals
     \begin{align*}
-        c(u_1,\dots , u_n) & = \frac{\partial}{\partial \mathbf{u}} C(u_1,\dots,u_n)                                                                                                                   \\
-                           & = \frac{\partial}{\partial \mathbf{u}} F\left(F_1^{-1}\left(u_1\right), \dots, F_n^{-1}\left(u_n\right)\right)                                                            \\
-                           & = f\left(F_1^{-1}\left(u_1\right),\dots, F_1^{-1}\left(u_n\right)\right) \frac{1}{f_1\left(F_1^{-1}\left(u_1\right)\right)\dots f_n\left(F_1^{-1}\left(u_d\right)\right)}
+        c(u_1,\dots , u_d) & = \frac{\partial}{\partial \mathbf{u}} C(u_1,\dots,u_d)                                                                                                                   \\
+                           & = \frac{\partial}{\partial \mathbf{u}} F\left(F_1^{-1}\left(u_1\right), \dots, F_d^{-1}\left(u_d\right)\right)                                                            \\
+                           & = \frac{\partial^d}{\prod_{i = 1}^{d} \partial u_i}  F\left(F_1^{-1}\left(u_1\right), \dots, F_d^{-1}\left(u_d\right)\right)\\
+                           & = \frac{\partial^{d-1}}{\prod_{i = 2}^{d} \partial u_i}  \left(\frac{\partial}{\partial x_1}F\right)\left(F_1^{-1}\left(u_1\right), \dots, F_d^{-1}\left(u_d\right)\right) \cdot \frac{1}{f_1\left(F^{-1}_1\left(u_1\right)\right)}\\
+                           & \vdots \\
+                           & = \frac{\partial}{\partial \boldsymbol x} F\left(F_1^{-1}\left(u_1\right),\dots, F_d^{-1}\left(u_d\right)\right) \cdot \frac{1}{\prod_{i = 1}^{d} f_i \left(F_i^{-1}\left(u_i\right)\right) } \\
+                           & = f\left(F_1^{-1}\left(u_1\right),\dots, F_d^{-1}\left(u_d\right)\right) \frac{1}{ \prod_{i = 1}^d f_i\left(F_i^{-1}\left(u_i\right)\right)}
     \end{align*}
-    It follows directly that
+    Where for the fourth equality, we have applied the chain rule and that $\frac{d}{dx} f^{-1}\left(x\right) = \frac{1}{f' \left(f^{-1}\left(x\right)\right)}$ for any differentiable and invertible function $f$. The final equality follows by definition of the joint probability density function $f$ in terms of $F$. We note that there is no need for the Jacobian as $x_i = F_i^{-1}\left(u_i\right)$ and hence no need for non-diagonal partial derivatives $\frac{\partial x_i}{\partial u_j}$. It follows directly that
     \begin{align*}
         -CE\left(\boldsymbol{X}\right) & = \int_{[0,1]^d} c\left(\boldsymbol{u}\right) \log c\left(\boldsymbol{u}\right) \, d\boldsymbol{u}                                                                                                                        \\
                                        & =  \int_{\mathcal{X}} \frac{f(\boldsymbol{x})}{\prod_{i=1}^{d} f_i\left(x_i\right)} \log\left(\frac{f(\boldsymbol{x})}{\prod_{i=1}^{d} f_i\left(x_i\right)}\right) \prod_{i=1}^{d} f_i\left(x_i\right) \, d\boldsymbol{x} \\
                                        & = \int_{\mathcal{X}} f(\boldsymbol{x}) \log\left(\frac{f(\boldsymbol{x})}{\prod_{i=1}^{d} f_i\left(x_i\right)}\right) \, d\boldsymbol{x}                                                                                  \\
                                        & = I\left(\boldsymbol{X}\right)
     \end{align*}
-    where $\mathcal{X}$ is the domain of the random variable $\boldsymbol X$ and the third equality follows from a change of variables with the trivial substitution $u_i = F_i(x_i)$ such that $du_i = f_i(x_i)\,dx_i$. This concludes the proof.
+    where $\mathcal{X}  = \prod_{i = 1}^{d} \text{dom}\, F_i $ is the domain of the random vector $\boldsymbol X$ and the third equality follows from a change of variables with the trivial substitution $u_i = F_i(x_i)$ such that $du_i = f_i(x_i)\,dx_i$ and $x_i = F_i^{-1}\left(u_i\right)$. This concludes the proof.
 \end{proof}
 Finally, before moving on to correlation as a measure of similarity, we discuss what happens in the limit of mutual information and entropy as we shall later need this as arguments for numerical stability.
 
@@ -290,11 +294,11 @@ First, although one may think differential entropy is the limit of (discrete) en
         \mathbb{P}\left(X^{\Delta} = x_i\right) = f(x_i) \Delta = \int_{i\Delta}^{(i+1)\Delta} f(x) \, dx
     \end{equation}
 }
-Clearly, this discretization is a valid distribution as
+Clearly, this discretization generates a valid distribution as
 $$\sum_{i\in\mathbb{Z}} f(x_i) \Delta = \int_{\mathbb{R}} f(x) \, dx = 1$$
 and in the limit, as $\Delta \to 0$ we recover the original distribution $f(x)$. However, if we try to calculate the entropy of this discretization, denoted by $H^{\Delta}$, we get a diverging limit
 \begin{align*}
-    H^{\Delta} & = -\sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i) \Delta}                                             \\
+    H^{\Delta} & = -\sum_{i\in\mathbb{Z}} f(x_i) \Delta \log \left(f(x_i) \Delta\right)                                     \\
                & = -\sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} - \sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{\Delta} \\
                & = -\sum_{i\in\mathbb{Z}} f(x_i) \Delta \log{f(x_i)} - \log{\Delta}
 \end{align*}
@@ -351,7 +355,7 @@ where $c_{ij}$ density version of the copula defined for $X_i$ and $X_j$ and $F_
 $$\int_0^1 F^{-1}(u) \, du = \int_{\mathbb{R}} z f(z) \, dz = 0$$
 where the final equality follows from the construction of $Z_i$.
 
-Thus, we conclude that indeed mutual information and correlation are very different measures of codependency. Namely, mutual information does not depend on the marginal distributions whereas from \autoref{eq:corr from copula} we see that correlation does. Thus, it does not make much sense to introduce copulas in the setting of correlation albeit at this point we do not favor one measure above the other except if marginals should be insignificant to the network, copula entropy is preferred.
+Thus, we conclude that indeed mutual information and correlation are very different measures of codependency. Namely, mutual information does not depend on the marginal distributions whereas from \autoref{eq:corr from copula} we see that correlation does. Thus, it does not make much sense to introduce copulas in the setting of correlation albeit at this point we do not favor one measure above the other. Only if marginals should be insignificant to the network, copula entropy is at this point preferred.
 
 
 
