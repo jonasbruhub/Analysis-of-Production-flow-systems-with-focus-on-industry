@@ -1,49 +1,59 @@
-\chapter{Summary (English)}
-
-The goal of the thesis is to ...
+\chapter{Abstract}
 
 
+% Introduction
+% Purpose
+% Method
+% Results
+% Conclusion + future works
+Casual relations between processes are a core issue for effective control of production systems. In particular, it is paramount to understand how variations, such as delays, propagate through the production system for feasible and robust scheduling of processes.
+
+This thesis aims to uncover such causal relations from observations of production flow runs. To obtain the above, we shall present a method for network deconvolution, where direct and indirect effects are separated. The algorithm's robustness is explored in depth, focusing primarily on the influence of noise. Moreover, we shall extend the algorithm to work with mixed random variables, which is crucial for delay modeling, and discuss in detail how to estimate mutual information for such joint distributions. Furthermore, topological assumptions are considered and shown to improve the method's accuracy.
+
+Applying the method to controlled examples with known causal structures, we observe that chainlike causal structures can be tough to recover. However, assuming a topological order, this problem is greatly alleviated. More complex causal structures are considered, where the method also performs well. In particular, with only a few hundred observations, the algorithm can recover the causal structure.
+
+Finally, the method is applied to a dataset from a simulated pharmaceutical production system. We show how the framework functions in practice and demonstrate the robustness of the inferred causal structure by including more or fewer variables. In particular, we shall observe that almost all delays are unexplained by previous incidents.
+
+Based on the results of this thesis, the algorithm combined with mutual information as a measure of similarity appears to constitute a promising and generally applicable framework for causal discovery. However, observations regarding possible optimizations of estimating mutual information from data are noted. Namely, for random variables that are almost perfectly descriptive of each other, the information is shown to be underestimated. This error results in a bias but is, in most situations, not a problem.
 
 
 
-
-\cite{An_effective_approach_for_causal_variables_analysis_in_diesel_engine_production_by_using_mutual_information_and_network_deconvolution}
-The effective control of the power consistency, which is one of the most important quality indicators of diesel engine, plays a decisive role for improving the competitiveness of the products. The widely used sensors and other data acquisition equipment make the “data-driven quality control” become possible. However, how to determine the highly related parameters with the engine power from massive captured manufacturing data and effectively discriminated the direct and indirect dependencies between these variables are still challenging. This paper proposed a feature selection algorithm named NMI-ND which uses network deconvolution (ND) to infer causal correlations among various diesel engine manufacturing parameters from the observed correlations based on normalized mutual information (NMI). The proposed algorithm is thoroughly evaluated through the experimental study by comparing it with other representative feature selection algorithms. The comparison demonstrates that NMI-ND performs better in both effectiveness and efficiency.
+% \newpage
 
 
+% \cite{An_effective_approach_for_causal_variables_analysis_in_diesel_engine_production_by_using_mutual_information_and_network_deconvolution}
+% The effective control of the power consistency, which is one of the most important quality indicators of diesel engine, plays a decisive role for improving the competitiveness of the products. The widely used sensors and other data acquisition equipment make the “data-driven quality control” become possible. 
 
-\cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}
-Recognizing direct relationships between variables connected
-in a network is a pervasive problem in biological, social and
-information sciences as correlation-based networks contain
-numerous indirect relationships. Here we present a general
-method for inferring direct effects from an observed
-correlation matrix containing both direct and indirect
-effects. We formulate the problem as the inverse of network
-convolution, and introduce an algorithm that removes the
-combined effect of all indirect paths of arbitrary length in
-a closed-form solution by exploiting eigen-decomposition
-and infinite-series sums. We demonstrate the effectiveness
-of our approach in several network applications: distinguishing
-direct targets in gene expression regulatory networks; recognizing
-directly interacting amino-acid residues for protein structure
-prediction from sequence alignments; and distinguishing
-strong collaborations in co-authorship social networks using
-connectivity information alone. In addition to its theoretical
-impact as a foundational graph theoretic tool, our results suggest
-network deconvolution is widely applicable for computing direct
-dependencies in network science across diverse disciplines.
+% However, how to determine the highly related parameters with the engine power from massive captured manufacturing data and effectively discriminated the direct and indirect dependencies between these variables are still challenging. This paper proposed a feature selection algorithm named NMI-ND which uses network deconvolution (ND) to infer causal correlations among various diesel engine manufacturing parameters from the observed correlations based on normalized mutual information (NMI). The proposed algorithm is thoroughly evaluated through the experimental study by comparing it with other representative feature selection algorithms. The comparison demonstrates that NMI-ND performs better in both effectiveness and efficiency.
 
 
-\cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems}
-To clarify the causality among process parameters is a core issue of data-driven production performance analysis and product
-quality optimization. The difculty lies in accurately measuring and distinguishing direct and indirect associations of complex
-manufacturing systems. In this work, the nonparametric-copula-entropy and network deconvolution method is proposed for
-causal discovery in complex manufacturing systems. Firstly, based on copula theory and kernel density estimation method,
-the nonparametric-copula-entropy is introduced to improve the accuracy of association measurement between parameters,
-and its superiority is verifed by comparing with the results of diferent association measurement methods. Then, the global
-association matrix is constructed by the nonparametric-copula-entropy, and network deconvolution method is employed
-to extract the direct information from the global association matrix. The proposed method is tested by using an open gene
-expression dataset. Finally, as an experimental application, the causal analysis for a diesel engine production line is carried
-out by the proposed method. The results show that the proposed method can reveal causal relationship between process
-parameters and quality parameters in the diesel engine production line well, which provide theoretical guidance and implementation approach for the optimal control of complex manufacturing system.
+
+% \cite{Network-deconvolution-as-a-general-method-to-distinguish-direct-dependencies-in-networks}
+% Recognizing direct relationships between variables connected
+% in a network is a pervasive problem in biological, social and
+% information sciences as correlation-based networks contain
+% numerous indirect relationships.
+
+% Here we present a general
+% method for inferring direct effects from an observed
+% correlation matrix containing both direct and indirect
+% effects. We formulate the problem as the inverse of network
+% convolution, and introduce an algorithm that removes the
+% combined effect of all indirect paths of arbitrary length in
+% a closed-form solution by exploiting eigen-decomposition
+% and infinite-series sums. We demonstrate the effectiveness
+% of our approach in several network applications: distinguishing
+% direct targets in gene expression regulatory networks; recognizing
+% directly interacting amino-acid residues for protein structure
+% prediction from sequence alignments; and distinguishing
+% strong collaborations in co-authorship social networks using
+% connectivity information alone. In addition to its theoretical
+% impact as a foundational graph theoretic tool, our results suggest
+% network deconvolution is widely applicable for computing direct
+% dependencies in network science across diverse disciplines.
+
+
+% \cite{Nonparametric-copula-entropy-and-network-deconvolution-method-for-causal-discovery-in-complex-manufacturing-systems}
+% To clarify the causality among process parameters is a core issue of data-driven production performance analysis and product quality optimization. The difculty lies in accurately measuring and distinguishing direct and indirect associations of complex manufacturing systems.
+
+% In this work, the nonparametric-copula-entropy and network deconvolution method is proposed for causal discovery in complex manufacturing systems. Firstly, based on copula theory and kernel density estimation method, the nonparametric-copula-entropy is introduced to improve the accuracy of association measurement between parameters, and its superiority is verifed by comparing with the results of diferent association measurement methods. Then, the global association matrix is constructed by the nonparametric-copula-entropy, and network deconvolution method is employed to extract the direct information from the global association matrix. The proposed method is tested by using an open gene expression dataset. Finally, as an experimental application, the causal analysis for a diesel engine production line is carried out by the proposed method. The results show that the proposed method can reveal causal relationship between process parameters and quality parameters in the diesel engine production line well, which provide theoretical guidance and implementation approach for the optimal control of complex manufacturing system.

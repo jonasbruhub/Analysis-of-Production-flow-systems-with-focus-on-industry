@@ -15,3 +15,4 @@
 {"rule":"COMMA_PERIOD_CONFUSION","sentence":"^\\QCycle number of batches mean variance standard deviation coefficient of variation A 66 14.776 3.641 1.908 0.1291 B 64 15.644 3.915 1.979 0.1265 C 61 17.714 2.330 1.526 0.08617 D 60 18.069 6.922 2.631 0.1456 E 60 18.088 9.613 3.100 0.1714 F 63 17.227 7.766 2.787 0.1618 Combined cycles 374 16.876 7.218 2.687 0.1592 Basic batch statistics for each cycle and by combining all cycles into a single data set.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThe data originates from the Mental Health Enquiry (MHE) of England of Wales and was published in 1967.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QEach of the 6 cycles, cleaning (corresponding to BatchID = 0 in the time series dataset).\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QApplying the method to controlled examples with known causal structures, we observe that chainlike causal structures can be tough to recover.\\E$"}

@@ -1,4 +1,3 @@
-
 \documentclass[../Thesis.tex]{subfiles}
 \graphicspath{{\subfix{../figures/}}}
 \begin{document}
@@ -67,37 +66,50 @@ Let $P'$ be the above block diagonal matrix, consisting of $P_i$s and $J'$ be th
 $$B = \left(P' P\right)^{-1} J' P' P$$
 In particular, $B$ is similar to the Jordan normal form $J'$ with diagonal elements $\frac{\lambda_i}{1-\lambda_i}$. In particular, the spectrum of $B$ is exactly the elements of the spectrum of $A$ mapped by $\lambda \mapsto \frac{\lambda}{1 - \lambda}$.
 
-\newpage
+
+
+
 
 \section{Pharmaceutical duration and level changes plots}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \linewidth]{figures/Multiple cycles data/time vs time scatter.png}
-    \caption{}
+    \begin{sideways}
+        \includegraphics[width = .85\textheight]{figures/Multiple cycles data/time vs time scatter.png}
+    \end{sideways}
+    \caption{Durations and delays vs durations and delays. Some combinations of variables show a tendency, although a causal structure can not be inferred from this alone.}
     \label{fig:time vs time all}
 \end{figure}
+\newpage
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \linewidth]{figures/Multiple cycles data/delta filling vs time scatter.png}
-    \caption{}
+    \begin{sideways}
+        \includegraphics[width = .85\textheight]{figures/Multiple cycles data/delta filling vs time scatter.png}
+    \end{sideways}
+    \caption{Changes in levels vs durations and delays.}
     \label{fig:time vs level all}
 \end{figure}
+\newpage
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \linewidth]{figures/Multiple cycles data/delta fill vs delta fill scatter.png}
-    \caption{}
+    \begin{sideways}
+        \includegraphics[width = .85\textheight]{figures/Multiple cycles data/delta fill vs delta fill scatter.png}
+    \end{sideways}
+    \caption{Changes in levels vs changes in levels.}
     \label{fig:level vs level all}
 \end{figure}
-
 \newpage
+
+
+
 
 \section{Cleaning operations plots}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/Multiple cycles data/Cleaning batches timeseries single.png}
-    \caption{A single blue rectangle zoomed in}
+    \caption{A single cleaning process and the process labels assigned during the duration. This blue rectangle corresponds to a single blue vertical line in \autoref{fig:cycle cleaning time series}.}
     \label{fig:cycle cleaning time series single}
 \end{figure}
 
@@ -105,7 +117,7 @@ In particular, $B$ is similar to the Jordan normal form $J'$ with diagonal eleme
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/Multiple cycles data/Cleaning batches.png}
-    \caption{Each of the 6 cycles, cleaning (corresponding to \texttt{BatchID = 0} in the time series dataset). Each \textit(Cleaning Procedure), CIP, is highlighted with an opaque interval (the blue rectangles). The dots marked with red (only ID 11.5, but not all of these are red), is if the Cleaning ID is 0.}
+    \caption{Each of the 6 cycles, cleaning (corresponding to \texttt{BatchID = 0} in the time series dataset). Each \textit(Cleaning process), CIP, is highlighted by an opaque interval (the blue rectangles). The dots marked with red (only process label $11.5$, but not all of these are red), is if the Cleaning ID is 0 in the data. Upon further inspection, this is assumed to be the existence of delays after a cleaning process, before the next batch is started.}
     \label{fig:cycle cleaning time series}
 \end{figure}
 
@@ -145,46 +157,54 @@ $$\int_{0}^{1} Q_{i,p} (t) \, dt = \frac{1}{n} $$
 Actually, both M- and B-splines satisfies this for $p = 0$ as they are then both piecewise constant and non-zero on disjoint intervals. From this, one can the construct such sets of $Q_{i,p}$ in the following way. Namely, start with the piecewise constant functions, $Q_{i,0}$ depicted in \autoref{fig:spline order 0 - Q} as boxes in the case $n = 5$.
 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includesvg[width=.7\linewidth]{figures/MI estimation/Q_spline_construction_step_1.svg}
-    \caption{}
+    \caption{The initial splines from which we iteratively construct a set of splines summing to $1$ and integrating to $1/n$ individually.}
     \label{fig:spline order 0 - Q}
 \end{figure}
 
-A better spline
+By cutting off equal areas of each of these rectangles, and moving them to the neighboring intervals as shown in \autoref{fig:spline order 0 - Q - step 2}, we can obtain a set of splines as shown in \autoref{subfig:Q-splines result - splines}. In \autoref{subfig:Q-splines result - interval probability mass} and \autoref{fig:Q-spline sum of functions} we show the accumulated probability mass in each bin and the sum of the splines for all $t$ and confirm that indeed the above properties hold. This process can be iterated to obtain more regularization/smoothing of the observations.
 
-\begin{figure}[h]
+
+\begin{figure}[H]
     \centering
     \includesvg[width=.7\linewidth]{figures/MI estimation/Q-spline construction - step 2.svg}
-    \caption{}
+    \caption{Each color represent an area removed from a rectangle and added to a neighboring interval such that the initial splines now are defined on multiple intervals, conserving the desired properties}
     \label{fig:spline order 0 - Q - step 2}
 \end{figure}
 
-Cut off function has derivative 0 at top and is halfway down at the sides
-\begin{figure}[h]
+
+
+\begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline basis functions - degree 3.pdf}
         \caption{}
+        \label{subfig:Q-splines result - splines}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/MI estimation/Q-spline marginal dist - degree 3.pdf}
         \caption{}
+        \label{subfig:Q-splines result - interval probability mass}
     \end{subfigure}
-    \caption{$P_i$ is area of each rectangle i.e. $0.2$.}
+    \caption{The resulting $Q$-splines (a) and the expected bin probability mass $P_i$ is area of each rectangle i.e. $0.2$.}
+    \label{fig:Q-splines result}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width = .55\linewidth]{figures/MI estimation/Q-spline coefficient sum - degree 3.pdf}
-    \caption{}
-    % \label{}
+    \caption{The sum of the set of $Q$-splines for all $t\in [0,1]$. Indeed, they sum to $1$ as per construction.}
+    \label{fig:Q-spline sum of functions}
 \end{figure}
-This example does however not work well for many bins, in particular, due to the splines not overlapping that much i.e. a poor regularization on the smoothness. However, the method used for constructing this set of splines can be extended to bleed into multiple neighboring bins just as for B- and M-splines.
+% This example does however not work well for many bins, in particular, due to the splines not overlapping that much i.e. a poor regularization on the smoothness. However, the method used for constructing this set of splines can be extended to bleed into multiple neighboring bins just as for B- and M-splines.
+
+
+
 
 \newpage
 \section{M-spline based MI estimation}
@@ -210,7 +230,7 @@ This example does however not work well for many bins, in particular, due to the
         \caption{}
         % \label{subfig:ddd}
     \end{subfigure}
-    \caption{}
+    \caption{Relative errors of the mutual information using $M$-splines. We observe the same behavior as with the B-splines. This indicates that neither is better than the other and thus no prefference between the two.}
     \label{fig:M-spline approach results MI - relative error}
 \end{figure}
 
@@ -229,9 +249,12 @@ This example does however not work well for many bins, in particular, due to the
         \caption{}
         % \label{subfig:new MI method all zoom}
     \end{subfigure}
-    \caption{}
+    \caption{The actual error using the M-splines. Once again, we observe similar behavior to the B-splines.}
     \label{fig:M-spline approach results MI - error}
 \end{figure}
+
+
+
 
 
 \newpage
@@ -273,34 +296,27 @@ As an example, suppose $r_a=0.06$ with $1000$ observations. Then a $95\%$ CI for
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 2e-2.pdf}
-        \caption{}
+        \caption{$t = 0.02$}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 2_1e-2.pdf}
-        \caption{}
+        \caption{$t = 0.021$}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
     \\[\baselineskip]
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=.95\linewidth]{figures/Gaussian Chain Theoretical/Chain graph from triangular G obs - MI - cutoff 4_51e-2.pdf}
-        \caption{}
+        \caption{$t = 0.0451$}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
-    \caption{Triangular, mutual information, cutoff $2\cdot 10^{-10}$, $2.1 \cdot 10^{-2}$ and $4.51 \cdot 10^{-2}$.}
+    \caption{$G_{dir}$ represented as a graph for different cut-offs. Based on a triangular $G_{obs}$ with mutual information as the measure of similarity. Varying the threshold, we observe that we are almost able to recover the true causal structure. Only the weak link between variables $X_4$ and $X_5$.}
     \label{fig:Gaussian chain symmetric G_obs using mutual information different cutoff}
 \end{figure}
 
-\newpage
-\begin{figure}
-    \centering
-    \includegraphics[width=.5\linewidth]{figures/Cycle data/G_dir times - symmetric - TP9 vs TP7.pdf}
-    \caption{}
-    \label{fig:G_dir times - TP9 vs TP7}
-\end{figure}
 
 
 \newpage
@@ -327,12 +343,19 @@ As an example, suppose $r_a=0.06$ with $1000$ observations. Then a $95\%$ CI for
         \caption{$G_{dir}$ as a graph}
         % \label{fig:Gaussian 3x3 large s}
     \end{subfigure}
-    \caption{For the linear network defined in \autoref{eq:example Gaussian network}, using a triangular $G_{obs}$ (a) with the true topological structure we are able to perfectly rediscover the causal structure as seen in (b) and (c).}
+    \caption{For the linear network defined in \autoref{eq:example Gaussian network}, using a triangular $G_{obs}$ (a) with the true topological structure and correlation as the measure of similarity we are able to perfectly rediscover the causal structure as seen in (b) and (c).}
     \label{fig:Gaussian network triangular G_obs using correlation}
 \end{figure}
 
 \newpage
 \section{Pharmaceutical process deconvolution}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\linewidth]{figures/Cycle data/G_dir times - symmetric - TP9 vs TP7.pdf}
+    \caption{$T^P_9$ vs $T^P_7$ for the pharmaceutical data set. Although as small positive correlation is observed, it does not appear as if these variables are particularly descriptive of each other.}
+    \label{fig:G_dir times - TP9 vs TP7}
+\end{figure}
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width = 1\linewidth]{figures/Cycle data/G_obs complete - symmetric.pdf}

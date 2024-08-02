@@ -233,7 +233,7 @@ An important property of mutual information is that the continuous version is th
 We note the need for two separate notations of entropy as differential entropy is not the limit of Shannon entropy in the way mutual information is. Again, this is further discussed in \autoref{subsec:limit entropy and MI}.
 % However, they are both equal to the expectation $\mathbb{E}\left(\log f\left(\boldsymbol X\right)\right)$.
 
-Before discussing opula entropy (CE), we note a very useful relation between entropy and mutual information. Indeed, we shall later use this to show that mutual information in the continuous version is the limit of the discretization.
+Before discussing copula entropy (CE), we note a very useful relation between entropy and mutual information. Indeed, we shall later use this to show that mutual information in the continuous version is the limit of the discretization.
 \begin{lemma}[Mutual information and entropy relation]\label{lemma:mutual information and entropy relation}
     For a continuous random vector $\boldsymbol{X}$, the (joint) mutual information $I\left(\boldsymbol{X}\right)$ can be decomposed into a sum of differential entropies as
     $$I\left(\boldsymbol{X}\right) = \sum_{i=1}^{d} h(X_i) - h\left(\boldsymbol{X}\right)$$
@@ -359,9 +359,9 @@ Thus, we conclude that indeed mutual information and correlation are very differ
 
 
 \section{Copula Based Network Discovery}\label{sec:Copula based network discovery}
-In this section, we will present the general algorithm and discuss some of its properties regarding uncertainty and convergence. We will focus on using mutual information i.e. opula entropy as the measure of similarity but other measures such as correlation can be interchanged at will in the general algorithm.
+In this section, we will present the general algorithm and discuss some of its properties regarding uncertainty and convergence. We will focus on using mutual information i.e. copula entropy as the measure of similarity but other measures such as correlation can be interchanged at will in the general algorithm.
 
-By \autoref{thm:copula entropy equals mutual information} we can compute the mutual information from observed data from the copula. Namely, let $CE_{ij}$ denote the (pairwise) opula entropy of variables $X_i$ and $X_j$. We shall then set
+By \autoref{thm:copula entropy equals mutual information} we can compute the mutual information from observed data from the copula. Namely, let $CE_{ij}$ denote the (pairwise) copula entropy of variables $X_i$ and $X_j$. We shall then set
 \begin{equation}\label{eq:Gobs matrix}
     G_{obs} = \begin{bmatrix}
         0        & - CE_{12} & \dots  & - CE_{1n} \\
